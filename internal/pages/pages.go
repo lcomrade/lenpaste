@@ -45,6 +45,14 @@ type PastePageType struct {
 	//Password string
 }
 
+//Style
+func Style(rw http.ResponseWriter, req *http.Request) {
+	//Return response
+	rw.Header().Set("Content-Type", "text/css")
+
+	io.WriteString(rw, styleCSS)
+}
+
 //New paste
 func NewPaste(rw http.ResponseWriter, req *http.Request) {
 	//Return response
@@ -134,11 +142,20 @@ func loadFile(path string) ([]byte, error) {
 	return fileByte, nil
 }
 
+var styleCSS string
 var newPage string
 var newDoneTmpl *template.Template
 var getTmpl *template.Template
 
 func Load() error {
+	//Style
+	styleCSSByte, err := loadFile(filepath.Join(webDir, "style.css"))
+	if err != nil {
+		return err
+	}
+
+	styleCSS = string(styleCSSByte)
+
 	//New page
 	newPageByte, err := loadFile(filepath.Join(webDir, "new.html"))
 	if err != nil {

@@ -63,6 +63,7 @@ func main() {
 	}
 
 	//Handlers
+	http.HandleFunc("/style.css", pages.Style)
 	http.HandleFunc("/", pages.GetPaste)
 	http.HandleFunc("/new", pages.NewPaste)
 	http.HandleFunc("/new_done", pages.NewPasteDone)

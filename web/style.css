@@ -1,0 +1,43 @@
+body {
+	text-align: center;
+	background-color: #333333;
+	font-size: 16px;
+	color: #FFFFFF;
+}
+
+h3 {
+	font-size: 26px;
+}
+
+textarea {
+	background-color: #999999;
+	padding: 10px 10px 10px 10px;
+	border: 1px;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+select {
+	background: #666666;
+	color: #FFFFCC;
+	font-size: 14px;
+	padding: 4px 4px 4px 4px;
+	border: 2px;
+	border-radius: 4px;
+}
+
+select:hover {
+	cursor: pointer;
+}
+
+input {
+	 background: #66CC00;
+	 font-size: 16px;
+	 padding: 6px 6px 6px 6px;
+	 border: 2px;
+	 border-radius: 7px;
+}
+
+input:hover {
+	cursor: pointer;
+}

@@ -2,15 +2,17 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>New anonymous paste</title>
+		<title>Create anonymous paste</title>
+		<link rel="stylesheet" type="text/css" href="/style.css"/>
 	</head>
 	<body>
-		<h3>New anonymous paste</h3>
+		<h3>Create anonymous paste</h3>
+		<hr/>
 		<form action="/new_done" method="post">
-			<p><textarea name="text" rows=30 cols=100 required></textarea></p>
+			<p><textarea name="text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
 			<p>
 				Expiration:
-				<select name="expiration" size="1">
+				<select name="expiration" tabindex=2 size=1>
 					<option value="10m">10 minutes</option>
 					<option value="30m">30 minutes</option>
 					<option value="1h">1 hour</option>
@@ -18,7 +20,7 @@
 					<option value="1w" selected>1 week</option>
 				</select>
 			</p>
-			<p><input type="submit" value="Create paste"></p>
+			<p><input type="submit" value="Create paste" tabindex=3></p>
 		</form>
 	</body>
 </html>
