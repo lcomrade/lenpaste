@@ -28,11 +28,22 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 const (
 	webDir = "./web"
 )
+
+type PastePageType struct {
+	Text       string
+	ExpiresMin int64
+	ExpiresDay int64
+	//Title string
+	//Syntax string
+	//OneUse bool
+	//Password string
+}
 
 //New paste
 func NewPaste(rw http.ResponseWriter, req *http.Request) {
@@ -75,10 +86,19 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	name := filepath.Base(req.URL.Path)
 
 	//Get paste
-	paste, err := storage.GetPaste(name)
+	pasteInfo, err := storage.GetPaste(name)
 	if err != nil {
 		http.Error(rw, err.Error(), 404)
 		return
+	}
+
+	//Convert paste info
+	deltaTime := pasteInfo.Info.DeleteTime - time.Now().Unix()
+	deltaTime = deltaTime / 60
+	pastePage := PastePageType{
+		Text:       pasteInfo.Text,
+		ExpiresMin: deltaTime % 60,
+		ExpiresDay: deltaTime / 60 / 24,
 	}
 
 	//Set Header
@@ -87,7 +107,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	//Filling the html page template
 	tmpl := getTmpl
 
-	err = tmpl.Execute(rw, paste)
+	err = tmpl.Execute(rw, pastePage)
 	if err != nil {
 		http.Error(rw, err.Error(), 400)
 		return
