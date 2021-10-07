@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>New anonymous paste</title>
+	</head>
+	<body>
+		<h3>New anonymous paste</h3>
+		<form action="/new_done" method="post">
+			<p><textarea name="text" rows=30 cols=100 required></textarea></p>
+			<p>
+				Expiration:
+				<select name="expiration" size="1">
+					<option value="10m">10 minutes</option>
+					<option value="30m">30 minutes</option>
+					<option value="1h">1 hour</option>
+					<option value="1d">1 day</option>
+					<option value="1w" selected>1 week</option>
+				</select>
+			</p>
+			<p><input type="submit" value="Create paste"></p>
+		</form>
+	</body>
+</html>
