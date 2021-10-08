@@ -6,7 +6,7 @@ body {
 }
 
 h3 {
-	font-size: 26px;
+	font-size: 22px;
 }
 
 textarea {
@@ -27,6 +27,7 @@ select {
 }
 
 select:hover {
+	background: #999999;
 	cursor: pointer;
 }
 
@@ -39,5 +40,15 @@ input {
 }
 
 input:hover {
+	background: #99FF66;
 	cursor: pointer;
+}
+
+.totalMsg {
+	display: inline-block;
+	background: #999999;
+	font-size: 18px;
+	padding: 20px;
+	border: 1px;
+	border-radius: 6px;
 }
