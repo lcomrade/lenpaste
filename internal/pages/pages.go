@@ -36,9 +36,10 @@ const (
 )
 
 type PastePageType struct {
-	Text       string
-	ExpiresMin int64
-	ExpiresDay int64
+	Text        string
+	ExpiresMin  int64
+	ExpiresHour int64
+	ExpiresDay  int64
 	//Title string
 	//Syntax string
 	//OneUse bool
@@ -113,9 +114,10 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	deltaTime := pasteInfo.Info.DeleteTime - time.Now().Unix()
 	deltaTime = deltaTime / 60
 	pastePage := PastePageType{
-		Text:       pasteInfo.Text,
-		ExpiresMin: deltaTime % 60,
-		ExpiresDay: deltaTime / 60 / 24,
+		Text:        pasteInfo.Text,
+		ExpiresMin:  deltaTime % 60,
+		ExpiresHour: deltaTime / 60 % 24,
+		ExpiresDay:  deltaTime / 60 / 24,
 	}
 
 	//Filling the html page template
