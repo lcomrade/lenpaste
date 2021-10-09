@@ -46,6 +46,11 @@ type PastePageType struct {
 	//Password string
 }
 
+type errorPageType struct {
+	Code  int
+	Error string
+}
+
 //Style
 func Style(rw http.ResponseWriter, req *http.Request) {
 	//Return response
@@ -72,7 +77,7 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 	//Create paste
 	paste, err := storage.NewPaste(text, expiration)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 
@@ -84,7 +89,7 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 
 	err = tmpl.Execute(rw, paste)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 }
@@ -106,7 +111,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	//Get paste
 	pasteInfo, err := storage.GetPaste(name)
 	if err != nil {
-		http.Error(rw, err.Error(), 404)
+		errorHandler(rw, err, 404)
 		return
 	}
 
@@ -124,6 +129,27 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	tmpl := getTmpl
 
 	err = tmpl.Execute(rw, pastePage)
+	if err != nil {
+		errorHandler(rw, err, 400)
+		return
+	}
+}
+
+//Error page
+func errorHandler(rw http.ResponseWriter, err error, code int) {
+	//Set Header
+	rw.Header().Set("Content-Type", "text/html")
+
+	//Get error info
+	errorInfo := errorPageType{
+		Code:  code,
+		Error: err.Error(),
+	}
+
+	//Filling the html page template
+	tmpl := errorTmpl
+
+	err = tmpl.Execute(rw, errorInfo)
 	if err != nil {
 		http.Error(rw, err.Error(), 400)
 		return
@@ -155,6 +181,7 @@ var mainPage string
 var newPage string
 var newDoneTmpl *template.Template
 var getTmpl *template.Template
+var errorTmpl *template.Template
 
 func Load() error {
 	//Style
@@ -196,6 +223,14 @@ func Load() error {
 	}
 
 	getTmpl = getTmplLoad
+
+	//Error tmpl
+	errorTmplLoad, err := template.ParseFiles(filepath.Join(webDir, "error.tmpl"))
+	if err != nil {
+		return err
+	}
+
+	errorTmpl = errorTmplLoad
 
 	return nil
 }
