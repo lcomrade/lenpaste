@@ -44,8 +44,15 @@ input:hover {
 .title {
 	padding-top: 1px;
 	padding-bottom: 1px;
+	padding-left: 20px;
 	margin-bottom: 20px;
 	background: #FF9933;
+	text-align: left;
+}
+
+.titleA {
+	color: #FFFFFF;
+	text-decoration: none;
 }
 
 .totalMsg {
