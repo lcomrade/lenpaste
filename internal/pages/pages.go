@@ -90,6 +90,15 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 
 //Get paste
 func GetPaste(rw http.ResponseWriter, req *http.Request) {
+	//Set Header
+	rw.Header().Set("Content-Type", "text/html")
+
+	//Main page
+	if req.URL.Path == "/" {
+		io.WriteString(rw, mainPage)
+		return
+	}
+
 	//Get paste name
 	name := filepath.Base(req.URL.Path)
 
@@ -108,9 +117,6 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 		ExpiresMin: deltaTime % 60,
 		ExpiresDay: deltaTime / 60 / 24,
 	}
-
-	//Set Header
-	rw.Header().Set("Content-Type", "text/html")
 
 	//Filling the html page template
 	tmpl := getTmpl
@@ -143,6 +149,7 @@ func loadFile(path string) ([]byte, error) {
 }
 
 var styleCSS string
+var mainPage string
 var newPage string
 var newDoneTmpl *template.Template
 var getTmpl *template.Template
@@ -155,6 +162,14 @@ func Load() error {
 	}
 
 	styleCSS = string(styleCSSByte)
+
+	//Main page
+	mainPageByte, err := loadFile(filepath.Join(webDir, "main.html"))
+	if err != nil {
+		return err
+	}
+
+	mainPage = string(mainPageByte)
 
 	//New page
 	newPageByte, err := loadFile(filepath.Join(webDir, "new.html"))
