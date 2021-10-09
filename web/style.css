@@ -1,4 +1,5 @@
 body {
+	margin: 0;
 	text-align: center;
 	background-color: #333333;
 	font-size: 16px;
@@ -38,6 +39,13 @@ input {
 input:hover {
 	background: #99FF66;
 	cursor: pointer;
+}
+
+.title {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	margin-bottom: 20px;
+	background: #FF9933;
 }
 
 .totalMsg {
