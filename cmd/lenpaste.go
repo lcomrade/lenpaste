@@ -23,6 +23,7 @@ package main
 
 import (
 	"../internal/api"
+	"../internal/assets"
 	"../internal/pages"
 	"../internal/storage"
 	"log"
@@ -56,14 +57,22 @@ func BackgroundJob() {
 }
 
 func main() {
-	//Pages
-	err := pages.Load()
+	//Load assets
+	err := assets.Load()
+	if err != nil {
+		panic(err)
+	}
+
+	//Load pages
+	err = pages.Load()
 	if err != nil {
 		panic(err)
 	}
 
 	//Handlers
 	http.HandleFunc("/style.css", pages.Style)
+	http.HandleFunc("/robots.txt", assets.RobotsTxt)
+
 	http.HandleFunc("/", pages.GetPaste)
 	http.HandleFunc("/new", pages.NewPaste)
 	http.HandleFunc("/new_done", pages.NewPasteDone)
