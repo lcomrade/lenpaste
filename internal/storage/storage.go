@@ -144,12 +144,39 @@ func getPasteInfo(name string) (PasteInfoType, error) {
 	return pasteInfo, nil
 }
 
+func isPasteExist(name string) bool {
+	//File name
+	fileName := filepath.Join(pasteDir, name)
+	infoFileName := fileName + pasteInfoPrefix
+	textFileName := fileName + pasteTextPrefix
+
+	//Check (INFO)
+	_, err := os.Stat(infoFileName)
+	if os.IsNotExist(err) == true {
+		return false
+	}
+
+	//Check (TEXT)
+	_, err = os.Stat(textFileName)
+	if os.IsNotExist(err) == true {
+		return false
+	}
+
+	//Return
+	return true
+}
+
 //Create Paste
 func NewPaste(pasteText string, expir string) (NewPasteType, error) {
 	var paste NewPasteType
 
-	//File name
+	//Paste name
 	pasteName := randString()
+	if isPasteExist(pasteName) == true {
+		return paste, errors.New("paste with '" + pasteName + "' name exists")
+	}
+
+	//File name
 	fileName := filepath.Join(pasteDir, pasteName)
 	infoFileName := fileName + pasteInfoPrefix
 	textFileName := fileName + pasteTextPrefix
