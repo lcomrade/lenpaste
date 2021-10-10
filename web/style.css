@@ -42,11 +42,19 @@ input:hover {
 	cursor: pointer;
 }
 
+ul {
+	list-style: square;
+}
+
 mark {
 	background: #3366CC;
 	padding: 2px 5px 2px 5px;
 	border-radius: 2px;
 	color: #FFFFFF;
+}
+
+details {
+	cursor: pointer;
 }
 
 pre {
