@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>API | Lenpaste</title>
+		<link rel="stylesheet" type="text/css" href="/style.css"/>
+	</head>
+	<body>
+		<div class="title">
+			<h2><a class="titleA" href=/>Lenpaste</a></h2>
+		</div>
+		<h3>Lenpaste API</h3>
+		<div class="totalMsg">
+			<h3>About</h3>
+			<p>Lenpaste has an open API. It does not require registration.</p>
+			<h3>Methods</h3>
+			<hr/>
+			<h4>/api/new (GET)</h4>
+			<p>Create a new paste.</p>
+			<p>Request:</p>
+			<ul>
+				<li><p><mark>text</mark> - Paste text</p></li>
+				<li><p><mark>expiration</mark> - Paste expiration date</p>
+				<table>
+					<th>Value</th>
+					<th>Description</th>
+					<tr>
+						<td>10m</td>
+						<td>10 minutes</td>
+					</tr>
+					<tr>
+						<td>30m</td>
+						<td>30 minutes</td>
+					</tr>
+					<tr>
+						<td>1h</td>
+						<td>1 hour</td>
+					</tr>
+					<tr>
+						<td>1d</td>
+						<td>1 day</td>
+					</tr>
+					<tr>
+						<td>1w</td>
+						<td>1 week</td>
+					</tr>
+				</table></li>
+			</ul>
+			<p>Response: JSON</p>
+			<details>
+				<summary>Response example</summary>
+<pre><code>{
+	"Name":"8HslINRp"
+}
+</code></pre>
+			</details>
+			<hr/>
+			<h4>/api/get/<PASTE_NAME> (GET)</h4>
+			<p>Get information about the paste and its text.</p>
+			<p>Request: NONE</p>
+			<p>Response: JSON</p>
+			<details>
+				<summary>Response example</summary>
+<pre><code>{
+	"Name":"8HslINRp",
+	"Text":"My paste\r\nEND",
+	"Info":{
+		"CreateTime":1633845370,
+		"DeleteTime":1633847170
+	}
+}
+</code></pre>
+			</details>
+		</div>
+	</body>
+</html>

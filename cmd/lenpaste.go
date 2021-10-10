@@ -67,6 +67,7 @@ func main() {
 	http.HandleFunc("/", pages.GetPaste)
 	http.HandleFunc("/new", pages.NewPaste)
 	http.HandleFunc("/new_done", pages.NewPasteDone)
+	http.HandleFunc("/api", pages.API)
 	http.HandleFunc("/api/new", api.NewPaste)
 	http.HandleFunc("/api/get/", api.GetPaste)
 

@@ -94,6 +94,14 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
+//About API page
+func API(rw http.ResponseWriter, req *http.Request) {
+	//Return response
+	rw.Header().Set("Content-Type", "text/html")
+
+	io.WriteString(rw, apiPage)
+}
+
 //Get paste
 func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	//Set Header
@@ -178,6 +186,7 @@ func loadFile(path string) ([]byte, error) {
 
 var styleCSS string
 var mainPage string
+var apiPage string
 var newPage string
 var newDoneTmpl *template.Template
 var getTmpl *template.Template
@@ -199,6 +208,14 @@ func Load() error {
 	}
 
 	mainPage = string(mainPageByte)
+
+	//About API page
+	apiPageByte, err := loadFile(filepath.Join(webDir, "api.html"))
+	if err != nil {
+		return err
+	}
+
+	apiPage = string(apiPageByte)
 
 	//New page
 	newPageByte, err := loadFile(filepath.Join(webDir, "new.html"))
