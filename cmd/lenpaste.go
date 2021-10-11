@@ -24,6 +24,7 @@ package main
 import (
 	"../internal/api"
 	"../internal/assets"
+	"../internal/config"
 	"../internal/pages"
 	"../internal/storage"
 	"log"
@@ -34,8 +35,7 @@ import (
 
 const (
 	//Background job break
-	backJobBreak     = 1 * time.Minute
-	httpServerListen = ":8000"
+	backJobBreak = 1 * time.Minute
 )
 
 //Logging
@@ -57,8 +57,14 @@ func BackgroundJob() {
 }
 
 func main() {
+	//Read config
+	config, err := config.Read()
+	if err != nil {
+		panic(err)
+	}
+
 	//Load assets
-	err := assets.Load()
+	err = assets.Load()
 	if err != nil {
 		panic(err)
 	}
@@ -84,8 +90,8 @@ func main() {
 	go BackgroundJob()
 
 	//Run (WEB)
-	logInfo.Println("HTTP server listen: '" + httpServerListen + "'")
-	err = http.ListenAndServe(httpServerListen, nil)
+	logInfo.Println("HTTP server listen: '" + config.HTTP.Listen + "'")
+	err = http.ListenAndServe(config.HTTP.Listen, nil)
 	if err != nil {
 		panic(err)
 	}
