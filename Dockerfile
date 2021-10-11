@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY --from=build /build/dist/* ./
 
-COPY ./web ./
+COPY ./web ./web
 
 RUN chmod +x /app/lenpaste
 
