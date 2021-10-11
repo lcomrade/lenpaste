@@ -17,6 +17,8 @@ COPY --from=build /build/dist/* ./
 
 RUN chmod +x /app/lenpaste
 
+EXPOSE 8000/tcp
+
 VOLUME /app/data
 
 CMD [ "./lenpaste" ]
