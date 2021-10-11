@@ -15,6 +15,8 @@ WORKDIR /app
 
 COPY --from=build /build/dist/* ./
 
+COPY ./web ./
+
 RUN chmod +x /app/lenpaste
 
 EXPOSE 8000/tcp
