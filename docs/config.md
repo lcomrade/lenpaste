@@ -6,7 +6,10 @@ Here is an example of a configuration file:
 ```
 {
 	"HTTP": {
-		"Listen": ":8000"
+		"Listen": ":8000",
+		"UseTLS": false,
+		"SSLCert": "./data/fullchain.pem",
+		"SSLKey": "./data/privkey.pem"
 	}
 }
 ```

@@ -91,8 +91,25 @@ func main() {
 
 	//Run (WEB)
 	logInfo.Println("HTTP server listen: '" + config.HTTP.Listen + "'")
-	err = http.ListenAndServe(config.HTTP.Listen, nil)
-	if err != nil {
-		panic(err)
+	logInfo.Println("Use TLS: ", config.HTTP.UseTLS)
+
+	//Use TLS or no?
+	if config.HTTP.UseTLS == false {
+		//No TLS
+		err = http.ListenAndServe(config.HTTP.Listen, nil)
+		if err != nil {
+			panic(err)
+		}
+
+	} else {
+		//Enable TLS
+		logInfo.Println("SSL cert: '" + config.HTTP.SSLCert + "'")
+		logInfo.Println("SSL key: '" + config.HTTP.SSLKey + "'")
+
+		err = http.ListenAndServeTLS(config.HTTP.Listen, config.HTTP.SSLCert, config.HTTP.SSLKey, nil)
+		err = http.ListenAndServe(config.HTTP.Listen, nil)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
