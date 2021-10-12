@@ -45,7 +45,7 @@ type ConfigHTTP struct {
 var defaultCfg = Config{
 	HTTP: ConfigHTTP{
 		Listen:  ":8000",
-		UseTLS:  true,
+		UseTLS:  false,
 		SSLCert: "./data/fullchain.pem",
 		SSLKey:  "./data/privkey.pem",
 	},
