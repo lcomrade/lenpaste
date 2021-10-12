@@ -107,7 +107,6 @@ func main() {
 		logInfo.Println("SSL key: '" + config.HTTP.SSLKey + "'")
 
 		err = http.ListenAndServeTLS(config.HTTP.Listen, config.HTTP.SSLCert, config.HTTP.SSLKey, nil)
-		err = http.ListenAndServe(config.HTTP.Listen, nil)
 		if err != nil {
 			panic(err)
 		}
