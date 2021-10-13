@@ -21,6 +21,7 @@
 package api
 
 import (
+	"../config"
 	"../storage"
 	"encoding/json"
 	"net/http"
@@ -67,6 +68,25 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 
 	encoder := json.NewEncoder(rw)
 	err = encoder.Encode(&paste)
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+}
+
+func GetRules(rw http.ResponseWriter, req *http.Request) {
+	//Get rules
+	rules, err := config.ReadRules()
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+
+	//Return response
+	rw.Header().Set("Content-Type", "application/json")
+
+	encoder := json.NewEncoder(rw)
+	err = encoder.Encode(&rules)
 	if err != nil {
 		http.Error(rw, err.Error(), 400)
 		return

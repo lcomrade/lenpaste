@@ -22,11 +22,13 @@ package config
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"os"
 )
 
 const (
 	configPath = "./data/config.json"
+	rulesPath  = "./data/rules.txt"
 )
 
 //Config file TYPE
@@ -52,7 +54,7 @@ var defaultCfg = Config{
 }
 
 // Get config file
-func Read() (Config, error) {
+func ReadConfig() (Config, error) {
 	//Set default values
 	config := defaultCfg
 
@@ -77,4 +79,46 @@ func Read() (Config, error) {
 	}
 
 	return config, nil
+}
+
+//Get rules text
+type RulesType struct {
+	Exist bool
+	Text  string
+}
+
+var RulesDefault = RulesType{
+	Exist: false,
+	Text:  "",
+}
+
+func ReadRules() (RulesType, error) {
+	rules := RulesDefault
+
+	//Open rules file
+	file, err := os.Open(rulesPath)
+	//If the rules file is missing
+	if err != nil {
+		if os.IsNotExist(err) == true {
+			return rules, nil
+
+			//If another error
+		} else {
+			return rules, err
+		}
+	}
+	defer file.Close()
+
+	//Read rules file
+	fileByte, err := ioutil.ReadAll(file)
+	if err != nil {
+		return rules, err
+	}
+
+	//Byte to string
+	rules.Text = string(fileByte)
+	rules.Exist = true
+
+	//Return
+	return rules, nil
 }

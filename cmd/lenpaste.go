@@ -58,7 +58,7 @@ func BackgroundJob() {
 
 func main() {
 	//Read config
-	config, err := config.Read()
+	config, err := config.ReadConfig()
 	if err != nil {
 		panic(err)
 	}
@@ -87,6 +87,7 @@ func main() {
 
 	http.HandleFunc("/api/new", api.NewPaste)
 	http.HandleFunc("/api/get/", api.GetPaste)
+	http.HandleFunc("/api/rules", api.GetRules)
 
 	//Run (Background Job)
 	go BackgroundJob()

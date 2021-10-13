@@ -21,6 +21,7 @@
 package pages
 
 import (
+	"../config"
 	"../storage"
 	"bytes"
 	"html/template"
@@ -33,8 +34,7 @@ import (
 )
 
 const (
-	webDir    = "./web"
-	rulesFile = "./data/rules.txt"
+	webDir = "./web"
 )
 
 type PastePageType struct {
@@ -176,35 +176,6 @@ func errorHandler(rw http.ResponseWriter, err error, code int) {
 }
 
 //Load pages (init)
-func loadRules() (string, error) {
-	var rulesHTML string
-
-	//Load HTML template
-	tmpl, err := template.ParseFiles(filepath.Join(webDir, "rules.tmpl"))
-	if err != nil {
-		return rulesHTML, err
-	}
-
-	//Load rules file
-	rulesTxtByte, err := loadFile(rulesFile)
-	rulesTxt := string(rulesTxtByte)
-	if err != nil {
-		rulesTxt = "This server has no rules."
-	}
-
-	//Execute template
-	buf := new(bytes.Buffer)
-
-	err = tmpl.Execute(buf, rulesTxt)
-	if err != nil {
-		return rulesHTML, err
-	}
-
-	rulesHTML = buf.String()
-
-	return rulesHTML, nil
-}
-
 func loadFile(path string) ([]byte, error) {
 	var fileByte []byte
 
@@ -222,6 +193,38 @@ func loadFile(path string) ([]byte, error) {
 	}
 
 	return fileByte, nil
+}
+
+func loadRules() (string, error) {
+	var rulesHTML string
+
+	//Load HTML template
+	tmpl, err := template.ParseFiles(filepath.Join(webDir, "rules.tmpl"))
+	if err != nil {
+		return rulesHTML, err
+	}
+
+	//Read rules file
+	rules, err := config.ReadRules()
+	if err != nil {
+		return rulesHTML, err
+	}
+
+	if rules.Exist == false {
+		rules.Text = "This server has no rules."
+	}
+
+	//Execute template
+	buf := new(bytes.Buffer)
+
+	err = tmpl.Execute(buf, rules)
+	if err != nil {
+		return rulesHTML, err
+	}
+
+	rulesHTML = buf.String()
+
+	return rulesHTML, nil
 }
 
 var styleCSS string
