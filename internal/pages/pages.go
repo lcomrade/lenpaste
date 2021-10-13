@@ -22,6 +22,7 @@ package pages
 
 import (
 	"../storage"
+	"bytes"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -32,7 +33,8 @@ import (
 )
 
 const (
-	webDir = "./web"
+	webDir    = "./web"
+	rulesFile = "./data/rules.txt"
 )
 
 type PastePageType struct {
@@ -102,6 +104,14 @@ func API(rw http.ResponseWriter, req *http.Request) {
 	io.WriteString(rw, apiPage)
 }
 
+//Server rules page
+func Rules(rw http.ResponseWriter, req *http.Request) {
+	//Return response
+	rw.Header().Set("Content-Type", "text/html")
+
+	io.WriteString(rw, rulesPage)
+}
+
 //Get paste
 func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	//Set Header
@@ -166,6 +176,35 @@ func errorHandler(rw http.ResponseWriter, err error, code int) {
 }
 
 //Load pages (init)
+func loadRules() (string, error) {
+	var rulesHTML string
+
+	//Load HTML template
+	tmpl, err := template.ParseFiles(filepath.Join(webDir, "rules.tmpl"))
+	if err != nil {
+		return rulesHTML, err
+	}
+
+	//Load rules file
+	rulesTxtByte, err := loadFile(rulesFile)
+	rulesTxt := string(rulesTxtByte)
+	if err != nil {
+		rulesTxt = "This server has no rules."
+	}
+
+	//Execute template
+	buf := new(bytes.Buffer)
+
+	err = tmpl.Execute(buf, rulesTxt)
+	if err != nil {
+		return rulesHTML, err
+	}
+
+	rulesHTML = buf.String()
+
+	return rulesHTML, nil
+}
+
 func loadFile(path string) ([]byte, error) {
 	var fileByte []byte
 
@@ -188,6 +227,7 @@ func loadFile(path string) ([]byte, error) {
 var styleCSS string
 var mainPage string
 var apiPage string
+var rulesPage string
 var newPage string
 var newDoneTmpl *template.Template
 var getTmpl *template.Template
@@ -217,6 +257,14 @@ func Load() error {
 	}
 
 	apiPage = string(apiPageByte)
+
+	//Rules page
+	rulesPageLoad, err := loadRules()
+	if err != nil {
+		return err
+	}
+
+	rulesPage = rulesPageLoad
 
 	//New page
 	newPageByte, err := loadFile(filepath.Join(webDir, "new.html"))
