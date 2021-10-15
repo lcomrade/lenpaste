@@ -6,9 +6,9 @@
 		<link rel="stylesheet" type="text/css" href="/style.css"/>
 	</head>
 	<body>
-		<div class="title">
+		<header>
 			<h2><a class="titleA" href=/>Lenpaste</a></h2>
-		</div>
+		</header>
 		<h3>Create paste</h3>
 		<form action="/new_done" method="post">
 			<p><textarea name="text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
@@ -24,5 +24,11 @@
 			</p>
 			<p><input type="submit" value="Create paste" tabindex=3></p>
 		</form>
+		<footer>
+			<p>
+				<a href=/rules class="footerA">Server rules</a>
+				<a href=/api class="footerA">API</a>
+			</p>
+		</footer>
 	</body>
 </html>

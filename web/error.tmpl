@@ -6,13 +6,19 @@
 		<link rel="stylesheet" type="text/css" href="/style.css"/>
 	</head>
 	<body>
-		<div class="title">
+		<header>
 			<h2><a class="titleA" href=/>Lenpaste</a></h2>
-		</div>
+		</header>
 		<div class="totalMsg">
 			<h3>Error {{.Code}}</h3>
 			<p>{{.Error}}</p>
 			<a href=/ style="color: #3366CC;">Back to home page</a>
 		</div>
+		<footer>
+			<p>
+				<a href=/rules class="footerA">Server rules</a>
+				<a href=/api class="footerA">API</a>
+			</p>
+		</footer>
 	</body>
 </html>
