@@ -7,6 +7,8 @@ COPY . ./
 
 RUN mkdir ./dist/ && go build -ldflags="-w -s" -o ./dist/lenpaste ./cmd/lenpaste.go
 
+RUN if [ -f "./version.json" ]; then cp ./version.json ./dist/version.json; fi
+
 
 # RUN
 FROM alpine:latest as run
