@@ -27,8 +27,9 @@ import (
 )
 
 const (
-	configPath = "./data/config.json"
-	rulesPath  = "./data/rules.txt"
+	configPath  = "./data/config.json"
+	rulesPath   = "./data/rules.txt"
+	versionPath = "./version.txt"
 )
 
 //Config file TYPE
@@ -121,4 +122,35 @@ func ReadRules() (RulesType, error) {
 
 	//Return
 	return rules, nil
+}
+
+//Get version
+func ReadVersion() (string, error) {
+	version := "unknown"
+
+	//Open version file
+	file, err := os.Open(versionPath)
+	//If the version file is missing
+	if err != nil {
+		if os.IsNotExist(err) == true {
+			return version, nil
+
+			//If another error
+		} else {
+			return version, err
+		}
+	}
+	defer file.Close()
+
+	//Read version file
+	fileByte, err := ioutil.ReadAll(file)
+	if err != nil {
+		return version, err
+	}
+
+	//Byte to string
+	version = string(fileByte)
+
+	//Return
+	return version, nil
 }

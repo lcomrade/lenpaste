@@ -112,6 +112,14 @@ func Rules(rw http.ResponseWriter, req *http.Request) {
 	io.WriteString(rw, rulesPage)
 }
 
+//Server version page
+func Version(rw http.ResponseWriter, req *http.Request) {
+	//Return response
+	rw.Header().Set("Content-Type", "text/html")
+
+	io.WriteString(rw, versionPage)
+}
+
 //Get paste
 func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	//Set Header
@@ -227,10 +235,39 @@ func loadRules() (string, error) {
 	return rulesHTML, nil
 }
 
+func loadVersion() (string, error) {
+	var versionHTML string
+
+	//Load HTML template
+	tmpl, err := template.ParseFiles(filepath.Join(webDir, "version.tmpl"))
+	if err != nil {
+		return versionHTML, err
+	}
+
+	//Read version file
+	version, err := config.ReadVersion()
+	if err != nil {
+		return versionHTML, err
+	}
+
+	//Execute template
+	buf := new(bytes.Buffer)
+
+	err = tmpl.Execute(buf, version)
+	if err != nil {
+		return versionHTML, err
+	}
+
+	versionHTML = buf.String()
+
+	return versionHTML, nil
+}
+
 var styleCSS string
 var mainPage string
 var apiPage string
 var rulesPage string
+var versionPage string
 var newPage string
 var newDoneTmpl *template.Template
 var getTmpl *template.Template
@@ -268,6 +305,14 @@ func Load() error {
 	}
 
 	rulesPage = rulesPageLoad
+
+	//Version page
+	versionPageLoad, err := loadVersion()
+	if err != nil {
+		return err
+	}
+
+	versionPage = versionPageLoad
 
 	//New page
 	newPageByte, err := loadFile(filepath.Join(webDir, "new.html"))

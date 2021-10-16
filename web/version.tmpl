@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Read | Lenpaste</title>
+		<title>Version | Lenpaste</title>
 		<link rel="stylesheet" type="text/css" href="/style.css"/>
 	</head>
 	<body>
@@ -10,8 +10,10 @@
 			<h2><a class="titleA" href=/>Lenpaste</a></h2>
 		</header>
 		<div class="main">
-			<p><textarea wrap="off" autofocus tabindex=1 rows=30 cols=100 readonly>{{.Text}}</textarea></p>
-			<p>Expires in: {{.ExpiresDay}} days, {{.ExpiresHour}} hours, {{.ExpiresMin}} minutes</p>
+			<h3>Version</h3>
+			<div class="totalMsg">
+				<p>{{.}}</p>
+			</div>
 		</div>
 		<footer>
 			<p>
