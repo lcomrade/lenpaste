@@ -11,7 +11,11 @@
 		</header>
 		<div class="main">
 			<div class="totalMsg">
-				<h3>About</h3>
+				{{if .Exist}}
+				<h3>About this server</h3>
+				<pre>{{.Text}}</pre>
+				{{end}}
+				<h3>About Lenpaste</h3>
 				<ul>
 					<li>Lenpaste is open source software. All source code is available in the <a href=https://github.com/lcomrade/lenpaste>GitHub repository</a> under the GPL 3 license.</li>
 					<li>This site does not use Java Script. Your privacy is respected here.</li>

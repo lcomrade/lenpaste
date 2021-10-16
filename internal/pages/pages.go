@@ -203,6 +203,34 @@ func loadFile(path string) ([]byte, error) {
 	return fileByte, nil
 }
 
+func loadMain() (string, error) {
+	var mainHTML string
+
+	//Load HTML template
+	tmpl, err := template.ParseFiles(filepath.Join(webDir, "main.tmpl"))
+	if err != nil {
+		return mainHTML, err
+	}
+
+	//Read about file
+	about, err := config.ReadAbout()
+	if err != nil {
+		return mainHTML, err
+	}
+
+	//Execute template
+	buf := new(bytes.Buffer)
+
+	err = tmpl.Execute(buf, about)
+	if err != nil {
+		return mainHTML, err
+	}
+
+	mainHTML = buf.String()
+
+	return mainHTML, nil
+}
+
 func loadRules() (string, error) {
 	var rulesHTML string
 
@@ -283,7 +311,7 @@ func Load() error {
 	styleCSS = string(styleCSSByte)
 
 	//Main page
-	mainPageByte, err := loadFile(filepath.Join(webDir, "main.html"))
+	mainPageByte, err := loadMain()
 	if err != nil {
 		return err
 	}

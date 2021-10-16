@@ -14,6 +14,10 @@ Here is an example of a configuration file:
 }
 ```
 
+## ./data/about.txt
+Here you can write information about your server.
+It will be displayed on the main page.
+
 ## ./data/rules.txt
 In this file you can describe the rules for using your server.
 It will be available at `/rules`.

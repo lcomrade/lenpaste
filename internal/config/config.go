@@ -28,6 +28,7 @@ import (
 
 const (
 	configPath  = "./data/config.json"
+	aboutPath   = "./data/about.txt"
 	rulesPath   = "./data/rules.txt"
 	versionPath = "./version.json"
 )
@@ -80,6 +81,48 @@ func ReadConfig() (Config, error) {
 	}
 
 	return config, nil
+}
+
+//Get about text
+type AboutType struct {
+	Exist bool
+	Text  string
+}
+
+var AboutDefault = AboutType{
+	Exist: false,
+	Text:  "",
+}
+
+func ReadAbout() (AboutType, error) {
+	about := AboutDefault
+
+	//Open about file
+	file, err := os.Open(aboutPath)
+	//If the about file is missing
+	if err != nil {
+		if os.IsNotExist(err) == true {
+			return about, nil
+
+			//If another error
+		} else {
+			return about, err
+		}
+	}
+	defer file.Close()
+
+	//Read rules file
+	fileByte, err := ioutil.ReadAll(file)
+	if err != nil {
+		return about, err
+	}
+
+	//Byte to string
+	about.Text = string(fileByte)
+	about.Exist = true
+
+	//Return
+	return about, nil
 }
 
 //Get rules text
