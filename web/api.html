@@ -16,7 +16,7 @@
 				<p>Lenpaste has an open API. It does not require registration.</p>
 				<h3>Methods</h3>
 				<hr/>
-				<h4>/api/new (GET)</h4>
+				<h4>/api/new</h4>
 				<p>Create a new paste.</p>
 				<p>Request:</p>
 				<ul>
@@ -106,41 +106,54 @@
 				<p>Response: JSON</p>
 				<details>
 					<summary>Response example</summary>
-	<pre><code>{
-		"Name":"8HslINRp"
-	}
-	</code></pre>
+<pre><code>{
+	"Name":"8HslINRp"
+}
+</code></pre>
 				</details>
 				<hr/>
-				<h4>/api/get/PASTE_NAME (GET)</h4>
+				<h4>/api/get/PASTE_NAME</h4>
 				<p>Get information about the paste and its text.</p>
 				<p>Request: NONE</p>
 				<p>Response: JSON</p>
 				<details>
 					<summary>Response example</summary>
-	<pre><code>{
-		"Name":"8HslINRp",
-		"Text":"My paste\r\nEND",
-		"Info":{
-			"CreateTime":1633845370,
-			"DeleteTime":1633847170
-		}
+<pre><code>{
+	"Name":"8HslINRp",
+	"Text":"My paste\r\nEND",
+	"Info":{
+		"CreateTime":1633845370,
+		"DeleteTime":1633847170
 	}
-	</code></pre>
+}
+</code></pre>
 				</details>
 				<hr></hr>
-				<h4>/api/rules (GET)</h4>
+				<h4>/api/rules</h4>
 				<p>Get information about server rules.</p>
 				<p>Request: NONE</p>
 				<p>Response: JSON</p>
 				<details>
 					<summary>Response example</summary>
-	<pre><code>{
-		"Exist":true,
-		"Text":"My server\nMy rules"
-	}
-	</code></pre>
+<pre><code>{
+	"Exist":true,
+	"Text":"My server\nMy rules"
+}
+</code></pre>
 				</details>
+				<hr></hr>
+				<h4>/api/version</h4>
+				<p>Get information about server version.</p>
+				<p>Request: NONE</p>
+				<p>Response: JSON</p>
+				<details>
+					<summary>Response example</summary>
+<pre><code>{
+	"Tag":"v0.1"
+}
+</code></pre>
+				</details>
+
 			</div>
 		</div>
 		<footer>

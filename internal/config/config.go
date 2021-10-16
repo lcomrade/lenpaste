@@ -29,7 +29,7 @@ import (
 const (
 	configPath  = "./data/config.json"
 	rulesPath   = "./data/rules.txt"
-	versionPath = "./version.txt"
+	versionPath = "./version.json"
 )
 
 //Config file TYPE
@@ -125,13 +125,22 @@ func ReadRules() (RulesType, error) {
 }
 
 //Get version
-func ReadVersion() (string, error) {
-	version := "unknown"
+type VersionType struct {
+	Tag string
+}
 
-	//Open version file
+var VersionDefault = VersionType{
+	Tag: "unknown",
+}
+
+func ReadVersion() (VersionType, error) {
+	//Set default values
+	version := VersionDefault
+
+	//Read version file
 	file, err := os.Open(versionPath)
-	//If the version file is missing
 	if err != nil {
+		//If the version is missing
 		if os.IsNotExist(err) == true {
 			return version, nil
 
@@ -140,16 +149,13 @@ func ReadVersion() (string, error) {
 			return version, err
 		}
 	}
-	defer file.Close()
 
-	//Read version file
-	fileByte, err := ioutil.ReadAll(file)
+	//Decode version file
+	parser := json.NewDecoder(file)
+	err = parser.Decode(&version)
 	if err != nil {
 		return version, err
 	}
-
-	//Byte to string
-	version = string(fileByte)
 
 	//Return
 	return version, nil

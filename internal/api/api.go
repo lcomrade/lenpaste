@@ -92,3 +92,22 @@ func GetRules(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 }
+
+func GetVersion(rw http.ResponseWriter, req *http.Request) {
+	//Get version
+	version, err := config.ReadVersion()
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+
+	//Return response
+	rw.Header().Set("Content-Type", "application/json")
+
+	encoder := json.NewEncoder(rw)
+	err = encoder.Encode(&version)
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+}
