@@ -90,6 +90,10 @@ header {
 	text-decoration: none;
 }
 
+.main {
+	min-height: calc(100vh - 224px);
+}
+
 .totalMsg {
 	text-align: left;
 	line-height: 1.5;

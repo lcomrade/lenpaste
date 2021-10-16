@@ -9,21 +9,23 @@
 		<header>
 			<h2><a class="titleA" href=/>Lenpaste</a></h2>
 		</header>
-		<h3>Create paste</h3>
-		<form action="/new_done" method="post">
-			<p><textarea name="text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
-			<p>
-				Expiration:
-				<select name="expiration" tabindex=2 size=1>
-					<option value="10m">10 minutes</option>
-					<option value="30m">30 minutes</option>
-					<option value="1h">1 hour</option>
-					<option value="1d">1 day</option>
-					<option value="1w" selected>1 week</option>
-				</select>
-			</p>
-			<p><input type="submit" value="Create paste" tabindex=3></p>
-		</form>
+		<div class="main">
+			<h3>Create paste</h3>
+			<form action="/new_done" method="post">
+				<p><textarea name="text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
+				<p>
+					Expiration:
+					<select name="expiration" tabindex=2 size=1>
+						<option value="10m">10 minutes</option>
+						<option value="30m">30 minutes</option>
+						<option value="1h">1 hour</option>
+						<option value="1d">1 day</option>
+						<option value="1w" selected>1 week</option>
+					</select>
+				</p>
+				<p><input type="submit" value="Create paste" tabindex=3></p>
+			</form>
+		</div>
 		<footer>
 			<p>
 				<a href=/rules class="footerA">Server rules</a>

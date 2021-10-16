@@ -9,8 +9,10 @@
 		<header>
 			<h2><a class="titleA" href=/>Lenpaste</a></h2>
 		</header>
-		<p><textarea wrap="off" autofocus tabindex=1 rows=30 cols=100 readonly>{{.Text}}</textarea></p>
-		<p>Expires in: {{.ExpiresDay}} days, {{.ExpiresHour}} hours, {{.ExpiresMin}} minutes</p>
+		<div class="main">
+			<p><textarea wrap="off" autofocus tabindex=1 rows=30 cols=100 readonly>{{.Text}}</textarea></p>
+			<p>Expires in: {{.ExpiresDay}} days, {{.ExpiresHour}} hours, {{.ExpiresMin}} minutes</p>
+		</div>
 		<footer>
 			<p>
 				<a href=/rules class="footerA">Server rules</a>
