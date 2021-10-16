@@ -126,11 +126,17 @@ func ReadRules() (RulesType, error) {
 
 //Get version
 type VersionType struct {
-	Tag string
+	Version   string
+	GitTag    string
+	GitCommit string
+	BuildDate string
 }
 
 var VersionDefault = VersionType{
-	Tag: "unknown",
+	Version:   "unknown",
+	GitTag:    "unknown",
+	GitCommit: "unknown",
+	BuildDate: "unknown",
 }
 
 func ReadVersion() (VersionType, error) {

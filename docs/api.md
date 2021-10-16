@@ -73,3 +73,20 @@ Response example:
 	"Text":"My server\nMy rules"
 }
 ```
+
+### /api/version
+Get information about server version.
+
+Request: NONE
+
+Response: JSON
+
+Response example:
+```
+{
+	"Version":"v0.1-stable",
+	"GitTag":"v0.1",
+	"GitCommit":"30bb0a7e768f46ab02b74cf05fb948e8696a055c",
+	"BuildDate":"16.10.2021"
+}
+```
