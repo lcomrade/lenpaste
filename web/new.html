@@ -12,7 +12,8 @@
 		<div class="main">
 			<h3>Create paste</h3>
 			<form action="/new_done" method="post">
-				<p><textarea name="text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
+				<p><input name="title" placeholder="Paste title" tabindex=4></p>
+				<p><textarea name="text" placeholder="Paste text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
 				<p>
 					Expiration:
 					<select name="expiration" tabindex=2 size=1>

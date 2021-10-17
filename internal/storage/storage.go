@@ -42,7 +42,7 @@ const (
 type PasteInfoType struct {
 	CreateTime int64
 	DeleteTime int64
-	//Title string
+	Title      string
 	//Syntax string
 	//OneUse bool
 	//Password string
@@ -139,7 +139,7 @@ func expirParse(expiration string) (int64, error) {
 	return 0, errors.New("unknown expiration: " + expiration)
 }
 
-func genPasteInfo(expir string) ([]byte, error) {
+func genPasteInfo(expir string, title string) ([]byte, error) {
 	var infoByte []byte
 
 	//Time
@@ -155,6 +155,7 @@ func genPasteInfo(expir string) ([]byte, error) {
 	pasteInfo := PasteInfoType{
 		CreateTime: nowTime,
 		DeleteTime: delTime,
+		Title:      title,
 	}
 
 	//Marshal (json)
@@ -213,7 +214,7 @@ func isPasteExist(name string) bool {
 }
 
 //Create Paste
-func NewPaste(pasteText string, expir string) (NewPasteType, error) {
+func NewPaste(pasteText string, expir string, title string) (NewPasteType, error) {
 	var paste NewPasteType
 
 	//Paste name
@@ -228,7 +229,7 @@ func NewPaste(pasteText string, expir string) (NewPasteType, error) {
 	textFileName := fileName + pasteTextPrefix
 
 	//Paste info
-	pasteInfo, err := genPasteInfo(expir)
+	pasteInfo, err := genPasteInfo(expir, title)
 	if err != nil {
 		return paste, err
 	}

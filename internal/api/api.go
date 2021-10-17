@@ -33,9 +33,10 @@ func NewPaste(rw http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
 	text := req.Form.Get("text")
 	expiration := req.Form.Get("expiration")
+	title := req.Form.Get("title")
 
 	//Create paste
-	paste, err := storage.NewPaste(text, expiration)
+	paste, err := storage.NewPaste(text, expiration, title)
 	if err != nil {
 		http.Error(rw, err.Error(), 400)
 		return

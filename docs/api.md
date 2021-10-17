@@ -6,6 +6,7 @@ Lenpaste has an open API. It does not require registration.
 Create a new paste.
 
 Request:
+ - `title` - Paste title
  - `text` - Paste text
  - `expiration` - Paste expiration date
  

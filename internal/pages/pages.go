@@ -38,11 +38,11 @@ const (
 )
 
 type PastePageType struct {
+	Title       string
 	Text        string
 	ExpiresMin  int64
 	ExpiresHour int64
 	ExpiresDay  int64
-	//Title string
 	//Syntax string
 	//OneUse bool
 	//Password string
@@ -75,9 +75,10 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
 	text := req.Form.Get("text")
 	expiration := req.Form.Get("expiration")
+	title := req.Form.Get("title")
 
 	//Create paste
-	paste, err := storage.NewPaste(text, expiration)
+	paste, err := storage.NewPaste(text, expiration, title)
 	if err != nil {
 		errorHandler(rw, err, 400)
 		return
@@ -145,6 +146,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	deltaTime := pasteInfo.Info.DeleteTime - time.Now().Unix()
 	deltaTime = deltaTime / 60
 	pastePage := PastePageType{
+		Title:       pasteInfo.Info.Title,
 		Text:        pasteInfo.Text,
 		ExpiresMin:  deltaTime % 60,
 		ExpiresHour: deltaTime / 60 % 24,
