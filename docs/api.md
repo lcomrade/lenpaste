@@ -59,6 +59,21 @@ Response example:
 }
 ```
 
+### /api/about
+Get information about this server.
+
+Request: NONE
+
+Response: JSON
+
+Response example:
+```
+{
+	"Exist":true,
+	"Text":"ABOUT\n1\n2\n3\n"
+}
+```
+
 ### /api/rules
 Get information about server rules.
 

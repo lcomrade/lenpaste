@@ -74,6 +74,25 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func GetAbout(rw http.ResponseWriter, req *http.Request) {
+	//Get about
+	about, err := config.ReadAbout()
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+
+	//Return response
+	rw.Header().Set("Content-Type", "application/json")
+
+	encoder := json.NewEncoder(rw)
+	err = encoder.Encode(&about)
+	if err != nil {
+		http.Error(rw, err.Error(), 400)
+		return
+	}
+}
+
 func GetRules(rw http.ResponseWriter, req *http.Request) {
 	//Get rules
 	rules, err := config.ReadRules()

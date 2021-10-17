@@ -88,6 +88,7 @@ func main() {
 
 	http.HandleFunc("/api/new", api.NewPaste)
 	http.HandleFunc("/api/get/", api.GetPaste)
+	http.HandleFunc("/api/about", api.GetAbout)
 	http.HandleFunc("/api/rules", api.GetRules)
 	http.HandleFunc("/api/version", api.GetVersion)
 
