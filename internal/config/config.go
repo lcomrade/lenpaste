@@ -83,88 +83,58 @@ func ReadConfig() (Config, error) {
 	return config, nil
 }
 
-//Get about text
-type AboutType struct {
+//Get text file
+type TextType struct {
 	Exist bool
 	Text  string
 }
 
-var AboutDefault = AboutType{
+var TextDefault = TextType{
 	Exist: false,
 	Text:  "",
 }
 
-func ReadAbout() (AboutType, error) {
-	about := AboutDefault
+func readText(path string) (TextType, error) {
+	out := TextDefault
 
-	//Open about file
-	file, err := os.Open(aboutPath)
-	//If the about file is missing
+	//Open text file
+	file, err := os.Open(path)
+	//If text file is missing
 	if err != nil {
 		if os.IsNotExist(err) == true {
-			return about, nil
+			return out, nil
 
 			//If another error
 		} else {
-			return about, err
+			return out, err
 		}
 	}
 	defer file.Close()
 
-	//Read rules file
+	//Read text file
 	fileByte, err := ioutil.ReadAll(file)
 	if err != nil {
-		return about, err
+		return out, err
 	}
 
 	//Byte to string
-	about.Text = string(fileByte)
-	about.Exist = true
+	out.Text = string(fileByte)
+	out.Exist = true
 
 	//Return
-	return about, nil
+	return out, nil
+}
+
+//Get about text
+func ReadAbout() (TextType, error) {
+	out, err := readText(aboutPath)
+	return out, err
 }
 
 //Get rules text
-type RulesType struct {
-	Exist bool
-	Text  string
-}
-
-var RulesDefault = RulesType{
-	Exist: false,
-	Text:  "",
-}
-
-func ReadRules() (RulesType, error) {
-	rules := RulesDefault
-
-	//Open rules file
-	file, err := os.Open(rulesPath)
-	//If the rules file is missing
-	if err != nil {
-		if os.IsNotExist(err) == true {
-			return rules, nil
-
-			//If another error
-		} else {
-			return rules, err
-		}
-	}
-	defer file.Close()
-
-	//Read rules file
-	fileByte, err := ioutil.ReadAll(file)
-	if err != nil {
-		return rules, err
-	}
-
-	//Byte to string
-	rules.Text = string(fileByte)
-	rules.Exist = true
-
-	//Return
-	return rules, nil
+func ReadRules() (TextType, error) {
+	out, err := readText(rulesPath)
+	return out, err
 }
 
 //Get version

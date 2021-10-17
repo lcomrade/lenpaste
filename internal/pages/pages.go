@@ -58,7 +58,7 @@ func Style(rw http.ResponseWriter, req *http.Request) {
 	//Return response
 	rw.Header().Set("Content-Type", "text/css")
 
-	io.WriteString(rw, styleCSS)
+	io.WriteString(rw, pages.StyleCSS)
 }
 
 //New paste
@@ -66,7 +66,7 @@ func NewPaste(rw http.ResponseWriter, req *http.Request) {
 	//Return response
 	rw.Header().Set("Content-Type", "text/html")
 
-	io.WriteString(rw, newPage)
+	io.WriteString(rw, pages.New)
 }
 
 //New paste done
@@ -87,7 +87,7 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/html")
 
 	//Filling the html page template
-	tmpl := newDoneTmpl
+	tmpl := pages.NewDoneTmpl
 
 	err = tmpl.Execute(rw, paste)
 	if err != nil {
@@ -101,7 +101,7 @@ func API(rw http.ResponseWriter, req *http.Request) {
 	//Return response
 	rw.Header().Set("Content-Type", "text/html")
 
-	io.WriteString(rw, apiPage)
+	io.WriteString(rw, pages.API)
 }
 
 //Server rules page
@@ -109,7 +109,7 @@ func Rules(rw http.ResponseWriter, req *http.Request) {
 	//Return response
 	rw.Header().Set("Content-Type", "text/html")
 
-	io.WriteString(rw, rulesPage)
+	io.WriteString(rw, pages.Rules)
 }
 
 //Server version page
@@ -117,7 +117,7 @@ func Version(rw http.ResponseWriter, req *http.Request) {
 	//Return response
 	rw.Header().Set("Content-Type", "text/html")
 
-	io.WriteString(rw, versionPage)
+	io.WriteString(rw, pages.Version)
 }
 
 //Get paste
@@ -127,7 +127,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 
 	//Main page
 	if req.URL.Path == "/" {
-		io.WriteString(rw, mainPage)
+		io.WriteString(rw, pages.Main)
 		return
 	}
 
@@ -152,7 +152,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	//Filling the html page template
-	tmpl := getTmpl
+	tmpl := pages.GetTmpl
 
 	err = tmpl.Execute(rw, pastePage)
 	if err != nil {
@@ -174,7 +174,7 @@ func errorHandler(rw http.ResponseWriter, err error, code int) {
 	}
 
 	//Filling the html page template
-	tmpl := errorTmpl
+	tmpl := pages.ErrorTmpl
 
 	err = tmpl.Execute(rw, errorInfo)
 	if err != nil {
@@ -184,23 +184,24 @@ func errorHandler(rw http.ResponseWriter, err error, code int) {
 }
 
 //Load pages (init)
-func loadFile(path string) ([]byte, error) {
-	var fileByte []byte
+func loadFile(path string) (string, error) {
+	var out string
 
 	//Open file
 	file, err := os.Open(path)
 	if err != nil {
-		return fileByte, err
+		return out, err
 	}
 	defer file.Close()
 
 	//Read file
-	fileByte, err = ioutil.ReadAll(file)
+	fileByte, err := ioutil.ReadAll(file)
+	out = string(fileByte)
 	if err != nil {
-		return fileByte, err
+		return out, err
 	}
 
-	return fileByte, nil
+	return out, nil
 }
 
 func loadMain() (string, error) {
@@ -291,88 +292,76 @@ func loadVersion() (string, error) {
 	return versionHTML, nil
 }
 
-var styleCSS string
-var mainPage string
-var apiPage string
-var rulesPage string
-var versionPage string
-var newPage string
-var newDoneTmpl *template.Template
-var getTmpl *template.Template
-var errorTmpl *template.Template
+type pagesType struct {
+	StyleCSS    string
+	Main        string
+	API         string
+	Rules       string
+	Version     string
+	New         string
+	NewDoneTmpl *template.Template
+	GetTmpl     *template.Template
+	ErrorTmpl   *template.Template
+}
+
+var pages pagesType
 
 func Load() error {
+	var err error
+
 	//Style
-	styleCSSByte, err := loadFile(filepath.Join(webDir, "style.css"))
+	pages.StyleCSS, err = loadFile(filepath.Join(webDir, "style.css"))
 	if err != nil {
 		return err
 	}
-
-	styleCSS = string(styleCSSByte)
 
 	//Main page
-	mainPageByte, err := loadMain()
+	pages.Main, err = loadMain()
 	if err != nil {
 		return err
 	}
-
-	mainPage = string(mainPageByte)
 
 	//About API page
-	apiPageByte, err := loadFile(filepath.Join(webDir, "api.html"))
+	pages.API, err = loadFile(filepath.Join(webDir, "api.html"))
 	if err != nil {
 		return err
 	}
-
-	apiPage = string(apiPageByte)
 
 	//Rules page
-	rulesPageLoad, err := loadRules()
+	pages.Rules, err = loadRules()
 	if err != nil {
 		return err
 	}
-
-	rulesPage = rulesPageLoad
 
 	//Version page
-	versionPageLoad, err := loadVersion()
+	pages.Version, err = loadVersion()
 	if err != nil {
 		return err
 	}
-
-	versionPage = versionPageLoad
 
 	//New page
-	newPageByte, err := loadFile(filepath.Join(webDir, "new.html"))
+	pages.New, err = loadFile(filepath.Join(webDir, "new.html"))
 	if err != nil {
 		return err
 	}
-
-	newPage = string(newPageByte)
 
 	//New done tmpl
-	newDoneTmplLoad, err := template.ParseFiles(filepath.Join(webDir, "new_done.tmpl"))
+	pages.NewDoneTmpl, err = template.ParseFiles(filepath.Join(webDir, "new_done.tmpl"))
 	if err != nil {
 		return err
 	}
-
-	newDoneTmpl = newDoneTmplLoad
 
 	//Get tmpl
-	getTmplLoad, err := template.ParseFiles(filepath.Join(webDir, "get.tmpl"))
+	pages.GetTmpl, err = template.ParseFiles(filepath.Join(webDir, "get.tmpl"))
 	if err != nil {
 		return err
 	}
-
-	getTmpl = getTmplLoad
 
 	//Error tmpl
-	errorTmplLoad, err := template.ParseFiles(filepath.Join(webDir, "error.tmpl"))
+	pages.ErrorTmpl, err = template.ParseFiles(filepath.Join(webDir, "error.tmpl"))
 	if err != nil {
 		return err
 	}
-
-	errorTmpl = errorTmplLoad
 
 	return nil
 }
