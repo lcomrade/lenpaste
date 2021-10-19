@@ -28,7 +28,7 @@ select:hover {
 	cursor: pointer;
 }
 
-input {
+.button {
 	 background: #66CC00;
 	 font-size: 16px;
 	 padding: 6px 6px 6px 6px;
@@ -36,9 +36,21 @@ input {
 	 border-radius: 7px;
 }
 
-input:hover {
+.button:hover {
 	background: #99FF66;
 	cursor: pointer;
+}
+
+.textEnter {
+	background: #999999;
+	font-size: 16px;
+	padding: 6px 6px 6px 6px;
+	border: 2px;
+	border-radius: 7px;
+}
+
+.textEnter:hover {
+	background: #999999;
 }
 
 ul {
