@@ -28,7 +28,35 @@ import (
 	"path/filepath"
 )
 
+type errorType struct {
+	Code  int
+	Error string
+}
+
+func errorHandler(rw http.ResponseWriter, err error, code int) {
+	//Set Header
+	rw.WriteHeader(code)
+	rw.Header().Set("Content-Type", "application/json")
+
+	//Get error info
+	errorInfo := errorType{
+		Code:  code,
+		Error: err.Error(),
+	}
+
+	//Return response
+	encoder := json.NewEncoder(rw)
+	err = encoder.Encode(&errorInfo)
+	if err != nil {
+		errorHandler(rw, err, 400)
+		return
+	}
+}
+
 func NewPaste(rw http.ResponseWriter, req *http.Request) {
+	//Set Header
+	rw.Header().Set("Content-Type", "application/json")
+
 	//Get form data
 	req.ParseForm()
 	text := req.Form.Get("text")
@@ -38,96 +66,98 @@ func NewPaste(rw http.ResponseWriter, req *http.Request) {
 	//Create paste
 	paste, err := storage.NewPaste(text, expiration, title)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 
 	//Return response
-	rw.Header().Set("Content-Type", "application/json")
-
 	encoder := json.NewEncoder(rw)
 	err = encoder.Encode(&paste)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 }
 
 func GetPaste(rw http.ResponseWriter, req *http.Request) {
+	//Set Header
+	rw.Header().Set("Content-Type", "application/json")
+
 	//Get paste name
 	name := filepath.Base(req.URL.Path)
 
 	//Get paste
 	paste, err := storage.GetPaste(name)
 	if err != nil {
-		http.Error(rw, err.Error(), 404)
+		errorHandler(rw, err, 404)
 		return
 	}
 
 	//Return response
-	rw.Header().Set("Content-Type", "application/json")
-
 	encoder := json.NewEncoder(rw)
 	err = encoder.Encode(&paste)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 }
 
 func GetAbout(rw http.ResponseWriter, req *http.Request) {
+	//Set Header
+	rw.Header().Set("Content-Type", "application/json")
+
 	//Get about
 	about, err := config.ReadAbout()
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 
 	//Return response
-	rw.Header().Set("Content-Type", "application/json")
-
 	encoder := json.NewEncoder(rw)
 	err = encoder.Encode(&about)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 }
 
 func GetRules(rw http.ResponseWriter, req *http.Request) {
+	//Set Header
+	rw.Header().Set("Content-Type", "application/json")
+
 	//Get rules
 	rules, err := config.ReadRules()
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 
 	//Return response
-	rw.Header().Set("Content-Type", "application/json")
-
 	encoder := json.NewEncoder(rw)
 	err = encoder.Encode(&rules)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 }
 
 func GetVersion(rw http.ResponseWriter, req *http.Request) {
+	//Set Header
+	rw.Header().Set("Content-Type", "application/json")
+
 	//Get version
 	version, err := config.ReadVersion()
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 
 	//Return response
-	rw.Header().Set("Content-Type", "application/json")
-
 	encoder := json.NewEncoder(rw)
 	err = encoder.Encode(&version)
 	if err != nil {
-		http.Error(rw, err.Error(), 400)
+		errorHandler(rw, err, 400)
 		return
 	}
 }

@@ -166,7 +166,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 //Error page
 func errorHandler(rw http.ResponseWriter, err error, code int) {
 	//Set Header
-	rw.WriteHeader(404)
+	rw.WriteHeader(code)
 	rw.Header().Set("Content-Type", "text/html")
 
 	//Get error info
