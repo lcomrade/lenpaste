@@ -21,7 +21,7 @@ There is its own API.
 
 ### For developers
 - [Lenpaste API](https://github.com/lcomrade/lenpaste/blob/main/docs/api.md)
-- [Golang library for working with API](https://github.com/lcomrade/lenpaste)
+- [Golang library for working with API](https://github.com/lcomrade/lenin)
 
 ### Self-hosting
 - [Configuration](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/config.md)
