@@ -45,9 +45,11 @@ var logError = log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 func BackgroundJob() {
 	for {
 		//Delete expired pastes
-		err := storage.DelExpiredPaste()
-		if err != nil {
-			logError.Println("Delete expired:", err)
+		errs := storage.DelExpiredPaste()
+		if len(errs) != 0 {
+			for _, err := range errs {
+				logError.Println("delete expired error:", err)
+			}
 		}
 
 		//Wait

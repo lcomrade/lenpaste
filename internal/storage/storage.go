@@ -317,14 +317,16 @@ func DelPaste(name string) error {
 }
 
 //Deletes expired pastes
-func DelExpiredPaste() error {
+func DelExpiredPaste() []error {
+	var errs []error
+
 	//Get file prefix len
 	infoPrefixLen := len(pasteInfoPrefix)
 
 	//Get files list
 	filesList, err := ioutil.ReadDir(pasteDir)
 	if err != nil {
-		return err
+		return append(errs, err)
 	}
 
 	//Read files list
@@ -345,7 +347,7 @@ func DelExpiredPaste() error {
 			//Get paste info
 			paste, err := getPasteInfo(pasteName)
 			if err != nil {
-				return err
+				errs = append(errs, err)
 			}
 
 			//Expiry time check
@@ -353,13 +355,13 @@ func DelExpiredPaste() error {
 				//Delete expired paste
 				err := DelPaste(pasteName)
 				if err != nil {
-					return err
+					errs = append(errs, err)
 				}
 			}
 		}
 	}
 
-	return nil
+	return errs
 }
 
 func init() {
