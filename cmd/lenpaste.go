@@ -27,6 +27,7 @@ import (
 	"../internal/config"
 	"../internal/pages"
 	"../internal/storage"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -36,19 +37,47 @@ import (
 const (
 	//Background job break
 	backJobBreak = 1 * time.Minute
+	//Logs files
+	logDir      = "./data/log"
+	logFileMod  = 0700
+	logInfoFile = "./data/log/info"
+	logErrFile  = "./data/log/errors"
+	logJobFile  = "./data/log/job"
 )
 
-//Logging
-var logInfo = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-var logError = log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+func tee(file string, writer io.Writer) (io.Writer, error) {
+	var mw io.Writer
+
+	//Open file
+	logFile, err := os.OpenFile(file, os.O_APPEND|os.O_CREATE|os.O_WRONLY, logFileMod)
+	if err != nil {
+		return mw, err
+	}
+	//defer logFile.Close()
+
+	//Create Multi Writer
+	mw = io.MultiWriter(writer, logFile)
+
+	//Return
+	return mw, nil
+}
 
 func BackgroundJob() {
+	//Prepare loging
+	logMW, err := tee(logJobFile, os.Stderr)
+	if err != nil {
+		panic(err)
+	}
+
+	backLog := log.New(logMW, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	//Run
 	for {
 		//Delete expired pastes
 		errs := storage.DelExpiredPaste()
 		if len(errs) != 0 {
 			for _, err := range errs {
-				logError.Println("delete expired error:", err)
+				backLog.Println("delete expired error:", err)
 			}
 		}
 
@@ -58,23 +87,49 @@ func BackgroundJob() {
 	}
 }
 
+func init() {
+	//Create log dir
+	err := os.MkdirAll(logDir, logFileMod)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
+	//Prepare loging (ERROR)
+	logErrMW, err := tee(logErrFile, os.Stderr)
+	if err != nil {
+		panic(err)
+	}
+
+	errLog := log.New(logErrMW, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	//Prepare loging (INFO)
+	logInfoMW, err := tee(logInfoFile, os.Stdout)
+	if err != nil {
+		panic(err)
+	}
+	infoLog := log.New(logInfoMW, "INFO\t", log.Ldate|log.Ltime)
+
+	//Log start
+	infoLog.Println("## Start Lenpaste ##")
+
 	//Read config
 	config, err := config.ReadConfig()
 	if err != nil {
-		panic(err)
+		errLog.Fatal(err)
 	}
 
 	//Load assets
 	err = assets.Load()
 	if err != nil {
-		panic(err)
+		errLog.Fatal(err)
 	}
 
 	//Load pages
 	err = pages.Load()
 	if err != nil {
-		panic(err)
+		errLog.Fatal(err)
 	}
 
 	//Handlers
@@ -98,25 +153,25 @@ func main() {
 	go BackgroundJob()
 
 	//Run (WEB)
-	logInfo.Println("HTTP server listen: '" + config.HTTP.Listen + "'")
-	logInfo.Println("Use TLS: ", config.HTTP.UseTLS)
+	infoLog.Println("HTTP server listen: '" + config.HTTP.Listen + "'")
+	infoLog.Println("Use TLS: ", config.HTTP.UseTLS)
 
 	//Use TLS or no?
 	if config.HTTP.UseTLS == false {
 		//No TLS
 		err = http.ListenAndServe(config.HTTP.Listen, nil)
 		if err != nil {
-			panic(err)
+			errLog.Fatal(err)
 		}
 
 	} else {
 		//Enable TLS
-		logInfo.Println("SSL cert: '" + config.HTTP.SSLCert + "'")
-		logInfo.Println("SSL key: '" + config.HTTP.SSLKey + "'")
+		infoLog.Println("SSL cert: '" + config.HTTP.SSLCert + "'")
+		infoLog.Println("SSL key: '" + config.HTTP.SSLKey + "'")
 
 		err = http.ListenAndServeTLS(config.HTTP.Listen, config.HTTP.SSLCert, config.HTTP.SSLKey, nil)
 		if err != nil {
-			panic(err)
+			errLog.Fatal(err)
 		}
 	}
 }
