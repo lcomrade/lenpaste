@@ -36,6 +36,7 @@ const (
 //Config file TYPE
 type Config struct {
 	HTTP ConfigHTTP
+	Logs ConfigLogs
 }
 
 type ConfigHTTP struct {
@@ -45,6 +46,12 @@ type ConfigHTTP struct {
 	SSLKey  string
 }
 
+type ConfigLogs struct {
+	SaveErr  bool
+	SaveInfo bool
+	SaveJob  bool
+}
+
 //Config DEFAULT
 var defaultCfg = Config{
 	HTTP: ConfigHTTP{
@@ -52,6 +59,11 @@ var defaultCfg = Config{
 		UseTLS:  false,
 		SSLCert: "./data/fullchain.pem",
 		SSLKey:  "./data/privkey.pem",
+	},
+	Logs: ConfigLogs{
+		SaveErr:  true,
+		SaveInfo: true,
+		SaveJob:  true,
 	},
 }
 

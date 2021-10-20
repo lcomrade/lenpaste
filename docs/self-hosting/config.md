@@ -10,6 +10,11 @@ Here is an example of a configuration file:
 		"UseTLS": false,
 		"SSLCert": "./data/fullchain.pem",
 		"SSLKey": "./data/privkey.pem"
+	},
+	"Logs": {
+		"SaveErr": true,
+		"SaveInfo": true,
+		"SaveJob": true
 	}
 }
 ```

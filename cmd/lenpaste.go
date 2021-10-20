@@ -27,6 +27,7 @@ import (
 	"../internal/config"
 	"../internal/pages"
 	"../internal/storage"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -45,7 +46,13 @@ const (
 	logJobFile  = "./data/log/job"
 )
 
-func tee(file string, writer io.Writer) (io.Writer, error) {
+func tee(file string, writer io.Writer, save bool) (io.Writer, error) {
+	//Check SAVE
+	if save == false {
+		return writer, nil
+	}
+
+	//If save == true: continue
 	var mw io.Writer
 
 	//Open file
@@ -62,14 +69,14 @@ func tee(file string, writer io.Writer) (io.Writer, error) {
 	return mw, nil
 }
 
-func BackgroundJob() {
+func BackgroundJob(saveLog bool) {
 	//Prepare loging
-	logMW, err := tee(logJobFile, os.Stderr)
+	logWr, err := tee(logJobFile, os.Stderr, saveLog)
 	if err != nil {
 		panic(err)
 	}
 
-	backLog := log.New(logMW, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	backLog := log.New(logWr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	//Run
 	for {
@@ -96,40 +103,40 @@ func init() {
 }
 
 func main() {
+	//Read config
+	config, err := config.ReadConfig()
+	if err != nil {
+		panic(errors.New("read config: " + err.Error()))
+	}
+
 	//Prepare loging (ERROR)
-	logErrMW, err := tee(logErrFile, os.Stderr)
+	logErrWr, err := tee(logErrFile, os.Stderr, config.Logs.SaveErr)
 	if err != nil {
 		panic(err)
 	}
 
-	errLog := log.New(logErrMW, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	errLog := log.New(logErrWr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	//Prepare loging (INFO)
-	logInfoMW, err := tee(logInfoFile, os.Stdout)
+	logInfoWr, err := tee(logInfoFile, os.Stdout, config.Logs.SaveInfo)
 	if err != nil {
 		panic(err)
 	}
-	infoLog := log.New(logInfoMW, "INFO\t", log.Ldate|log.Ltime)
+	infoLog := log.New(logInfoWr, "INFO\t", log.Ldate|log.Ltime)
 
 	//Log start
 	infoLog.Println("## Start Lenpaste ##")
 
-	//Read config
-	config, err := config.ReadConfig()
-	if err != nil {
-		errLog.Fatal(err)
-	}
-
 	//Load assets
 	err = assets.Load()
 	if err != nil {
-		errLog.Fatal(err)
+		errLog.Fatal("load assets:", err)
 	}
 
 	//Load pages
 	err = pages.Load()
 	if err != nil {
-		errLog.Fatal(err)
+		errLog.Fatal("load pages:", err)
 	}
 
 	//Handlers
@@ -150,7 +157,7 @@ func main() {
 	http.HandleFunc("/api/version", api.GetVersion)
 
 	//Run (Background Job)
-	go BackgroundJob()
+	go BackgroundJob(config.Logs.SaveJob)
 
 	//Run (WEB)
 	infoLog.Println("HTTP server listen: '" + config.HTTP.Listen + "'")
@@ -161,7 +168,7 @@ func main() {
 		//No TLS
 		err = http.ListenAndServe(config.HTTP.Listen, nil)
 		if err != nil {
-			errLog.Fatal(err)
+			errLog.Fatal("run WEB server:", err)
 		}
 
 	} else {
@@ -171,7 +178,7 @@ func main() {
 
 		err = http.ListenAndServeTLS(config.HTTP.Listen, config.HTTP.SSLCert, config.HTTP.SSLKey, nil)
 		if err != nil {
-			errLog.Fatal(err)
+			errLog.Fatal("run WEB server:", err)
 		}
 	}
 }
