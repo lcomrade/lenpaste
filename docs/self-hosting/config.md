@@ -14,7 +14,9 @@ Here is an example of a configuration file:
 	"Logs": {
 		"SaveErr": true,
 		"SaveInfo": true,
-		"SaveJob": true
+		"SaveJob": true,
+		"RotateLogs": true,
+		"MaxLogSize": 1000000
 	}
 }
 ```

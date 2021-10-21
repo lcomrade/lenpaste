@@ -47,9 +47,11 @@ type ConfigHTTP struct {
 }
 
 type ConfigLogs struct {
-	SaveErr  bool
-	SaveInfo bool
-	SaveJob  bool
+	SaveErr    bool
+	SaveInfo   bool
+	SaveJob    bool
+	RotateLogs bool
+	MaxLogSize int64
 }
 
 //Config DEFAULT
@@ -61,9 +63,11 @@ var defaultCfg = Config{
 		SSLKey:  "./data/privkey.pem",
 	},
 	Logs: ConfigLogs{
-		SaveErr:  true,
-		SaveInfo: true,
-		SaveJob:  true,
+		SaveErr:    true,
+		SaveInfo:   true,
+		SaveJob:    true,
+		RotateLogs: true,
+		MaxLogSize: 1000000, //1 MB
 	},
 }
 

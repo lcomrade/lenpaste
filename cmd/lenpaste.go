@@ -41,7 +41,6 @@ const (
 	//Logs files
 	logDir       = "./data/log"
 	logFileMod   = 0700
-	logFileSize  = 1000000 //1 MB
 	logOldPrefix = ".old"
 	logInfoFile  = "./data/log/info"
 	logErrFile   = "./data/log/error"
@@ -134,27 +133,29 @@ func main() {
 		panic(errors.New("read config: " + err.Error()))
 	}
 
-	//Rotate ERROR
-	if config.Logs.SaveErr == true {
-		err := rotateLog(logErrFile, logFileSize)
-		if err != nil {
-			panic(errors.New("rotate log: " + err.Error()))
+	if config.Logs.RotateLogs == true {
+		//Rotate ERROR
+		if config.Logs.SaveErr == true {
+			err := rotateLog(logErrFile, config.Logs.MaxLogSize)
+			if err != nil {
+				panic(errors.New("rotate log: " + err.Error()))
+			}
 		}
-	}
 
-	//Rotate INFO
-	if config.Logs.SaveInfo == true {
-		err := rotateLog(logInfoFile, logFileSize)
-		if err != nil {
-			panic(errors.New("rotate log: " + err.Error()))
+		//Rotate INFO
+		if config.Logs.SaveInfo == true {
+			err := rotateLog(logInfoFile, config.Logs.MaxLogSize)
+			if err != nil {
+				panic(errors.New("rotate log: " + err.Error()))
+			}
 		}
-	}
 
-	//Rotate JOB
-	if config.Logs.SaveJob == true {
-		err := rotateLog(logJobFile, logFileSize)
-		if err != nil {
-			panic(errors.New("rotate log: " + err.Error()))
+		//Rotate JOB
+		if config.Logs.SaveJob == true {
+			err := rotateLog(logJobFile, config.Logs.MaxLogSize)
+			if err != nil {
+				panic(errors.New("rotate log: " + err.Error()))
+			}
 		}
 	}
 
