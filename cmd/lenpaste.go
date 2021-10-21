@@ -39,11 +39,13 @@ const (
 	//Background job break
 	backJobBreak = 1 * time.Minute
 	//Logs files
-	logDir      = "./data/log"
-	logFileMod  = 0700
-	logInfoFile = "./data/log/info"
-	logErrFile  = "./data/log/errors"
-	logJobFile  = "./data/log/job"
+	logDir       = "./data/log"
+	logFileMod   = 0700
+	logFileSize  = 1000000 //1 MB
+	logOldPrefix = ".old"
+	logInfoFile  = "./data/log/info"
+	logErrFile   = "./data/log/error"
+	logJobFile   = "./data/log/job"
 )
 
 func tee(file string, writer io.Writer, save bool) (io.Writer, error) {
@@ -94,6 +96,29 @@ func BackgroundJob(saveLog bool) {
 	}
 }
 
+func rotateLog(path string, maxSize int64) error {
+	//Stat file
+	file, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) == true {
+			return nil
+		} else {
+			return err
+		}
+	}
+
+	//Check file size
+	if file.Size() >= maxSize {
+		//Move
+		err := os.Rename(path, path+logOldPrefix)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func init() {
 	//Create log dir
 	err := os.MkdirAll(logDir, logFileMod)
@@ -107,6 +132,30 @@ func main() {
 	config, err := config.ReadConfig()
 	if err != nil {
 		panic(errors.New("read config: " + err.Error()))
+	}
+
+	//Rotate ERROR
+	if config.Logs.SaveErr == true {
+		err := rotateLog(logErrFile, logFileSize)
+		if err != nil {
+			panic(errors.New("rotate log: " + err.Error()))
+		}
+	}
+
+	//Rotate INFO
+	if config.Logs.SaveInfo == true {
+		err := rotateLog(logInfoFile, logFileSize)
+		if err != nil {
+			panic(errors.New("rotate log: " + err.Error()))
+		}
+	}
+
+	//Rotate JOB
+	if config.Logs.SaveJob == true {
+		err := rotateLog(logJobFile, logFileSize)
+		if err != nil {
+			panic(errors.New("rotate log: " + err.Error()))
+		}
 	}
 
 	//Prepare loging (ERROR)
