@@ -32,7 +32,7 @@ import (
 
 const (
 	pasteDir        = "./data/paste"
-	pasteFileMod    = 0777
+	pasteFileMod    = 0700
 	pasteTextPrefix = ".txt"
 	pasteInfoPrefix = ".json"
 	pasteNameLength = 8
