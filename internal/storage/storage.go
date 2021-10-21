@@ -273,7 +273,24 @@ func GetPaste(name string) (GetPasteType, error) {
 	//Get paste info
 	pasteInfo, err := getPasteInfo(name)
 	if err != nil {
-		return paste, err
+		//If paste does not exist
+		if os.IsNotExist(err) == true {
+			return paste, errors.New("paste not exist: " + name)
+		} else {
+			return paste, err
+		}
+	}
+
+	//Expiry time check
+	if pasteInfo.DeleteTime <= time.Now().Unix() {
+		//Delete expired paste
+		err = DelPaste(name)
+		if err != nil {
+			return paste, err
+		}
+
+		//Return error
+		return paste, errors.New("paste not exist: " + name)
 	}
 
 	//Get paste text
