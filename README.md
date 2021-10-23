@@ -20,8 +20,8 @@ There is its own API.
 - [Public servers list](https://github.com/lcomrade/lenpaste/blob/main/docs/public_servers.md)
 
 ### For developers
-- [Lenpaste API](https://github.com/lcomrade/lenpaste/blob/main/docs/api.md)
-- [Golang library for working with API](https://github.com/lcomrade/lenin)
+- [Lenpaste API](https://github.com/lcomrade/lenpaste/blob/main/docs/devs/api.md)
+- [Libraries for working with API](https://github.com/lcomrade/lenpaste/blob/main/docs/devs/libs.md)
 
 ### Self-hosting
 - [Configuration](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/config.md)
