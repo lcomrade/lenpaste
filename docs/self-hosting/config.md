@@ -4,29 +4,7 @@ Location of configuration files:
 - Inside Docker container: `/app/data/`
 
 ## config.json
-This is the main configuration file (format: JSON).
-Here is an example of a configuration file:
-
-```
-{
-	"HTTP": {
-		"Listen": ":8000",
-		"UseTLS": false,
-		"SSLCert": "./data/fullchain.pem",
-		"SSLKey": "./data/privkey.pem"
-	},
-	"Storage": {
-		"CleanJobPeriod": 600
-	},
-	"Logs": {
-		"SaveErr": true,
-		"SaveInfo": true,
-		"SaveJob": true,
-		"RotateLogs": true,
-		"MaxLogSize": 1000000
-	}
-}
-```
+This documentation is too big so it was put in a separate file: [`config.json.md`](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/config.json.md).
 
 ## about.txt
 Here you can write information about your server.
