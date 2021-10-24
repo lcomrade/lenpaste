@@ -27,5 +27,8 @@ There is its own API.
 - [Configuration](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/config.md)
 - [Installation](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/install.md)
 
+### FAQ
+- [FAQ](https://github.com/lcomrade/lenpaste/blob/main/docs/faq.md)
+
 ## Bugs and Suggestion
 If you find a bug or have a suggestion, create an Issue [here](https://github.com/lcomrade/lenpaste/issues).
