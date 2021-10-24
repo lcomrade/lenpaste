@@ -15,6 +15,9 @@ Here is an example of a configuration file:
 		"SSLCert": "./data/fullchain.pem",
 		"SSLKey": "./data/privkey.pem"
 	},
+	"Storage": {
+		"CleanJobPeriod": 600
+	},
 	"Logs": {
 		"SaveErr": true,
 		"SaveInfo": true,

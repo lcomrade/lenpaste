@@ -36,8 +36,6 @@ import (
 )
 
 const (
-	//Background job break
-	backJobBreak = 1 * time.Minute
 	//Logs files
 	logDir       = "./data/log"
 	logFileMod   = 0700
@@ -70,7 +68,7 @@ func tee(file string, writer io.Writer, save bool) (io.Writer, error) {
 	return mw, nil
 }
 
-func BackgroundJob(saveLog bool) {
+func BackgroundJob(cleanJobPeriod time.Duration, saveLog bool) {
 	//Prepare loging
 	logWr, err := tee(logJobFile, os.Stderr, saveLog)
 	if err != nil {
@@ -90,7 +88,7 @@ func BackgroundJob(saveLog bool) {
 		}
 
 		//Wait
-		time.Sleep(backJobBreak)
+		time.Sleep(cleanJobPeriod)
 
 	}
 }
@@ -207,7 +205,7 @@ func main() {
 	http.HandleFunc("/api/version", api.GetVersion)
 
 	//Run (Background Job)
-	go BackgroundJob(config.Logs.SaveJob)
+	go BackgroundJob(config.Storage.CleanJobPeriod, config.Logs.SaveJob)
 
 	//Run (WEB)
 	infoLog.Println("HTTP server listen: '" + config.HTTP.Listen + "'")

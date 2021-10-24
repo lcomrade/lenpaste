@@ -24,6 +24,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 const (
@@ -35,8 +36,9 @@ const (
 
 //Config file TYPE
 type Config struct {
-	HTTP ConfigHTTP
-	Logs ConfigLogs
+	HTTP    ConfigHTTP
+	Storage ConfigStorage
+	Logs    ConfigLogs
 }
 
 type ConfigHTTP struct {
@@ -44,6 +46,10 @@ type ConfigHTTP struct {
 	UseTLS  bool
 	SSLCert string
 	SSLKey  string
+}
+
+type ConfigStorage struct {
+	CleanJobPeriod time.Duration
 }
 
 type ConfigLogs struct {
@@ -61,6 +67,9 @@ var defaultCfg = Config{
 		UseTLS:  false,
 		SSLCert: "./data/fullchain.pem",
 		SSLKey:  "./data/privkey.pem",
+	},
+	Storage: ConfigStorage{
+		CleanJobPeriod: 10 * time.Minute, //10 minutes
 	},
 	Logs: ConfigLogs{
 		SaveErr:    true,
