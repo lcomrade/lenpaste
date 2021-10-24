@@ -11,6 +11,7 @@ Here is an example of a configuration file:
 		"SSLKey": "./data/privkey.pem"
 	},
 	"Storage": {
+		"EnableCleanJob": true,
 		"CleanJobPeriod": 600
 	},
 	"Logs": {
@@ -42,6 +43,9 @@ Specifies the path to the SSL private key.
 
 
 ## Storage
+### EnableCleanJob
+Enables background cleaning of expired pastes.
+
 ### CleanJobPeriod
 Specifies the frequency of background deletion of expired pastes.
 Specifies in seconds.

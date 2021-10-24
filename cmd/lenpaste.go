@@ -205,7 +205,10 @@ func main() {
 	http.HandleFunc("/api/version", api.GetVersion)
 
 	//Run (Background Job)
-	go BackgroundJob(config.Storage.CleanJobPeriod, config.Logs.SaveJob)
+	if config.Storage.EnableCleanJob == true {
+		infoLog.Println("Run background clean job")
+		go BackgroundJob(config.Storage.CleanJobPeriod, config.Logs.SaveJob)
+	}
 
 	//Run (WEB)
 	infoLog.Println("HTTP server listen: '" + config.HTTP.Listen + "'")

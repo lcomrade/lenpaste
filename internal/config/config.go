@@ -49,6 +49,7 @@ type ConfigHTTP struct {
 }
 
 type ConfigStorage struct {
+	EnableCleanJob bool
 	CleanJobPeriod time.Duration
 }
 
@@ -69,6 +70,7 @@ var defaultCfg = Config{
 		SSLKey:  "./data/privkey.pem",
 	},
 	Storage: ConfigStorage{
+		EnableCleanJob: true,
 		CleanJobPeriod: 10 * time.Minute, //10 minutes
 	},
 	Logs: ConfigLogs{
