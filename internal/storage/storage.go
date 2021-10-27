@@ -221,7 +221,7 @@ func NewPaste(pasteText string, expir string, oneUse bool, title string) (NewPas
 	//Paste name
 	pasteName := randString()
 	if isPasteExist(pasteName) == true {
-		return paste, errors.New("paste with '" + pasteName + "' name exists")
+		return paste, errors.New("paste with that name exists")
 	}
 
 	//File name
