@@ -70,6 +70,11 @@ func NewPaste(rw http.ResponseWriter, req *http.Request) {
 }
 
 //New paste done
+type NewPasteType struct {
+	Name string
+	Host string
+}
+
 func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 	//Get form data
 	req.ParseForm()
@@ -84,13 +89,19 @@ func NewPasteDone(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	//Total paste info
+	pasteTotal := NewPasteType{
+		Name: paste.Name,
+		Host: req.Host,
+	}
+
 	//Set Header
 	rw.Header().Set("Content-Type", "text/html")
 
 	//Filling the html page template
 	tmpl := pages.NewDoneTmpl
 
-	err = tmpl.Execute(rw, paste)
+	err = tmpl.Execute(rw, pasteTotal)
 	if err != nil {
 		errorHandler(rw, err, 400)
 		return

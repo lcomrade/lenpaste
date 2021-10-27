@@ -12,7 +12,11 @@
 		<div class="main">
 			<h3>Paste created</h3>
 			<div class="totalMsg">
-				<p>Link: <a href=/{{.Name}}>{{.Name}}</a></p>
+				<h3>About</h3>
+				<p>Code: {{.Name}}</p>
+				<p><a href=/{{.Name}}>Link</a></p>
+				<h3>Share</h3>
+				<p><a href="mailto:?to=&body={{.Host}}/{{.Name}}">Share via email</a></p>
 			</div>
 		</div>
 		<footer>
