@@ -10,23 +10,25 @@
 			<h2><a class="titleA" href=/>Lenpaste</a></h2>
 		</header>
 		<div class="main">
-			<h3>Create paste</h3>
-			<form action="/new_done" method="post">
-				<p><input name="title" placeholder="Paste title" tabindex=4 size=70 class="textEnter"></p>
-				<p><textarea name="text" placeholder="Paste text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
-				<p><input type="checkbox" name="oneUse" value="true">Burn after reading</p>
-				<p>
-					Expiration:
-					<select name="expiration" tabindex=2 size=1>
-						<option value="10m">10 minutes</option>
-						<option value="30m">30 minutes</option>
-						<option value="1h">1 hour</option>
-						<option value="1d">1 day</option>
-						<option value="1w" selected>1 week</option>
-					</select>
-				</p>
-				<p><input type="submit" value="Create paste" tabindex=3 class="button"></p>
-			</form>
+			<div class="totalMsg" style="background-color: #333333;">
+				<h3>Create paste</h3>
+				<form action="/new_done" method="post">
+					<p><input name="title" placeholder="Paste title" tabindex=4 size=70 class="textEnter"></p>
+					<p><textarea name="text" placeholder="Paste text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
+					<p><input type="checkbox" name="oneUse" value="true">Burn after reading</p>
+					<p>
+						Expiration:
+						<select name="expiration" tabindex=2 size=1>
+							<option value="10m">10 minutes</option>
+							<option value="30m">30 minutes</option>
+							<option value="1h">1 hour</option>
+							<option value="1d">1 day</option>
+							<option value="1w" selected>1 week</option>
+						</select>
+					</p>
+					<p><input type="submit" value="Create paste" tabindex=3 class="button"></p>
+				</form>
+			</div>
 		</div>
 		<footer>
 			<p>
