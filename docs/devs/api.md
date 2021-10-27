@@ -8,6 +8,7 @@ Create a new paste.
 Request:
  - `title` - Paste title
  - `text` - Paste text
+ - `oneUse` - If 'true' then the paste is removed after opening
  - `expiration` - Paste expiration date
  
    | Value | Description |
@@ -56,6 +57,8 @@ Response example:
 	"Info":{
 		"CreateTime":1633845370,
 		"DeleteTime":1633847170
+		"OneUse":true,
+		"Title":"My first paste"
 	}
 }
 ```
