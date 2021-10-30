@@ -46,6 +46,7 @@ func errorHandler(rw http.ResponseWriter, err error, code int) {
 
 	//Return response
 	encoder := json.NewEncoder(rw)
+	encoder.SetIndent("", " ")
 	err = encoder.Encode(&errorInfo)
 	if err != nil {
 		errorHandler(rw, err, 400)
@@ -78,6 +79,7 @@ func NewPaste(rw http.ResponseWriter, req *http.Request) {
 
 	//Return response
 	encoder := json.NewEncoder(rw)
+	encoder.SetIndent("", " ")
 	err = encoder.Encode(&paste)
 	if err != nil {
 		errorHandler(rw, err, 400)
@@ -101,6 +103,7 @@ func GetPaste(rw http.ResponseWriter, req *http.Request) {
 
 	//Return response
 	encoder := json.NewEncoder(rw)
+	encoder.SetIndent("", " ")
 	err = encoder.Encode(&paste)
 	if err != nil {
 		errorHandler(rw, err, 400)
@@ -121,6 +124,7 @@ func GetAbout(rw http.ResponseWriter, req *http.Request) {
 
 	//Return response
 	encoder := json.NewEncoder(rw)
+	encoder.SetIndent("", " ")
 	err = encoder.Encode(&about)
 	if err != nil {
 		errorHandler(rw, err, 400)
@@ -141,6 +145,7 @@ func GetRules(rw http.ResponseWriter, req *http.Request) {
 
 	//Return response
 	encoder := json.NewEncoder(rw)
+	encoder.SetIndent("", " ")
 	err = encoder.Encode(&rules)
 	if err != nil {
 		errorHandler(rw, err, 400)
@@ -161,6 +166,7 @@ func GetVersion(rw http.ResponseWriter, req *http.Request) {
 
 	//Return response
 	encoder := json.NewEncoder(rw)
+	encoder.SetIndent("", " ")
 	err = encoder.Encode(&version)
 	if err != nil {
 		errorHandler(rw, err, 400)
