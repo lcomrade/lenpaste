@@ -160,7 +160,7 @@ func genPasteInfo(expir string, oneUse bool, title string) ([]byte, error) {
 	}
 
 	//Marshal (json)
-	infoByte, err = json.Marshal(pasteInfo)
+	infoByte, err = json.MarshalIndent(pasteInfo, "", " ")
 	if err != nil {
 		return infoByte, err
 	}
