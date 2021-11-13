@@ -1,6 +1,5 @@
 [Unit]
-Requires=docker.service
-After=docker.service
+After=network-online.target docker.service
 
 [Service]
 Restart=always
