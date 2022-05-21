@@ -22,11 +22,10 @@
 package main
 
 import (
-	"../internal/api"
-	"../internal/assets"
-	"../internal/config"
-	"../internal/pages"
-	"../internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/api"
+	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/pages"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"errors"
 	"io"
 	"log"
@@ -175,12 +174,6 @@ func main() {
 	//Log start
 	infoLog.Println("## Start Lenpaste ##")
 
-	//Load assets
-	err = assets.Load()
-	if err != nil {
-		errLog.Fatal("load assets:", err)
-	}
-
 	//Load pages
 	err = pages.Load()
 	if err != nil {
@@ -189,7 +182,6 @@ func main() {
 
 	//Handlers
 	http.HandleFunc("/style.css", pages.Style)
-	http.HandleFunc("/robots.txt", assets.RobotsTxt)
 
 	http.HandleFunc("/", pages.GetPaste)
 	http.HandleFunc("/new", pages.NewPaste)

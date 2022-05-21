@@ -21,8 +21,8 @@
 package pages
 
 import (
-	"../config"
-	"../storage"
+	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"bytes"
 	"html/template"
 	"io"
