@@ -117,8 +117,8 @@ func main() {
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
 		webData.MainHand(rw, req)
 	})
-	http.HandleFunc("/new", func(rw http.ResponseWriter, req *http.Request) {
-		webData.NewHand(rw, req)
+	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
+		webData.AboutHand(rw, req)
 	})
 	http.HandleFunc("/docs", func(rw http.ResponseWriter, req *http.Request) {
 		webData.DocsHand(rw, req)

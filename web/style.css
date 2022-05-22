@@ -29,15 +29,18 @@ header {
 	padding-bottom: 20px;
 	padding-left: 20px;
 	padding-right: 20px;
-	margin-bottom: 20px;
 	background: #FF9933;
 }
 
-header h2 {
+header h2,
+header h4 {
+	display: inline;
+	margin-right: 15px;
 	padding: 0;
 }
 
-header h2 a {
+header h2 a, header h2 a:hover,
+header h4 a, header h4 a:hover {
 	color: #FFFFFF;
 	text-decoration: none;
 }
@@ -47,25 +50,30 @@ header h2 a {
 article {
 	width: 100%;
 	box-sizing: border-box;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	padding: 20px;
-	padding-top: 5px;
-	padding-bottom: 5px;
 	line-height: 1.5;
 	background: #999999;
 }
 
+
 /* OTHER */
+.stretch-width {
+	width: 100%;
+	box-sizing: border-box;	
+}
+
 h1, h2, h3, h4, h5, h6,
 p, pre,
 select, label,
 button, input,
 textarea {
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 pre, textarea {
-	height: 100%;
 	width: 100%;
 	max-width: 100%;
 	min-width: 100%;
@@ -129,7 +137,7 @@ summary {
 }
 
 table {
-	background: #3366CC;
+	background: #888888;
 	border-collapse: collapse;
 }
 
@@ -138,4 +146,8 @@ th, td {
 	padding: 2px 10px 2px 10px;
 	border: 1px;
 	border-style: solid;
+}
+
+a, a:hover {
+	color: #3366CC;
 }

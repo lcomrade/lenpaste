@@ -1,16 +1,28 @@
 {{define "article"}}
-<div class="main">
-	<div class="totalMsg">
-		<h3>Welcome</h3>
-		<ul>
-			<li>Lenpaste is open source software. All source code is available in the <a href=https://github.com/lcomrade/lenpaste>GitHub repository</a> under the AGPL 3 license.</li>
-			<li>You don't need to register here.</li>
-			<li>This site does not use Java Script. Your privacy is respected here.</li>
-			<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
-		</ul>
-		<form action="/new" method="get">
-			<button type="submit" tabindex=1>Create paste</button>
-		</form>
+<h3>Create paste</h3>
+<form action="/" method="post">
+	<div><input class="stretch-width" name="title" placeholder="Enter title..." tabindex=1 autofocus></div>
+	<div><textarea name="body" placeholder="Enter text..." rows=25  wrap="off" tabindex=2 required></textarea></div>
+	<div><input type="checkbox" name="oneUse" value="true" tabindex=3>Burn after reading</input></div>
+	<div>
+		<label for="expiration">Expiration:</label>
+		<select name="expiration" tabindex=4 size=1>
+			<option value="0" selected>Never</option>
+			<option value="600">10 minutes</option>
+			<option value="1800">30 minutes</option>
+			<option value="3600">1 hour</option>
+			<option value="7200">2 hour</option>
+			<option value="14400">4 hour</option>
+			<option value="43200">12 hour</option>
+			<option value="86400">1 day</option>
+			<option value="604800">1 week</option>
+			<option value="1209600">2 weeks</option>
+			<option value="2419200">1 Month</option>
+			<option value="4838400">2 Months</option>
+			<option value="14515200">6 Months</option>
+			<option value="29030400">1 Year</option>
+		</select>
 	</div>
-</div>
+	<div><button type="submit" tabindex=5>Create paste</button></div>
+</form>
 {{end}}

@@ -21,6 +21,8 @@ package web
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 // Pattern: /
@@ -30,16 +32,68 @@ func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
 
 	// If main page
 	if req.URL.Path == "/" {
-		rw.Header().Set("Content-Type", "text/html")
-		err := data.Main.Execute(rw, "")
-		if err != nil {
-			data.errorInternal(rw, req, err)
+		data.newPaste(rw, req)
+
+		// Else show paste
+	} else {
+		data.getPaste(rw, req)
+	}
+}
+
+func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
+	// Read request
+	req.ParseForm()
+
+	if req.PostForm.Get("body") != "" {
+		paste := storage.Paste{
+			Title:  req.PostForm.Get("title"),
+			Body:   req.PostForm.Get("body"),
+			OneUse: false,
 		}
 
+		// Get delete time
+		expirStr := req.Form.Get("expiration")
+		if expirStr != "" {
+			expir, err := strconv.ParseInt(expirStr, 16, 64)
+			if err != nil {
+				data.errorBadRequest(rw, req)
+				return
+			}
+
+			if expir > 0 {
+				paste.DeleteTime = time.Now().Unix() + expir
+			}
+		}
+
+		// Get "one use" parameter
+		if req.PostForm.Get("oneUse") == "true" {
+			paste.OneUse = true
+		}
+
+		// Create paste
+		paste, err := data.DB.PasteAdd(paste)
+		if err != nil {
+			data.errorInternal(rw, req, err)
+			return
+		}
+
+		// Redirect to paste
+		writeRedirect(rw, req, "/"+paste.ID, 302)
 		return
 	}
 
-	// Get paste
+	// Else show create page
+	rw.Header().Set("Content-Type", "text/html")
+
+	err := data.Main.Execute(rw, "")
+	if err != nil {
+		data.errorInternal(rw, req, err)
+		return
+	}
+}
+
+func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
+	// Read DB
 	pasteID := string([]rune(req.URL.Path)[1:])
 
 	paste, err := data.DB.PasteGet(pasteID)

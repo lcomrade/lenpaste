@@ -1,9 +1,7 @@
 {{define "article"}}
-<div class="main">
-	<h3>{{.Title}}</h3>
-	<p><textarea wrap="off" autofocus tabindex=1 rows=30 cols=100 readonly>{{.Body}}</textarea></p>
-	{{if .OneUse}}
-	<p>This paste has been removed!</p>
-	{{end}}
-</div>
+<h3>{{.Title}}</h3>
+<p><textarea wrap="off" rows=35 autofocus tabindex=1 readonly>{{.Body}}</textarea></p>
+{{if .OneUse}}
+<p>This paste will be deleted after you read it!</p>
+{{end}}
 {{end}}
