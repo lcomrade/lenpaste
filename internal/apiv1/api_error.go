@@ -25,8 +25,8 @@ import (
 )
 
 type errorType struct {
-	Code  int
-	Error string
+	Code  int    `json:"code"`
+	Error string `json:"error"`
 }
 
 func (data Data) writeError(rw http.ResponseWriter, req *http.Request, err error) {

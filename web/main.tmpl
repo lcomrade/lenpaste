@@ -1,15 +1,15 @@
 {{define "article"}}
 <div class="main">
 	<div class="totalMsg">
-		<h3>About Lenpaste</h3>
+		<h3>Welcome</h3>
 		<ul>
 			<li>Lenpaste is open source software. All source code is available in the <a href=https://github.com/lcomrade/lenpaste>GitHub repository</a> under the AGPL 3 license.</li>
 			<li>You don't need to register here.</li>
 			<li>This site does not use Java Script. Your privacy is respected here.</li>
 			<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
 		</ul>
-		<form action="/new" method="post">
-			<input type="submit" value="Create paste" tabindex=1 class="button">
+		<form action="/new" method="get">
+			<button type="submit" tabindex=1>Create paste</button>
 		</form>
 	</div>
 </div>

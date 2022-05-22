@@ -1,26 +1,22 @@
 {{define "article"}}
-<div class="main">
-	<div class="totalMsg" style="background-color: #333333;">
-		<h3>Create paste</h3>
-		<form action="/new" method="post">
-			<p><input name="title" placeholder="Paste title" tabindex=4 size=70 class="textEnter"></p>
-			<p><textarea name="body" placeholder="Paste text" wrap="off" autofocus tabindex=1 rows=30 cols=100 required></textarea></p>
-			<p><input type="checkbox" name="oneUse" value="true" class="button">Burn after reading</p>
-			<p>
-				Expiration:
-				<select name="expiration" tabindex=2 size=1>
-					<option value="600">10 minutes</option>
-					<option value="1800">30 minutes</option>
-					<option value="3600">1 hour</option>
-					<option value="7200">2 hour</option>
-					<option value="14400">4 hour</option>
-					<option value="43200">12 hour</option>
-					<option value="86400">1 day</option>
-					<option value="604800" selected>1 week</option>
-				</select>
-			</p>
-			<p><input type="submit" value="Create paste" tabindex=3 class="button"></p>
-		</form>
+<h3>Create paste</h3>
+<form action="/new" method="post">
+	<div><input name="title" placeholder="Enter title..." tabindex=1 autofocus></div>
+	<div><textarea name="body" placeholder="Enter text..." wrap="off" tabindex=2 required></textarea></div>
+	<div><input type="checkbox" name="oneUse" value="true" tabindex=3>Burn after reading</input></div>
+	<div>
+		<label for="expiration">Expiration:</label>
+		<select name="expiration" tabindex=4 size=1>
+			<option value="600">10 minutes</option>
+			<option value="1800">30 minutes</option>
+			<option value="3600">1 hour</option>
+			<option value="7200">2 hour</option>
+			<option value="14400">4 hour</option>
+			<option value="43200">12 hour</option>
+			<option value="86400">1 day</option>
+			<option value="604800" selected>1 week</option>
+		</select>
 	</div>
-</div>
+	<div><button type="submit" tabindex=5>Create paste</button></div>
+</form>
 {{end}}
