@@ -21,7 +21,7 @@ package main
 import (
 	"git.lcomrade.su/root/lenpaste/internal/api"
 	"git.lcomrade.su/root/lenpaste/internal/config"
-	"git.lcomrade.su/root/lenpaste/internal/pages"
+	"git.lcomrade.su/root/lenpaste/internal/web"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"errors"
 	"io"

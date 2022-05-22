@@ -16,50 +16,44 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package storage
+package web
 
 import (
-	"database/sql"
-	"errors"
-	_ "github.com/mattn/go-sqlite3"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"net/http"
 )
 
-var (
-	ErrNotFoundID   = errors.New("db: could not find ID")
-)
+// Pattern: /
+func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
 
-type DB struct {
-	DriverName     string
-	DataSourceName string
-}
-
-func (dbInfo DB) openDB() (*sql.DB, error) {
-	db, err := sql.Open(dbInfo.DriverName, dbInfo.DataSourceName)
-	return db, err
-}
-
-func (dbInfo DB) InitDB() error {
-	// Open DB
-	db, err := dbInfo.openDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	// Create tables
-	_, err = db.Exec(`
-		CREATE TABLE IF NOT EXISTS "pastes" (
-			"id" TEXT PRIMARY KEY,
-			"title" TEXT NOT NULL,
-			"body" TEXT NOT NULL,
-			"create_time" INTEGER NOT NULL,
-			"delete_time" INTEGER NOT NULL,
-			"one_use" BOOL NOT NULL
-		);
-	`)
-	if err != nil {
-		return err
+	// If main page
+	if req.URL.Path == "/" {
+		rw.Header().Set("Content-Type", "text/html")
+		data.Main.Execute(rw, "")
+		return
 	}
 
-	return nil
+	// Get paste
+	pasteID := string([]rune(req.URL.Path)[1:])
+
+	paste, err := data.DB.PasteGet(pasteID)
+	if err != nil {
+		if err == storage.ErrNotFoundID {
+			data.errorNotFound(rw, req)
+			return
+			
+		} else {
+			data.errorInternal(rw, req, err)
+			return
+		}
+	}
+	
+	// Show paste
+	err = data.PastePage.Execute(rw, paste)
+	if err != nil {
+		data.errorInternal(rw, req, err)
+		return
+	}
 }

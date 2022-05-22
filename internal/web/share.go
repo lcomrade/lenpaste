@@ -16,50 +16,26 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package storage
+package web
 
-import (
-	"database/sql"
-	"errors"
-	_ "github.com/mattn/go-sqlite3"
+import(
+	"os"
+	"io/ioutil"
 )
 
-var (
-	ErrNotFoundID   = errors.New("db: could not find ID")
-)
-
-type DB struct {
-	DriverName     string
-	DataSourceName string
-}
-
-func (dbInfo DB) openDB() (*sql.DB, error) {
-	db, err := sql.Open(dbInfo.DriverName, dbInfo.DataSourceName)
-	return db, err
-}
-
-func (dbInfo DB) InitDB() error {
-	// Open DB
-	db, err := dbInfo.openDB()
+func readFile(path string) ([]byte, error) {
+	// Open file
+	file, err := os.Open(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer db.Close()
+	defer file.Close()
 
-	// Create tables
-	_, err = db.Exec(`
-		CREATE TABLE IF NOT EXISTS "pastes" (
-			"id" TEXT PRIMARY KEY,
-			"title" TEXT NOT NULL,
-			"body" TEXT NOT NULL,
-			"create_time" INTEGER NOT NULL,
-			"delete_time" INTEGER NOT NULL,
-			"one_use" BOOL NOT NULL
-		);
-	`)
+	// Read file
+	fileByte, err := ioutil.ReadAll(file)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return fileByte, nil
 }
