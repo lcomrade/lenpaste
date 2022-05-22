@@ -25,7 +25,7 @@ import (
 )
 
 var (
-	ErrNotFoundID   = errors.New("db: could not find ID")
+	ErrNotFoundID = errors.New("db: could not find ID")
 )
 
 type DB struct {

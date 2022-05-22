@@ -18,9 +18,9 @@
 
 package apiv1
 
-import(
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+import (
 	"encoding/json"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 )
 

@@ -18,7 +18,7 @@
 
 package storage
 
-import(
+import (
 	"crypto/rand"
 	"math/big"
 )

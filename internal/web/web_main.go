@@ -35,7 +35,7 @@ func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			data.errorInternal(rw, req, err)
 		}
-		
+
 		return
 	}
 
@@ -47,13 +47,22 @@ func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
 		if err == storage.ErrNotFoundID {
 			data.errorNotFound(rw, req)
 			return
-			
+
 		} else {
 			data.errorInternal(rw, req, err)
 			return
 		}
 	}
-	
+
+	// If "one use" paste
+	if paste.OneUse == true {
+		err = data.DB.PasteDelete(pasteID)
+		if err != nil {
+			data.errorInternal(rw, req, err)
+			return
+		}
+	}
+
 	// Show paste
 	err = data.PastePage.Execute(rw, paste)
 	if err != nil {

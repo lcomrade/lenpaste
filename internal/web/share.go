@@ -18,9 +18,9 @@
 
 package web
 
-import(
-	"os"
+import (
 	"io/ioutil"
+	"os"
 )
 
 func readFile(path string) ([]byte, error) {

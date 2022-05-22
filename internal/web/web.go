@@ -53,7 +53,7 @@ func Load(webDir string, db storage.DB, log logger.Config) (Data, error) {
 	}
 
 	// main.tmpl
-	data.Main, err =  template.ParseFiles(
+	data.Main, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "main.tmpl"),
 	)

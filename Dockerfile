@@ -1,13 +1,13 @@
 # BUILD
-FROM golang:1.15.9-alpine as build
+FROM golang:1.18.1-alpine as build
 
 WORKDIR /build
 
+RUN apk update && apk upgrade && apk add --no-cache make gcc musl-dev
+
 COPY . ./
 
-RUN mkdir ./dist/ && go build -ldflags="-w -s" -o ./dist/lenpaste ./cmd/lenpaste.go
-
-RUN if [ -f "./version.json" ]; then cp ./version.json ./dist/version.json; fi
+RUN make
 
 
 # RUN
@@ -17,12 +17,6 @@ WORKDIR /app
 
 COPY --from=build /build/dist/* ./
 
-COPY ./web ./web
-
-RUN chmod +x /app/lenpaste
-
 EXPOSE 8000/tcp
-
-VOLUME /app/data
 
 CMD [ "./lenpaste" ]

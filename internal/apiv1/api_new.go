@@ -19,8 +19,8 @@
 package apiv1
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"encoding/json"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 	"strconv"
 	"time"
@@ -32,10 +32,10 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
 
 	paste := storage.Paste{
-		Title: req.Form.Get("title"),
-		Body: req.Form.Get("body"),
+		Title:      req.Form.Get("title"),
+		Body:       req.Form.Get("body"),
 		DeleteTime: 0,
-		OneUse: false,
+		OneUse:     false,
 	}
 
 	// Get delete time

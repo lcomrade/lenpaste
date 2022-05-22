@@ -19,15 +19,15 @@
 package main
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/apiv1"
-	"git.lcomrade.su/root/lenpaste/internal/web"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"errors"
-	"net/http"
-	"time"
 	"flag"
+	"git.lcomrade.su/root/lenpaste/internal/apiv1"
+	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/web"
+	"net/http"
 	"os"
+	"time"
 )
 
 func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Config) {
@@ -38,17 +38,17 @@ func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Confi
 			log.Error(errors.New("Delete expired: " + err.Error()))
 		}
 
-		log.Info("Deleted "+string(count)+" expired pastes")
+		log.Info("Delete " + string(count) + " expired pastes")
 
 		// Wait
 		time.Sleep(cleanJobPeriod)
 	}
 }
 
-
 func printHelp() {
 	println("Usage:", os.Args[0], "[OPTION]...")
 	println("")
+	println("    --addres    ADDRES:PORT (default: :80)")
 	println("    --db-source path to config file")
 	println("-h, --help      display this help and exit")
 
@@ -65,6 +65,7 @@ func main() {
 	// Read cmd args
 	flag.Usage = printHelp
 
+	flagAddres := flag.String("addres", ":80", "")
 	flagDbSource := flag.String("db-source", "", "")
 	flagH := flag.Bool("h", false, "")
 	flagHelp := flag.Bool("-help", false, "")
@@ -82,8 +83,8 @@ func main() {
 	}
 
 	// Settings
-	db := storage.DB {
-		DriverName: "sqlite3",
+	db := storage.DB{
+		DriverName:     "sqlite3",
 		DataSourceName: *flagDbSource,
 	}
 
@@ -92,7 +93,7 @@ func main() {
 	}
 
 	apiv1Data := apiv1.Data{
-		DB: db,
+		DB:  db,
 		Log: log,
 	}
 
@@ -133,14 +134,13 @@ func main() {
 		apiv1Data.GetHand(rw, req)
 	})
 
-
 	// Run background job
 	log.Info("Run background job")
-	go backgroundJob(10 * time.Minute, db, log)
+	go backgroundJob(10*time.Minute, db, log)
 
 	// Run HTTP server
-	log.Info("Run HTTP server on :8000")
-	err = http.ListenAndServe(":8000", nil)
+	log.Info("Run HTTP server on " + *flagAddres)
+	err = http.ListenAndServe(*flagAddres, nil)
 	if err != nil {
 		panic(err)
 	}

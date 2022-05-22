@@ -18,7 +18,7 @@
 
 package web
 
-import(
+import (
 	"net/http"
 )
 
@@ -43,7 +43,6 @@ func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
 		data.Log.HttpError(req, e)
 	}
 }
-
 
 func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
 	// Write response header

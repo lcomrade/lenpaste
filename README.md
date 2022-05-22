@@ -8,27 +8,24 @@
 Java Script is not used.
 There is its own API.
 
+
 ## Features
 - No need to register
-- IP addresses are not saved
-- Not use Java Script
+- Does not use Java Script or cookies
 - Has its own API
 - Open source and self-hosted
 
+
+## Public servers list
+| Name              | Description                              | Link                                           |
+| ----------------- | ---------------------------------------- | ---------------------------------------------- |
+| lcomrade's server | Server managed by the Lenpaste developer | [paste.lcomrade.su](https://paste.lcomrade.su) |
+
+
 ## Documentation
-### For users
-- [Public servers list](https://github.com/lcomrade/lenpaste/blob/main/docs/public_servers.md)
+- [Lenpaste API](docs/api.md)
+- [Libraries for working with API](docs/libs.md)
 
-### For developers
-- [Lenpaste API](https://github.com/lcomrade/lenpaste/blob/main/docs/devs/api.md)
-- [Libraries for working with API](https://github.com/lcomrade/lenpaste/blob/main/docs/devs/libs.md)
-
-### Self-hosting
-- [Configuration](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/config.md)
-- [Installation](https://github.com/lcomrade/lenpaste/blob/main/docs/self-hosting/install.md)
-
-### FAQ
-- [FAQ](https://github.com/lcomrade/lenpaste/blob/main/docs/faq.md)
 
 ## Bugs and Suggestion
 If you find a bug or have a suggestion, create an Issue [here](https://github.com/lcomrade/lenpaste/issues).

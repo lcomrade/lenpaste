@@ -18,11 +18,11 @@
 
 package web
 
-import(
+import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 )
 
 // Pattern: /new
@@ -35,11 +35,11 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 
 	if req.PostForm.Get("body") != "" {
 		paste := storage.Paste{
-			Title: req.PostForm.Get("title"),
-			Body: req.PostForm.Get("body"),
+			Title:  req.PostForm.Get("title"),
+			Body:   req.PostForm.Get("body"),
 			OneUse: false,
 		}
-	
+
 		// Get delete time
 		expirStr := req.Form.Get("expiration")
 		if expirStr != "" {
@@ -53,7 +53,7 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 				paste.DeleteTime = time.Now().Unix() + expir
 			}
 		}
-	
+
 		// Get "one use" parameter
 		if req.PostForm.Get("oneUse") == "true" {
 			paste.OneUse = true

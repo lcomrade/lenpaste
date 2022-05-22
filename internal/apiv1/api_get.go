@@ -19,8 +19,8 @@
 package apiv1
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"encoding/json"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 )
 
@@ -28,7 +28,7 @@ import (
 func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 	// Get paste id
 	req.ParseForm()
-	
+
 	id := req.PostForm.Get("id")
 
 	// Check paste id

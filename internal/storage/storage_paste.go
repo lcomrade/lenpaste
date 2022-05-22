@@ -19,17 +19,17 @@
 package storage
 
 import (
-	"time"
 	"database/sql"
+	"time"
 )
 
 type Paste struct {
-	ID string `json:"id"` // Ignored when creating
+	ID         string `json:"id"` // Ignored when creating
 	Title      string `json:"title"`
 	Body       string `json:"body"`
 	CreateTime int64  `json:"createTime"` // Ignored when creating
 	DeleteTime int64  `json:"deleteTime"`
-	OneUse     bool `json:"oneUse"`
+	OneUse     bool   `json:"oneUse"`
 	//Syntax string `json:"syntax"`
 	//Password string `json:"password"`
 }
@@ -117,7 +117,7 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 		if err == sql.ErrNoRows {
 			return paste, ErrNotFoundID
 		}
-		
+
 		return paste, err
 	}
 
@@ -142,7 +142,7 @@ func (dbInfo DB) PasteGetList() ([]Paste, error) {
 		if err == sql.ErrNoRows {
 			return pastes, ErrNotFoundID
 		}
-	
+
 		return pastes, err
 	}
 

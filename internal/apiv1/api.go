@@ -19,9 +19,9 @@
 package apiv1
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"errors"
+	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 )
 
 type Data struct {

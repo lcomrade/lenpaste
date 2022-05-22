@@ -19,9 +19,9 @@
 package logger
 
 import (
+	"fmt"
 	"net/http"
 	"time"
-	"fmt"
 )
 
 type Config struct {
