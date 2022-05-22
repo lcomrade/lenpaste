@@ -38,12 +38,13 @@ type Data struct {
 	ErrorPage   *template.Template
 }
 
-func Load(db storage.DB, webDir string) (Data, error) {
+func Load(webDir string, db storage.DB, log logger.Config) (Data, error) {
 	var data Data
 	var err error
 
-	// Save DB info
+	// Setup DB and logger
 	data.DB = db
+	data.Log = log
 
 	// style.css file
 	data.StyleCSS, err = readFile(filepath.Join(webDir, "style.css"))

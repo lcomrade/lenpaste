@@ -16,24 +16,39 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package apiv1
 
-import(
+import (
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"encoding/json"
 	"net/http"
 )
 
-// Pattern: /docs
-func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
+// GET /api/v1/get?id=""
+func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
+	// Get paste id
+	req.ParseForm()
+	
+	id := req.PostForm.Get("id")
 
-	rw.Header().Set("Content-Type", "text/html")
-	data.Docs.Execute(rw, "")
-}
+	// Check paste id
+	if id == "" {
+		data.writeError(rw, req, storage.ErrNotFoundID)
+	}
 
-// Pattern: /docs/apiv1
-func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
+	// Get paste
+	paste, err := data.DB.PasteGet(id)
+	if err != nil {
+		data.writeError(rw, req, err)
+		return
+	}
 
-	rw.Header().Set("Content-Type", "text/html")
-	data.DocsApiV1.Execute(rw, "")
+	// Return response
+	rw.Header().Set("Content-Type", "application/json")
+
+	err = json.NewEncoder(rw).Encode(paste)
+	if err != nil {
+		data.Log.HttpError(req, err)
+		return
+	}
 }

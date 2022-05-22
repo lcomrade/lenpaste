@@ -1,27 +1,9 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>{{.Code}} | Lenpaste</title>
-		<link rel="stylesheet" type="text/css" href="/style.css"/>
-	</head>
-	<body>
-		<header>
-			<h2><a class="titleA" href=/>Lenpaste</a></h2>
-		</header>
-		<div class="main">
-			<div class="totalMsg">
-				<h3>Error {{.Code}}</h3>
-				<p>{{.Error}}</p>
-				<a href=/ style="color: #3366CC;">Back to home page</a>
-			</div>
-		</div>
-		<footer>
-			<p>
-				<a href=/rules class="footerA">Server rules</a>
-				<a href=/api class="footerA">API</a>
-				<a href=/version class="footerA">Version</a>
-			</p>
-		</footer>
-	</body>
-</html>
+{{define "article"}}
+<div class="main">
+	<div class="totalMsg">
+		<h3>Error {{.Code}}</h3>
+		<p>{{.Error}}</p>
+		<a href=/ style="color: #3366CC;">Back to home page</a>
+	</div>
+</div>
+{{end}}

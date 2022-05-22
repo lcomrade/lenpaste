@@ -31,7 +31,11 @@ func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
 	// If main page
 	if req.URL.Path == "/" {
 		rw.Header().Set("Content-Type", "text/html")
-		data.Main.Execute(rw, "")
+		err := data.Main.Execute(rw, "")
+		if err != nil {
+			data.errorInternal(rw, req, err)
+		}
+		
 		return
 	}
 

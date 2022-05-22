@@ -1,0 +1,11 @@
+{{define "article"}}
+<div class="main">
+	<h3>{{.Title}}</h3>
+	<p><textarea wrap="off" autofocus tabindex=1 rows=30 cols=100 readonly>{{.Text}}</textarea></p>
+	{{if .OneUse}}
+	<p>This paste has been removed!</p>
+	{{else}}
+	<p>Expires in: {{.ExpiresDay}} days, {{.ExpiresHour}} hours, {{.ExpiresMin}} minutes</p>
+	{{end}}
+</div>
+{{end}}

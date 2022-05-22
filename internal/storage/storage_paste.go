@@ -20,6 +20,7 @@ package storage
 
 import (
 	"time"
+	"database/sql"
 )
 
 type Paste struct {
@@ -45,6 +46,11 @@ func (dbInfo DB) PasteAdd(paste Paste) (Paste, error) {
 	paste.ID, err = genTokenCrypto(8)
 	if err != nil {
 		return paste, err
+	}
+
+	// Check delete time
+	if paste.DeleteTime < 0 {
+		paste.DeleteTime = 0
 	}
 
 	// Add
@@ -108,6 +114,10 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 	// Read query
 	err = row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return paste, ErrNotFoundID
+		}
+		
 		return paste, err
 	}
 
@@ -129,6 +139,10 @@ func (dbInfo DB) PasteGetList() ([]Paste, error) {
 		`SELECT "id", "title", "body", "create_time", "delete_time", "one_use" FROM "pastes"`,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return pastes, ErrNotFoundID
+		}
+	
 		return pastes, err
 	}
 
@@ -157,7 +171,7 @@ func (dbInfo DB) PasteDeleteExpired() (int64, error) {
 
 	// Delete
 	result, err := db.Exec(
-		`DELETE FROM "pastes" WHERE delete_time < ?`,
+		`DELETE FROM "pastes" WHERE delete_time < ? AND delete_time > 0`,
 		time.Now().Unix(),
 	)
 	if err != nil {

@@ -16,24 +16,42 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package apiv1
 
 import(
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"encoding/json"
 	"net/http"
 )
 
-// Pattern: /docs
-func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
-	rw.Header().Set("Content-Type", "text/html")
-	data.Docs.Execute(rw, "")
+type errorType struct {
+	Code  int
+	Error string
 }
 
-// Pattern: /docs/apiv1
-func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
+func (data Data) writeError(rw http.ResponseWriter, req *http.Request, err error) {
+	var resp errorType
 
-	rw.Header().Set("Content-Type", "text/html")
-	data.DocsApiV1.Execute(rw, "")
+	if err == errBadRequest {
+		resp.Code = 400
+		resp.Error = "Bad Request"
+
+	} else if err == storage.ErrNotFoundID {
+		resp.Code = 403
+		resp.Error = "Could not find ID"
+
+	} else {
+		resp.Code = 500
+		resp.Error = "Internal Server Error"
+		data.Log.HttpError(req, err)
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(resp.Code)
+
+	e := json.NewEncoder(rw).Encode(resp)
+	if err != nil {
+		data.Log.HttpError(req, e)
+		return
+	}
 }

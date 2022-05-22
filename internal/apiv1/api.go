@@ -16,24 +16,19 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package apiv1
 
-import(
-	"net/http"
+import (
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"errors"
 )
 
-// Pattern: /docs
-func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
-	rw.Header().Set("Content-Type", "text/html")
-	data.Docs.Execute(rw, "")
+type Data struct {
+	Log logger.Config
+	DB  storage.DB
 }
 
-// Pattern: /docs/apiv1
-func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
-	rw.Header().Set("Content-Type", "text/html")
-	data.DocsApiV1.Execute(rw, "")
-}
+var (
+	errBadRequest = errors.New("Bad Request")
+)

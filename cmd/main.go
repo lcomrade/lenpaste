@@ -19,206 +19,129 @@
 package main
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/api"
-	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/apiv1"
 	"git.lcomrade.su/root/lenpaste/internal/web"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"errors"
-	"io"
-	"log"
 	"net/http"
-	"os"
 	"time"
+	"flag"
+	"os"
 )
 
-const (
-	//Logs files
-	logDir       = "./data/log"
-	logFileMod   = 0700
-	logOldPrefix = ".old"
-	logInfoFile  = "./data/log/info"
-	logErrFile   = "./data/log/error"
-	logJobFile   = "./data/log/job"
-)
-
-func tee(file string, writer io.Writer, save bool) (io.Writer, error) {
-	//Check SAVE
-	if save == false {
-		return writer, nil
-	}
-
-	//If save == true: continue
-	var mw io.Writer
-
-	//Open file
-	logFile, err := os.OpenFile(file, os.O_APPEND|os.O_CREATE|os.O_WRONLY, logFileMod)
-	if err != nil {
-		return mw, err
-	}
-	//defer logFile.Close()
-
-	//Create Multi Writer
-	mw = io.MultiWriter(writer, logFile)
-
-	//Return
-	return mw, nil
-}
-
-func BackgroundJob(cleanJobPeriod time.Duration, saveLog bool) {
-	//Prepare loging
-	logWr, err := tee(logJobFile, os.Stderr, saveLog)
-	if err != nil {
-		panic(err)
-	}
-
-	backLog := log.New(logWr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-
-	//Run
+func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Config) {
 	for {
-		//Delete expired pastes
-		errs := storage.DelExpiredPaste()
-		if len(errs) != 0 {
-			for _, err := range errs {
-				backLog.Println("delete expired error:", err)
-			}
-		}
-
-		//Wait
-		time.Sleep(cleanJobPeriod)
-
-	}
-}
-
-func rotateLog(path string, maxSize int64) error {
-	//Stat file
-	file, err := os.Stat(path)
-	if err != nil {
-		if os.IsNotExist(err) == true {
-			return nil
-		} else {
-			return err
-		}
-	}
-
-	//Check file size
-	if file.Size() >= maxSize {
-		//Move
-		err := os.Rename(path, path+logOldPrefix)
+		// Delete expired pastes
+		count, err := db.PasteDeleteExpired()
 		if err != nil {
-			return err
+			log.Error(errors.New("Delete expired: " + err.Error()))
 		}
-	}
 
-	return nil
+		log.Info("Deleted "+string(count)+" expired pastes")
+
+		// Wait
+		time.Sleep(cleanJobPeriod)
+	}
 }
 
-func init() {
-	//Create log dir
-	err := os.MkdirAll(logDir, logFileMod)
-	if err != nil {
-		panic(err)
-	}
+
+func printHelp() {
+	println("Usage:", os.Args[0], "[OPTION]...")
+	println("")
+	println("    --db-source path to config file")
+	println("-h, --help      display this help and exit")
+
+	os.Exit(0)
+}
+
+func printFlagNotSet(flg string) {
+	println("flag is not set:", flg)
+
+	os.Exit(0)
 }
 
 func main() {
-	//Read config
-	config, err := config.ReadConfig()
+	// Read cmd args
+	flag.Usage = printHelp
+
+	flagDbSource := flag.String("db-source", "", "")
+	flagH := flag.Bool("h", false, "")
+	flagHelp := flag.Bool("-help", false, "")
+
+	flag.Parse()
+
+	// -h or --help flag
+	if *flagH == true || *flagHelp == true {
+		printHelp()
+	}
+
+	// --db-source flag
+	if *flagDbSource == "" {
+		printFlagNotSet("--db-source")
+	}
+
+	// Settings
+	db := storage.DB {
+		DriverName: "sqlite3",
+		DataSourceName: *flagDbSource,
+	}
+
+	log := logger.Config{
+		TimeFormat: "2006/01/02 15:04:05",
+	}
+
+	apiv1Data := apiv1.Data{
+		DB: db,
+		Log: log,
+	}
+
+	// Init data base
+	err := db.InitDB()
 	if err != nil {
-		panic(errors.New("read config: " + err.Error()))
+		panic(err)
 	}
 
-	if config.Logs.RotateLogs == true {
-		//Rotate ERROR
-		if config.Logs.SaveErr == true {
-			err := rotateLog(logErrFile, config.Logs.MaxLogSize)
-			if err != nil {
-				panic(errors.New("rotate log: " + err.Error()))
-			}
-		}
-
-		//Rotate INFO
-		if config.Logs.SaveInfo == true {
-			err := rotateLog(logInfoFile, config.Logs.MaxLogSize)
-			if err != nil {
-				panic(errors.New("rotate log: " + err.Error()))
-			}
-		}
-
-		//Rotate JOB
-		if config.Logs.SaveJob == true {
-			err := rotateLog(logJobFile, config.Logs.MaxLogSize)
-			if err != nil {
-				panic(errors.New("rotate log: " + err.Error()))
-			}
-		}
-	}
-
-	//Prepare loging (ERROR)
-	logErrWr, err := tee(logErrFile, os.Stderr, config.Logs.SaveErr)
+	// Load pages
+	webData, err := web.Load("./web", db, log)
 	if err != nil {
 		panic(err)
 	}
 
-	errLog := log.New(logErrWr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	// Handlers
+	http.HandleFunc("/style.css", func(rw http.ResponseWriter, req *http.Request) {
+		webData.StyleCSSHand(rw, req)
+	})
 
-	//Prepare loging (INFO)
-	logInfoWr, err := tee(logInfoFile, os.Stdout, config.Logs.SaveInfo)
+	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		webData.MainHand(rw, req)
+	})
+	http.HandleFunc("/new", func(rw http.ResponseWriter, req *http.Request) {
+		webData.NewHand(rw, req)
+	})
+	http.HandleFunc("/docs", func(rw http.ResponseWriter, req *http.Request) {
+		webData.DocsHand(rw, req)
+	})
+	http.HandleFunc("/docs/apiv1", func(rw http.ResponseWriter, req *http.Request) {
+		webData.DocsApiV1Hand(rw, req)
+	})
+
+	http.HandleFunc("/api/v1/new", func(rw http.ResponseWriter, req *http.Request) {
+		apiv1Data.NewHand(rw, req)
+	})
+	http.HandleFunc("/api/v1/get", func(rw http.ResponseWriter, req *http.Request) {
+		apiv1Data.GetHand(rw, req)
+	})
+
+
+	// Run background job
+	log.Info("Run background job")
+	go backgroundJob(10 * time.Minute, db, log)
+
+	// Run HTTP server
+	log.Info("Run HTTP server on :8000")
+	err = http.ListenAndServe(":8000", nil)
 	if err != nil {
 		panic(err)
-	}
-	infoLog := log.New(logInfoWr, "INFO\t", log.Ldate|log.Ltime)
-
-	//Log start
-	infoLog.Println("## Start Lenpaste ##")
-
-	//Load pages
-	err = pages.Load()
-	if err != nil {
-		errLog.Fatal("load pages:", err)
-	}
-
-	//Handlers
-	http.HandleFunc("/style.css", pages.Style)
-
-	http.HandleFunc("/", pages.GetPaste)
-	http.HandleFunc("/new", pages.NewPaste)
-	http.HandleFunc("/new_done", pages.NewPasteDone)
-	http.HandleFunc("/api", pages.API)
-	http.HandleFunc("/rules", pages.Rules)
-	http.HandleFunc("/version", pages.Version)
-
-	http.HandleFunc("/api/new", api.NewPaste)
-	http.HandleFunc("/api/get/", api.GetPaste)
-	http.HandleFunc("/api/about", api.GetAbout)
-	http.HandleFunc("/api/rules", api.GetRules)
-	http.HandleFunc("/api/version", api.GetVersion)
-
-	//Run (Background Job)
-	if config.Storage.EnableCleanJob == true {
-		infoLog.Println("Run background clean job")
-		go BackgroundJob(config.Storage.CleanJobPeriod, config.Logs.SaveJob)
-	}
-
-	//Run (WEB)
-	infoLog.Println("HTTP server listen: '" + config.HTTP.Listen + "'")
-	infoLog.Println("Use TLS: ", config.HTTP.UseTLS)
-
-	//Use TLS or no?
-	if config.HTTP.UseTLS == false {
-		//No TLS
-		err = http.ListenAndServe(config.HTTP.Listen, nil)
-		if err != nil {
-			errLog.Fatal("run WEB server:", err)
-		}
-
-	} else {
-		//Enable TLS
-		infoLog.Println("SSL cert: '" + config.HTTP.SSLCert + "'")
-		infoLog.Println("SSL key: '" + config.HTTP.SSLKey + "'")
-
-		err = http.ListenAndServeTLS(config.HTTP.Listen, config.HTTP.SSLCert, config.HTTP.SSLKey, nil)
-		if err != nil {
-			errLog.Fatal("run WEB server:", err)
-		}
 	}
 }

@@ -22,10 +22,11 @@ import(
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 	"time"
+	"strconv"
 )
 
 // Pattern: /new
-func (data Data) CreatePasteHand(rw http.ResponseWriter, req *http.Request) {
+func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 
@@ -39,13 +40,19 @@ func (data Data) CreatePasteHand(rw http.ResponseWriter, req *http.Request) {
 			OneUse: false,
 		}
 	
-		// Get expiration time
-		expirTime, err := storage.ExpirationToTime(req.PostForm.Get("expiration"))
-		if err != nil {
-			data.errorBadRequest(rw, req)
-			return
+		// Get delete time
+		expirStr := req.Form.Get("expiration")
+		if expirStr != "" {
+			expir, err := strconv.ParseInt(expirStr, 16, 64)
+			if err != nil {
+				data.errorBadRequest(rw, req)
+				return
+			}
+
+			if expir > 0 {
+				paste.DeleteTime = time.Now().Unix() + expir
+			}
 		}
-		paste.DeleteTime = time.Now().Unix() + expirTime
 	
 		// Get "one use" parameter
 		if req.PostForm.Get("oneUse") == "true" {
@@ -53,12 +60,14 @@ func (data Data) CreatePasteHand(rw http.ResponseWriter, req *http.Request) {
 		}
 
 		// Create paste
-		_, err = data.DB.PasteAdd(paste)
+		paste, err := data.DB.PasteAdd(paste)
 		if err != nil {
 			data.errorInternal(rw, req, err)
 			return
 		}
 
+		// Redirect to paste
+		writeRedirect(rw, req, "/"+paste.ID, 302)
 		return
 	}
 

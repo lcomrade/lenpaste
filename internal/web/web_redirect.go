@@ -22,18 +22,15 @@ import(
 	"net/http"
 )
 
-// Pattern: /docs
-func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
+func writeRedirect(rw http.ResponseWriter, req *http.Request, newURL string, code int) {
+	if newURL == "" {
+		newURL = "/"
+	}
 
-	rw.Header().Set("Content-Type", "text/html")
-	data.Docs.Execute(rw, "")
-}
+	if req.URL.RawQuery != "" {
+		newURL = newURL + "?" + req.URL.RawQuery
+	}
 
-// Pattern: /docs/apiv1
-func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
-	rw.Header().Set("Content-Type", "text/html")
-	data.DocsApiV1.Execute(rw, "")
+	rw.Header().Set("Location", newURL)
+	rw.WriteHeader(code)
 }
