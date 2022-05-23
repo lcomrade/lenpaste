@@ -1,31 +1,26 @@
-name: CI to Docker Hub
+name: Docker (unstable)
 on:
   push:
     branches: [ main ]
     paths-ignore:
-      - ".github/**"
-      - ".dockerignore"
+      - ".github/dependabot.yml"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/PULL_REQUEST_TEMPLATE/**"
       - ".gitignore"
       - "README.md"
+      - "CHANGELOG.md"
+      - "CONTRIBUTING.md"
       - "docs/**"
       - "init/**"
+    tags-ignore:
+      - "v*.*.*"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-
-      - name: Save version information
-        shell: bash
-        run: |-
-          echo "{" > ./version.json
-          echo '    "Version":"'$(date +%Y%m%d)'-latest",' >> ./version.json
-          echo '    "GitTag":"none",' >> ./version.json
-          echo '    "GitCommit":"'$(git log -1 --pretty=%H)'",' >> ./version.json
-          echo '    "BuildDate":"'$(date +%d.%m.%Y)'"' >> ./version.json
-          echo "}" >> ./version.json
+      - name: Check Out Repo 
+        uses: actions/checkout@v3
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -44,7 +39,8 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/lenpaste:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/lenpaste:unstable
+          platforms: linux/386,linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v6
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

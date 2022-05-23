@@ -5,6 +5,10 @@ WORKDIR /build
 
 RUN apk update && apk upgrade && apk add --no-cache make gcc musl-dev
 
+COPY ./go.mod ./
+COPY go.sum ./
+RUN go mod download -x
+
 COPY . ./
 
 RUN make
@@ -13,10 +17,14 @@ RUN make
 # RUN
 FROM alpine:latest as run
 
-WORKDIR /app
+WORKDIR /
 
-COPY --from=build /build/dist/* ./
+COPY --from=build /build/dist/bin/* /usr/local/bin/
+COPY --from=build /build/dist/share/ /usr/local/share/
 
-EXPOSE 8000/tcp
+COPY ./entrypoint.sh /
+RUN chmod 755 /entrypoint.sh && mkdir -p /data/
 
-CMD [ "./lenpaste" ]
+EXPOSE 80/tcp
+
+CMD [ "/entrypoint.sh" ]

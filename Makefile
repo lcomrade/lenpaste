@@ -5,12 +5,13 @@ LDFLAGS = -w -s
 .PHONY: all fmt clean
 
 all:
-	mkdir -p ./dist/
+	mkdir -p ./dist/bin/
+	mkdir -p ./dist/share/$(NAME)
 
-	go build -ldflags="$(LDFLAGS)" -o ./dist/$(NAME) $(MAIN_GO)
-	chmod +x ./dist/$(NAME)
+	go build -ldflags="$(LDFLAGS)" -o ./dist/bin/$(NAME) $(MAIN_GO)
+	chmod +x ./dist/bin/$(NAME)
 
-	cp -r ./web ./dist
+	cp -r ./web ./dist/share/$(NAME)
 
 fmt:
 	gofmt -w ./cmd/*.go
