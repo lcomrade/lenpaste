@@ -1,5 +1,5 @@
 # BUILD
-FROM golang:1.18.1-alpine as build
+FROM golang:1.18.2-alpine as build
 
 WORKDIR /build
 
