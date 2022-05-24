@@ -25,6 +25,7 @@ COPY --from=build /build/dist/share/ /usr/local/share/
 COPY ./entrypoint.sh /
 RUN chmod 755 /entrypoint.sh && mkdir -p /data/
 
+VOLUME /data
 EXPOSE 80/tcp
 
 CMD [ "/entrypoint.sh" ]
