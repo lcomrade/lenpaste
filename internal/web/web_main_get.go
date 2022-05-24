@@ -21,7 +21,20 @@ package web
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
+	"time"
 )
+
+type pasteTmpl struct {
+	ID         string
+	Title      string
+	Body       string
+	CreateTime int64
+	DeleteTime int64
+	OneUse     bool
+
+	CreateTimeStr string
+	DeleteTimeStr string
+}
 
 func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	// Read DB
@@ -62,8 +75,24 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// Prepare template data
+	createTime := time.Unix(paste.CreateTime, 0).UTC()
+	deleteTime := time.Unix(paste.DeleteTime, 0).UTC()
+
+	tmplData := pasteTmpl{
+		ID:         paste.ID,
+		Title:      paste.Title,
+		Body:       paste.Body,
+		CreateTime: paste.CreateTime,
+		DeleteTime: paste.DeleteTime,
+		OneUse:     paste.OneUse,
+
+		CreateTimeStr: createTime.Format("15:04:05 02.01.2006"),
+		DeleteTimeStr: deleteTime.Format("15:04:05 02.01.2006"),
+	}
+
 	// Show paste
-	err = data.PastePage.Execute(rw, paste)
+	err = data.PastePage.Execute(rw, tmplData)
 	if err != nil {
 		data.errorInternal(rw, req, err)
 		return
