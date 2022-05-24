@@ -16,14 +16,13 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package netshare
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"errors"
 )
 
-type Data struct {
-	Log logger.Config
-	DB  storage.DB
-}
+var (
+	ErrBadRequest = errors.New("Bad Request")
+	ErrInternal   = errors.New("Internal Server Error")
+)

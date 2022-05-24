@@ -1,122 +1,63 @@
+{{define "titlePrefix"}}API v1 | {{end}}
 {{define "article"}}
-<h3>About</h3>
-<p>Lenpaste has an open API. It does not require registration.</p>
-<h3>Methods</h3>
-<hr/>
-<h4>/api/new</h4>
-<p>Create a new paste.</p>
-<p>Request:</p>
-<ul>
-	<li><p><code>title</code> - Paste title</p></li>
-	<li><p><code>text</code> - Paste text</p></li>
-	<li><p><code>oneUse</code> - If 'true' then the paste is removed after opening</p></li>
-	<li><p><code>expiration</code> - Paste expiration date</p></li>
-	<table>
-		<th>Value</th>
-		<th>Description</th>
-		<tr>
-			<td>5m</td>
-			<td>5 minutes</td>
-		</tr>
-		<tr>
-			<td>10m</td>
-			<td>10 minutes</td>
-		</tr>
-		<tr>
-			<td>20m</td>
-			<td>20 minutes</td>
-		</tr>
-		<tr>
-			<td>30m</td>
-			<td>30 minutes</td>
-		</tr>
-		<tr>
-			<td>40m</td>
-			<td>40 minutes</td>
-		</tr>
-		<tr>
-			<td>50m</td>
-			<td>50 minutes</td>
-		</tr>
-		<tr>
-			<td>1h</td>
-			<td>1 hour</td>
-		</tr>
-		<tr>
-			<td>2h</td>
-			<td>2 hour</td>
-		</tr>
-		<tr>
-			<td>4h</td>
-			<td>4 hour</td>
-		</tr>
-		<tr>
-			<td>12h</td>
-			<td>12 hour</td>
-		</tr>
-		<tr>
-			<td>1d</td>
-			<td>1 day</td>
-		</tr>
-		<tr>
-			<td>2d</td>
-			<td>2 day</td>
-		</tr>
-		<tr>
-			<td>3d</td>
-			<td>3 day</td>
-		</tr>
-		<tr>
-			<td>4d</td>
-			<td>4 day</td>
-		</tr>
-		<tr>
-			<td>5d</td>
-			<td>5 day</td>
-		</tr>
-		<tr>
-			<td>6d</td>
-			<td>6 day</td>
-		</tr>
-		<tr>
-			<td>1w</td>
-			<td>1 week</td>
-		</tr>
-		<tr>
-			<td>2w</td>
-			<td>2 week</td>
-		</tr>
-		<tr>
-			<td>3w</td>
-			<td>3 week</td>
-		</tr>
-	</table></li>
-</ul>
-<p>Response: JSON</p>
-<details>
-	<summary>Response example</summary>
+<h3><a href="/docs">Documentation</a> / API v1</h3>
+<h4>POST <code>/api/v1/new</code></h4>
+<p>Request Parameters:</p>
+<table>
+	<th>Field</th>
+	<th>Required?</th>
+	<th>Description</th>
+	<tr>
+		<td><code>title</code></td>
+		<td></td>
+		<td>Paste title.</td>
+	</tr>
+	<tr>
+		<td><code>body</code></td>
+		<td>Yes</td>
+		<td>Paste text.</td>
+	</tr>
+	<tr>
+		<td><code>oneUse</code></td>
+		<td></td>
+		<td>If <code>true</code> then the paste is removed after opening.</td>
+	</tr>
+	<tr>
+		<td><code>expiration</code></td>
+		<td></td>
+		<td>The "lifetime" of the paste in seconds. To prevent the paste from expiring, simply do not set this parameter.</td>
+	</tr>
+</table>
+<p>Response example:</p>
 <pre><code>{
-"Name":"8HslINRp"
+    "id": "XcmX9ON1",
+    "title": "Paste title.",
+    "body": "Line 1.\r\nLine 2.\r\nLine 3.\r\n\r\nLine 5.",
+    "createTime": 1653387358,
+    "deleteTime": 0,
+    "oneUse": false
 }
 </code></pre>
-</details>
-<hr/>
-<h4>/api/get/PASTE_NAME</h4>
-<p>Get information about the paste and its text.</p>
-<p>Request: NONE</p>
-<p>Response: JSON</p>
-<details>
-	<summary>Response example</summary>
+<h4>GET <code>/api/v1/get</code></h4>
+<p>Request Parameters:</p>
+<table>
+	<th>Field</th>
+	<th>Required?</th>
+	<th>Description</th>
+	<tr>
+		<td><code>id</code></td>
+		<td>Yes</td>
+		<td>Paste ID.</td>
+	</tr>
+</table>
+<p>Response example:</p>
 <pre><code>{
-"Name":"8HslINRp",
-"Text":"My paste\r\nEND",
-"Info":{
-"CreateTime":1633845370,
-"DeleteTime":1633847170,
-"OneUse":true,
-"Title":"My first paste"
-}
+    "id": "XcmX9ON1",
+    "title": "Paste title.",
+    "body": "Line 1.\r\nLine 2.\r\nLine 3.\r\n\r\nLine 5.",
+    "createTime": 1653387358,
+    "deleteTime": 0,
+    "oneUse": false
 }
 </code></pre>
-</details>
 {{end}}

@@ -48,6 +48,9 @@ func (dbInfo DB) PasteAdd(paste Paste) (Paste, error) {
 		return paste, err
 	}
 
+	// Set paste create time
+	paste.CreateTime = time.Now().Unix()
+
 	// Check delete time
 	if paste.DeleteTime < 0 {
 		paste.DeleteTime = 0
@@ -56,7 +59,7 @@ func (dbInfo DB) PasteAdd(paste Paste) (Paste, error) {
 	// Add
 	_, err = db.Exec(
 		`INSERT INTO "pastes" ("id", "title", "body", "create_time", "delete_time", "one_use") VALUES (?, ?, ?, ?, ?, ?)`,
-		paste.ID, paste.Title, paste.Body, time.Now().Unix(), paste.DeleteTime, paste.OneUse,
+		paste.ID, paste.Title, paste.Body, paste.CreateTime, paste.DeleteTime, paste.OneUse,
 	)
 	if err != nil {
 		return paste, err

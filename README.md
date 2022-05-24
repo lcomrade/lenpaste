@@ -22,7 +22,7 @@
 
 
 ## Documentation
-- [Lenpaste API](docs/api.md)
+- [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
 - [Libraries for working with API](docs/libs.md)
 
 

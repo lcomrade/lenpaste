@@ -17,6 +17,7 @@ fmt:
 	gofmt -w ./cmd/*.go
 	gofmt -w ./internal/apiv1/*.go
 	gofmt -w ./internal/logger/*.go
+	gofmt -w ./internal/netshare/*.go
 	gofmt -w ./internal/storage/*.go
 	gofmt -w ./internal/web/*.go
 

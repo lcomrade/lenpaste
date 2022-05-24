@@ -16,43 +16,52 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package netshare
 
 import (
-	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"net/http"
+	"net/url"
+	"strconv"
+	"time"
 )
 
-type errorType struct {
-	Code  int    `json:"code"`
-	Error string `json:"error"`
-}
-
-func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
-	var resp errorType
-
-	if e == netshare.ErrBadRequest {
-		resp.Code = 400
-		resp.Error = "Bad Request"
-
-	} else if e == storage.ErrNotFoundID {
-		resp.Code = 403
-		resp.Error = "Could not find ID"
-
-	} else {
-		resp.Code = 500
-		resp.Error = "Internal Server Error"
-		data.Log.HttpError(req, e)
+func PasteAddFromForm(dbInfo storage.DB, form url.Values) (storage.Paste, error) {
+	// Read form
+	paste := storage.Paste{
+		Title:      form.Get("title"),
+		Body:       form.Get("body"),
+		DeleteTime: 0,
+		OneUse:     false,
 	}
 
-	rw.Header().Set("Content-Type", "application/json")
-	rw.WriteHeader(resp.Code)
+	// Check paste body
+	if paste.Body == "" {
+		return paste, ErrBadRequest
+	}
 
-	err := json.NewEncoder(rw).Encode(resp)
+	// Get delete time
+	expirStr := form.Get("expiration")
+	if expirStr != "" {
+		expir, err := strconv.ParseInt(expirStr, 16, 64)
+		if err != nil {
+			return paste, ErrBadRequest
+		}
+
+		if expir > 0 {
+			paste.DeleteTime = time.Now().Unix() + expir
+		}
+	}
+
+	// Get "one use" parameter
+	if form.Get("oneUse") == "true" {
+		paste.OneUse = true
+	}
+
+	// Create paste
+	paste, err := dbInfo.PasteAdd(paste)
 	if err != nil {
-		data.Log.HttpError(req, err)
-		return
+		return paste, err
 	}
+
+	return paste, nil
 }

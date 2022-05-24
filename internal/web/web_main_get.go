@@ -16,14 +16,33 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"net/http"
 )
 
-type Data struct {
-	Log logger.Config
-	DB  storage.DB
+func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
+	// Read DB
+	pasteID := string([]rune(req.URL.Path)[1:])
+
+	paste, err := data.DB.PasteGet(pasteID)
+	if err != nil {
+		if err == storage.ErrNotFoundID {
+			data.errorNotFound(rw, req)
+			return
+
+		} else {
+			data.errorInternal(rw, req, err)
+			return
+		}
+	}
+
+	// Show paste
+	err = data.PastePage.Execute(rw, paste)
+	if err != nil {
+		data.errorInternal(rw, req, err)
+		return
+	}
 }

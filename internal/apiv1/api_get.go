@@ -20,20 +20,27 @@ package apiv1
 
 import (
 	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
 )
 
-// GET /api/v1/get?id=""
+// GET /api/v1/get
 func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
-	// Get paste id
+	// Check method
+	if req.Method != "GET" {
+		data.writeError(rw, req, netshare.ErrBadRequest)
+		return
+	}
+
+	// Get paste ID
 	req.ParseForm()
 
-	id := req.PostForm.Get("id")
+	id := req.Form.Get("id")
 
 	// Check paste id
 	if id == "" {
-		data.writeError(rw, req, storage.ErrNotFoundID)
+		data.writeError(rw, req, netshare.ErrBadRequest)
+		return
 	}
 
 	// Get paste

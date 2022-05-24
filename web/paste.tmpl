@@ -1,5 +1,6 @@
+{{define "titlePrefix"}}{{if .Title}}{{.Title}}{{else}}{{.ID}}{{end}} | {{end}}
 {{define "article"}}
-<h3>{{.Title}}</h3>
+{{if .Title}}<h3>{{.Title}}</h3>{{end}}
 <p><textarea wrap="off" rows=35 autofocus tabindex=1 readonly>{{.Body}}</textarea></p>
 {{if .OneUse}}
 <p>This paste will be deleted after you read it!</p>

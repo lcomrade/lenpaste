@@ -20,47 +20,29 @@ package apiv1
 
 import (
 	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
-	"strconv"
-	"time"
 )
 
-// GET /api/v1/new?title=""&body=""&expiration=""&oneUse=""
+// POST /api/v1/new
 func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
-	// Get form data
-	req.ParseForm()
-
-	paste := storage.Paste{
-		Title:      req.Form.Get("title"),
-		Body:       req.Form.Get("body"),
-		DeleteTime: 0,
-		OneUse:     false,
+	// Check method
+	if req.Method != "POST" {
+		data.writeError(rw, req, netshare.ErrBadRequest)
+		return
 	}
 
-	// Get delete time
-	expirStr := req.Form.Get("expiration")
-	if expirStr != "" {
-		expir, err := strconv.ParseInt(expirStr, 16, 64)
-		if err != nil {
-			data.writeError(rw, req, errBadRequest)
+	// Get form data and create paste
+	req.ParseForm()
+
+	paste, err := netshare.PasteAddFromForm(data.DB, req.PostForm)
+	if err != nil {
+		if err == netshare.ErrBadRequest {
+			data.writeError(rw, req, netshare.ErrBadRequest)
 			return
 		}
 
-		if expir > 0 {
-			paste.DeleteTime = time.Now().Unix() + expir
-		}
-	}
-
-	// Get "one use" parameter
-	if req.Form.Get("oneUse") == "true" {
-		paste.OneUse = true
-	}
-
-	// Create paste
-	paste, err := data.DB.PasteAdd(paste)
-	if err != nil {
-		data.writeError(rw, req, errBadRequest)
+		data.writeError(rw, req, netshare.ErrInternal)
 		return
 	}
 
