@@ -1,6 +1,5 @@
 [![Go report](https://goreportcard.com/badge/github.com/lcomrade/lenpaste?style=flat-square)](https://goreportcard.com/report/github.com/lcomrade/lenpaste)
 [![Release](https://img.shields.io/github/v/release/lcomrade/lenpaste?style=flat-square)](https://github.com/lcomrade/lenpaste/releases/latest)
-[![Docker Hub Pulls](https://img.shields.io/docker/pulls/lcomrade/lenpaste?style=flat-square)](https://hub.docker.com/r/lcomrade/lenpaste)
 [![License](https://img.shields.io/github/license/lcomrade/lenpaste?style=flat-square)](https://github.com/lcomrade/lenpaste/blob/main/LICENSE)
 
 **Lenpaste** is a web service that allows you to share notes anonymously, an alternative to `pastebin.com`.

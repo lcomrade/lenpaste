@@ -138,9 +138,17 @@ func main() {
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
 		webData.MainHand(rw, req)
 	})
+
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
 		webData.AboutHand(rw, req)
 	})
+	http.HandleFunc("/about/license", func(rw http.ResponseWriter, req *http.Request) {
+		webData.LicenseHand(rw, req)
+	})
+	http.HandleFunc("/about/source_code", func(rw http.ResponseWriter, req *http.Request) {
+		webData.SourceCodePageHand(rw, req)
+	})
+
 	http.HandleFunc("/docs", func(rw http.ResponseWriter, req *http.Request) {
 		webData.DocsHand(rw, req)
 	})

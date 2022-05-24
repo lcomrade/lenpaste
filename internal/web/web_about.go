@@ -35,3 +35,31 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		data.errorInternal(rw, req, err)
 	}
 }
+
+// Pattern: /about/license
+func (data Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
+	// Show page
+	rw.Header().Set("Content-Type", "text/html")
+
+	err := data.License.Execute(rw, "")
+	if err != nil {
+		data.errorInternal(rw, req, err)
+	}
+}
+
+// Pattern: /about/source_code
+func (data Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
+	// Show page
+	rw.Header().Set("Content-Type", "text/html")
+
+	err := data.SourceCodePage.Execute(rw, "")
+	if err != nil {
+		data.errorInternal(rw, req, err)
+	}
+}

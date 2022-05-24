@@ -29,14 +29,16 @@ type Data struct {
 	DB  storage.DB
 	Log logger.Config
 
-	StyleCSS      []byte
-	Main          *template.Template
-	PastePage     *template.Template
-	PasteContinue *template.Template
-	About         *template.Template
-	Docs          *template.Template
-	DocsApiV1     *template.Template
-	ErrorPage     *template.Template
+	StyleCSS       []byte
+	Main           *template.Template
+	PastePage      *template.Template
+	PasteContinue  *template.Template
+	About          *template.Template
+	License        *template.Template
+	SourceCodePage *template.Template
+	Docs           *template.Template
+	DocsApiV1      *template.Template
+	ErrorPage      *template.Template
 }
 
 func Load(webDir string, db storage.DB, log logger.Config) (Data, error) {
@@ -84,6 +86,24 @@ func Load(webDir string, db storage.DB, log logger.Config) (Data, error) {
 	data.About, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "about.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// license.tmpl
+	data.License, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "license.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// source_code.tmpl
+	data.SourceCodePage, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "source_code.tmpl"),
 	)
 	if err != nil {
 		return data, err
