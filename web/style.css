@@ -58,12 +58,23 @@ article {
 }
 
 
-/* OTHER */
+/* CONTAINERS */
 .stretch-width {
 	width: 100%;
 	box-sizing: border-box;	
 }
 
+.button-block-right {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.button-block-right button {
+	margin-left: 20px;
+}
+
+
+/* OTHER */
 h1, h2, h3, h4, h5, h6,
 p, pre,
 select, label,
@@ -117,15 +128,23 @@ select:hover {
 }
 
 button {
-	 background: #66CC00;
+	 background: #888888;
 	 font-size: 16px;
 	 padding: 6px 6px 6px 6px;
 	 border: 2px;
 }
 
 button:hover {
-	background: #74D117;
+	background: #999999;
 	cursor: pointer;
+}
+
+.button-green {
+	background: #66CC00;
+}
+
+.button-green:hover {
+	background: #74D117;
 }
 
 ul {
@@ -147,14 +166,14 @@ summary {
 }
 
 table {
-	background: #666666;
+	background: inherit;
 	border-collapse: collapse;
 }
 
 th, td {
 	text-align: left;
 	padding: 10px;
-	border: 2px;
+	border: 1px;
 	border-style: solid;
 	font-size: inherit;
 	font-family: inherit;

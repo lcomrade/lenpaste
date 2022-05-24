@@ -39,6 +39,29 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	// If "one use" paste
+	if paste.OneUse == true {
+		// If continue button not pressed
+		req.ParseForm()
+
+		if req.PostForm.Get("oneUseContinue") != "true" {
+			err = data.PasteContinue.Execute(rw, paste)
+			if err != nil {
+				data.errorInternal(rw, req, err)
+				return
+			}
+
+			return
+		}
+
+		// If continue button pressed delete paste
+		err = data.DB.PasteDelete(pasteID)
+		if err != nil {
+			data.errorInternal(rw, req, err)
+			return
+		}
+	}
+
 	// Show paste
 	err = data.PastePage.Execute(rw, paste)
 	if err != nil {

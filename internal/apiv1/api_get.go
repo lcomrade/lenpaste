@@ -35,19 +35,29 @@ func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 	// Get paste ID
 	req.ParseForm()
 
-	id := req.Form.Get("id")
+	pasteID := req.Form.Get("id")
 
 	// Check paste id
-	if id == "" {
+	if pasteID == "" {
 		data.writeError(rw, req, netshare.ErrBadRequest)
 		return
 	}
 
 	// Get paste
-	paste, err := data.DB.PasteGet(id)
+	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
 		data.writeError(rw, req, err)
 		return
+	}
+
+	// If "one use" paste
+	if paste.OneUse == true {
+		// Delete paste
+		err = data.DB.PasteDelete(pasteID)
+		if err != nil {
+			data.writeError(rw, req, err)
+			return
+		}
 	}
 
 	// Return response
