@@ -42,7 +42,7 @@ func PasteAddFromForm(dbInfo storage.DB, form url.Values) (storage.Paste, error)
 	// Get delete time
 	expirStr := form.Get("expiration")
 	if expirStr != "" {
-		expir, err := strconv.ParseInt(expirStr, 16, 64)
+		expir, err := strconv.ParseInt(expirStr, 10, 64)
 		if err != nil {
 			return paste, ErrBadRequest
 		}

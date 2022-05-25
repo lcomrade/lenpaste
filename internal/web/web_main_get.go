@@ -87,8 +87,8 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,
 
-		CreateTimeStr: createTime.Format("15:04:05 02.01.2006"),
-		DeleteTimeStr: deleteTime.Format("15:04:05 02.01.2006"),
+		CreateTimeStr: createTime.Format("15:04 02.01.2006 UTC"),
+		DeleteTimeStr: deleteTime.Format("15:04 02.01.2006 UTC"),
 	}
 
 	// Show paste

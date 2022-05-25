@@ -3,14 +3,14 @@
 {{if .Title}}<h3>{{.Title}}</h3>{{end}}
 <textarea wrap="off" rows=30 autofocus tabindex=1 readonly>{{.Body}}</textarea>
 
-<p>Create time: {{.CreateTimeStr}}</p>
+<p>Created: {{.CreateTimeStr}}
 
 {{if .OneUse}}
-<p>Delete time: Now</p>
+<p>Expires: <span class="text-red">Now</span></p>
 {{else if eq .DeleteTime 0}}
-<p>Delete time: Never</p>
+<p>Expires: Never</p>
 {{else}}
-<p>Delete time: {{.DeleteTimeStr}}</p>
+<p>Expires: {{.DeleteTimeStr}}</p>
 {{end}}
 
 {{end}}

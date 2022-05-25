@@ -74,6 +74,16 @@ article {
 }
 
 
+/* TEXT */
+.text-red {
+	color: #FF1F1F;
+}
+
+.text-grey {
+	color: #888888;
+}
+
+
 /* OTHER */
 h1, h2, h3, h4, h5, h6,
 p, pre,
