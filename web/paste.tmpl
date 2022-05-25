@@ -1,9 +1,10 @@
 {{define "titlePrefix"}}{{if .Title}}{{.Title}}{{else}}{{.ID}}{{end}} | {{end}}
 {{define "article"}}
 {{if .Title}}<h3>{{.Title}}</h3>{{end}}
+<p style="text-align: right;"><a href="/raw/{{.ID}}" tabindex=2>raw</a></p>
 <textarea wrap="off" rows=30 autofocus tabindex=1 readonly>{{.Body}}</textarea>
 
-<p>Created: {{.CreateTimeStr}}
+<p>Created: {{.CreateTimeStr}}</p>
 
 {{if .OneUse}}
 <p>Expires: <span class="text-red">Now</span></p>

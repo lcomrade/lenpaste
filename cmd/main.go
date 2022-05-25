@@ -23,6 +23,7 @@ import (
 	"flag"
 	"git.lcomrade.su/root/lenpaste/internal/apiv1"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/raw"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lenpaste/internal/web"
 	"net/http"
@@ -118,6 +119,11 @@ func main() {
 		Log: log,
 	}
 
+	rawData := raw.Data{
+		DB:  db,
+		Log: log,
+	}
+
 	// Init data base
 	err = db.InitDB()
 	if err != nil {
@@ -137,6 +143,10 @@ func main() {
 
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
 		webData.MainHand(rw, req)
+	})
+
+	http.HandleFunc("/raw/", func(rw http.ResponseWriter, req *http.Request) {
+		rawData.MainHand(rw, req)
 	})
 
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
