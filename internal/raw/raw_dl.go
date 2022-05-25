@@ -20,14 +20,15 @@ package raw
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"io"
 	"net/http"
+	"strings"
+	"time"
 )
 
-// Pattern: /raw/
-func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
+// Pattern: /dl/
+func (data Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 	// Read DB
-	pasteID := string([]rune(req.URL.Path)[5:])
+	pasteID := string([]rune(req.URL.Path)[4:])
 
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
@@ -51,12 +52,21 @@ func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Write result
-	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	// Get file name and create time
+	createTime := time.Unix(paste.CreateTime, 0).UTC()
 
-	_, err = io.WriteString(rw, paste.Body)
-	if err != nil {
-		data.errorInternal(rw, req, err)
-		return
+	fileName := paste.ID
+	if paste.Title != "" {
+		fileName = paste.Title
 	}
+
+	fileName = fileName + ".txt"
+
+	// Write result
+	rw.Header().Set("Content-Type", "application/octet-stream")
+	rw.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	rw.Header().Set("Content-Transfer-Encoding", "binary")
+	rw.Header().Set("Expires", "0")
+
+	http.ServeContent(rw, req, fileName, createTime, strings.NewReader(paste.Body))
 }

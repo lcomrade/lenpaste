@@ -146,7 +146,10 @@ func main() {
 	})
 
 	http.HandleFunc("/raw/", func(rw http.ResponseWriter, req *http.Request) {
-		rawData.MainHand(rw, req)
+		rawData.RawHand(rw, req)
+	})
+	http.HandleFunc("/dl/", func(rw http.ResponseWriter, req *http.Request) {
+		rawData.DlHand(rw, req)
 	})
 
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
