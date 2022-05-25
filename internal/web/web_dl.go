@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package raw
+package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
@@ -27,6 +27,9 @@ import (
 
 // Pattern: /dl/
 func (data Data) DlHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[4:])
 

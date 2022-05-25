@@ -26,6 +26,9 @@ import (
 
 // Pattern: /raw/
 func (data Data) RawHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[5:])
 

@@ -149,7 +149,7 @@ func main() {
 		rawData.RawHand(rw, req)
 	})
 	http.HandleFunc("/dl/", func(rw http.ResponseWriter, req *http.Request) {
-		rawData.DlHand(rw, req)
+		webData.DlHand(rw, req)
 	})
 
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {

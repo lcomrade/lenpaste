@@ -123,6 +123,7 @@ input {
 	color: inherit;
 	padding: 10px;
 	border: 2px;
+	overflow-x: scroll;
 }
 
 select {
