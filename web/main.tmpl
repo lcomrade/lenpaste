@@ -12,11 +12,22 @@
 		autocomplete="off" autocorrect="off" spellcheck="true"
 		rows=20  wrap="off" tabindex=2 required
 	></textarea></div>
-	<div><input type="checkbox" name="oneUse" value="true" tabindex=3>Burn after reading</input></div>
+	<div>
+		<label for="syntax">Syntax:</label>
+		<select name="syntax" tabindex=3 size=1>
+			{{range .Lexers}}
+			<option value="{{.}}"{{if eq . "plaintext"}} selected="true"{{end}}>{{.}}</option>
+			{{end}}
+		</select>		
+	</div>
+	<div>
+		<label class="checkbox">
+		<input type="checkbox" name="oneUse" value="true" tabindex=4></input>Burn after reading</label>
+	</div>
 	<div>
 		<label for="expiration">Expiration:</label>
-		<select name="expiration" tabindex=4 size=1>
-			<option value="0" selected>Never</option>
+		<select name="expiration" tabindex=5 size=1>
+			<option value="0" selected="true">Never</option>
 			<option value="600">10 minutes</option>
 			<option value="1800">30 minutes</option>
 			<option value="3600">1 hour</option>
@@ -32,6 +43,6 @@
 			<option value="31557600">1 Year</option>
 		</select>
 	</div>
-	<div><button class="button-green" type="submit" tabindex=5>Create paste</button></div>
+	<div><button class="button-green" type="submit" tabindex=6>Create paste</button></div>
 </form>
 {{end}}

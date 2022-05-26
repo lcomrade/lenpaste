@@ -16,42 +16,48 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package web
 
 import (
-	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"net/http"
+	"bytes"
+	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
 )
 
-// POST /api/v1/new
-func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
-	// Check method
-	if req.Method != "POST" {
-		data.writeError(rw, req, netshare.ErrBadRequest)
-		return
+func highlight(source string, lexer string) (string, error) {
+	// Determine lexer
+	l := lexers.Get(lexer)
+	if l == nil {
+		return source, nil
 	}
 
-	// Get form data and create paste
-	req.ParseForm()
+	l = chroma.Coalesce(l)
 
-	paste, err := netshare.PasteAddFromForm(data.DB, data.Lexers, req.PostForm)
+	// Determine formatter
+	f := html.New(
+		html.Standalone(false),
+		html.WithClasses(false),
+		html.TabWidth(4),
+		html.WithLineNumbers(true),
+		html.WrapLongLines(true),
+	)
+
+	s := styles.Get("dracula")
+
+	it, err := l.Tokenise(nil, source)
 	if err != nil {
-		if err == netshare.ErrBadRequest {
-			data.writeError(rw, req, netshare.ErrBadRequest)
-			return
-		}
-
-		data.writeError(rw, req, netshare.ErrInternal)
-		return
+		return "", err
 	}
 
-	// Return response
-	rw.Header().Set("Content-Type", "application/json")
+	// Format
+	var buf bytes.Buffer
 
-	err = json.NewEncoder(rw).Encode(paste)
+	err = f.Format(&buf, s, it)
 	if err != nil {
-		data.Log.HttpError(req, err)
-		return
+		return "", err
 	}
+
+	return buf.String(), nil
 }

@@ -21,6 +21,7 @@ package web
 import (
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	chromaLexers "github.com/alecthomas/chroma/lexers"
 	"html/template"
 	"path/filepath"
 )
@@ -28,6 +29,8 @@ import (
 type Data struct {
 	DB  storage.DB
 	Log logger.Config
+
+	Lexers []string
 
 	StyleCSS       []byte
 	Main           *template.Template
@@ -48,6 +51,9 @@ func Load(webDir string, db storage.DB, log logger.Config) (Data, error) {
 	// Setup DB and logger
 	data.DB = db
 	data.Log = log
+
+	// Get Chroma lexers
+	data.Lexers = chromaLexers.Names(false)
 
 	// style.css file
 	data.StyleCSS, err = readFile(filepath.Join(webDir, "style.css"))

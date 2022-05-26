@@ -30,7 +30,7 @@ type Paste struct {
 	CreateTime int64  `json:"createTime"` // Ignored when creating
 	DeleteTime int64  `json:"deleteTime"`
 	OneUse     bool   `json:"oneUse"`
-	//Syntax string `json:"syntax"`
+	Syntax     string `json:"syntax"`
 	//Password string `json:"password"`
 }
 
@@ -58,8 +58,8 @@ func (dbInfo DB) PasteAdd(paste Paste) (Paste, error) {
 
 	// Add
 	_, err = db.Exec(
-		`INSERT INTO "pastes" ("id", "title", "body", "create_time", "delete_time", "one_use") VALUES (?, ?, ?, ?, ?, ?)`,
-		paste.ID, paste.Title, paste.Body, paste.CreateTime, paste.DeleteTime, paste.OneUse,
+		`INSERT INTO "pastes" ("id", "title", "body", "syntax", "create_time", "delete_time", "one_use") VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse,
 	)
 	if err != nil {
 		return paste, err
@@ -110,12 +110,12 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 
 	// Make query
 	row := db.QueryRow(
-		`SELECT "id", "title", "body", "create_time", "delete_time", "one_use" FROM "pastes" WHERE "id" = ?`,
+		`SELECT "id", "title", "body", "syntax", "create_time", "delete_time", "one_use" FROM "pastes" WHERE "id" = ?`,
 		id,
 	)
 
 	// Read query
-	err = row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
+	err = row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return paste, ErrNotFoundID
@@ -139,7 +139,7 @@ func (dbInfo DB) PasteGetList() ([]Paste, error) {
 
 	// Make query
 	rows, err := db.Query(
-		`SELECT "id", "title", "body", "create_time", "delete_time", "one_use" FROM "pastes"`,
+		`SELECT "id", "title", "body", "syntax", "create_time", "delete_time", "one_use" FROM "pastes"`,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -153,7 +153,7 @@ func (dbInfo DB) PasteGetList() ([]Paste, error) {
 	for rows.Next() {
 		var paste Paste
 
-		err = rows.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
+		err = rows.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
 		if err != nil {
 			return pastes, err
 		}

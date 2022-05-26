@@ -4,4 +4,7 @@ go 1.11
 
 replace git.lcomrade.su/root/lenpaste/internal => ./internal
 
-require github.com/mattn/go-sqlite3 v1.14.13
+require (
+	github.com/alecthomas/chroma v0.10.0
+	github.com/mattn/go-sqlite3 v1.14.13
+)

@@ -25,17 +25,31 @@ import (
 	"time"
 )
 
-func PasteAddFromForm(dbInfo storage.DB, form url.Values) (storage.Paste, error) {
+func PasteAddFromForm(dbInfo storage.DB, lexerNames []string, form url.Values) (storage.Paste, error) {
 	// Read form
 	paste := storage.Paste{
 		Title:      form.Get("title"),
 		Body:       form.Get("body"),
+		Syntax:     form.Get("syntax"),
 		DeleteTime: 0,
 		OneUse:     false,
 	}
 
 	// Check paste body
 	if paste.Body == "" {
+		return paste, ErrBadRequest
+	}
+
+	// Check syntax
+	syntaxOk := false
+	for _, name := range lexerNames {
+		if name == paste.Syntax {
+			syntaxOk = true
+			break
+		}
+	}
+
+	if syntaxOk == false {
 		return paste, ErrBadRequest
 	}
 

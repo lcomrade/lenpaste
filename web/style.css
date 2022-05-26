@@ -159,6 +159,11 @@ button:hover {
 	background: #74D117;
 }
 
+.checkbox:hover,
+.checkbox:hover input {
+	cursor: pointer;
+}
+
 ul {
 	list-style: square;
 }

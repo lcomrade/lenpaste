@@ -16,49 +16,55 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package apiv1
 
 import (
+	"encoding/json"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 )
 
-type createTmpl struct {
-	Lexers []string
-}
-
-func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
-	// Read request
-	req.ParseForm()
-
-	if req.PostForm.Get("body") != "" {
-		// Create paste
-		paste, err := netshare.PasteAddFromForm(data.DB, data.Lexers, req.PostForm)
-		if err != nil {
-			if err == netshare.ErrBadRequest {
-				data.errorBadRequest(rw, req)
-				return
-			}
-
-			data.errorInternal(rw, req, err)
-			return
-		}
-
-		// Redirect to paste
-		writeRedirect(rw, req, "/"+paste.ID, 302)
+// GET /api/v1/getSafely
+func (data Data) GetSafelyHand(rw http.ResponseWriter, req *http.Request) {
+	// Check method
+	if req.Method != "GET" {
+		data.writeError(rw, req, netshare.ErrBadRequest)
 		return
 	}
 
-	// Else show create page
-	tmplData := createTmpl{
-		Lexers: data.Lexers,
+	// Get paste ID
+	req.ParseForm()
+
+	pasteID := req.Form.Get("id")
+
+	// Check paste id
+	if pasteID == "" {
+		data.writeError(rw, req, netshare.ErrBadRequest)
+		return
 	}
 
-	rw.Header().Set("Content-Type", "text/html")
-
-	err := data.Main.Execute(rw, tmplData)
+	// Get paste
+	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
+		return
+	}
+
+	// If "one use" paste
+	if paste.OneUse == true {
+		paste = storage.Paste{
+			ID:     paste.ID,
+			OneUse: paste.OneUse,
+		}
+	}
+
+	// Return response
+	rw.Header().Set("Content-Type", "application/json")
+
+	err = json.NewEncoder(rw).Encode(paste)
+	if err != nil {
+		data.Log.HttpError(req, err)
 		return
 	}
 }

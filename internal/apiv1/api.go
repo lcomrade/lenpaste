@@ -21,9 +21,20 @@ package apiv1
 import (
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	chromaLexers "github.com/alecthomas/chroma/lexers"
 )
 
 type Data struct {
 	Log logger.Config
 	DB  storage.DB
+
+	Lexers []string
+}
+
+func Load(db storage.DB, log logger.Config) Data {
+	return Data{
+		DB:     db,
+		Log:    log,
+		Lexers: chromaLexers.Names(false),
+	}
 }

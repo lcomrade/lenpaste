@@ -52,6 +52,7 @@ func (dbInfo DB) InitDB() error {
 			"id" TEXT PRIMARY KEY,
 			"title" TEXT NOT NULL,
 			"body" TEXT NOT NULL,
+			"syntax" TEXT NOT NULL,
 			"create_time" INTEGER NOT NULL,
 			"delete_time" INTEGER NOT NULL,
 			"one_use" BOOL NOT NULL

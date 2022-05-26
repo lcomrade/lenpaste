@@ -20,6 +20,7 @@ package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"html/template"
 	"net/http"
 	"time"
 )
@@ -27,7 +28,7 @@ import (
 type pasteTmpl struct {
 	ID         string
 	Title      string
-	Body       string
+	Body       template.HTML
 	CreateTime int64
 	DeleteTime int64
 	OneUse     bool
@@ -75,6 +76,13 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	//Highlight body
+	bodyHighlight, err := highlight(paste.Body, "go")
+	if err != nil {
+		data.errorInternal(rw, req, err)
+		return
+	}
+
 	// Prepare template data
 	createTime := time.Unix(paste.CreateTime, 0).UTC()
 	deleteTime := time.Unix(paste.DeleteTime, 0).UTC()
@@ -82,7 +90,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	tmplData := pasteTmpl{
 		ID:         paste.ID,
 		Title:      paste.Title,
-		Body:       paste.Body,
+		Body:       template.HTML(bodyHighlight),
 		CreateTime: paste.CreateTime,
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,

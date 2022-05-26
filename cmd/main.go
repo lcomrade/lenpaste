@@ -114,10 +114,7 @@ func main() {
 		TimeFormat: "2006/01/02 15:04:05",
 	}
 
-	apiv1Data := apiv1.Data{
-		DB:  db,
-		Log: log,
-	}
+	apiv1Data := apiv1.Load(db, log)
 
 	rawData := raw.Data{
 		DB:  db,

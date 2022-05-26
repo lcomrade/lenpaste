@@ -20,5 +20,7 @@ updates:
     schedule:
       interval: "daily"
     ignore:
+      - dependency-name: "github.com/alecthomas/chroma"
+        versions: ["2.x"]
       - dependency-name: "github.com/mattn/go-sqlite3"
         versions: ["2.x"]
