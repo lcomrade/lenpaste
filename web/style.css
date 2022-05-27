@@ -1,5 +1,6 @@
 /* MAIN */
 body {
+	width: 50%;
 	margin: 0;
 	margin-left: auto;
 	margin-right: auto;
@@ -10,13 +11,25 @@ body {
 	color: #FFFFFF;
 }
 
-@media only screen and (orientation: landscape){
+@media screen and (max-device-width: 1280px) {
 	body {
-		width: 50%;
+		width: 60%;
 	}
 }
 
-@media only screen and (orientation: portrait){
+@media screen and (max-device-width: 1024px) {
+	body {
+		width: 70%;
+	}
+}
+
+@media screen and (max-device-width: 768px) {
+	body {
+		width: 80%;
+	}
+}
+
+@media screen and (max-device-width: 480px) {
 	body {
 		width: 95%;
 	}
