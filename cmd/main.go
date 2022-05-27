@@ -175,6 +175,9 @@ func main() {
 	http.HandleFunc("/api/v1/get", func(rw http.ResponseWriter, req *http.Request) {
 		apiv1Data.GetHand(rw, req)
 	})
+	http.HandleFunc("/api/v1/getServerInfo", func(rw http.ResponseWriter, req *http.Request) {
+		apiv1Data.GetServerInfoHand(rw, req)
+	})
 
 	// Run background job
 	go backgroundJob(10*time.Minute, db, log)
