@@ -26,11 +26,11 @@ import (
 	"github.com/alecthomas/chroma/styles"
 )
 
-func highlight(source string, lexer string) (string, error) {
+func tryHighlight(source string, lexer string) string {
 	// Determine lexer
 	l := lexers.Get(lexer)
 	if l == nil {
-		return source, nil
+		return source
 	}
 
 	l = chroma.Coalesce(l)
@@ -44,11 +44,11 @@ func highlight(source string, lexer string) (string, error) {
 		html.WrapLongLines(true),
 	)
 
-	s := styles.Get("dracula")
+	s := styles.Get("monokai")
 
 	it, err := l.Tokenise(nil, source)
 	if err != nil {
-		return "", err
+		return source
 	}
 
 	// Format
@@ -56,8 +56,8 @@ func highlight(source string, lexer string) (string, error) {
 
 	err = f.Format(&buf, s, it)
 	if err != nil {
-		return "", err
+		return source
 	}
 
-	return buf.String(), nil
+	return buf.String()
 }

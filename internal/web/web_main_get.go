@@ -78,11 +78,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	//Highlight body
-	bodyHighlight, err := highlight(paste.Body, "go")
-	if err != nil {
-		data.errorInternal(rw, req, err)
-		return
-	}
+	bodyHighlight := tryHighlight(paste.Body, paste.Syntax)
 
 	// Prepare template data
 	createTime := time.Unix(paste.CreateTime, 0).UTC()
