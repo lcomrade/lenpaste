@@ -3,9 +3,15 @@
 {{if .Title}}<input class="stretch-width" value="{{.Title}}" tabindex=1 readonly>
 {{end}}
 
-{{if not .OneUse}}
-<p style="text-align: right;"><a style="button" href="/raw/{{.ID}}" tabindex=2>Raw</a> <a href="/dl/{{.ID}}" tabindex=3>Download</a></p>
-{{end}}
+<div class="text-bar">
+	<div>{{.Syntax}}</div>
+
+	{{if not .OneUse}}
+	<div class="text-bar-right">
+		<a href="/raw/{{.ID}}" tabindex=2>Raw</a><a href="/dl/{{.ID}}" tabindex=3>Download</a>
+	</div>
+	{{end}}
+</div>
 
 {{.Body}}
 

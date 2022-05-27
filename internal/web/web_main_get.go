@@ -29,6 +29,7 @@ type pasteTmpl struct {
 	ID         string
 	Title      string
 	Body       template.HTML
+	Syntax     string
 	CreateTime int64
 	DeleteTime int64
 	OneUse     bool
@@ -91,6 +92,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		ID:         paste.ID,
 		Title:      paste.Title,
 		Body:       template.HTML(bodyHighlight),
+		Syntax:     paste.Syntax,
 		CreateTime: paste.CreateTime,
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,

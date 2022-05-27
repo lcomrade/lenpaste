@@ -73,6 +73,21 @@ article {
 	margin-left: 20px;
 }
 
+.text-bar {
+	display: flex;
+	justify-content: space-between;
+	font-family: monospace;
+}
+
+.text-bar-right {
+	align-self: flex-end;
+	text-align: right;
+}
+
+.text-bar-right a {
+	margin-left: 10px;
+}
+
 
 /* TEXT */
 .text-red {
