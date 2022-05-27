@@ -41,6 +41,10 @@ func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) 
 		resp.Code = 403
 		resp.Error = "Could not find ID"
 
+	} else if e == netshare.ErrNotFound {
+		resp.Code = 404
+		resp.Error = "Not Found"
+
 	} else {
 		resp.Code = 500
 		resp.Error = "Internal Server Error"

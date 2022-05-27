@@ -16,14 +16,14 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package netshare
+package apiv1
 
 import (
-	"errors"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"net/http"
 )
 
-var (
-	ErrBadRequest = errors.New("Bad Request")           // 400
-	ErrNotFound   = errors.New("Not Found")             // 404
-	ErrInternal   = errors.New("Internal Server Error") // 500
-)
+// GET /api/v1/
+func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
+	data.writeError(rw, req, netshare.ErrNotFound)
+}
