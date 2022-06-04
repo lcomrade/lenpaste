@@ -25,6 +25,7 @@ import (
 )
 
 type serverInfoType struct {
+	Version  string   `json:"version"`
 	Syntaxes []string `json:"syntaxes"`
 }
 
@@ -38,6 +39,7 @@ func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	serverInfo := serverInfoType{
+		Version:  data.Version,
 		Syntaxes: data.Lexers,
 	}
 

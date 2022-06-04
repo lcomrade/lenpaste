@@ -29,12 +29,15 @@ type Data struct {
 	DB  storage.DB
 
 	Lexers []string
+
+	Version string
 }
 
-func Load(db storage.DB, log logger.Config) Data {
+func Load(db storage.DB, log logger.Config, version string) Data {
 	return Data{
-		DB:     db,
-		Log:    log,
-		Lexers: chromaLexers.Names(false),
+		DB:      db,
+		Log:     log,
+		Lexers:  chromaLexers.Names(false),
+		Version: version,
 	}
 }

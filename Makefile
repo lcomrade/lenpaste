@@ -1,6 +1,9 @@
 NAME = lenpaste
 MAIN_GO = ./cmd/*.go
-LDFLAGS = -w -s
+
+export GOMODULE111=on
+LDFLAGS = -w -s -X "main.Version=$(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')"
+
 
 .PHONY: all fmt clean
 

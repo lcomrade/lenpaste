@@ -42,15 +42,18 @@ type Data struct {
 	Docs           *template.Template
 	DocsApiV1      *template.Template
 	ErrorPage      *template.Template
+
+	Version string
 }
 
-func Load(webDir string, db storage.DB, log logger.Config) (Data, error) {
+func Load(webDir string, db storage.DB, log logger.Config, version string) (Data, error) {
 	var data Data
 	var err error
 
-	// Setup DB and logger
+	// Setup base info
 	data.DB = db
 	data.Log = log
+	data.Version = version
 
 	// Get Chroma lexers
 	data.Lexers = chromaLexers.Names(false)

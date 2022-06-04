@@ -33,6 +33,8 @@ import (
 	"time"
 )
 
+var Version = ""
+
 func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Config) {
 	for {
 		// Delete expired pastes
@@ -55,7 +57,14 @@ func printHelp() {
 	println("-web-dir   Dir with page templates and static content")
 	println("-db-driver Only 'sqlite3' is available yet (default: sqlite3)")
 	println("-db-source DB source")
+	println("-version   display version and exit")
 	println("-help      display this help and exit")
+
+	os.Exit(0)
+}
+
+func printVersion() {
+	println(Version)
 
 	os.Exit(0)
 }
@@ -64,6 +73,12 @@ func printFlagNotSet(flg string) {
 	println("flag is not set:", flg)
 
 	os.Exit(0)
+}
+
+func init() {
+	if Version == "" {
+		Version = "unknown"
+	}
 }
 
 func main() {
@@ -90,6 +105,7 @@ func main() {
 	flagWebDir := flag.String("web-dir", defaultWebDir, "")
 	flagDbDriver := flag.String("db-driver", "sqlite3", "")
 	flagDbSource := flag.String("db-source", "", "")
+	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
 	flag.Parse()
@@ -97,6 +113,11 @@ func main() {
 	// -help flag
 	if *flagHelp == true {
 		printHelp()
+	}
+
+	// -version flag
+	if *flagVersion == true {
+		printVersion()
 	}
 
 	// -db-source flag
@@ -114,7 +135,7 @@ func main() {
 		TimeFormat: "2006/01/02 15:04:05",
 	}
 
-	apiv1Data := apiv1.Load(db, log)
+	apiv1Data := apiv1.Load(db, log, Version)
 
 	rawData := raw.Data{
 		DB:  db,
@@ -128,7 +149,7 @@ func main() {
 	}
 
 	// Load pages
-	webData, err := web.Load(*flagWebDir, db, log)
+	webData, err := web.Load(*flagWebDir, db, log, Version)
 	if err != nil {
 		panic(err)
 	}

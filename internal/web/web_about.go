@@ -22,15 +22,24 @@ import (
 	"net/http"
 )
 
+type aboutTmpl struct {
+	Version string
+}
+
 // Pattern: /about
 func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 
+	// Prepare data
+	dataTmpl := aboutTmpl{
+		Version: data.Version,
+	}
+
 	// Show page
 	rw.Header().Set("Content-Type", "text/html")
 
-	err := data.About.Execute(rw, "")
+	err := data.About.Execute(rw, dataTmpl)
 	if err != nil {
 		data.errorInternal(rw, req, err)
 	}
