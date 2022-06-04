@@ -21,6 +21,7 @@ package apiv1
 import (
 	"encoding/json"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 )
 
@@ -52,11 +53,20 @@ func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 
 	// If "one use" paste
 	if paste.OneUse == true {
-		// Delete paste
-		err = data.DB.PasteDelete(pasteID)
-		if err != nil {
-			data.writeError(rw, req, err)
-			return
+		if req.Form.Get("openOneUse") == "true" {
+			// Delete paste
+			err = data.DB.PasteDelete(pasteID)
+			if err != nil {
+				data.writeError(rw, req, err)
+				return
+			}
+
+		} else {
+			// Remove secret data
+			paste = storage.Paste{
+				ID:     paste.ID,
+				OneUse: true,
+			}
 		}
 	}
 

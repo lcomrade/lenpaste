@@ -13,34 +13,40 @@
 
 
 <h4 id="new">POST <code>/api/v1/new</code></h4>
-<p>Request Parameters:</p>
+<p>Request parameters:</p>
 <table>
 	<th>Field</th>
 	<th>Required?</th>
+	<th>Default</th>
 	<th>Description</th>
 	<tr>
 		<td><code>title</code></td>
+		<td></td>
 		<td></td>
 		<td>Paste title.</td>
 	</tr>
 	<tr>
 		<td><code>body</code></td>
 		<td>Yes</td>
+		<td></td>
 		<td>Paste text.</td>
 	</tr>
 	<tr>
 		<td><code>syntax</code></td>
 		<td></td>
+		<td><code>plaintext</code></td>
 		<td>Paste syntax. You can get a list of semi-retained syntaxes using the <a href="#getServerInfo"><code>getServerInfo</code></a> method.</td>
 	</tr>
 	<tr>
 		<td><code>oneUse</code></td>
 		<td></td>
+		<td><code>false</code></td>
 		<td>If <code>true</code> then the paste is removed after opening.</td>
 	</tr>
 	<tr>
 		<td><code>expiration</code></td>
 		<td></td>
+		<td><code>0</code></td>
 		<td>The "lifetime" of the paste in seconds. To prevent the paste from expiring, simply do not set this parameter.</td>
 	</tr>
 </table>
@@ -57,15 +63,26 @@
 
 
 <h4 id="get">GET <code>/api/v1/get</code></h4>
-<p>Request Parameters:</p>
+<p>Request parameters:</p>
 <table>
 	<th>Field</th>
 	<th>Required?</th>
+	<th>Default</th>
 	<th>Description</th>
 	<tr>
 		<td><code>id</code></td>
 		<td>Yes</td>
+		<td></td>
 		<td>Paste ID.</td>
+	</tr>
+	<tr>
+		<td><code>openOneUse</code></td>
+		<td></td>
+		<td><code>false</code></td>
+		<td>
+			If <code>true</code>, it will be all the contents of the paste after which it will be deleted.
+			If it's <code>false</code>, you will only get the <code>id</code> and <code>oneUse</code>, but the paste will stay on the server.
+		</td>
 	</tr>
 </table>
 <p>Response example:</p>
@@ -75,7 +92,18 @@
     "body": "Line 1.\r\nLine 2.\r\nLine 3.\r\n\r\nLine 5.",
     "createTime": 1653387358,
     "deleteTime": 0,
-    "oneUse": false
+    "oneUse": false,
+    "syntax": "plaintext"
+}
+</code></pre>
+<pre><code>{
+    "id": "5mqqHZRg",
+    "title": "",
+    "body": "",
+    "createTime": 0,
+    "deleteTime": 0,
+    "oneUse": true,
+    "syntax": ""
 }
 </code></pre>
 
