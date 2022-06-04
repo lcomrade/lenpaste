@@ -39,8 +39,11 @@ type Data struct {
 	About          *template.Template
 	License        *template.Template
 	SourceCodePage *template.Template
+	
 	Docs           *template.Template
 	DocsApiV1      *template.Template
+	DocsApiLibs *template.Template
+	
 	ErrorPage      *template.Template
 
 	Version string
@@ -131,6 +134,15 @@ func Load(webDir string, db storage.DB, log logger.Config, version string) (Data
 	data.DocsApiV1, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "docs_apiv1.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// docs_api_libs.tmpl
+	data.DocsApiLibs, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "docs_api_libs.tmpl"),
 	)
 	if err != nil {
 		return data, err

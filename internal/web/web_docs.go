@@ -37,3 +37,11 @@ func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/html")
 	data.DocsApiV1.Execute(rw, "")
 }
+
+// Pattern: /docs/api_libs
+func (data Data) DocsApiLibsHand(rw http.ResponseWriter, req *http.Request) {
+	data.Log.HttpRequest(req)
+
+	rw.Header().Set("Content-Type", "text/html")
+	data.DocsApiLibs.Execute(rw, "")
+}

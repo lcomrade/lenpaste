@@ -186,6 +186,9 @@ func main() {
 	http.HandleFunc("/docs/apiv1", func(rw http.ResponseWriter, req *http.Request) {
 		webData.DocsApiV1Hand(rw, req)
 	})
+	http.HandleFunc("/docs/api_libs", func(rw http.ResponseWriter, req *http.Request) {
+		webData.DocsApiLibsHand(rw, req)
+	})
 
 	http.HandleFunc("/api/", func(rw http.ResponseWriter, req *http.Request) {
 		apiv1Data.MainHand(rw, req)
