@@ -33,18 +33,20 @@ type Data struct {
 	Lexers []string
 
 	StyleCSS       []byte
+	ErrorPage      *template.Template
 	Main           *template.Template
 	PastePage      *template.Template
 	PasteContinue  *template.Template
 	About          *template.Template
 	License        *template.Template
 	SourceCodePage *template.Template
-	
-	Docs           *template.Template
-	DocsApiV1      *template.Template
+
+	Docs        *template.Template
+	DocsApiV1   *template.Template
 	DocsApiLibs *template.Template
-	
-	ErrorPage      *template.Template
+
+	EmbeddedPage     *template.Template
+	EmbeddedHelpPage *template.Template
 
 	Version string
 }
@@ -152,6 +154,23 @@ func Load(webDir string, db storage.DB, log logger.Config, version string) (Data
 	data.ErrorPage, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "error.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// emb.tmpl
+	data.EmbeddedPage, err = template.ParseFiles(
+		filepath.Join(webDir, "emb.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// emb_help.tmpl
+	data.EmbeddedHelpPage, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "emb_help.tmpl"),
 	)
 	if err != nil {
 		return data, err

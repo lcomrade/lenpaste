@@ -139,6 +139,10 @@ pre, textarea {
 	color: inherit;
 }
 
+pre {
+	overflow: auto;
+}
+
 textarea {
 	min-height: 100px;
 	resize: vertical;

@@ -22,25 +22,18 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
-	"time"
 )
 
-type pasteTmpl struct {
-	ID         string
-	Title      string
-	Body       template.HTML
-	Syntax     string
-	CreateTime int64
-	DeleteTime int64
-	OneUse     bool
-
-	CreateTimeStr string
-	DeleteTimeStr string
+type embTmpl struct {
+	Title         string
+	Body          template.HTML
+	EmbeddedError bool
 }
 
-func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
+// Pattern: /emb/
+func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	// Get paste ID
-	pasteID := string([]rune(req.URL.Path)[1:])
+	pasteID := string([]rune(req.URL.Path)[5:])
 
 	// Read DB
 	paste, err := data.DB.PasteGet(pasteID)
@@ -57,49 +50,21 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 
 	// If "one use" paste
 	if paste.OneUse == true {
-		// If continue button not pressed
-		req.ParseForm()
-
-		if req.PostForm.Get("oneUseContinue") != "true" {
-			err = data.PasteContinue.Execute(rw, paste)
-			if err != nil {
-				data.errorInternal(rw, req, err)
-				return
-			}
-
-			return
-		}
-
-		// If continue button pressed delete paste
-		err = data.DB.PasteDelete(pasteID)
-		if err != nil {
-			data.errorInternal(rw, req, err)
-			return
-		}
+		// Return 404 error
+		data.errorNotFound(rw, req)
+		return
 	}
 
 	// Highlight body
 	bodyHighlight := tryHighlight(paste.Body, paste.Syntax)
 
-	// Prepare template data
-	createTime := time.Unix(paste.CreateTime, 0).UTC()
-	deleteTime := time.Unix(paste.DeleteTime, 0).UTC()
-
-	tmplData := pasteTmpl{
-		ID:         paste.ID,
-		Title:      paste.Title,
-		Body:       template.HTML(bodyHighlight),
-		Syntax:     paste.Syntax,
-		CreateTime: paste.CreateTime,
-		DeleteTime: paste.DeleteTime,
-		OneUse:     paste.OneUse,
-
-		CreateTimeStr: createTime.Format("15:04 02.01.2006 UTC"),
-		DeleteTimeStr: deleteTime.Format("15:04 02.01.2006 UTC"),
+	tmplData := embTmpl{
+		Title: paste.Title,
+		Body:  template.HTML(bodyHighlight),
 	}
 
 	// Show paste
-	err = data.PastePage.Execute(rw, tmplData)
+	err = data.EmbeddedPage.Execute(rw, tmplData)
 	if err != nil {
 		data.errorInternal(rw, req, err)
 		return

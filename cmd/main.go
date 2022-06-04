@@ -169,6 +169,12 @@ func main() {
 	http.HandleFunc("/dl/", func(rw http.ResponseWriter, req *http.Request) {
 		webData.DlHand(rw, req)
 	})
+	http.HandleFunc("/emb/", func(rw http.ResponseWriter, req *http.Request) {
+		webData.EmbeddedHand(rw, req)
+	})
+	http.HandleFunc("/emb_help/", func(rw http.ResponseWriter, req *http.Request) {
+		webData.EmbeddedHelpHand(rw, req)
+	})
 
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
 		webData.AboutHand(rw, req)
