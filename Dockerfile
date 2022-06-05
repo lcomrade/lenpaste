@@ -3,7 +3,7 @@ FROM golang:1.18.3-alpine as build
 
 WORKDIR /build
 
-RUN apk update && apk upgrade && apk add --no-cache make gcc musl-dev
+RUN apk update && apk upgrade && apk add --no-cache make git gcc musl-dev
 
 COPY ./go.mod ./
 COPY go.sum ./
