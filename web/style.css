@@ -11,27 +11,27 @@ body {
 	color: #FFFFFF;
 }
 
-@media screen and (max-device-width: 1280px) {
+@media all and (max-device-width: 1280px) {
 	body {
 		width: 60%;
 	}
 }
 
-@media screen and (max-device-width: 1024px) {
+@media all and (max-device-width: 1024px) {
 	body {
 		width: 70%;
 	}
 }
 
-@media screen and (max-device-width: 768px) {
+@media all and (max-device-width: 768px) {
 	body {
-		width: 80%;
+		width: 85%;
 	}
 }
 
-@media screen and (max-device-width: 480px) {
+@media all and (max-device-width: 480px), all and (orientation: portrait) {
 	body {
-		width: 95%;
+		width: 100%;
 	}
 }
 
@@ -148,6 +148,10 @@ textarea {
 	resize: vertical;
 }
 
+input::placeholder, textarea::placeholder {
+	color: #B9B9B9;
+}
+
 input {
 	background: #666666;
 	font-size: inherit;
@@ -215,6 +219,7 @@ summary {
 }
 
 table {
+	overflow: auto;
 	background: inherit;
 	border-collapse: collapse;
 }
