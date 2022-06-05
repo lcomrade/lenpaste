@@ -65,12 +65,12 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare template dat
 	createTime := time.Unix(paste.CreateTime, 0).UTC()
-	
+
 	tmplData := embTmpl{
-		ID:    paste.ID,
+		ID:            paste.ID,
 		CreateTimeStr: createTime.Format("1 Jan, 2006"),
-		Title: paste.Title,
-		Body:  template.HTML(bodyHighlight),
+		Title:         paste.Title,
+		Body:          template.HTML(bodyHighlight),
 	}
 
 	// Show paste

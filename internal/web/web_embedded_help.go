@@ -19,13 +19,15 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
 )
 
 type embHelpTmpl struct {
-	ID   string
-	Host string
+	ID       string
+	Protocol string
+	Host     string
 }
 
 // Pattern: /emb_help/
@@ -51,8 +53,9 @@ func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Show paste
 	tmplData := embHelpTmpl{
-		ID:   paste.ID,
-		Host: req.Host,
+		ID:       paste.ID,
+		Protocol: netshare.GetProtocol(req.Header),
+		Host:     netshare.GetHost(req),
 	}
 
 	err = data.EmbeddedHelpPage.Execute(rw, tmplData)
