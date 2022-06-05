@@ -219,12 +219,6 @@ summary {
 }
 
 table {
-	display: block;
-	max-width: 100%;
-	margin: 0 auto;
-	overflow-x: auto;
-	white-space: nowrap;
-
 	background: inherit;
 	border-collapse: collapse;
 }

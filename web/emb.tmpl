@@ -1,8 +1,29 @@
 <!doctype html>
 <html>
 	<head>
+		<style>
+			body {
+				margin: 0;
+				font-family: monospace;
+				font-size: 16px;
+				color: #F8F8F2;
+				background-color: #272822;
+			}
+			header {
+				padding: 0.4em 1.8em 0.4em 1.8em;
+			}
+			header a {
+				color: #FFFFFF;
+				text-decoration: none;
+			}
+			pre {
+				border-top: 1px solid #75715E;
+				margin: 0;
+			}
+		</style>
 	</head>
 	<body>
-		{{.Body}}
+		<header><a href="/{{.ID}}" target="_blank">{{.Title}}</a></header>
+		<article>{{.Body}}</article>
 	</body>
 </html>

@@ -25,6 +25,7 @@ import (
 )
 
 type embTmpl struct {
+	ID string
 	Title         string
 	Body          template.HTML
 	EmbeddedError bool
@@ -32,6 +33,9 @@ type embTmpl struct {
 
 // Pattern: /emb/
 func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
 	// Get paste ID
 	pasteID := string([]rune(req.URL.Path)[5:])
 
@@ -59,6 +63,7 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	bodyHighlight := tryHighlight(paste.Body, paste.Syntax)
 
 	tmplData := embTmpl{
+		ID: paste.ID,
 		Title: paste.Title,
 		Body:  template.HTML(bodyHighlight),
 	}

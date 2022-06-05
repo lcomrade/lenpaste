@@ -30,6 +30,9 @@ type embHelpTmpl struct {
 
 // Pattern: /emb_help/
 func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
 	// Get paste ID
 	pasteID := string([]rune(req.URL.Path)[10:])
 
