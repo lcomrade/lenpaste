@@ -60,6 +60,8 @@ docker-compose pull && docker-compose up -d
 
 PS: If you want to install updates, run: `docker-compose pull && docker-compose stop && docker-compose up -d && docker system prune -a -f`
 
+Read more:
+- [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
 
 
 ## Build from source code
