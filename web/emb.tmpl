@@ -11,6 +11,12 @@
 			}
 			header {
 				padding: 0.4em 1.8em 0.4em 1.8em;
+				display: flex;
+				justify-content: space-between;
+			}
+			.header-right {
+				align-self: flex-end;
+				text-align: right;
 			}
 			header a {
 				color: #FFFFFF;
@@ -23,7 +29,10 @@
 		</style>
 	</head>
 	<body>
-		<header><a href="/{{.ID}}" target="_blank">{{.Title}}</a></header>
+		<header>
+			<div>{{if .Title}}<a href="/{{.ID}}" target="_blank">{{.Title}}</a>{{end}}</div>
+			<div class="header-right"><a href="/{{.ID}}" target="_blank">{{.CreateTimeStr}}</a></div>
+		</header>
 		<article>{{.Body}}</article>
 	</body>
 </html>

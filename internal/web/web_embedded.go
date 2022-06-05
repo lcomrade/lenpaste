@@ -22,13 +22,14 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
+	"time"
 )
 
 type embTmpl struct {
-	ID string
+	ID            string
+	CreateTimeStr string
 	Title         string
 	Body          template.HTML
-	EmbeddedError bool
 }
 
 // Pattern: /emb/
@@ -62,8 +63,12 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	// Highlight body
 	bodyHighlight := tryHighlight(paste.Body, paste.Syntax)
 
+	// Prepare template dat
+	createTime := time.Unix(paste.CreateTime, 0).UTC()
+	
 	tmplData := embTmpl{
-		ID: paste.ID,
+		ID:    paste.ID,
+		CreateTimeStr: createTime.Format("1 Jan, 2006"),
 		Title: paste.Title,
 		Body:  template.HTML(bodyHighlight),
 	}
