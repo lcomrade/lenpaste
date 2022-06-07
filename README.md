@@ -45,6 +45,7 @@ services:
       - LENPASTE_ADDRESS=:80 # Set -address flag
       - LENPASTE_DB_DRIVER=sqlite3 # Set -db-driver flag
       - LENPASTE_DB_SOURCE=/data/lenpaste.db # Set -db-source flag
+      - LENPASTE_ROBOTS_DISALLOW=false # If true set -robots-disallow flag
     volumes:
       - "${PWD}/data:/data"
       - "/etc/timezone:/etc/timezone:ro"

@@ -25,6 +25,18 @@ else
 fi
 
 
+# LENPASTE_ROBOTS_DISALLOW
+if [[ "$LENPASTE_ROBOTS_DISALLOW" == "true" ]]; then
+	RUN_CMD="$RUN_CMD -robots-disallow"
+	
+else
+	if [[ "$LENPASTE_ROBOTS_DISALLOW" != "" && "$LENPASTE_ROBOTS_DISALLOW" != "false" ]]; then
+		echo "[ENTRYPOINT] Error: unknown: LENPASTE_ROBOTS_DISALLOW = $LENPASTE_ROBOTS_DISALLOW"
+		exit 2
+	fi
+fi
+
+
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
 $RUN_CMD

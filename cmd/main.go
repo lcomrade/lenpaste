@@ -53,12 +53,13 @@ func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Confi
 func printHelp() {
 	println("Usage:", os.Args[0], "[OPTION]...")
 	println("")
-	println("-addres    ADDRES:PORT (default: :80)")
-	println("-web-dir   Dir with page templates and static content")
-	println("-db-driver Only 'sqlite3' is available yet (default: sqlite3)")
-	println("-db-source DB source")
-	println("-version   display version and exit")
-	println("-help      display this help and exit")
+	println("-addres           ADDRES:PORT (default: :80)")
+	println("-web-dir          Dir with page templates and static content")
+	println("-db-driver        Only 'sqlite3' is available yet (default: sqlite3)")
+	println("-db-source        DB source")
+	println("-robots-disallow  Prohibits search engine crawlers from indexing site using robots.txt file.")
+	println("-version          Display version and exit")
+	println("-help             Display this help and exit")
 
 	os.Exit(0)
 }
@@ -105,6 +106,7 @@ func main() {
 	flagWebDir := flag.String("web-dir", defaultWebDir, "")
 	flagDbDriver := flag.String("db-driver", "sqlite3", "")
 	flagDbSource := flag.String("db-source", "", "")
+	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
@@ -123,6 +125,13 @@ func main() {
 	// -db-source flag
 	if *flagDbSource == "" {
 		printFlagNotSet("-db-source")
+	}
+
+	// -robots-disallow flag
+	robotsTxt := "User-agent: *\nAllow: /\n"
+
+	if *flagRobotsDisallow == true {
+		robotsTxt = "User-agent: *\nDisallow: /\n"
 	}
 
 	// Settings
@@ -149,12 +158,15 @@ func main() {
 	}
 
 	// Load pages
-	webData, err := web.Load(*flagWebDir, db, log, Version)
+	webData, err := web.Load(*flagWebDir, db, log, Version, []byte(robotsTxt))
 	if err != nil {
 		panic(err)
 	}
 
 	// Handlers
+	http.HandleFunc("/robots.txt", func(rw http.ResponseWriter, req *http.Request) {
+		webData.RobotsTxtHand(rw, req)
+	})
 	http.HandleFunc("/style.css", func(rw http.ResponseWriter, req *http.Request) {
 		webData.StyleCSSHand(rw, req)
 	})

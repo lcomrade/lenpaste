@@ -33,6 +33,7 @@ type Data struct {
 	Lexers []string
 
 	StyleCSS       []byte
+	RobotsTxt      []byte
 	ErrorPage      *template.Template
 	Main           *template.Template
 	PastePage      *template.Template
@@ -51,7 +52,7 @@ type Data struct {
 	Version string
 }
 
-func Load(webDir string, db storage.DB, log logger.Config, version string) (Data, error) {
+func Load(webDir string, db storage.DB, log logger.Config, version string, robotsTxt []byte) (Data, error) {
 	var data Data
 	var err error
 
@@ -59,6 +60,7 @@ func Load(webDir string, db storage.DB, log logger.Config, version string) (Data
 	data.DB = db
 	data.Log = log
 	data.Version = version
+	data.RobotsTxt = robotsTxt
 
 	// Get Chroma lexers
 	data.Lexers = chromaLexers.Names(false)
