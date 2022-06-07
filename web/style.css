@@ -164,7 +164,7 @@ input {
 
 select {
 	background: #666666;
-	color: #FFFFCC;
+	color: #FFFFFF;
 	font-size: 16px;
 	padding: 4px 4px 4px 4px;
 	border: 2px;
@@ -173,6 +173,12 @@ select {
 select:hover {
 	background: #777777;
 	cursor: pointer;
+}
+
+button, checkbox, select, input, textarea {
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
 }
 
 button {
