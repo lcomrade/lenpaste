@@ -28,12 +28,18 @@ import (
 type embTmpl struct {
 	ID            string
 	CreateTimeStr string
+	DeleteTime int64
+	OneUse bool
 	Title         string
 	Body          template.HTML
+
+	ErrorNotFound bool
 }
 
 // Pattern: /emb/
 func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
+	errorNotFound := false
+
 	// Log request
 	data.Log.HttpRequest(req)
 
@@ -44,20 +50,12 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
 		if err == storage.ErrNotFoundID {
-			data.errorNotFound(rw, req)
-			return
+			errorNotFound = true
 
 		} else {
 			data.errorInternal(rw, req, err)
 			return
 		}
-	}
-
-	// If "one use" paste
-	if paste.OneUse == true {
-		// Return 404 error
-		data.errorNotFound(rw, req)
-		return
 	}
 
 	// Highlight body
@@ -69,8 +67,12 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	tmplData := embTmpl{
 		ID:            paste.ID,
 		CreateTimeStr: createTime.Format("1 Jan, 2006"),
+		DeleteTime: paste.DeleteTime,
+		OneUse: paste.OneUse,
 		Title:         paste.Title,
 		Body:          template.HTML(bodyHighlight),
+
+		ErrorNotFound: errorNotFound,
 	}
 
 	// Show paste

@@ -103,11 +103,11 @@ article {
 
 
 /* TEXT */
-.text-red {
+.text-red, .text-red:hover {
 	color: #FF1F1F;
 }
 
-.text-grey {
+.text-grey, .text-grey:hover {
 	color: #888888;
 }
 
