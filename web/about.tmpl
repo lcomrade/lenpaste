@@ -10,7 +10,11 @@
 <h3>This server</h3>
 <p>Lenpaste version: <code>{{.Version}}</code>.<br/>
 {{if ne .TitleMaxLen 0}}
-Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.<br/>
+	{{if gt .TitleMaxLen 0}}
+	Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.<br/>
+	{{else}}
+	There is no limit to the size of the paste body.</br>
+	{{end}}
 {{else}}
 Paste titles are disabled on this server.<br/>
 {{end}}
