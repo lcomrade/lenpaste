@@ -32,6 +32,16 @@
 		<td>Paste text.</td>
 	</tr>
 	<tr>
+		<td><code>lineEnd</code></td>
+		<td></td>
+		<td><code>LF</code></td>
+		<td>
+			The end of a line in the paste body.
+			The text will be automatically recoded to match the selected end of line.
+			Can accept <code>LF</code>, <code>CRLF</code> or <code>CR</code>.
+		</td>
+	</tr>
+	<tr>
 		<td><code>syntax</code></td>
 		<td></td>
 		<td><code>plaintext</code></td>
@@ -54,7 +64,7 @@
 <pre><code>{
     "id": "XcmX9ON1",
     "title": "Paste title.",
-    "body": "Line 1.\r\nLine 2.\r\nLine 3.\r\n\r\nLine 5.",
+    "body": "Line 1.\nLine 2.\nLine 3.\n\nLine 5.",
     "createTime": 1653387358,
     "deleteTime": 0,
     "oneUse": false

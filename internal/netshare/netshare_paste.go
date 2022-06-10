@@ -20,8 +20,10 @@ package netshare
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lineend"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -35,8 +37,27 @@ func PasteAddFromForm(dbInfo storage.DB, lexerNames []string, form url.Values) (
 		OneUse:     false,
 	}
 
+	// Remove new line from title
+	paste.Title = strings.Replace(paste.Title, "\n", "", -1)
+	paste.Title = strings.Replace(paste.Title, "\r", "", -1)
+
 	// Check paste body
 	if paste.Body == "" {
+		return paste, ErrBadRequest
+	}
+
+	// Change paste body lines end
+	switch form.Get("lineEnd") {
+	case "", "LF", "lf":
+		paste.Body = lineend.UnknownToUnix(paste.Body)
+
+	case "CRLF", "crlf":
+		paste.Body = lineend.UnknownToDos(paste.Body)
+
+	case "CR", "cr":
+		paste.Body = lineend.UnknownToOldMac(paste.Body)
+
+	default:
 		return paste, ErrBadRequest
 	}
 

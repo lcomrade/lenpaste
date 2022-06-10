@@ -88,8 +88,12 @@ article {
 
 .text-bar {
 	display: flex;
-	justify-content: space-between;
+	justify-content: start;
 	font-family: monospace;
+}
+
+.text-bar div {
+	width: 50%;
 }
 
 .text-bar-right {

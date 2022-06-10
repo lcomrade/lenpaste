@@ -2,19 +2,28 @@
 {{define "article"}}
 <h3>Create paste</h3>
 <form action="/" method="post">
-	<div><input
-		class="stretch-width" name="title"
-		autocomplete="off" autocorrect="off" spellcheck="true"
-		placeholder="Enter title..." tabindex=1 autofocus
+	<div class="text-bar">
+		<div><input
+			class="stretch-width" name="title"
+			autocomplete="off" autocorrect="off" spellcheck="true"
+			placeholder="Enter title..." tabindex=1 autofocus
 		></div>
+		<div class="text-bar-right">
+			<select name="lineEnd" tabindex=2 size=1>
+				<option value="LF" selected="true">UNIX</option>
+				<option value="CRLF">Windows/DOS</option>
+				<option value="CR">Macintosh</option>
+			</select>
+		</div>
+	</div>
 	<div><textarea
 		name="body" placeholder="Enter text..."
 		autocomplete="off" autocorrect="off" spellcheck="true"
-		rows=20  wrap="off" tabindex=2 required
+		rows=20  wrap="off" tabindex=3 required
 	></textarea></div>
 	<div>
 		<label for="syntax">Syntax:</label>
-		<select name="syntax" tabindex=3 size=1>
+		<select name="syntax" tabindex=4 size=1>
 			{{range .Lexers}}
 			<option value="{{.}}"{{if eq . "plaintext"}} selected="true"{{end}}>{{.}}</option>
 			{{end}}
@@ -22,11 +31,11 @@
 	</div>
 	<div>
 		<label class="checkbox">
-		<input type="checkbox" name="oneUse" value="true" tabindex=4></input>Burn after reading</label>
+		<input type="checkbox" name="oneUse" value="true" tabindex=5></input>Burn after reading</label>
 	</div>
 	<div>
 		<label for="expiration">Expiration:</label>
-		<select name="expiration" tabindex=5 size=1>
+		<select name="expiration" tabindex=6 size=1>
 			<option value="0" selected="true">Never</option>
 			<option value="600">10 minutes</option>
 			<option value="1800">30 minutes</option>
@@ -43,6 +52,6 @@
 			<option value="31557600">1 Year</option>
 		</select>
 	</div>
-	<div><button class="button-green" type="submit" tabindex=6>Create paste</button></div>
+	<div><button class="button-green" type="submit" tabindex=7>Create paste</button></div>
 </form>
 {{end}}

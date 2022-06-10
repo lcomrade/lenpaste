@@ -20,6 +20,7 @@ package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lineend"
 	"html/template"
 	"net/http"
 	"time"
@@ -34,6 +35,7 @@ type pasteTmpl struct {
 	DeleteTime int64
 	OneUse     bool
 
+	LineEnd       string
 	CreateTimeStr string
 	DeleteTimeStr string
 }
@@ -96,6 +98,16 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 
 		CreateTimeStr: createTime.Format("15:04 02.01.2006 UTC"),
 		DeleteTimeStr: deleteTime.Format("15:04 02.01.2006 UTC"),
+	}
+
+	// Get body line end
+	switch lineend.GetLineEnd(paste.Body) {
+	case "\r\n":
+		tmplData.LineEnd = "CRLF"
+	case "\r":
+		tmplData.LineEnd = "CR"
+	default:
+		tmplData.LineEnd = "LF"
 	}
 
 	// Show paste

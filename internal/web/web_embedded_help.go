@@ -25,9 +25,9 @@ import (
 )
 
 type embHelpTmpl struct {
-	ID       string
+	ID         string
 	DeleteTime int64
-	OneUse bool
+	OneUse     bool
 
 	Protocol string
 	Host     string
@@ -56,11 +56,11 @@ func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Show paste
 	tmplData := embHelpTmpl{
-		ID:       paste.ID,
+		ID:         paste.ID,
 		DeleteTime: paste.DeleteTime,
-		OneUse: paste.OneUse,
-		Protocol: netshare.GetProtocol(req.Header),
-		Host:     netshare.GetHost(req),
+		OneUse:     paste.OneUse,
+		Protocol:   netshare.GetProtocol(req.Header),
+		Host:       netshare.GetHost(req),
 	}
 
 	err = data.EmbeddedHelpPage.Execute(rw, tmplData)

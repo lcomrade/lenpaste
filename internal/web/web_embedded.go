@@ -28,8 +28,8 @@ import (
 type embTmpl struct {
 	ID            string
 	CreateTimeStr string
-	DeleteTime int64
-	OneUse bool
+	DeleteTime    int64
+	OneUse        bool
 	Title         string
 	Body          template.HTML
 
@@ -67,8 +67,8 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	tmplData := embTmpl{
 		ID:            paste.ID,
 		CreateTimeStr: createTime.Format("1 Jan, 2006"),
-		DeleteTime: paste.DeleteTime,
-		OneUse: paste.OneUse,
+		DeleteTime:    paste.DeleteTime,
+		OneUse:        paste.OneUse,
 		Title:         paste.Title,
 		Body:          template.HTML(bodyHighlight),
 
