@@ -96,6 +96,15 @@ article {
 	width: 50%;
 }
 
+.text-bar h1,
+.text-bar h2,
+.text-bar h3,
+.text-bar h4,
+.text-bar h5,
+.text-bar h6 {
+	font-family: sans-serif;
+}
+
 .text-bar-right {
 	align-self: flex-end;
 	text-align: right;

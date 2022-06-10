@@ -1,13 +1,18 @@
 {{define "titlePrefix"}}{{end}}
 {{define "article"}}
-<h3>Create paste</h3>
+{{if ne .TitleMaxLen 0}}<h3>Create paste</h3>{{end}}
 <form action="/" method="post">
 	<div class="text-bar">
-		<div><input
-			class="stretch-width" name="title" maxlength={{.TitleMaxLen}}
-			autocomplete="off" autocorrect="off" spellcheck="true"
-			placeholder="Enter title..." tabindex=1 autofocus
-		></div>
+		<div>
+			{{if ne .TitleMaxLen 0}}<input
+				class="stretch-width" name="title" {{if gt .TitleMaxLen 0}}maxlength="{{.TitleMaxLen}}"{{end}}
+				autocomplete="off" autocorrect="off" spellcheck="true"
+				placeholder="Enter title..." tabindex=1 autofocus
+			>
+			{{else}}
+			<h3>Create paste</h3>
+			{{end}}
+		</div>
 		<div class="text-bar-right">
 			<select name="lineEnd" tabindex=2 size=1>
 				<option value="LF" selected="true">UNIX</option>
@@ -17,7 +22,7 @@
 		</div>
 	</div>
 	<div><textarea
-		name="body" placeholder="Enter text..." maxlength={{.BodyMaxLen}}
+		name="body" placeholder="Enter text..." {{if gt .BodyMaxLen 0}}maxlength="{{.BodyMaxLen}}"{{end}}
 		autocomplete="off" autocorrect="off" spellcheck="true"
 		rows=20  wrap="off" tabindex=3 required
 	></textarea></div>
@@ -30,7 +35,9 @@
 				{{end}}
 			</select>		
 		</div>
-		<div class="text-bar-right" style="align-self: flex-start;"><span class="text-grey">*Maximum {{.BodyMaxLen}} symbols</span></div>
+		<div class="text-bar-right" style="align-self: flex-start;">
+			{{if gt .BodyMaxLen 0}}<span class="text-grey">*Maximum {{.BodyMaxLen}} symbols</span>{{end}}
+		</div>
 	</div>
 	<div>
 		<label class="checkbox"><input type="checkbox" name="oneUse" value="true" tabindex=5></input>Burn after reading</label>

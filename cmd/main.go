@@ -51,18 +51,22 @@ func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Confi
 	}
 }
 
-func printHelp() {
-	println("Usage:", os.Args[0], "[OPTION]...")
+func printHelp(noErrors bool) {
+	println("Usage:", os.Args[0], "[-web-dir] [OPTION]...")
 	println("")
-	println("-addres           ADDRES:PORT (default: :80)")
-	println("-web-dir          Dir with page templates and static content")
-	println("-db-driver        Only 'sqlite3' is available yet (default: sqlite3)")
-	println("-db-source        DB source")
-	println("-robots-disallow  Prohibits search engine crawlers from indexing site using robots.txt file.")
-	println("-title-max-length Maximum length of the paste title (default: 100)")
-	println("-body-max-length  Maximum length of the paste body (default: 100000)")
-	println("-version          Display version and exit")
-	println("-help             Display this help and exit")
+	println("  -addres           ADDRES:PORT (default: :80)")
+	println("  -web-dir          Dir with page templates and static content")
+	println("  -db-driver        Only 'sqlite3' is available yet (default: sqlite3)")
+	println("  -db-source        DB source")
+	println("  -robots-disallow  Prohibits search engine crawlers from indexing site using robots.txt file.")
+	println("  -title-max-length Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
+	println("  -body-max-length  Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
+	println("  -version          Display version and exit")
+	println("  -help             Display this help and exit")
+
+	if noErrors == false {
+		os.Exit(2)
+	}
 
 	os.Exit(0)
 }
@@ -76,7 +80,7 @@ func printVersion() {
 func printFlagNotSet(flg string) {
 	println("flag is not set:", flg)
 
-	os.Exit(0)
+	os.Exit(2)
 }
 
 func init() {
@@ -103,7 +107,7 @@ func main() {
 	defaultWebDir := filepath.Join(binDir, "../share/lenpaste/web")
 
 	// Read cmd args
-	flag.Usage = printHelp
+	flag.Usage = func() { printHelp(false) }
 
 	flagAddress := flag.String("address", ":80", "")
 	flagWebDir := flag.String("web-dir", defaultWebDir, "")
@@ -119,7 +123,7 @@ func main() {
 
 	// -help flag
 	if *flagHelp == true {
-		printHelp()
+		printHelp(true)
 	}
 
 	// -version flag
@@ -137,6 +141,12 @@ func main() {
 
 	if *flagRobotsDisallow == true {
 		robotsTxt = "User-agent: *\nDisallow: /\n"
+	}
+
+	// -body-max-length flag
+	if *flagBodyMaxLen == 0 {
+		println("-body-max-length flag cannot be 0")
+		os.Exit(2)
 	}
 
 	// Settings

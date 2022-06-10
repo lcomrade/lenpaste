@@ -8,11 +8,16 @@
 	<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
 </ul>
 <h3>This server</h3>
-<p>
-	Lenpaste version: <code>{{.Version}}</code>.
-	<br/>
-	Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.
-	<br/>
-	Maximum length of the paste body: <code>{{.BodyMaxLen}}</code> symbols.
-</p>
+<p>Lenpaste version: <code>{{.Version}}</code>.<br/>
+{{if ne .TitleMaxLen 0}}
+Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.<br/>
+{{else}}
+Paste titles are disabled on this server.<br/>
+{{end}}
+{{if gt .BodyMaxLen 0}}
+Maximum length of the paste body: <code>{{.BodyMaxLen}}</code> symbols.</p>
+{{else}}
+There is no limit to the size of the paste body.</p>
+{{end}}
+
 {{end}}
