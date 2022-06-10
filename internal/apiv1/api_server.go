@@ -25,8 +25,10 @@ import (
 )
 
 type serverInfoType struct {
-	Version  string   `json:"version"`
-	Syntaxes []string `json:"syntaxes"`
+	Version     string   `json:"version"`
+	TitleMaxLen int      `json:"titleMaxlength"`
+	BodyMaxLen  int      `json:"bodyMaxlength"`
+	Syntaxes    []string `json:"syntaxes"`
 }
 
 // GET /api/v1/getServerInfo
@@ -39,8 +41,10 @@ func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	serverInfo := serverInfoType{
-		Version:  data.Version,
-		Syntaxes: data.Lexers,
+		TitleMaxLen: data.TitleMaxLen,
+		BodyMaxLen:  data.BodyMaxLen,
+		Version:     data.Version,
+		Syntaxes:    data.Lexers,
 	}
 
 	// Return response

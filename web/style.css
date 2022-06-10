@@ -179,6 +179,10 @@ select:hover {
 	cursor: pointer;
 }
 
+label {
+	margin-right: 10px;
+}
+
 button, checkbox, select, input, textarea {
 	border-radius: 0;
 	-webkit-border-radius: 0;

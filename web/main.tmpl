@@ -4,7 +4,7 @@
 <form action="/" method="post">
 	<div class="text-bar">
 		<div><input
-			class="stretch-width" name="title"
+			class="stretch-width" name="title" maxlength={{.TitleMaxLen}}
 			autocomplete="off" autocorrect="off" spellcheck="true"
 			placeholder="Enter title..." tabindex=1 autofocus
 		></div>
@@ -17,25 +17,27 @@
 		</div>
 	</div>
 	<div><textarea
-		name="body" placeholder="Enter text..."
+		name="body" placeholder="Enter text..." maxlength={{.BodyMaxLen}}
 		autocomplete="off" autocorrect="off" spellcheck="true"
 		rows=20  wrap="off" tabindex=3 required
 	></textarea></div>
-	<div>
-		<label for="syntax">Syntax:</label>
-		<select name="syntax" tabindex=4 size=1>
-			{{range .Lexers}}
-			<option value="{{.}}"{{if eq . "plaintext"}} selected="true"{{end}}>{{.}}</option>
-			{{end}}
-		</select>		
+	<div class="text-bar">
+		<div>
+			<label for="syntax">Syntax:</label
+			><select name="syntax" tabindex=4 size=1>
+				{{range .Lexers}}
+				<option value="{{.}}"{{if eq . "plaintext"}} selected="true"{{end}}>{{.}}</option>
+				{{end}}
+			</select>		
+		</div>
+		<div class="text-bar-right" style="align-self: flex-start;"><span class="text-grey">*Maximum {{.BodyMaxLen}} symbols</span></div>
 	</div>
 	<div>
-		<label class="checkbox">
-		<input type="checkbox" name="oneUse" value="true" tabindex=5></input>Burn after reading</label>
+		<label class="checkbox"><input type="checkbox" name="oneUse" value="true" tabindex=5></input>Burn after reading</label>
 	</div>
 	<div>
-		<label for="expiration">Expiration:</label>
-		<select name="expiration" tabindex=6 size=1>
+		<label for="expiration">Expiration:</label
+		><select name="expiration" tabindex=6 size=1>
 			<option value="0" selected="true">Never</option>
 			<option value="600">10 minutes</option>
 			<option value="1800">30 minutes</option>

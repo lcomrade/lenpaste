@@ -27,7 +27,7 @@ import (
 	"time"
 )
 
-func PasteAddFromForm(dbInfo storage.DB, lexerNames []string, form url.Values) (storage.Paste, error) {
+func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, lexerNames []string) (storage.Paste, error) {
 	// Read form
 	paste := storage.Paste{
 		Title:      form.Get("title"),
@@ -41,8 +41,13 @@ func PasteAddFromForm(dbInfo storage.DB, lexerNames []string, form url.Values) (
 	paste.Title = strings.Replace(paste.Title, "\n", "", -1)
 	paste.Title = strings.Replace(paste.Title, "\r", "", -1)
 
+	// Check title
+	if len(paste.Title) <= titleMaxLen {
+		return paste, ErrBadRequest
+	}
+
 	// Check paste body
-	if paste.Body == "" {
+	if paste.Body == "" && len(paste.Body) <= bodyMaxLen {
 		return paste, ErrBadRequest
 	}
 
@@ -93,7 +98,7 @@ func PasteAddFromForm(dbInfo storage.DB, lexerNames []string, form url.Values) (
 	}
 
 	// Create paste
-	paste, err := dbInfo.PasteAdd(paste)
+	paste, err := db.PasteAdd(paste)
 	if err != nil {
 		return paste, err
 	}

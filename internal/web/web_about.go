@@ -23,7 +23,9 @@ import (
 )
 
 type aboutTmpl struct {
-	Version string
+	Version     string
+	TitleMaxLen int
+	BodyMaxLen  int
 }
 
 // Pattern: /about
@@ -33,7 +35,9 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	dataTmpl := aboutTmpl{
-		Version: data.Version,
+		Version:     data.Version,
+		TitleMaxLen: data.TitleMaxLen,
+		BodyMaxLen:  data.BodyMaxLen,
 	}
 
 	// Show page

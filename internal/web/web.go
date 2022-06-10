@@ -19,6 +19,7 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/lexers"
@@ -50,16 +51,21 @@ type Data struct {
 	EmbeddedHelpPage *template.Template
 
 	Version string
+
+	TitleMaxLen int
+	BodyMaxLen  int
 }
 
-func Load(webDir string, db storage.DB, log logger.Config, version string, robotsTxt []byte) (Data, error) {
+func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
 	var data Data
 	var err error
 
 	// Setup base info
-	data.DB = db
-	data.Log = log
-	data.Version = version
+	data.DB = cfg.DB
+	data.Log = cfg.Log
+	data.Version = cfg.Version
+	data.TitleMaxLen = cfg.TitleMaxLen
+	data.BodyMaxLen = cfg.BodyMaxLen
 	data.RobotsTxt = robotsTxt
 
 	// Get Chroma lexers

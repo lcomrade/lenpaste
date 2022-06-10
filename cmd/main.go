@@ -22,6 +22,7 @@ import (
 	"errors"
 	"flag"
 	"git.lcomrade.su/root/lenpaste/internal/apiv1"
+	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/raw"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
@@ -58,6 +59,8 @@ func printHelp() {
 	println("-db-driver        Only 'sqlite3' is available yet (default: sqlite3)")
 	println("-db-source        DB source")
 	println("-robots-disallow  Prohibits search engine crawlers from indexing site using robots.txt file.")
+	println("-title-max-length Maximum length of the paste title (default: 100)")
+	println("-body-max-length  Maximum length of the paste body (default: 100000)")
 	println("-version          Display version and exit")
 	println("-help             Display this help and exit")
 
@@ -107,6 +110,8 @@ func main() {
 	flagDbDriver := flag.String("db-driver", "sqlite3", "")
 	flagDbSource := flag.String("db-source", "", "")
 	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
+	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
+	flagBodyMaxLen := flag.Int("body-max-length", 10000, "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
@@ -144,12 +149,17 @@ func main() {
 		TimeFormat: "2006/01/02 15:04:05",
 	}
 
-	apiv1Data := apiv1.Load(db, log, Version)
-
-	rawData := raw.Data{
-		DB:  db,
-		Log: log,
+	cfg := config.Config{
+		DB:          db,
+		Log:         log,
+		Version:     Version,
+		TitleMaxLen: *flagTitleMaxLen,
+		BodyMaxLen:  *flagBodyMaxLen,
 	}
+
+	apiv1Data := apiv1.Load(cfg)
+
+	rawData := raw.Load(cfg)
 
 	// Init data base
 	err = db.InitDB()
@@ -158,7 +168,7 @@ func main() {
 	}
 
 	// Load pages
-	webData, err := web.Load(*flagWebDir, db, log, Version, []byte(robotsTxt))
+	webData, err := web.Load(cfg, *flagWebDir, []byte(robotsTxt))
 	if err != nil {
 		panic(err)
 	}

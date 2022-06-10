@@ -16,22 +16,19 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package raw
+package config
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 )
 
-type Data struct {
+type Config struct {
 	DB  storage.DB
 	Log logger.Config
-}
 
-func Load(cfg config.Config) Data {
-	return Data{
-		DB:  cfg.DB,
-		Log: cfg.Log,
-	}
+	Version string
+
+	TitleMaxLen int
+	BodyMaxLen  int
 }

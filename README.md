@@ -42,10 +42,12 @@ services:
     restart: always
     environment:
       # All parameters are optional
-      - LENPASTE_ADDRESS=:80 # Set -address flag
-      - LENPASTE_DB_DRIVER=sqlite3 # Set -db-driver flag
+      - LENPASTE_ADDRESS=:80                 # Set -address flag
+      - LENPASTE_DB_DRIVER=sqlite3           # Set -db-driver flag
       - LENPASTE_DB_SOURCE=/data/lenpaste.db # Set -db-source flag
-      - LENPASTE_ROBOTS_DISALLOW=false # If true set -robots-disallow flag
+      - LENPASTE_ROBOTS_DISALLOW=false       # If true set -robots-disallow flag
+      - LENPASTE_TITLE_MAX_LENGTH=100        # Set -title-max-length flag
+      - LENPASTE_BODY_MAX_LENGTH=10000       # Set -body-max-length flag
     volumes:
       - "${PWD}/data:/data"
       - "/etc/timezone:/etc/timezone:ro"

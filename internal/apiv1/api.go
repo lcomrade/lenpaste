@@ -19,6 +19,7 @@
 package apiv1
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/lexers"
@@ -31,13 +32,18 @@ type Data struct {
 	Lexers []string
 
 	Version string
+
+	TitleMaxLen int
+	BodyMaxLen  int
 }
 
-func Load(db storage.DB, log logger.Config, version string) Data {
+func Load(cfg config.Config) Data {
 	return Data{
-		DB:      db,
-		Log:     log,
-		Lexers:  chromaLexers.Names(false),
-		Version: version,
+		DB:          cfg.DB,
+		Log:         cfg.Log,
+		Lexers:      chromaLexers.Names(false),
+		Version:     cfg.Version,
+		TitleMaxLen: cfg.TitleMaxLen,
+		BodyMaxLen:  cfg.BodyMaxLen,
 	}
 }

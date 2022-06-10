@@ -37,6 +37,18 @@ else
 fi
 
 
+# LENPASTE_TITLE_MAX_LENGTH
+if [[ -n "$LENPASTE_TITLE_MAX_LENGTH" ]]; then
+	RUN_CMD="$RUN_CMD -title-max-length $LENPASTE_TITLE_MAX_LENGTH"
+fi
+
+
+# LENPASTE_BODY_MAX_LENGTH
+if [[ -n "$LENPASTE_BODY_MAX_LENGTH" ]]; then
+	RUN_CMD="$RUN_CMD -body-max-length $LENPASTE_BODY_MAX_LENGTH"
+fi
+
+
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
 $RUN_CMD

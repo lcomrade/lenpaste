@@ -35,7 +35,7 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	// Get form data and create paste
 	req.ParseForm()
 
-	paste, err := netshare.PasteAddFromForm(data.DB, data.Lexers, req.PostForm)
+	paste, err := netshare.PasteAddFromForm(req.PostForm, data.DB, data.TitleMaxLen, data.BodyMaxLen, data.Lexers)
 	if err != nil {
 		if err == netshare.ErrBadRequest {
 			data.writeError(rw, req, netshare.ErrBadRequest)
