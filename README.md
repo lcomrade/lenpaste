@@ -45,6 +45,7 @@ services:
       - LENPASTE_ADDRESS=:80                 # Set -address flag
       - LENPASTE_DB_DRIVER=sqlite3           # Set -db-driver flag
       - LENPASTE_DB_SOURCE=/data/lenpaste.db # Set -db-source flag
+      - LENPASTE_DB_CLEANUP_PERIOD=3h        # Set -db-cleanup-period flag
       - LENPASTE_ROBOTS_DISALLOW=false       # If true set -robots-disallow flag
       - LENPASTE_TITLE_MAX_LENGTH=100        # Set -title-max-length flag. If 0 disable title, if -1 disable length limit.
       - LENPASTE_BODY_MAX_LENGTH=10000       # Set -body-max-length flag. If -1 disable length limit. Can't be -1.

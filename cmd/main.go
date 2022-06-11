@@ -59,15 +59,16 @@ func exitOnError(e error) {
 func printHelp(noErrors bool) {
 	println("Usage:", os.Args[0], "[-web-dir] [OPTION]...")
 	println("")
-	println("  -addres           ADDRES:PORT (default: :80)")
-	println("  -web-dir          Dir with page templates and static content")
-	println("  -db-driver        Only 'sqlite3' is available yet (default: sqlite3)")
-	println("  -db-source        DB source")
-	println("  -robots-disallow  Prohibits search engine crawlers from indexing site using robots.txt file.")
-	println("  -title-max-length Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
-	println("  -body-max-length  Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
-	println("  -version          Display version and exit")
-	println("  -help             Display this help and exit")
+	println("  -addres            ADDRES:PORT (default: :80)")
+	println("  -web-dir           Dir with page templates and static content")
+	println("  -db-driver         Only 'sqlite3' is available yet (default: sqlite3)")
+	println("  -db-source         DB source")
+	println("  -db-cleanup-period Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
+	println("  -robots-disallow   Prohibits search engine crawlers from indexing site using robots.txt file.")
+	println("  -title-max-length  Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
+	println("  -body-max-length   Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
+	println("  -version           Display version and exit")
+	println("  -help              Display this help and exit")
 	println()
 	println("Exit status:")
 	println(" 0  if you used the -help or -version flag")
@@ -123,6 +124,7 @@ func main() {
 	flagWebDir := flag.String("web-dir", defaultWebDir, "")
 	flagDbDriver := flag.String("db-driver", "sqlite3", "")
 	flagDbSource := flag.String("db-source", "", "")
+	flagDbCleanupPeriod := flag.String("db-cleanup-period", "3h", "")
 	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 10000, "")
@@ -252,7 +254,12 @@ func main() {
 	})
 
 	// Run background job
-	go backgroundJob(10*time.Minute, db, log)
+	jobDuration, err := time.ParseDuration(*flagDbCleanupPeriod)
+	if err != nil {
+		exitOnError(err)
+	}
+
+	go backgroundJob(jobDuration, db, log)
 
 	// Run HTTP server
 	log.Info("Run HTTP server on " + *flagAddress)

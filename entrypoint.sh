@@ -25,6 +25,11 @@ else
 fi
 
 
+# LENPASTE_DB_CLEANUP_PERIOD
+if [[ -n "$LENPASTE_DB_CLEANUP_PERIOD" ]]; then
+	RUN_CMD="$RUN_CMD -db-cleanup-period $LENPASTE_DB_CLEANUP_PERIOD"
+fi
+
 # LENPASTE_ROBOTS_DISALLOW
 if [[ "$LENPASTE_ROBOTS_DISALLOW" == "true" ]]; then
 	RUN_CMD="$RUN_CMD -robots-disallow"
