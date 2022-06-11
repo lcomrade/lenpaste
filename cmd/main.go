@@ -51,6 +51,11 @@ func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Confi
 	}
 }
 
+func exitOnError(e error) {
+	println("error:", e.Error())
+	os.Exit(1)
+}
+
 func printHelp(noErrors bool) {
 	println("Usage:", os.Args[0], "[-web-dir] [OPTION]...")
 	println("")
@@ -63,6 +68,11 @@ func printHelp(noErrors bool) {
 	println("  -body-max-length  Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
 	println("  -version          Display version and exit")
 	println("  -help             Display this help and exit")
+	println()
+	println("Exit status:")
+	println(" 0  if you used the -help or -version flag")
+	println(" 1  if there is an error during initialization")
+	println(" 2  if command line arguments are not entered correctly")
 
 	if noErrors == false {
 		os.Exit(2)
@@ -93,12 +103,12 @@ func main() {
 	// Get ./bin/ dir
 	binFile, err := os.Executable()
 	if err != nil {
-		panic(err)
+		exitOnError(err)
 	}
 
 	binFile, err = filepath.EvalSymlinks(binFile)
 	if err != nil {
-		panic(err)
+		exitOnError(err)
 	}
 
 	binDir := filepath.Dir(binFile)
@@ -174,13 +184,13 @@ func main() {
 	// Init data base
 	err = db.InitDB()
 	if err != nil {
-		panic(err)
+		exitOnError(err)
 	}
 
 	// Load pages
 	webData, err := web.Load(cfg, *flagWebDir, []byte(robotsTxt))
 	if err != nil {
-		panic(err)
+		exitOnError(err)
 	}
 
 	// Handlers
@@ -248,6 +258,6 @@ func main() {
 	log.Info("Run HTTP server on " + *flagAddress)
 	err = http.ListenAndServe(*flagAddress, nil)
 	if err != nil {
-		panic(err)
+		exitOnError(err)
 	}
 }
