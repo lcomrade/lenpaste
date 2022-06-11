@@ -42,12 +42,16 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	paste.Title = strings.Replace(paste.Title, "\r", "", -1)
 
 	// Check title
-	if len(paste.Title) <= titleMaxLen {
+	if len(paste.Title) > titleMaxLen && titleMaxLen >= 0 {
 		return paste, ErrBadRequest
 	}
 
 	// Check paste body
-	if paste.Body == "" && len(paste.Body) <= bodyMaxLen {
+	if paste.Body == "" {
+		return paste, ErrBadRequest
+	}
+
+	if len(paste.Body) > bodyMaxLen && bodyMaxLen > 0 {
 		return paste, ErrBadRequest
 	}
 

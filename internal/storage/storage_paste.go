@@ -124,6 +124,21 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 		return paste, err
 	}
 
+	// Check paste expiration
+	if paste.DeleteTime < time.Now().Unix() && paste.DeleteTime > 0 {
+		// Delete expired paste
+		_, err = db.Exec(
+			`DELETE FROM "pastes" WHERE id = ?`,
+			paste.ID,
+		)
+		if err != nil {
+			return Paste{}, err
+		}
+
+		// Return ErrNotFound
+		return Paste{}, ErrNotFoundID
+	}
+
 	return paste, nil
 }
 
@@ -137,7 +152,16 @@ func (dbInfo DB) PasteGetList() ([]Paste, error) {
 	}
 	defer db.Close()
 
-	// Make query
+	// Delete expired paste
+	_, err = db.Exec(
+		`DELETE FROM "pastes" WHERE delete_time < ? AND delete_time > 0`,
+		time.Now().Unix(),
+	)
+	if err != nil {
+		return pastes, err
+	}
+
+	// Make query to get paste list
 	rows, err := db.Query(
 		`SELECT "id", "title", "body", "syntax", "create_time", "delete_time", "one_use" FROM "pastes"`,
 	)
