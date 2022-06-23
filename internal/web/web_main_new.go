@@ -35,7 +35,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	if req.PostForm.Get("body") != "" {
 		// Create paste
-		paste, err := netshare.PasteAddFromForm(req.PostForm, data.DB, data.TitleMaxLen, data.BodyMaxLen, data.Lexers)
+		paste, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.Lexers)
 		if err != nil {
 			if err == netshare.ErrBadRequest {
 				data.errorBadRequest(rw, req)
@@ -53,9 +53,9 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	// Else show create page
 	tmplData := createTmpl{
-		TitleMaxLen: data.TitleMaxLen,
-		BodyMaxLen:  data.BodyMaxLen,
-		Lexers:      data.Lexers,
+		TitleMaxLen: *data.TitleMaxLen,
+		BodyMaxLen:  *data.BodyMaxLen,
+		Lexers:      *data.Lexers,
 	}
 
 	rw.Header().Set("Content-Type", "text/html")

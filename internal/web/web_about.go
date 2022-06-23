@@ -35,9 +35,9 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	dataTmpl := aboutTmpl{
-		Version:     data.Version,
-		TitleMaxLen: data.TitleMaxLen,
-		BodyMaxLen:  data.BodyMaxLen,
+		Version:     *data.Version,
+		TitleMaxLen: *data.TitleMaxLen,
+		BodyMaxLen:  *data.BodyMaxLen,
 	}
 
 	// Show page

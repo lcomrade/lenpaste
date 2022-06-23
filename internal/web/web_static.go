@@ -26,12 +26,12 @@ func (data Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/plain")
-	rw.Write(data.RobotsTxt)
+	rw.Write(*data.RobotsTxt)
 }
 
 func (data Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/css")
-	rw.Write(data.StyleCSS)
+	rw.Write(*data.StyleCSS)
 }

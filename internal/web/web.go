@@ -31,10 +31,10 @@ type Data struct {
 	DB  storage.DB
 	Log logger.Config
 
-	Lexers []string
+	Lexers *[]string
 
-	StyleCSS       []byte
-	RobotsTxt      []byte
+	StyleCSS       *[]byte
+	RobotsTxt      *[]byte
 	ErrorPage      *template.Template
 	Main           *template.Template
 	PastePage      *template.Template
@@ -50,10 +50,10 @@ type Data struct {
 	EmbeddedPage     *template.Template
 	EmbeddedHelpPage *template.Template
 
-	Version string
+	Version *string
 
-	TitleMaxLen int
-	BodyMaxLen  int
+	TitleMaxLen *int
+	BodyMaxLen  *int
 }
 
 func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
@@ -63,19 +63,21 @@ func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
 	// Setup base info
 	data.DB = cfg.DB
 	data.Log = cfg.Log
-	data.Version = cfg.Version
-	data.TitleMaxLen = cfg.TitleMaxLen
-	data.BodyMaxLen = cfg.BodyMaxLen
-	data.RobotsTxt = robotsTxt
+	data.Version = &cfg.Version
+	data.TitleMaxLen = &cfg.TitleMaxLen
+	data.BodyMaxLen = &cfg.BodyMaxLen
+	data.RobotsTxt = &robotsTxt
 
 	// Get Chroma lexers
-	data.Lexers = chromaLexers.Names(false)
+	lexers := chromaLexers.Names(false)
+	data.Lexers = &lexers
 
 	// style.css file
-	data.StyleCSS, err = readFile(filepath.Join(webDir, "style.css"))
+	styleCSS, err := readFile(filepath.Join(webDir, "style.css"))
 	if err != nil {
 		return data, err
 	}
+	data.StyleCSS = &styleCSS
 
 	// main.tmpl
 	data.Main, err = template.ParseFiles(
