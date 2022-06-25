@@ -26,6 +26,7 @@ import (
 type createTmpl struct {
 	TitleMaxLen int
 	BodyMaxLen  int
+	MaxLifeTime int64
 	Lexers      []string
 }
 
@@ -35,7 +36,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	if req.PostForm.Get("body") != "" {
 		// Create paste
-		paste, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.Lexers)
+		paste, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 		if err != nil {
 			if err == netshare.ErrBadRequest {
 				data.errorBadRequest(rw, req)
@@ -55,6 +56,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 	tmplData := createTmpl{
 		TitleMaxLen: *data.TitleMaxLen,
 		BodyMaxLen:  *data.BodyMaxLen,
+		MaxLifeTime: *data.MaxLifeTime,
 		Lexers:      *data.Lexers,
 	}
 

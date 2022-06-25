@@ -35,6 +35,7 @@ type Data struct {
 
 	TitleMaxLen int
 	BodyMaxLen  int
+	MaxLifeTime int64
 }
 
 func Load(cfg config.Config) Data {
@@ -45,5 +46,6 @@ func Load(cfg config.Config) Data {
 		Version:     cfg.Version,
 		TitleMaxLen: cfg.TitleMaxLen,
 		BodyMaxLen:  cfg.BodyMaxLen,
+		MaxLifeTime: cfg.MaxLifeTime,
 	}
 }

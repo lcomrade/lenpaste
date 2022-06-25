@@ -54,6 +54,12 @@ if [[ -n "$LENPASTE_BODY_MAX_LENGTH" ]]; then
 fi
 
 
+# LENPASTE_MAX_PASTE_LIFETIME
+if [[ -n "$LENPASTE_MAX_PASTE_LIFETIME" ]]; then
+	RUN_CMD="$RUN_CMD -max-paste-lifetime $LENPASTE_MAX_PASTE_LIFETIME"
+fi
+
+
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
 $RUN_CMD

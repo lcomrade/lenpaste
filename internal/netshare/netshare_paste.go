@@ -27,7 +27,7 @@ import (
 	"time"
 )
 
-func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, lexerNames []string) (storage.Paste, error) {
+func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (storage.Paste, error) {
 	// Read form
 	paste := storage.Paste{
 		Title:      form.Get("title"),
@@ -86,11 +86,18 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	// Get delete time
 	expirStr := form.Get("expiration")
 	if expirStr != "" {
+		// Convert string to int
 		expir, err := strconv.ParseInt(expirStr, 10, 64)
 		if err != nil {
 			return paste, ErrBadRequest
 		}
 
+		// Check limits
+		if expir > maxLifeTime && maxLifeTime > 0 {
+			return paste, ErrBadRequest
+		}
+
+		// Save if ok
 		if expir > 0 {
 			paste.DeleteTime = time.Now().Unix() + expir
 		}

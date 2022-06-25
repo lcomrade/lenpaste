@@ -59,16 +59,17 @@ func exitOnError(e error) {
 func printHelp(noErrors bool) {
 	println("Usage:", os.Args[0], "[-web-dir] [OPTION]...")
 	println("")
-	println("  -addres            ADDRES:PORT (default: :80)")
-	println("  -web-dir           Dir with page templates and static content")
-	println("  -db-driver         Only 'sqlite3' is available yet (default: sqlite3)")
-	println("  -db-source         DB source")
-	println("  -db-cleanup-period Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
-	println("  -robots-disallow   Prohibits search engine crawlers from indexing site using robots.txt file.")
-	println("  -title-max-length  Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
-	println("  -body-max-length   Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
-	println("  -version           Display version and exit")
-	println("  -help              Display this help and exit")
+	println("  -addres             ADDRES:PORT (default: :80)")
+	println("  -web-dir            Dir with page templates and static content")
+	println("  -db-driver          Only 'sqlite3' is available yet (default: sqlite3)")
+	println("  -db-source          DB source")
+	println("  -db-cleanup-period  Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
+	println("  -robots-disallow    Prohibits search engine crawlers from indexing site using robots.txt file.")
+	println("  -title-max-length   Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
+	println("  -body-max-length    Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
+	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 2d, 12h, 7m. (default: never)")
+	println("  -version            Display version and exit")
+	println("  -help               Display this help and exit")
 	println()
 	println("Exit status:")
 	println(" 0  if you used the -help or -version flag")
@@ -128,6 +129,7 @@ func main() {
 	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 10000, "")
+	flagMaxLifetime := flag.String("max-paste-lifetime", "0", "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
@@ -161,6 +163,23 @@ func main() {
 		os.Exit(2)
 	}
 
+	// -max-paste-lifetime
+	maxLifeTime := int64(-1)
+
+	if *flagMaxLifetime != "never" {
+		maxLifeTimeTmp, err := time.ParseDuration(*flagMaxLifetime)
+		if err != nil {
+			exitOnError(err)
+		}
+
+		maxLifeTime = int64(maxLifeTimeTmp.Seconds())
+
+		if maxLifeTime < 600 {
+			println("-max-paste-lifetime flag cannot have a value less than 10 minutes")
+			os.Exit(2)
+		}
+	}
+
 	// Settings
 	db := storage.DB{
 		DriverName:     *flagDbDriver,
@@ -177,6 +196,7 @@ func main() {
 		Version:     Version,
 		TitleMaxLen: *flagTitleMaxLen,
 		BodyMaxLen:  *flagBodyMaxLen,
+		MaxLifeTime: maxLifeTime,
 	}
 
 	apiv1Data := apiv1.Load(cfg)

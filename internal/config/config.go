@@ -31,4 +31,5 @@ type Config struct {
 
 	TitleMaxLen int
 	BodyMaxLen  int
+	MaxLifeTime int64
 }
