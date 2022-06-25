@@ -129,7 +129,7 @@ func main() {
 	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 10000, "")
-	flagMaxLifetime := flag.String("max-paste-lifetime", "0", "")
+	flagMaxLifetime := flag.String("max-paste-lifetime", "never", "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
