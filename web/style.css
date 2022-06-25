@@ -126,6 +126,14 @@ article {
 
 
 /* OTHER */
+:focus-visible {
+	outline: 2px solid #3DAEE9;
+}
+
+:active {
+	outline: 0;
+}
+
 h1, h2, h3, h4, h5, h6,
 p, pre,
 select, label,
@@ -159,6 +167,10 @@ pre {
 textarea {
 	min-height: 100px;
 	resize: vertical;
+}
+
+label {
+	font-family: sans-serif;
 }
 
 input::placeholder, textarea::placeholder {
@@ -216,6 +228,10 @@ button:hover {
 
 .button-green:hover {
 	background: #74D117;
+}
+
+input[type="checkbox" i] {
+	cursor: pointer;
 }
 
 .checkbox:hover,
