@@ -232,6 +232,7 @@ button:hover {
 
 input[type="checkbox" i] {
 	cursor: pointer;
+	overflow: hidden;
 }
 
 .checkbox:hover,
