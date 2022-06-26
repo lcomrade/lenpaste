@@ -20,6 +20,7 @@ package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	chromaLexers "github.com/alecthomas/chroma/lexers"
 	"net/http"
 	"strings"
 	"time"
@@ -55,15 +56,20 @@ func (data Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Get file name and create time
+	// Get create time
 	createTime := time.Unix(paste.CreateTime, 0).UTC()
 
+	// Get file name
 	fileName := paste.ID
 	if paste.Title != "" {
 		fileName = paste.Title
 	}
 
-	fileName = fileName + ".txt"
+	// Get file extension
+	fileExt := chromaLexers.Get(paste.Syntax).Config().Filenames[0][1:]
+	if strings.HasSuffix(fileName, fileExt) == false {
+		fileName = fileName + fileExt
+	}
 
 	// Write result
 	rw.Header().Set("Content-Type", "application/octet-stream")
