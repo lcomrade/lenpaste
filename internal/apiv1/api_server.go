@@ -28,6 +28,9 @@ type serverInfoType struct {
 	Version     string   `json:"version"`
 	TitleMaxLen int      `json:"titleMaxlength"`
 	BodyMaxLen  int      `json:"bodyMaxlength"`
+	MaxLifeTime int64    `json:"maxLifeTime"`
+	ServerAbout string   `json:"serverAbout"`
+	ServerRules string   `json:"serverRules"`
 	Syntaxes    []string `json:"syntaxes"`
 }
 
@@ -41,10 +44,13 @@ func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	serverInfo := serverInfoType{
-		TitleMaxLen: data.TitleMaxLen,
-		BodyMaxLen:  data.BodyMaxLen,
-		Version:     data.Version,
-		Syntaxes:    data.Lexers,
+		TitleMaxLen: *data.TitleMaxLen,
+		BodyMaxLen:  *data.BodyMaxLen,
+		Version:     *data.Version,
+		MaxLifeTime: *data.MaxLifeTime,
+		ServerAbout: *data.ServerAbout,
+		ServerRules: *data.ServerRules,
+		Syntaxes:    *data.Lexers,
 	}
 
 	// Return response

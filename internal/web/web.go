@@ -55,6 +55,9 @@ type Data struct {
 	TitleMaxLen *int
 	BodyMaxLen  *int
 	MaxLifeTime *int64
+
+	ServerAbout *string
+	ServerRules *string
 }
 
 func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
@@ -64,10 +67,16 @@ func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
 	// Setup base info
 	data.DB = cfg.DB
 	data.Log = cfg.Log
+
 	data.Version = &cfg.Version
+
 	data.TitleMaxLen = &cfg.TitleMaxLen
 	data.BodyMaxLen = &cfg.BodyMaxLen
 	data.MaxLifeTime = &cfg.MaxLifeTime
+
+	data.ServerAbout = &cfg.ServerAbout
+	data.ServerRules = &cfg.ServerRules
+
 	data.RobotsTxt = &robotsTxt
 
 	// Get Chroma lexers

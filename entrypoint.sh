@@ -60,6 +60,18 @@ if [[ -n "$LENPASTE_MAX_PASTE_LIFETIME" ]]; then
 fi
 
 
+# Server about
+if [[ -f "/data/about.html" ]]; then
+	RUN_CMD="$RUN_CMD -server-about /data/about.html"
+fi
+
+
+# Server rules
+if [[ -f "/data/rules.html" ]]; then
+	RUN_CMD="$RUN_CMD -server-rules /data/rules.html"
+fi
+
+
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
 $RUN_CMD

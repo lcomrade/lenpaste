@@ -29,23 +29,30 @@ type Data struct {
 	Log logger.Config
 	DB  storage.DB
 
-	Lexers []string
+	Lexers *[]string
 
-	Version string
+	Version *string
 
-	TitleMaxLen int
-	BodyMaxLen  int
-	MaxLifeTime int64
+	TitleMaxLen *int
+	BodyMaxLen  *int
+	MaxLifeTime *int64
+
+	ServerAbout *string
+	ServerRules *string
 }
 
 func Load(cfg config.Config) Data {
+	lexers := chromaLexers.Names(false)
+
 	return Data{
 		DB:          cfg.DB,
 		Log:         cfg.Log,
-		Lexers:      chromaLexers.Names(false),
-		Version:     cfg.Version,
-		TitleMaxLen: cfg.TitleMaxLen,
-		BodyMaxLen:  cfg.BodyMaxLen,
-		MaxLifeTime: cfg.MaxLifeTime,
+		Lexers:      &lexers,
+		Version:     &cfg.Version,
+		TitleMaxLen: &cfg.TitleMaxLen,
+		BodyMaxLen:  &cfg.BodyMaxLen,
+		MaxLifeTime: &cfg.MaxLifeTime,
+		ServerAbout: &cfg.ServerAbout,
+		ServerRules: &cfg.ServerRules,
 	}
 }

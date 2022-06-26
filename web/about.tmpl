@@ -1,22 +1,24 @@
 {{define "titlePrefix"}}About | {{end}}
 {{define "article"}}
-<h3>About</h3>
-<ul>
-	<li>Lenpaste is open source software. All <a href="/about/source_code">source code</a> is available under the <a href="/about/license">AGPL 3</a> license.</li>
-	<li>You don't need to register here.</li>
-	<li>This site does not use Java Script. Your privacy is respected here.</li>
-	<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
-</ul>
-<h3>This server</h3>
-<p>Lenpaste version: <code>{{.Version}}</code>.<br/>
+{{if ne .ServerAbout ``}}
+<h3>About this server</h3>
+{{.ServerAbout}}
+{{end}}
+
+{{if ne .ServerRules ``}}
+<h3>This server rules</h3>
+{{.ServerRules}}
+{{end}}
+
+<h3>Limits</h3>
 {{if ne .TitleMaxLen 0}}
 	{{if gt .TitleMaxLen 0}}
-	Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.<br/>
+	<p>Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.<br/>
 	{{else}}
-	There is no limit to the size of the paste body.</br>
+	<p>There is no limit to the size of the paste body.</br>
 	{{end}}
 {{else}}
-Paste titles are disabled on this server.<br/>
+<p>Paste titles are disabled on this server.<br/>
 {{end}}
 {{if gt .BodyMaxLen 0}}
 Maximum length of the paste body: <code>{{.BodyMaxLen}}</code> symbols.</p>
@@ -24,4 +26,12 @@ Maximum length of the paste body: <code>{{.BodyMaxLen}}</code> symbols.</p>
 There is no limit to the size of the paste body.</p>
 {{end}}
 
+<h3>What is Lenpaste?</h3>
+<p>This server uses Lenpaste version <code>{{.Version}}</code>. A little bit about it:</p>
+<ul>
+	<li>Lenpaste is open source software. All <a href="/about/source_code">source code</a> is available under the <a href="/about/license">AGPL 3</a> license.</li>
+	<li>You don't need to register here.</li>
+	<li>This site does not use Java Script. Your privacy is respected here.</li>
+	<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
+</ul>
 {{end}}

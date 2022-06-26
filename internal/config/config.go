@@ -32,4 +32,7 @@ type Config struct {
 	TitleMaxLen int
 	BodyMaxLen  int
 	MaxLifeTime int64
+
+	ServerAbout string
+	ServerRules string
 }

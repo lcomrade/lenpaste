@@ -27,6 +27,7 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/raw"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lenpaste/internal/web"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -51,6 +52,24 @@ func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Confi
 	}
 }
 
+func readFile(path string) (string, error) {
+	// Open file
+	file, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	// Read file
+	fileByte, err := ioutil.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	// Return result
+	return string(fileByte), nil
+}
+
 func exitOnError(e error) {
 	println("error:", e.Error())
 	os.Exit(1)
@@ -68,6 +87,8 @@ func printHelp(noErrors bool) {
 	println("  -title-max-length   Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
 	println("  -body-max-length    Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
 	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 2d, 12h, 7m. (default: never)")
+	println("  -server-about       Path to the HTML file that contains the server description.")
+	println("  -server-rules       Path to the HTML file that contains the server rules.")
 	println("  -version            Display version and exit")
 	println("  -help               Display this help and exit")
 	println()
@@ -130,6 +151,8 @@ func main() {
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 10000, "")
 	flagMaxLifetime := flag.String("max-paste-lifetime", "never", "")
+	flagServerAbout := flag.String("server-about", "", "")
+	flagServerRules := flag.String("server-rules", "", "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
@@ -180,6 +203,24 @@ func main() {
 		}
 	}
 
+	// Load server about
+	serverAbout := ""
+	if *flagServerAbout != "" {
+		serverAbout, err = readFile(*flagServerAbout)
+		if err != nil {
+			exitOnError(err)
+		}
+	}
+
+	// Load server rules
+	serverRules := ""
+	if *flagServerRules != "" {
+		serverRules, err = readFile(*flagServerRules)
+		if err != nil {
+			exitOnError(err)
+		}
+	}
+
 	// Settings
 	db := storage.DB{
 		DriverName:     *flagDbDriver,
@@ -197,6 +238,8 @@ func main() {
 		TitleMaxLen: *flagTitleMaxLen,
 		BodyMaxLen:  *flagBodyMaxLen,
 		MaxLifeTime: maxLifeTime,
+		ServerAbout: serverAbout,
+		ServerRules: serverRules,
 	}
 
 	apiv1Data := apiv1.Load(cfg)

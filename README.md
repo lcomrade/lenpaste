@@ -51,6 +51,9 @@ services:
       - LENPASTE_BODY_MAX_LENGTH=10000       # Set -body-max-length flag. If -1 disable length limit. Can't be -1.
       - LENPASTE_MAX_PASTE_LIFETIME=never    # Set -max-paste-lifetime flag. Examples: 2d, 12h, 7m.
     volumes:
+      # /data/lenpaste.db - SQLite DB
+      # /data/about.html  - About this server
+      # /data/rules.html  - This server rules
       - "${PWD}/data:/data"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"

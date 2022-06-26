@@ -19,6 +19,7 @@
 package web
 
 import (
+	"html/template"
 	"net/http"
 )
 
@@ -26,6 +27,9 @@ type aboutTmpl struct {
 	Version     string
 	TitleMaxLen int
 	BodyMaxLen  int
+
+	ServerAbout template.HTML
+	ServerRules template.HTML
 }
 
 // Pattern: /about
@@ -38,6 +42,8 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		Version:     *data.Version,
 		TitleMaxLen: *data.TitleMaxLen,
 		BodyMaxLen:  *data.BodyMaxLen,
+		ServerAbout: template.HTML(*data.ServerAbout),
+		ServerRules: template.HTML(*data.ServerRules),
 	}
 
 	// Show page
