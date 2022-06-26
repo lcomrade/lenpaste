@@ -29,7 +29,7 @@ import (
 func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 	// Check method
 	if req.Method != "GET" {
-		data.writeError(rw, req, netshare.ErrBadRequest)
+		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
 		return
 	}
 

@@ -28,7 +28,7 @@ import (
 func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	// Check method
 	if req.Method != "POST" {
-		data.writeError(rw, req, netshare.ErrBadRequest)
+		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
 		return
 	}
 

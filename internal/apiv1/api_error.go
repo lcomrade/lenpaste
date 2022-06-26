@@ -38,12 +38,16 @@ func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) 
 		resp.Error = "Bad Request"
 
 	} else if e == storage.ErrNotFoundID {
-		resp.Code = 403
+		resp.Code = 404
 		resp.Error = "Could not find ID"
 
 	} else if e == netshare.ErrNotFound {
 		resp.Code = 404
 		resp.Error = "Not Found"
+
+	} else if e == netshare.ErrMethodNotAllowed {
+		resp.Code = 405
+		resp.Error = "Method Not Allowed"
 
 	} else {
 		resp.Code = 500

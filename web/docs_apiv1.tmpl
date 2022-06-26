@@ -148,24 +148,35 @@
 
 
 <h4 id="errors">Possible API Errors</h4>
+<p>This API method exists on the server, but you passed the wrong arguments for it.</p>
 <pre><code>{
     "code": 400,
     "error": "Bad Request"
 }
 </code></pre>
 
+<p>There is no paste with this ID.</p>
 <pre><code>{
-    "code": 403,
+    "code": 404,
     "error": "Could not find ID"
 }
 </code></pre>
 
+<p>There is no such API method.</p>
 <pre><code>{
     "code": 404,
     "error": "Not Found"
 }
 </code></pre>
 
+<p>You made a mistake with HTTP request (example: you made POST instead of GET).</p>
+<pre><code>{
+    "code": 405,
+    "error": "Method Not Allowed"
+}
+</code></pre>
+
+<p>There was a failure on the server. Contact your server administrator to find out what the problem is.</p>
 <pre><code>{
     "code": 500,
     "error": "Internal Server Error"

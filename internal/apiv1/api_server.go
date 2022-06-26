@@ -38,7 +38,7 @@ type serverInfoType struct {
 func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 	// Check method
 	if req.Method != "GET" {
-		data.writeError(rw, req, netshare.ErrBadRequest)
+		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
 		return
 	}
 
