@@ -2,5 +2,13 @@
 {{define "article"}}
 <h3>Error {{.Code}}</h3>
 <p>{{.Error}}</p>
-<a href="/">Back to home page</a>
+
+{{if and (ne .AdminName ``) (ne .AdminMail ``)}}
+<p>Administrator contacts: <code>{{.AdminName}} &lt<a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a>&gt</code></p>
+{{else}}
+{{if ne .AdminName ``}}<p>Administrator contacts: <code>{{.AdminName}}</code></p>{{end}}
+{{if ne .AdminMail ``}}<p>Administrator contacts: <code><a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a></code></p>{{end}}
+{{end}}
+
+<p><a href="/"><< Back to home page</a></p>
 {{end}}

@@ -23,8 +23,10 @@ import (
 )
 
 type errorTmpl struct {
-	Code  int
-	Error string
+	Code      int
+	Error     string
+	AdminName string
+	AdminMail string
 }
 
 func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
@@ -34,8 +36,10 @@ func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
 
 	// Render template
 	errData := errorTmpl{
-		Error: "Bad Request",
-		Code:  400,
+		Error:     "Bad Request",
+		Code:      400,
+		AdminName: *data.AdminName,
+		AdminMail: *data.AdminMail,
 	}
 
 	e := data.ErrorPage.Execute(rw, errData)
@@ -51,8 +55,10 @@ func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
 
 	// Render template
 	errData := errorTmpl{
-		Error: "Not Found",
-		Code:  404,
+		Error:     "Not Found",
+		Code:      404,
+		AdminName: *data.AdminName,
+		AdminMail: *data.AdminMail,
 	}
 
 	e := data.ErrorPage.Execute(rw, errData)
@@ -71,8 +77,10 @@ func (data Data) errorInternal(rw http.ResponseWriter, req *http.Request, err er
 
 	// Render template
 	errData := errorTmpl{
-		Error: "Internal Server Error",
-		Code:  500,
+		Error:     "Internal Server Error",
+		Code:      500,
+		AdminName: *data.AdminName,
+		AdminMail: *data.AdminMail,
 	}
 
 	e := data.ErrorPage.Execute(rw, errData)
