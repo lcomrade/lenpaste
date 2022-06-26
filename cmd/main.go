@@ -89,6 +89,8 @@ func printHelp(noErrors bool) {
 	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 2d, 12h, 7m. (default: never)")
 	println("  -server-about       Path to the HTML file that contains the server description.")
 	println("  -server-rules       Path to the HTML file that contains the server rules.")
+	println("  -admin-name         Name of the administrator of this server")
+	println("  -admin-mail         Email of the administrator of this server.")
 	println("  -version            Display version and exit")
 	println("  -help               Display this help and exit")
 	println()
@@ -153,6 +155,8 @@ func main() {
 	flagMaxLifetime := flag.String("max-paste-lifetime", "never", "")
 	flagServerAbout := flag.String("server-about", "", "")
 	flagServerRules := flag.String("server-rules", "", "")
+	flagAdminName := flag.String("admin-name", "", "")
+	flagAdminMail := flag.String("admin-mail", "", "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
@@ -240,6 +244,8 @@ func main() {
 		MaxLifeTime: maxLifeTime,
 		ServerAbout: serverAbout,
 		ServerRules: serverRules,
+		AdminName:   *flagAdminName,
+		AdminMail:   *flagAdminMail,
 	}
 
 	apiv1Data := apiv1.Load(cfg)

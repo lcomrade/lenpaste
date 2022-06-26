@@ -31,6 +31,8 @@ type serverInfoType struct {
 	MaxLifeTime int64    `json:"maxLifeTime"`
 	ServerAbout string   `json:"serverAbout"`
 	ServerRules string   `json:"serverRules"`
+	AdminName   string   `json:"adminName"`
+	AdminMail   string   `json:"adminMail"`
 	Syntaxes    []string `json:"syntaxes"`
 }
 
@@ -50,6 +52,8 @@ func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 		MaxLifeTime: *data.MaxLifeTime,
 		ServerAbout: *data.ServerAbout,
 		ServerRules: *data.ServerRules,
+		AdminName:   *data.AdminName,
+		AdminMail:   *data.AdminMail,
 		Syntaxes:    *data.Lexers,
 	}
 

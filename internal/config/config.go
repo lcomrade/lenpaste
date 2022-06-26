@@ -35,4 +35,7 @@ type Config struct {
 
 	ServerAbout string
 	ServerRules string
+
+	AdminName string
+	AdminMail string
 }

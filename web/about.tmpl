@@ -26,6 +26,12 @@ Maximum length of the paste body: <code>{{.BodyMaxLen}}</code> symbols.</p>
 There is no limit to the size of the paste body.</p>
 {{end}}
 
+{{if or (ne .AdminName ``) (ne .AdminMail ``)}}
+<h3>Contact the administrator</h3>
+{{if ne .AdminName ``}}<p>Name: <code>{{.AdminName}}</code></p>{{end}}
+{{if ne .AdminMail ``}}<p>Email: <a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a></p>{{end}}
+{{end}}
+
 <h3>What is Lenpaste?</h3>
 <p>This server uses Lenpaste version <code>{{.Version}}</code>. A little bit about it:</p>
 <ul>

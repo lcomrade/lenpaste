@@ -72,6 +72,18 @@ if [[ -f "/data/rules.html" ]]; then
 fi
 
 
+# LENPASTE_ADMIN_NAME
+if [[ -n "$LENPASTE_ADMIN_NAME" ]]; then
+	RUN_CMD="$RUN_CMD -admin-name $LENPASTE_ADMIN_NAME"
+fi
+
+
+# LENPASTE_ADMIN_MAIL
+if [[ -n "$LENPASTE_ADMIN_MAIL" ]]; then
+	RUN_CMD="$RUN_CMD -admin-mail $LENPASTE_ADMIN_MAIL"
+fi
+
+
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
 $RUN_CMD

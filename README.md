@@ -50,6 +50,8 @@ services:
       - LENPASTE_TITLE_MAX_LENGTH=100        # Set -title-max-length flag. If 0 disable title, if -1 disable length limit.
       - LENPASTE_BODY_MAX_LENGTH=10000       # Set -body-max-length flag. If -1 disable length limit. Can't be -1.
       - LENPASTE_MAX_PASTE_LIFETIME=never    # Set -max-paste-lifetime flag. Examples: 2d, 12h, 7m.
+      - LENPASTE_ADMIN_NAME=                 # Set -admin-name flag.
+      - LENPASTE_ADMIN_MAIL=                 # Set -admin-mail flag.
     volumes:
       # /data/lenpaste.db - SQLite DB
       # /data/about.html  - About this server

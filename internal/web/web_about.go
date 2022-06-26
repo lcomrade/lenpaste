@@ -30,6 +30,9 @@ type aboutTmpl struct {
 
 	ServerAbout template.HTML
 	ServerRules template.HTML
+
+	AdminName string
+	AdminMail string
 }
 
 // Pattern: /about
@@ -44,6 +47,8 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		BodyMaxLen:  *data.BodyMaxLen,
 		ServerAbout: template.HTML(*data.ServerAbout),
 		ServerRules: template.HTML(*data.ServerRules),
+		AdminName:   *data.AdminName,
+		AdminMail:   *data.AdminMail,
 	}
 
 	// Show page

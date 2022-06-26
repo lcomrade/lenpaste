@@ -58,6 +58,9 @@ type Data struct {
 
 	ServerAbout *string
 	ServerRules *string
+
+	AdminName *string
+	AdminMail *string
 }
 
 func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
@@ -76,6 +79,9 @@ func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
 
 	data.ServerAbout = &cfg.ServerAbout
 	data.ServerRules = &cfg.ServerRules
+
+	data.AdminName = &cfg.AdminName
+	data.AdminMail = &cfg.AdminMail
 
 	data.RobotsTxt = &robotsTxt
 

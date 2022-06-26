@@ -39,6 +39,9 @@ type Data struct {
 
 	ServerAbout *string
 	ServerRules *string
+
+	AdminName *string
+	AdminMail *string
 }
 
 func Load(cfg config.Config) Data {
@@ -54,5 +57,7 @@ func Load(cfg config.Config) Data {
 		MaxLifeTime: &cfg.MaxLifeTime,
 		ServerAbout: &cfg.ServerAbout,
 		ServerRules: &cfg.ServerRules,
+		AdminName:   &cfg.AdminName,
+		AdminMail:   &cfg.AdminMail,
 	}
 }
