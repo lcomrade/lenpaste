@@ -24,13 +24,14 @@ import (
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
+	"html/template"
 )
 
-func tryHighlight(source string, lexer string) string {
+func tryHighlight(source string, lexer string) template.HTML {
 	// Determine lexer
 	l := lexers.Get(lexer)
 	if l == nil {
-		return source
+		return template.HTML(source)
 	}
 
 	l = chroma.Coalesce(l)
@@ -48,7 +49,7 @@ func tryHighlight(source string, lexer string) string {
 
 	it, err := l.Tokenise(nil, source)
 	if err != nil {
-		return source
+		return template.HTML(source)
 	}
 
 	// Format
@@ -56,8 +57,8 @@ func tryHighlight(source string, lexer string) string {
 
 	err = f.Format(&buf, s, it)
 	if err != nil {
-		return source
+		return template.HTML(source)
 	}
 
-	return buf.String()
+	return template.HTML(buf.String())
 }

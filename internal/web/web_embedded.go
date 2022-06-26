@@ -58,10 +58,7 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Highlight body
-	bodyHighlight := tryHighlight(paste.Body, paste.Syntax)
-
-	// Prepare template dat
+	// Prepare template data
 	createTime := time.Unix(paste.CreateTime, 0).UTC()
 
 	tmplData := embTmpl{
@@ -70,7 +67,7 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 		DeleteTime:    paste.DeleteTime,
 		OneUse:        paste.OneUse,
 		Title:         paste.Title,
-		Body:          template.HTML(bodyHighlight),
+		Body:          tryHighlight(paste.Body, paste.Syntax),
 
 		ErrorNotFound: errorNotFound,
 	}

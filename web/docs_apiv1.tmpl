@@ -61,15 +61,14 @@
 	</tr>
 </table>
 <p>Response example:</p>
-<pre><code>{
-    "id": "XcmX9ON1",
-    "title": "Paste title.",
-    "body": "Line 1.\nLine 2.\nLine 3.\n\nLine 5.",
-    "createTime": 1653387358,
-    "deleteTime": 0,
-    "oneUse": false
-}
-</code></pre>
+{{ call . `{
+	"id": "XcmX9ON1",
+	"title": "Paste title.",
+	"body": "Line 1.\nLine 2.\nLine 3.\n\nLine 5.",
+	"createTime": 1653387358,
+	"deleteTime": 0,
+	"oneUse": false
+}` `json`}}
 
 
 <h4 id="get">GET <code>/api/v1/get</code></h4>
@@ -96,90 +95,82 @@
 	</tr>
 </table>
 <p>Response example:</p>
-<pre><code>{
-    "id": "XcmX9ON1",
-    "title": "Paste title.",
-    "body": "Line 1.\nLine 2.\nLine 3.\n\nLine 5.",
-    "createTime": 1653387358,
-    "deleteTime": 0,
-    "oneUse": false,
-    "syntax": "plaintext"
-}
-</code></pre>
-<pre><code>{
-    "id": "5mqqHZRg",
-    "title": "",
-    "body": "",
-    "createTime": 0,
-    "deleteTime": 0,
-    "oneUse": true,
-    "syntax": ""
-}
-</code></pre>
+{{ call . `{
+	"id": "XcmX9ON1",
+	"title": "Paste title.",
+	"body": "Line 1.\nLine 2.\nLine 3.\n\nLine 5.",
+	"createTime": 1653387358,
+	"deleteTime": 0,
+	"oneUse": false,
+	"syntax": "plaintext"
+}` `json`}}
+{{ call . `{
+	"id": "5mqqHZRg",
+	"title": "",
+	"body": "",
+	"createTime": 0,
+	"deleteTime": 0,
+	"oneUse": true,
+	"syntax": ""
+}` `json`}}
 
 
 <h4 id="getServerInfo">GET <code>/api/v1/getServerInfo</code></h4>
 <p>Response example:</p>
-<pre><code>{
-  "version": "0.2-60-g3fcc9ce",
-  "titleMaxlength": 100,
-  "bodyMaxlength": 10000,
-  "maxLifeTime": -1,
-  "serverAbout": "&ltp&gt1 2 3 4&lt/p&gt\n",
-  "serverRules": "",
-  "syntaxes": [
-    "ABAP",
-    "ABNF",
-    "AL",
-    "ANTLR",
-    "APL",
-    "ActionScript",
-    "ActionScript 3",
-    "Ada",
-    "Angular2",
-    "ApacheConf",
-    "AppleScript",
-    "Arduino",
-    "ArmAsm",
-    "Awk"
-  ]
-}
-</code></pre>
+{{ call . `{
+	"version": "0.2-60-g3fcc9ce",
+	"titleMaxlength": 100,
+	"bodyMaxlength": 10000,
+	"maxLifeTime": -1,
+	"serverAbout": "<p>1 2 3 4</p>\n",
+	"serverRules": "",
+	"syntaxes": [
+		"ABAP",
+		"ABNF",
+		"AL",
+		"ANTLR",
+		"APL",
+		"ActionScript",
+		"ActionScript 3",
+		"Ada",
+		"Angular2",
+		"ApacheConf",
+		"AppleScript",
+		"Arduino",
+		"ArmAsm",
+		"Awk"
+	]
+}` `json`}}
 
 
 <h4 id="errors">Possible API Errors</h4>
 <p>This API method exists on the server, but you passed the wrong arguments for it.</p>
-<pre><code>{
-    "code": 400,
-    "error": "Bad Request"
-}
-</code></pre>
+{{ call . `{
+	"code": 400,
+	"error": "Bad Request"
+}` `json`}}
 
 <p>There is no paste with this ID.</p>
-<pre><code>{
-    "code": 404,
-    "error": "Could not find ID"
-}
-</code></pre>
+{{ call . `{
+	"code": 404,
+	"error": "Could not find ID"
+}` `json`}}
 
 <p>There is no such API method.</p>
-<pre><code>{
-    "code": 404,
-    "error": "Not Found"
-}
-</code></pre>
+{{ call . `{
+	"code": 404,
+	"error": "Not Found"
+}` `json`}}
 
 <p>You made a mistake with HTTP request (example: you made POST instead of GET).</p>
-<pre><code>{
-    "code": 405,
-    "error": "Method Not Allowed"
-}
-</code></pre>
+{{ call . `{
+	"code": 405,
+	"error": "Method Not Allowed"
+}` `json`}}
 
 <p>There was a failure on the server. Contact your server administrator to find out what the problem is.</p>
-<pre><code>{
-    "code": 500,
-    "error": "Internal Server Error"
-}
-</code></pre>
+{{ call . `{
+	"code": 500,
+	"error": "Internal Server Error"
+}` `json`}}
 {{end}}

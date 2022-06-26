@@ -80,9 +80,6 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Highlight body
-	bodyHighlight := tryHighlight(paste.Body, paste.Syntax)
-
 	// Prepare template data
 	createTime := time.Unix(paste.CreateTime, 0).UTC()
 	deleteTime := time.Unix(paste.DeleteTime, 0).UTC()
@@ -90,7 +87,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	tmplData := pasteTmpl{
 		ID:         paste.ID,
 		Title:      paste.Title,
-		Body:       template.HTML(bodyHighlight),
+		Body:       tryHighlight(paste.Body, paste.Syntax),
 		Syntax:     paste.Syntax,
 		CreateTime: paste.CreateTime,
 		DeleteTime: paste.DeleteTime,

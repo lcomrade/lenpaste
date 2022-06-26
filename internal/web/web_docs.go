@@ -35,7 +35,7 @@ func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/html")
-	data.DocsApiV1.Execute(rw, "")
+	data.DocsApiV1.Execute(rw, tryHighlight)
 }
 
 // Pattern: /docs/api_libs
