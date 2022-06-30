@@ -86,4 +86,4 @@ fi
 
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
-$RUN_CMD
+sh -c "$RUN_CMD"
