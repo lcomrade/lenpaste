@@ -27,7 +27,7 @@ import (
 	"time"
 )
 
-func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (storage.Paste, error) {
+func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, error) {
 	// Read form
 	paste := storage.Paste{
 		Title:      form.Get("title"),
@@ -43,16 +43,16 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 
 	// Check title
 	if len(paste.Title) > titleMaxLen && titleMaxLen >= 0 {
-		return paste, ErrBadRequest
+		return "", ErrBadRequest
 	}
 
 	// Check paste body
 	if paste.Body == "" {
-		return paste, ErrBadRequest
+		return "", ErrBadRequest
 	}
 
 	if len(paste.Body) > bodyMaxLen && bodyMaxLen > 0 {
-		return paste, ErrBadRequest
+		return "", ErrBadRequest
 	}
 
 	// Change paste body lines end
@@ -67,7 +67,7 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 		paste.Body = lineend.UnknownToOldMac(paste.Body)
 
 	default:
-		return paste, ErrBadRequest
+		return "", ErrBadRequest
 	}
 
 	// Check syntax
@@ -80,7 +80,7 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	if syntaxOk == false {
-		return paste, ErrBadRequest
+		return "", ErrBadRequest
 	}
 
 	// Get delete time
@@ -89,12 +89,12 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 		// Convert string to int
 		expir, err := strconv.ParseInt(expirStr, 10, 64)
 		if err != nil {
-			return paste, ErrBadRequest
+			return "", ErrBadRequest
 		}
 
 		// Check limits
 		if expir > maxLifeTime && maxLifeTime > 0 {
-			return paste, ErrBadRequest
+			return "", ErrBadRequest
 		}
 
 		// Save if ok
@@ -109,10 +109,10 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	// Create paste
-	paste, err := db.PasteAdd(paste)
+	pasteID, err := db.PasteAdd(paste)
 	if err != nil {
-		return paste, err
+		return pasteID, err
 	}
 
-	return paste, nil
+	return pasteID, nil
 }

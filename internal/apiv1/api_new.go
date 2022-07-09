@@ -24,6 +24,10 @@ import (
 	"net/http"
 )
 
+type newPasteAnswer struct {
+	ID string `json:"id"`
+}
+
 // POST /api/v1/new
 func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	// Check method
@@ -35,7 +39,7 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	// Get form data and create paste
 	req.ParseForm()
 
-	paste, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+	pasteID, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 	if err != nil {
 		if err == netshare.ErrBadRequest {
 			data.writeError(rw, req, netshare.ErrBadRequest)
@@ -49,7 +53,7 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	// Return response
 	rw.Header().Set("Content-Type", "application/json")
 
-	err = json.NewEncoder(rw).Encode(paste)
+	err = json.NewEncoder(rw).Encode(newPasteAnswer{ID: pasteID})
 	if err != nil {
 		data.Log.HttpError(req, err)
 		return

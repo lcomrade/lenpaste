@@ -31,21 +31,20 @@ type Paste struct {
 	DeleteTime int64  `json:"deleteTime"`
 	OneUse     bool   `json:"oneUse"`
 	Syntax     string `json:"syntax"`
-	//Password string `json:"password"`
 }
 
-func (dbInfo DB) PasteAdd(paste Paste) (Paste, error) {
+func (dbInfo DB) PasteAdd(paste Paste) (string, error) {
 	// Open DB
 	db, err := dbInfo.openDB()
 	if err != nil {
-		return paste, err
+		return paste.ID, err
 	}
 	defer db.Close()
 
 	// Generate ID
 	paste.ID, err = genTokenCrypto(8)
 	if err != nil {
-		return paste, err
+		return paste.ID, err
 	}
 
 	// Set paste create time
@@ -62,10 +61,10 @@ func (dbInfo DB) PasteAdd(paste Paste) (Paste, error) {
 		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse,
 	)
 	if err != nil {
-		return paste, err
+		return paste.ID, err
 	}
 
-	return paste, nil
+	return paste.ID, nil
 }
 
 func (dbInfo DB) PasteDelete(id string) error {
