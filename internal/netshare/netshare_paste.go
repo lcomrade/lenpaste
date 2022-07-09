@@ -93,8 +93,10 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 		}
 
 		// Check limits
-		if expir > maxLifeTime && maxLifeTime > 0 {
-			return "", ErrBadRequest
+		if maxLifeTime > 0 {
+			if expir > maxLifeTime || expir <= 0 {
+				return "", ErrBadRequest
+			}
 		}
 
 		// Save if ok

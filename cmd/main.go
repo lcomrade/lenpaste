@@ -86,7 +86,7 @@ func printHelp(noErrors bool) {
 	println("  -robots-disallow    Prohibits search engine crawlers from indexing site using robots.txt file.")
 	println("  -title-max-length   Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
 	println("  -body-max-length    Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
-	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 2d, 12h, 7m. (default: never)")
+	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 12h, 7m, 10s. (default: never)")
 	println("  -server-about       Path to the HTML file that contains the server description.")
 	println("  -server-rules       Path to the HTML file that contains the server rules.")
 	println("  -admin-name         Name of the administrator of this server")
