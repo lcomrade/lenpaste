@@ -27,6 +27,9 @@ import (
 
 // GET /api/v1/get
 func (data Data) GetHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
 	// Check method
 	if req.Method != "GET" {
 		data.writeError(rw, req, netshare.ErrMethodNotAllowed)

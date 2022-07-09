@@ -30,6 +30,9 @@ type newPasteAnswer struct {
 
 // POST /api/v1/new
 func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
 	// Check method
 	if req.Method != "POST" {
 		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
