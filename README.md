@@ -38,7 +38,7 @@ version: "2"
 
 services:
   lenpaste:
-    image: lcomrade/lenpaste:latest
+    image: git.lcomrade.su/root/lenpaste:latest
     restart: always
     environment:
       # All parameters are optional
