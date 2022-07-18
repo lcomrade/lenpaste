@@ -1,3 +1,9 @@
+> ## Repository archiving
+> This repository has been permanently moved to my own Git server.
+> Stay tuned for updates here: https://git.lcomrade.su/root/lenpaste
+>
+> Read about the reason for this action here: https://github.com/lcomrade/lcomrade#give-up-github
+
 **Lenpaste** is a web service that allows you to share notes anonymously, an alternative to `pastebin.com`.
 
 
