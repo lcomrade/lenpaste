@@ -85,4 +85,4 @@ You can find the result of the build in the `./dist/` directory.
 
 
 ## Bugs and Suggestion
-If you find a bug or have a suggestion, create an Issue [here](https://git.lcomrade.su/root/lenpaste/issues).
+If you find a bug or have a suggestion, email me at root@lcomrade.su.
