@@ -11,7 +11,7 @@ all:
 	mkdir -p ./dist/bin/
 	mkdir -p ./dist/share/$(NAME)
 
-	go build -ldflags="$(LDFLAGS)" -o ./dist/bin/$(NAME) $(MAIN_GO)
+	go build -trimpath -ldflags="$(LDFLAGS)" -o ./dist/bin/$(NAME) $(MAIN_GO)
 	chmod +x ./dist/bin/$(NAME)
 
 	cp -r ./web ./dist/share/$(NAME)

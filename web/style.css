@@ -9,24 +9,7 @@ body {
 	font-family: sans-serif;
 	font-size: 16px;
 	color: #FFFFFF;
-}
-
-@media all and (max-device-width: 1280px) {
-	body {
-		width: 60%;
-	}
-}
-
-@media all and (max-device-width: 1024px) {
-	body {
-		width: 70%;
-	}
-}
-
-@media all and (max-device-width: 768px) {
-	body {
-		width: 85%;
-	}
+	width: 70%;
 }
 
 @media all and (max-device-width: 480px), all and (orientation: portrait) {
