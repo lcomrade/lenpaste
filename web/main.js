@@ -2,7 +2,7 @@
 // Although you will lose secondary functionality such as line numbers when you create a new paste.
 // Therefore, if you are concerned about privacy, you can disable JavaScript in your browser.
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
 	var editor = document.getElementById("editor");
 
 	editor.addEventListener("keydown", (e) => {
@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	#editorLines {
 		display: flex;
+		user-select: none;
 
 		text-align: right;
 		position: absolute;
@@ -73,4 +74,21 @@ document.addEventListener("DOMContentLoaded", function() {
 			lineCountCache = lineCount;
 		}
 	});
+
+	// Add symbol counter
+	document.getElementById("symbolCounterContainer").innerHTML = "<span id='symbolCounter' class='text-grey'></span>";
+	var symbolCounter = document.getElementById("symbolCounter");
+
+	function updateSymbolCounter() {
+		symbolCounter.textContent = editor.value.length;
+		
+		if (editor.maxLength !== -1) {
+			symbolCounter.textContent = symbolCounter.textContent + "/" + editor.maxLength;
+		} else {
+			symbolCounter.textContent = symbolCounter.textContent + "/unlimited";
+		}
+	}
+
+	editor.addEventListener("input", updateSymbolCounter);
+	updateSymbolCounter();
 });
