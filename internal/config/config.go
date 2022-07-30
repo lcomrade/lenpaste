@@ -38,4 +38,6 @@ type Config struct {
 
 	AdminName string
 	AdminMail string
+
+	RobotsDisallow bool
 }

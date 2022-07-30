@@ -34,7 +34,6 @@ type Data struct {
 	Lexers *[]string
 
 	StyleCSS       *[]byte
-	RobotsTxt      *[]byte
 	ErrorPage      *template.Template
 	Main           *template.Template
 	MainJS         *[]byte
@@ -62,9 +61,11 @@ type Data struct {
 
 	AdminName *string
 	AdminMail *string
+
+	RobotsDisallow *bool
 }
 
-func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
+func Load(cfg config.Config, webDir string) (Data, error) {
 	var data Data
 	var err error
 
@@ -84,7 +85,7 @@ func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
 	data.AdminName = &cfg.AdminName
 	data.AdminMail = &cfg.AdminMail
 
-	data.RobotsTxt = &robotsTxt
+	data.RobotsDisallow = &cfg.RobotsDisallow
 
 	// Get Chroma lexers
 	lexers := chromaLexers.Names(false)

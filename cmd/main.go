@@ -177,13 +177,6 @@ func main() {
 		printFlagNotSet("-db-source")
 	}
 
-	// -robots-disallow flag
-	robotsTxt := "User-agent: *\nAllow: /\n"
-
-	if *flagRobotsDisallow == true {
-		robotsTxt = "User-agent: *\nDisallow: /\n"
-	}
-
 	// -body-max-length flag
 	if *flagBodyMaxLen == 0 {
 		println("-body-max-length flag cannot be 0")
@@ -236,16 +229,17 @@ func main() {
 	}
 
 	cfg := config.Config{
-		DB:          db,
-		Log:         log,
-		Version:     Version,
-		TitleMaxLen: *flagTitleMaxLen,
-		BodyMaxLen:  *flagBodyMaxLen,
-		MaxLifeTime: maxLifeTime,
-		ServerAbout: serverAbout,
-		ServerRules: serverRules,
-		AdminName:   *flagAdminName,
-		AdminMail:   *flagAdminMail,
+		DB:             db,
+		Log:            log,
+		Version:        Version,
+		TitleMaxLen:    *flagTitleMaxLen,
+		BodyMaxLen:     *flagBodyMaxLen,
+		MaxLifeTime:    maxLifeTime,
+		ServerAbout:    serverAbout,
+		ServerRules:    serverRules,
+		AdminName:      *flagAdminName,
+		AdminMail:      *flagAdminMail,
+		RobotsDisallow: *flagRobotsDisallow,
 	}
 
 	apiv1Data := apiv1.Load(cfg)
@@ -259,7 +253,7 @@ func main() {
 	}
 
 	// Load pages
-	webData, err := web.Load(cfg, *flagWebDir, []byte(robotsTxt))
+	webData, err := web.Load(cfg, *flagWebDir)
 	if err != nil {
 		exitOnError(err)
 	}
@@ -268,6 +262,12 @@ func main() {
 	http.HandleFunc("/robots.txt", func(rw http.ResponseWriter, req *http.Request) {
 		webData.RobotsTxtHand(rw, req)
 	})
+	if *flagRobotsDisallow == false {
+		http.HandleFunc("/sitemap.xml", func(rw http.ResponseWriter, req *http.Request) {
+			webData.SitemapHand(rw, req)
+		})
+	}
+
 	http.HandleFunc("/style.css", func(rw http.ResponseWriter, req *http.Request) {
 		webData.StyleCSSHand(rw, req)
 	})
