@@ -1,4 +1,5 @@
 {{define "titlePrefix"}}About | {{end}}
+{{define "headAppend"}}{{end}}
 {{define "article"}}
 {{if ne .ServerAbout ``}}
 <h3>About this server</h3>
@@ -37,7 +38,8 @@ There is no limit to the size of the paste body.</p>
 <ul>
 	<li>Lenpaste is open source software. All <a href="/about/source_code">source code</a> is available under the <a href="/about/license">AGPL 3</a> license.</li>
 	<li>You don't need to register here.</li>
-	<li>This site does not use Java Script. Your privacy is respected here.</li>
+	<li>This site does not use cookies. Your privacy is respected here.</li>
+	<li>Can work without JavaScript.</li>
 	<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
 </ul>
 {{end}}

@@ -1,4 +1,5 @@
 {{define "titlePrefix"}}Embedded {{.ID}} | {{end}}
+{{define "headAppend"}}{{end}}
 {{define "article"}}
 <h3><a href="/{{.ID}}">{{.ID}}</a> / Embedded</h3>
 {{if or (.OneUse) (ne .DeleteTime 0)}}

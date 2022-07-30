@@ -1,4 +1,5 @@
 {{define "titlePrefix"}}{{end}}
+{{define "headAppend"}}<script src="/main.js"></script>{{end}}
 {{define "article"}}
 {{if ne .TitleMaxLen 0}}<h3>Create paste</h3>{{end}}
 <form action="/" method="post">
@@ -22,6 +23,7 @@
 		</div>
 	</div>
 	<div><textarea
+		id="editor"
 		name="body" placeholder="Enter text..." {{if gt .BodyMaxLen 0}}maxlength="{{.BodyMaxLen}}"{{end}}
 		autocomplete="off" autocorrect="off" spellcheck="true"
 		rows=20  wrap="off" tabindex=3 required

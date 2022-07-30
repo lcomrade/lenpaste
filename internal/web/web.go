@@ -37,6 +37,7 @@ type Data struct {
 	RobotsTxt      *[]byte
 	ErrorPage      *template.Template
 	Main           *template.Template
+	MainJS         *[]byte
 	PastePage      *template.Template
 	PasteContinue  *template.Template
 	About          *template.Template
@@ -104,6 +105,13 @@ func Load(cfg config.Config, webDir string, robotsTxt []byte) (Data, error) {
 	if err != nil {
 		return data, err
 	}
+
+	// main.js
+	mainJS, err := readFile(filepath.Join(webDir, "main.js"))
+	if err != nil {
+		return data, err
+	}
+	data.MainJS = &mainJS
 
 	// paste.tmpl
 	data.PastePage, err = template.ParseFiles(

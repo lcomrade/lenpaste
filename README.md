@@ -3,7 +3,8 @@
 
 ## Features
 - No need to register
-- Does not use Java Script or cookies
+- Does not use cookies
+- Can work without JavaScript
 - Has its own API
 - Open source and self-hosted
 
