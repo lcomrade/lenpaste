@@ -93,8 +93,8 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,
 
-		CreateTimeStr: createTime.Format("15:04 02.01.2006 UTC"),
-		DeleteTimeStr: deleteTime.Format("15:04 02.01.2006 UTC"),
+		CreateTimeStr: createTime.Format("Mon, 02 Jan 2006 15:04:05 -0700"),
+		DeleteTimeStr: deleteTime.Format("Mon, 02 Jan 2006 15:04:05 -0700"),
 	}
 
 	// Get body line end
