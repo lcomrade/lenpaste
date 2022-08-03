@@ -69,6 +69,7 @@ PS: If you want to install updates, run: `docker-compose pull && docker-compose 
 
 Read more:
 - [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
+- [Database: PostgreSQL](docs/db_postgresql.md)
 
 
 ## Build from source code
