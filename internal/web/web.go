@@ -38,6 +38,7 @@ type Data struct {
 	Main           *template.Template
 	MainJS         *[]byte
 	PastePage      *template.Template
+	PasteJS        *[]byte
 	PasteContinue  *template.Template
 	About          *template.Template
 	License        *template.Template
@@ -122,6 +123,13 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	if err != nil {
 		return data, err
 	}
+
+	// paste.js
+	pasteJS, err := readFile(filepath.Join(webDir, "paste.js"))
+	if err != nil {
+		return data, err
+	}
+	data.PasteJS = &pasteJS
 
 	// paste_continue.tmpl
 	data.PasteContinue, err = template.ParseFiles(

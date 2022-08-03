@@ -1,5 +1,5 @@
 {{define "titlePrefix"}}{{if .Title}}{{.Title}}{{else}}{{.ID}}{{end}} | {{end}}
-{{define "headAppend"}}{{end}}
+{{define "headAppend"}}<script src="/paste.js"></script>{{end}}
 {{define "article"}}
 {{if .Title}}<input class="stretch-width" value="{{.Title}}" tabindex=1 readonly>
 {{end}}
@@ -16,14 +16,14 @@
 
 {{.Body}}
 
-<p>Created: {{.CreateTimeStr}}</p>
+<p>Created: <span id="createTime">{{.CreateTimeStr}}</span></p>
 
 {{if .OneUse}}
 <p>Expires: <span class="text-red">Now</span></p>
 {{else if eq .DeleteTime 0}}
 <p>Expires: Never</p>
 {{else}}
-<p>Expires: {{.DeleteTimeStr}}</p>
+<p>Expires: <span id="deleteTime">{{.DeleteTimeStr}}</span></p>
 {{end}}
 
 {{end}}

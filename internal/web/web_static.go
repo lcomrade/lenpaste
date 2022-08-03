@@ -35,3 +35,10 @@ func (data Data) MainJSHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "application/javascript")
 	rw.Write(*data.MainJS)
 }
+
+func (data Data) PasteJSHand(rw http.ResponseWriter, req *http.Request) {
+	data.Log.HttpRequest(req)
+
+	rw.Header().Set("Content-Type", "application/javascript")
+	rw.Write(*data.PasteJS)
+}
