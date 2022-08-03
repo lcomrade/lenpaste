@@ -1,14 +1,14 @@
 {{define "titlePrefix"}}{{end}}
 {{define "headAppend"}}<script src="/main.js"></script>{{end}}
 {{define "article"}}
-{{if ne .TitleMaxLen 0}}<h3>Create paste</h3>{{end}}
+{{if ne .TitleMaxLen 0}}<h3>{{ call .Translate `Create paste` }}</h3>{{end}}
 <form action="/" method="post">
 	<div class="text-bar">
 		<div>
 			{{if ne .TitleMaxLen 0}}<input
 				class="stretch-width" name="title" {{if gt .TitleMaxLen 0}}maxlength="{{.TitleMaxLen}}"{{end}}
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="Enter title..." tabindex=1 autofocus
+				placeholder="{{ call .Translate `Enter title...` }}" tabindex=1 autofocus
 			>
 			{{else}}
 			<h3>Create paste</h3>
@@ -24,13 +24,13 @@
 	</div>
 	<div><textarea
 		id="editor"
-		name="body" placeholder="Enter text..." {{if gt .BodyMaxLen 0}}maxlength="{{.BodyMaxLen}}"{{end}}
+		name="body" placeholder="{{ call .Translate `Enter text...` }}" {{if gt .BodyMaxLen 0}}maxlength="{{.BodyMaxLen}}"{{end}}
 		autocomplete="off" autocorrect="off" spellcheck="true"
 		rows=20  wrap="off" tabindex=3 required
 	></textarea></div>
 	<div class="text-bar">
 		<div>
-			<label for="syntax">Syntax:</label
+			<label for="syntax">{{ call .Translate `Syntax:` }}</label
 			><select name="syntax" tabindex=4 size=1>
 				{{range .Lexers}}
 				<option value="{{.}}"{{if eq . "plaintext"}} selected="true"{{end}}>{{.}}</option>
@@ -38,14 +38,14 @@
 			</select>		
 		</div>
 		<div id="symbolCounterContainer" class="text-bar-right" style="align-self: flex-start;">
-			{{if gt .BodyMaxLen 0}}<span class="text-grey">*Maximum {{.BodyMaxLen}} symbols</span>{{end}}
+			{{if gt .BodyMaxLen 0}}<span class="text-grey">{{ call .Translate `*Maximum` }} {{.BodyMaxLen}} {{ call .Translate `symbols` }}</span>{{end}}
 		</div>
 	</div>
 	<div>
-		<label class="checkbox"><input type="checkbox" name="oneUse" value="true" tabindex=5></input>Burn after reading</label>
+		<label class="checkbox"><input type="checkbox" name="oneUse" value="true" tabindex=5></input>{{ call .Translate `Burn after reading` }}</label>
 	</div>
 	<div>
-		<label for="expiration">Expiration:</label
+		<label for="expiration">{{ call .Translate `Expiration:` }}</label
 		><select name="expiration" tabindex=6 size=1>
 			{{if lt .MaxLifeTime 0                                }}<option value="0">Never</option>{{end}}
 			{{if or (ge .MaxLifeTime 600)      (lt .MaxLifeTime 0)}}<option value="600">10 minutes</option>{{end}}
@@ -63,6 +63,6 @@
 			{{if or (ge .MaxLifeTime 31557600) (lt .MaxLifeTime 0)}}<option value="31557600">1 Year</option>{{end}}
 		</select>
 	</div>
-	<div><button class="button-green" type="submit" tabindex=7>Create paste</button></div>
+	<div><button class="button-green" type="submit" tabindex=7>{{ call .Translate `Create paste` }}</button></div>
 </form>
 {{end}}

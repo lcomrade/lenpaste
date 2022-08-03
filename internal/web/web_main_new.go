@@ -28,6 +28,7 @@ type createTmpl struct {
 	BodyMaxLen  int
 	MaxLifeTime int64
 	Lexers      []string
+	Translate   func(string) string
 }
 
 func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
@@ -58,6 +59,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		BodyMaxLen:  *data.BodyMaxLen,
 		MaxLifeTime: *data.MaxLifeTime,
 		Lexers:      *data.Lexers,
+		Translate:   data.Locales.findLocale(req).translate,
 	}
 
 	rw.Header().Set("Content-Type", "text/html")

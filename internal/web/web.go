@@ -31,7 +31,8 @@ type Data struct {
 	DB  storage.DB
 	Log logger.Config
 
-	Lexers *[]string
+	Lexers  *[]string
+	Locales *Locales
 
 	StyleCSS       *[]byte
 	ErrorPage      *template.Template
@@ -91,6 +92,13 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	// Get Chroma lexers
 	lexers := chromaLexers.Names(false)
 	data.Lexers = &lexers
+
+	// Load locales
+	locales, err := loadLocales(filepath.Join(webDir, "locale"))
+	if err != nil {
+		return data, err
+	}
+	data.Locales = &locales
 
 	// style.css file
 	styleCSS, err := readFile(filepath.Join(webDir, "style.css"))

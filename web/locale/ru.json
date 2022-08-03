@@ -1,0 +1,12 @@
+{
+	"translate": {
+		"Create paste": "Новый отрывок",
+		"Enter title...": "Введите название...",
+		"Enter text...": "Введите текст...",
+		"Syntax:": "Синтаксис:",
+		"Expiration:": "Срок хранения:",
+		"Burn after reading": "Удалить после прочтения",
+		"*Maximum": "*Максимум",
+		"symbols": "символов"
+	}
+}
