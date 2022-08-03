@@ -21,6 +21,7 @@ package storage
 import (
 	"database/sql"
 	"errors"
+	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -48,14 +49,14 @@ func (dbInfo DB) InitDB() error {
 
 	// Create tables
 	_, err = db.Exec(`
-		CREATE TABLE IF NOT EXISTS "pastes" (
-			"id" TEXT PRIMARY KEY,
-			"title" TEXT NOT NULL,
-			"body" TEXT NOT NULL,
-			"syntax" TEXT NOT NULL,
-			"create_time" INTEGER NOT NULL,
-			"delete_time" INTEGER NOT NULL,
-			"one_use" BOOL NOT NULL
+		CREATE TABLE IF NOT EXISTS pastes (
+			id          TEXT    PRIMARY KEY,
+			title       TEXT    NOT NULL,
+			body        TEXT    NOT NULL,
+			syntax      TEXT    NOT NULL,
+			create_time INTEGER NOT NULL,
+			delete_time INTEGER NOT NULL,
+			one_use     BOOL    NOT NULL
 		);
 	`)
 	if err != nil {

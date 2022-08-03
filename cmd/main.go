@@ -80,7 +80,7 @@ func printHelp(noErrors bool) {
 	println("")
 	println("  -addres             ADDRES:PORT (default: :80)")
 	println("  -web-dir            Dir with page templates and static content")
-	println("  -db-driver          Only 'sqlite3' is available yet (default: sqlite3)")
+	println("  -db-driver          Currently supported drivers: 'sqlite3' and 'postgres' (default: sqlite3)")
 	println("  -db-source          DB source")
 	println("  -db-cleanup-period  Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
 	println("  -robots-disallow    Prohibits search engine crawlers from indexing site using robots.txt file.")

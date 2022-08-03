@@ -57,7 +57,7 @@ func (dbInfo DB) PasteAdd(paste Paste) (string, error) {
 
 	// Add
 	_, err = db.Exec(
-		`INSERT INTO "pastes" ("id", "title", "body", "syntax", "create_time", "delete_time", "one_use") VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		`INSERT INTO pastes (id, title, body, syntax, create_time, delete_time, one_use) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
 		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse,
 	)
 	if err != nil {
@@ -77,7 +77,7 @@ func (dbInfo DB) PasteDelete(id string) error {
 
 	// Delete
 	result, err := db.Exec(
-		`DELETE FROM "pastes" WHERE id = ?`,
+		`DELETE FROM pastes WHERE id = $1`,
 		id,
 	)
 	if err != nil {
@@ -109,7 +109,7 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 
 	// Make query
 	row := db.QueryRow(
-		`SELECT "id", "title", "body", "syntax", "create_time", "delete_time", "one_use" FROM "pastes" WHERE "id" = ?`,
+		`SELECT id, title, body, syntax, create_time, delete_time, one_use FROM pastes WHERE id = $1`,
 		id,
 	)
 
@@ -127,7 +127,7 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 	if paste.DeleteTime < time.Now().Unix() && paste.DeleteTime > 0 {
 		// Delete expired paste
 		_, err = db.Exec(
-			`DELETE FROM "pastes" WHERE id = ?`,
+			`DELETE FROM pastes WHERE id = $1`,
 			paste.ID,
 		)
 		if err != nil {
@@ -141,52 +141,6 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 	return paste, nil
 }
 
-func (dbInfo DB) PasteGetList() ([]Paste, error) {
-	var pastes []Paste
-
-	// Open DB
-	db, err := dbInfo.openDB()
-	if err != nil {
-		return pastes, err
-	}
-	defer db.Close()
-
-	// Delete expired paste
-	_, err = db.Exec(
-		`DELETE FROM "pastes" WHERE delete_time < ? AND delete_time > 0`,
-		time.Now().Unix(),
-	)
-	if err != nil {
-		return pastes, err
-	}
-
-	// Make query to get paste list
-	rows, err := db.Query(
-		`SELECT "id", "title", "body", "syntax", "create_time", "delete_time", "one_use" FROM "pastes"`,
-	)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return pastes, ErrNotFoundID
-		}
-
-		return pastes, err
-	}
-
-	// Read query
-	for rows.Next() {
-		var paste Paste
-
-		err = rows.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
-		if err != nil {
-			return pastes, err
-		}
-
-		pastes = append(pastes, paste)
-	}
-
-	return pastes, nil
-}
-
 func (dbInfo DB) PasteDeleteExpired() (int64, error) {
 	// Open DB
 	db, err := dbInfo.openDB()
@@ -197,7 +151,7 @@ func (dbInfo DB) PasteDeleteExpired() (int64, error) {
 
 	// Delete
 	result, err := db.Exec(
-		`DELETE FROM "pastes" WHERE delete_time < ? AND delete_time > 0`,
+		`DELETE FROM pastes WHERE (delete_time < $1) AND (delete_time > 0)`,
 		time.Now().Unix(),
 	)
 	if err != nil {
