@@ -31,6 +31,8 @@ type embHelpTmpl struct {
 
 	Protocol string
 	Host     string
+
+	Translate func(string) string
 }
 
 // Pattern: /emb_help/
@@ -61,6 +63,7 @@ func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 		OneUse:     paste.OneUse,
 		Protocol:   netshare.GetProtocol(req.Header),
 		Host:       netshare.GetHost(req),
+		Translate:  data.Locales.findLocale(req).translate,
 	}
 
 	err = data.EmbeddedHelpPage.Execute(rw, tmplData)

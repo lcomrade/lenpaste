@@ -33,6 +33,12 @@ type aboutTmpl struct {
 
 	AdminName string
 	AdminMail string
+
+	Translate func(string) string
+}
+
+type aboutMinTmp struct {
+	Translate func(string) string
 }
 
 // Pattern: /about
@@ -49,6 +55,7 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		ServerRules: template.HTML(*data.ServerRules),
 		AdminName:   *data.AdminName,
 		AdminMail:   *data.AdminMail,
+		Translate:   data.Locales.findLocale(req).translate,
 	}
 
 	// Show page
@@ -68,7 +75,7 @@ func (data Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
 	// Show page
 	rw.Header().Set("Content-Type", "text/html")
 
-	err := data.License.Execute(rw, "")
+	err := data.License.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
 		data.errorInternal(rw, req, err)
 	}
@@ -82,7 +89,7 @@ func (data Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) {
 	// Show page
 	rw.Header().Set("Content-Type", "text/html")
 
-	err := data.SourceCodePage.Execute(rw, "")
+	err := data.SourceCodePage.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
 		data.errorInternal(rw, req, err)
 	}

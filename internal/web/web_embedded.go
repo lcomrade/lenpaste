@@ -34,6 +34,7 @@ type embTmpl struct {
 	Body          template.HTML
 
 	ErrorNotFound bool
+	Translate     func(string) string
 }
 
 // Pattern: /emb/
@@ -70,6 +71,7 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 		Body:          tryHighlight(paste.Body, paste.Syntax),
 
 		ErrorNotFound: errorNotFound,
+		Translate:     data.Locales.findLocale(req).translate,
 	}
 
 	// Show paste

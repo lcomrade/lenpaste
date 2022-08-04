@@ -27,6 +27,7 @@ type errorTmpl struct {
 	Error     string
 	AdminName string
 	AdminMail string
+	Translate func(string) string
 }
 
 func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
@@ -40,6 +41,7 @@ func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
 		Code:      400,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,
+		Translate: data.Locales.findLocale(req).translate,
 	}
 
 	e := data.ErrorPage.Execute(rw, errData)
@@ -59,6 +61,7 @@ func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
 		Code:      404,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,
+		Translate: data.Locales.findLocale(req).translate,
 	}
 
 	e := data.ErrorPage.Execute(rw, errData)
@@ -81,6 +84,7 @@ func (data Data) errorInternal(rw http.ResponseWriter, req *http.Request, err er
 		Code:      500,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,
+		Translate: data.Locales.findLocale(req).translate,
 	}
 
 	e := data.ErrorPage.Execute(rw, errData)

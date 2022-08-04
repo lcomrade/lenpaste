@@ -1,7 +1,7 @@
-{{define "titlePrefix"}}License | {{end}}
+{{define "titlePrefix"}}{{ call .Translate `License`}} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3><a href="/about">About</a> / License</h3>
+<h3><a href="/about">{{ call .Translate `About` }}</a> / {{ call .Translate `License` }}</h3>
 
 <h3 style="text-align: center;">GNU AFFERO GENERAL PUBLIC LICENSE</h3>
 <p style="text-align: center;">Version 3, 19 November 2007</p>

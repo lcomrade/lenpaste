@@ -1,45 +1,45 @@
-{{define "titlePrefix"}}About | {{end}}
+{{define "titlePrefix"}}{{ call .Translate `About` }} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
 {{if ne .ServerAbout ``}}
-<h3>About this server</h3>
+<h3>{{ call .Translate `About this server` }}</h3>
 {{.ServerAbout}}
 {{end}}
 
 {{if ne .ServerRules ``}}
-<h3>This server rules</h3>
+<h3>{{ call .Translate `This server rules` }}</h3>
 {{.ServerRules}}
 {{end}}
 
-<h3>Limits</h3>
+<h3>{{ call .Translate `Limits` }}</h3>
 {{if ne .TitleMaxLen 0}}
 	{{if gt .TitleMaxLen 0}}
-	<p>Maximum length of the paste title: <code>{{.TitleMaxLen}}</code> symbols.<br/>
+	<p>{{ call .Translate `Maximum length of the paste title:` }} <code>{{.TitleMaxLen}}</code> {{ call .Translate `symbols` }}.<br/>
 	{{else}}
-	<p>There is no limit to the size of the paste body.</br>
+	<p>{{ call .Translate `There is no limit to the size of the paste title.` }}</br>
 	{{end}}
 {{else}}
-<p>Paste titles are disabled on this server.<br/>
+<p>{{ call .Translate `Paste titles are disabled on this server.` }}<br/>
 {{end}}
 {{if gt .BodyMaxLen 0}}
-Maximum length of the paste body: <code>{{.BodyMaxLen}}</code> symbols.</p>
+{{ call .Translate `Maximum length of the paste body:` }} <code>{{.BodyMaxLen}}</code> {{ call .Translate `symbols`}}.</p>
 {{else}}
-There is no limit to the size of the paste body.</p>
+{{ call .Translate `There is no limit to the size of the paste body.` }}</p>
 {{end}}
 
 {{if or (ne .AdminName ``) (ne .AdminMail ``)}}
-<h3>Contact the administrator</h3>
-{{if ne .AdminName ``}}<p>Name: <code>{{.AdminName}}</code></p>{{end}}
-{{if ne .AdminMail ``}}<p>Email: <a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a></p>{{end}}
+<h3>{{ call .Translate `Contact the administrator` }}</h3>
+{{if ne .AdminName ``}}<p>{{ call .Translate `Name:` }} <code>{{.AdminName}}</code></p>{{end}}
+{{if ne .AdminMail ``}}<p>{{ call .Translate `Email:` }} <a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a></p>{{end}}
 {{end}}
 
-<h3>What is Lenpaste?</h3>
-<p>This server uses Lenpaste version <code>{{.Version}}</code>. A little bit about it:</p>
+<h3>{{ call .Translate `What is Lenpaste?` }}</h3>
+<p>{{ call .Translate `This server uses Lenpaste version` }} <code>{{.Version}}</code>. {{ call .Translate `A little bit about it:` }}</p>
 <ul>
-	<li>Lenpaste is open source software. All <a href="/about/source_code">source code</a> is available under the <a href="/about/license">AGPL 3</a> license.</li>
-	<li>You don't need to register here.</li>
-	<li>This site does not use cookies. Your privacy is respected here.</li>
-	<li>Can work without JavaScript.</li>
-	<li>Lenpaste has its own <a href="/docs/apiv1">API</a>.</li>
+	<li>{{ call .Translate `Lenpaste is open source software. All` }} <a href="/about/source_code">{{ call .Translate `source code` }}</a> {{ call .Translate `is available under the` }} <a href="/about/license">AGPL 3</a> {{ call .Translate `license.` }}</li>
+	<li>{{ call .Translate `You don't need to register here.` }}</li>
+	<li>{{ call .Translate `This site does not use cookies to keep track of you.` }}</li>
+	<li>{{ call .Translate `Can work without JavaScript.` }}</li>
+	<li>{{ call .Translate `Lenpaste has its own` }} <a href="/docs/apiv1">API</a>.</li>
 </ul>
 {{end}}

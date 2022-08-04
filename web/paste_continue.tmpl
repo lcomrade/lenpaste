@@ -1,15 +1,15 @@
 {{define "titlePrefix"}}{{.ID}} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3>Continue?</h3>
-<p>This paste can only be viewed once. After you do this, it will be deleted. Continue?</p>
+<h3>{{ call .Translate `Continue?` }}</h3>
+<p>{{ call .Translate `This paste can only be viewed once. After you do this, it will be deleted. Continue?` }}</p>
 <div class="button-block-right">
 	<form action="/" method="get">
-		<button type="submit" tabindex=1>Cancel</button>
+		<button type="submit" tabindex=1>{{ call .Translate `Cancel` }}</button>
 	</form>
 	<form action="/{{.ID}}" method="post">
 		<input type="hidden" name="oneUseContinue" value="true"></input>
-		<button class="button-green" type="submit" tabindex=2>Continue</button>
+		<button class="button-green" type="submit" tabindex=2>{{ call .Translate `Continue` }}</button>
 	</form>
 </div>
 {{end}}

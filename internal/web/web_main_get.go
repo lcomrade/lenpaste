@@ -38,6 +38,12 @@ type pasteTmpl struct {
 	LineEnd       string
 	CreateTimeStr string
 	DeleteTimeStr string
+	Translate     func(string) string
+}
+
+type pasteContinueTmpl struct {
+	ID        string
+	Translate func(string) string
 }
 
 func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
@@ -63,7 +69,12 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		req.ParseForm()
 
 		if req.PostForm.Get("oneUseContinue") != "true" {
-			err = data.PasteContinue.Execute(rw, paste)
+			tmplData := pasteContinueTmpl{
+				ID:        paste.ID,
+				Translate: data.Locales.findLocale(req).translate,
+			}
+
+			err = data.PasteContinue.Execute(rw, tmplData)
 			if err != nil {
 				data.errorInternal(rw, req, err)
 				return
@@ -95,6 +106,8 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 
 		CreateTimeStr: createTime.Format("Mon, 02 Jan 2006 15:04:05 -0700"),
 		DeleteTimeStr: deleteTime.Format("Mon, 02 Jan 2006 15:04:05 -0700"),
+
+		Translate: data.Locales.findLocale(req).translate,
 	}
 
 	// Get body line end

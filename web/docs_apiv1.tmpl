@@ -62,7 +62,7 @@
 	</tr>
 </table>
 <p>Response example:</p>
-{{ call . `{
+{{ call .Highlight `{
 	"id": "XcmX9ON1"
 }` `json`}}
 
@@ -91,7 +91,7 @@
 	</tr>
 </table>
 <p>Response example:</p>
-{{ call . `{
+{{ call .Highlight `{
 	"id": "XcmX9ON1",
 	"title": "Paste title.",
 	"body": "Line 1.\nLine 2.\nLine 3.\n\nLine 5.",
@@ -100,7 +100,7 @@
 	"oneUse": false,
 	"syntax": "plaintext"
 }` `json`}}
-{{ call . `{
+{{ call .Highlight `{
 	"id": "5mqqHZRg",
 	"title": "",
 	"body": "",
@@ -113,7 +113,7 @@
 
 <h4 id="getServerInfo">GET <code>/api/v1/getServerInfo</code></h4>
 <p>Response example:</p>
-{{ call . `{
+{{ call .Highlight `{
 	"version": "0.2-60-g3fcc9ce",
 	"titleMaxlength": 100,
 	"bodyMaxlength": 10000,
@@ -143,31 +143,31 @@
 
 <h4 id="errors">Possible API Errors</h4>
 <p>This API method exists on the server, but you passed the wrong arguments for it.</p>
-{{ call . `{
+{{ call .Highlight `{
 	"code": 400,
 	"error": "Bad Request"
 }` `json`}}
 
 <p>There is no paste with this ID.</p>
-{{ call . `{
+{{ call .Highlight `{
 	"code": 404,
 	"error": "Could not find ID"
 }` `json`}}
 
 <p>There is no such API method.</p>
-{{ call . `{
+{{ call .Highlight `{
 	"code": 404,
 	"error": "Not Found"
 }` `json`}}
 
 <p>You made a mistake with HTTP request (example: you made POST instead of GET).</p>
-{{ call . `{
+{{ call .Highlight `{
 	"code": 405,
 	"error": "Method Not Allowed"
 }` `json`}}
 
 <p>There was a failure on the server. Contact your server administrator to find out what the problem is.</p>
-{{ call . `{
+{{ call .Highlight `{
 	"code": 500,
 	"error": "Internal Server Error"
 }` `json`}}

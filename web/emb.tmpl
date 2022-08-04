@@ -33,9 +33,13 @@
 			<div>{{if .Title}}<a href="/{{.ID}}" target="_blank">{{.Title}}</a>{{end}}</div>
 			<div class="header-right"><a href="/{{.ID}}" target="_blank">{{.CreateTimeStr}}</a></div>
 		</header>
-		{{if or (.OneUse) (ne .DeleteTime 0) (.ErrorNotFound)}}
+		{{if or (.ErrorNotFound) (.OneUse) (ne .DeleteTime 0)}}
 		<article>
-			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">Error:</span> Could not embedded this paste.</code></pre>
+			{{if .ErrorNotFound}}
+			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">{{ call .Translate `Error` }}:</span> 404 {{ call .Translate `Not Found` }}</code></pre>
+			{{else}}
+			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">{{ call .Translate `Error` }}:</span> {{ call .Translate `Could not embedded this paste` }}</code></pre>
+			{{end}}
 		</article>
 		{{else}}
 		<article>{{.Body}}</article>
