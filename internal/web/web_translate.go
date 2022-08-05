@@ -19,18 +19,16 @@
 package web
 
 import (
-	"encoding/json"
+	"bytes"
+	"errors"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
-type Locale struct {
-	Translate map[string]string `json:"translate"`
-}
-
+type Locale map[string]string
 type Locales map[string]*Locale
 
 func loadLocales(localeDir string) (Locales, error) {
@@ -49,23 +47,52 @@ func loadLocales(localeDir string) (Locales, error) {
 		}
 
 		fileName := fileInfo.Name()
-		if strings.HasSuffix(fileName, ".json") == false {
+		if strings.HasSuffix(fileName, ".locale") == false {
 			continue
 		}
 		localeCode := fileName[:len(fileName)-5]
 
 		// Read file
-		file, err := os.Open(filepath.Join(localeDir, fileName))
+		filePath := filepath.Join(localeDir, fileName)
+		fileByte, err := readFile(filePath)
 		if err != nil {
 			return locales, err
 		}
-		defer file.Close()
 
-		var locale Locale
-		err = json.NewDecoder(file).Decode(&locale)
-		if err != nil {
-			return locales, err
+		file := bytes.NewBuffer(fileByte).String()
+
+		// Load locale
+		locale := make(Locale)
+		for num, str := range strings.Split(file, "\n") {
+			if str == "" || strings.HasPrefix(str, "//") {
+				continue
+			}
+
+			key := ""
+			val := ""
+
+			afterEqual := false
+			for _, char := range []rune(str) {
+				if afterEqual == false {
+					if char == '=' {
+						afterEqual = true
+
+					} else {
+						key = key + string(char)
+					}
+
+				} else {
+					val = val + string(char)
+				}
+			}
+
+			if afterEqual == false {
+				return locales, errors.New("locale: error in line " + strconv.Itoa(num) + " in the file " + filePath)
+			}
+
+			locale[key] = val
 		}
+
 		locales[localeCode] = &locale
 	}
 
@@ -100,23 +127,28 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	// Search locale
 	for localeCode, locale := range locales {
 		for _, lang := range langs {
-			if lang == "en" {
-				return Locale{}
-			}
-
 			if localeCode == lang {
 				return *locale
 			}
 		}
 	}
 
-	return Locale{}
+	// Load default locale
+	locale, ok := locales["en"]
+	if ok != true {
+		// If en locale not found load first locale
+		for _, l := range locales {
+			return *l
+		}
+	}
+
+	return *locale
 }
 
 func (locale Locale) translate(s string) string {
-	for val, key := range locale.Translate {
-		if val == s {
-			return key
+	for key, val := range locale {
+		if key == s {
+			return val
 		}
 	}
 

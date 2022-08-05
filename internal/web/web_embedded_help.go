@@ -21,6 +21,7 @@ package web
 import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"html/template"
 	"net/http"
 )
 
@@ -33,6 +34,7 @@ type embHelpTmpl struct {
 	Host     string
 
 	Translate func(string) string
+	Highlight func(string, string) template.HTML
 }
 
 // Pattern: /emb_help/
@@ -64,6 +66,7 @@ func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 		Protocol:   netshare.GetProtocol(req.Header),
 		Host:       netshare.GetHost(req),
 		Translate:  data.Locales.findLocale(req).translate,
+		Highlight:  tryHighlight,
 	}
 
 	err = data.EmbeddedHelpPage.Execute(rw, tmplData)

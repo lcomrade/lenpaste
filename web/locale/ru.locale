@@ -1,0 +1,95 @@
+base.Lenpaste=ЛенОтрывок
+base.About=О сайте
+base.Docs=Документация
+
+error.Error=Ошибка
+error.BadRequest=Неверный запрос
+error.NotFound=Не найдено
+error.InternalServerError=Внутренняя ошибка сервера
+error.AdminContacts=Связаться с администратором
+error.BackToHome=Вернуться на главную
+
+main.CreatePaste=Новый отрывок
+main.EnterTitle=Введите заголовок...
+main.EnterText=Введите текст...
+main.Syntax=Синтаксис:
+main.MaximumSymbols=*Максимум %d символов
+main.BurnAfterReading=Удалить после прочтения
+main.Expiration=Срок хранения:
+main.Never=Неограничен
+main.10Minutes=10 минут
+main.30Minutes=30 минут
+main.1Hour=1 час
+main.2Hour=2 часа
+main.4Hour=4 часа
+main.12Hour=12 часов
+main.1Day=1 день
+main.1Week=1 неделя
+main.2Weeks=2 недели
+main.1Month=1 месяц
+main.2Months=2 месяца
+main.6Months=6 месяцев
+main.1Year=1 год
+main.Create=Создать
+
+paste.Raw=Исходник
+paste.Download=Скачать
+paste.Embedded=Встроить
+paste.Created=Дата создания:
+paste.Expires=Конец срока хранения:
+paste.Now=Сейчас
+paste.Never=Никогда
+
+pasteContinue.Continue=Продолжить?
+pasteContinue.Message=Этот отрывок можно просмотреть только один раз после чего он будет удалён. Продолжить?
+pasteContinue.Cancel=Отмена
+pasteContinue.Continue=Продолжить
+
+pasteEmbHelp.Title=Встроить
+pasteEmbHelp.OneUseError=Вы не можете встроить отрывок в другую страницу, если он предназначен для одноразового прочтения или имеет ограниченный срок хранения.
+pasteEmbHelp.Message=Добавьте следующий код на вашу страницу:
+
+pasteEmd.Error=Ошибка:
+pasteEmb.ErrorCouldNotEmb=Этот отрывок нельзя встроить в другие страницы
+pasteEmd.ErrorNotFound=404 Не найдено
+
+about.Title=О сайте
+about.AboutServerTitle=Об этом сервер
+about.RulesTitle=Правила этого сервера
+about.LimitTitle=Лимиты
+about.LimitTitle=Максимальная длина заголовка:
+about.LimitTitleNo=Длина заголовка не ограничена.
+about.LimitTitleDisable=На этом сервере нельзя задать заголовок для отрывка.
+about.LimitBody=Максимальная длина отрывка:
+about.LimitBodyNo=Длина отрывка неограниченна.
+about.AdminTitle=Связаться с администратором
+about.AdminName=Имя:
+about.AdminEmail=Почта:
+about.LenpasteTitle=Что такое ЛенОтрывок
+about.LenpasteMessage=На этом сервере использует ЛенОтрывок версии <code>%s</code>. Немного о нём:
+about.Lenpaste1=ЛенОтрывок - это свободное ПО. Весь его исходный код доступен под лицензией %s.
+about.Lenpaste2=Вам не нужно регистрироваться здесь.
+about.Lenpaste3=Этот сайт не использует Cookie что бы следить за вами.
+about.Lenpaste4=Этот сайт может работать без JavaScript.
+about.Lenpaste5=У ЛенОтрывка есть свой собственный API.
+
+sourceCode.Title=Исходный код
+sourceCode.Message=К сожалению, пока нет возможности скачать исходный код непосредственно с этого сервера. Но вы можете загрузить его по ссылке:
+
+license.LicenseTitle=Лицензия
+
+docs.Title=Документация
+
+docsAPIv1Libs.Title=Библиотеки для работа с API
+docsAPIv1Libs.Recommended=Рекомендованые
+docsAPIv1Libs.Name=Название
+docsAPIv1Libs.Language=Язык програмирования
+docsAPIv1Libs.ApiVersion=Версия API
+docsAPIv1Libs.Status=Статус
+docsAPIv1Libs.StatusOfficial=Офицальный
+docsAPIv1Libs.StatusUnofficial=Не офицальный
+docsAPIv1Libs.GPL3Later=GPL 3.0 или старше
+docsAPIv1Libs.OutOfDateTitle=Больше не обновляются
+docsAPIv1Libs.OutOfDataMessage=Эти библиотеки больше не обновляются. Это означает, что они не могут использовать ЛенОтрывок API v1.0 и выше.
+
+docsAPIv1.Title=API v1

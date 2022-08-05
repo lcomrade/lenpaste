@@ -1,11 +1,11 @@
-{{define "titlePrefix"}}{{ call .Translate `Embedded` }} {{.ID}} | {{end}}
+{{define "titlePrefix"}}{{ call .Translate `pasteEmbHelp.Title` }} {{.ID}} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3><a href="/{{.ID}}">{{.ID}}</a> / {{ call .Translate `Embedded` }}</h3>
+<h3><a href="/{{.ID}}">{{.ID}}</a> / {{ call .Translate `pasteEmbHelp.Title` }}</h3>
 {{if or (.OneUse) (ne .DeleteTime 0)}}
-<p>{{ call .Translate `You cannot embedded the paste if it is "burned" after reading or has an expiration date.` }}`</p>
+<p>{{ call .Translate `pasteEmbHelp.OneUseError` }}`</p>
 {{else}}
-<p>{{ call .Translate `Add the following code to your page:` }}</p>
-<pre><code>&ltiframe src="{{.Protocol}}://{{.Host}}/emb/{{.ID}}" width="100%" height="100%" frameborder="0"&gt&lt/iframe&gt</code></pre>
+<p>{{ call .Translate `pasteEmbHelp.Message` }}</p>
+{{call .Highlight (printf `<iframe src="%s://%s/emb/%s" width="100%%" height="100%%" frameborder="0"></iframe>` .Protocol .Host .ID) `html`}}
 {{end}}
 {{end}}

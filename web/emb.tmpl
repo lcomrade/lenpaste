@@ -36,9 +36,9 @@
 		{{if or (.ErrorNotFound) (.OneUse) (ne .DeleteTime 0)}}
 		<article>
 			{{if .ErrorNotFound}}
-			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">{{ call .Translate `Error` }}:</span> 404 {{ call .Translate `Not Found` }}</code></pre>
+			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">{{ call .Translate `pasteEmd.Error` }}:</span> {{ call .Translate `pasteEmd.ErrorNotFound` }}</code></pre>
 			{{else}}
-			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">{{ call .Translate `Error` }}:</span> {{ call .Translate `Could not embedded this paste` }}</code></pre>
+			<pre><code style="margin-left: 0.4em;"><span style="color: #F92672;">{{ call .Translate `pasteEmd.Error` }}:</span> {{ call .Translate `pasteEmb.ErrorCouldNotEmb` }}</code></pre>
 			{{end}}
 		</article>
 		{{else}}

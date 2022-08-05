@@ -1,9 +1,9 @@
-{{define "titlePrefix"}}{{ call .Translate `Docs` }} | {{end}}
+{{define "titlePrefix"}}{{ call .Translate `docs.Title` }} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3>{{ call .Translate `Documentation` }}</h3>
+<h3>{{ call .Translate `docs.Title` }}</h3>
 <ul>
-	<li><a href="/docs/apiv1">API v1</li>
-	<li><a href="/docs/api_libs">{{ call .Translate `Libraries for working with API` }}</li>
+	<li><a href="/docs/apiv1">{{ call .Translate `docsAPIv1.Title` }}</li>
+	<li><a href="/docs/api_libs">{{ call .Translate `docsAPIv1Libs.Title` }}</li>
 </ul>
 {{end}}

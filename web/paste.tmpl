@@ -9,21 +9,21 @@
 
 	{{if not .OneUse}}
 	<div class="text-bar-right">
-		<a href="/raw/{{.ID}}" tabindex=2>{{ call .Translate `Raw` }}</a><a href="/dl/{{.ID}}" tabindex=3>{{ call .Translate `Download` }}</a><a{{if ne .DeleteTime 0}} class="text-grey"{{end}} href="/emb_help/{{.ID}}" tabindex=4>{{ call .Translate `Embedded`}}</a>
+		<a href="/raw/{{.ID}}" tabindex=2>{{ call .Translate `paste.Raw` }}</a><a href="/dl/{{.ID}}" tabindex=3>{{ call .Translate `paste.Download` }}</a><a{{if ne .DeleteTime 0}} class="text-grey"{{end}} href="/emb_help/{{.ID}}" tabindex=4>{{ call .Translate `paste.Embedded`}}</a>
 	</div>
 	{{end}}
 </div>
 
 {{.Body}}
 
-<p>{{ call .Translate `Created:` }} <span id="createTime">{{.CreateTimeStr}}</span></p>
+<p>{{ call .Translate `paste.Created` }} <span id="createTime">{{.CreateTimeStr}}</span></p>
 
 {{if .OneUse}}
-<p>{{ call .Translate `Expires:` }} <span class="text-red">{{ call .Translate `Now` }}</span></p>
+<p>{{ call .Translate `paste.Expires` }} <span class="text-red">{{ call .Translate `paste.Now` }}</span></p>
 {{else if eq .DeleteTime 0}}
-<p>{{ call .Translate `Expires:` }}{{ call .Translate ` Never` }}</p>
+<p>{{ call .Translate `paste.Expires` }} {{ call .Translate `paste.Never` }}</p>
 {{else}}
-<p>{{ call .Translate `Expires:` }} <span id="deleteTime">{{.DeleteTimeStr}}</span></p>
+<p>{{ call .Translate `paste.Expires` }} <span id="deleteTime">{{.DeleteTimeStr}}</span></p>
 {{end}}
 
 {{end}}

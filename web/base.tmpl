@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>{{template "titlePrefix" .}}{{ call .Translate `Lenpaste` }}</title>
+		<title>{{template "titlePrefix" .}}{{ call .Translate `base.Lenpaste` }}</title>
 		<link rel="stylesheet" type="text/css" href="/style.css"/>
 		<link rel="shortcut icon" href="data:," />
 		<meta name="viewport" content="width=device-width, minimum-scale=1">
@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<header>
-			<h2><a href="/">{{ call .Translate `Lenpaste` }}</a></h2><h4><a href="/about">{{ call .Translate `About` }}</a></h4><h4><a href="/docs">{{ call .Translate `Docs` }}</a></h4>
+			<h2><a href="/">{{ call .Translate `base.Lenpaste` }}</a></h2><h4><a href="/about">{{ call .Translate `base.About` }}</a></h4><h4><a href="/docs">{{ call .Translate `base.Docs` }}</a></h4>
 		</header>
 		<article>{{template "article" .}}</article>
 	</body>
