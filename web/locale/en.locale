@@ -1,0 +1,117 @@
+base.Lenpaste=Lenpaste
+base.About=About
+base.Docs=Docs
+
+error.Error=Error
+//error.BadRequest=Bad Request
+//error.NotFound=Not Found
+//error.InternalServerError=Internal Server Error
+error.AdminContacts=Contact the administrator:
+error.BackToHome=Back to Home
+
+main.CreatePaste=Create paste
+main.EnterTitle=Enter the title...
+main.EnterText=Enter text...
+main.Syntax=Syntax:
+main.MaximumSymbols=*Maximum %d symbols
+main.BurnAfterReading=Burn after reading
+main.Expiration=Expiration:
+main.Never=Never
+main.10Minutes=10 minutes
+main.30Minutes=30 minutes
+main.1Hour=1 hour
+main.2Hour=2 hours
+main.4Hour=4 hours
+main.12Hour=12 hours
+main.1Day=1 day
+main.1Week=1 week
+main.2Weeks=2 weeks
+main.1Month=1 month
+main.2Months=2 months
+main.6Months=6 months
+main.1Year=1 year
+main.Create=Create
+
+paste.Raw=Raw
+paste.Download=Download
+paste.Embedded=Embedded
+paste.Created=Created:
+paste.Expires=Expires:
+paste.Now=Now
+paste.Never=Never
+
+pasteContinue.Continue=Continue?
+pasteContinue.Message=This paste can only be viewed once, after which it will be deleted. Continue?
+pasteContinue.Cancel=Cancel
+pasteContinue.Continue=Continue
+
+pasteEmbHelp.Title=Embedded
+pasteEmbHelp.OneUseError=You cannot embed the paste in another page if it is intended to be read once or has a limited expiration.
+pasteEmbHelp.Message=Add the following code to your page:
+
+pasteEmd.Error=Error:
+pasteEmb.ErrorCouldNotEmb=This paste cannot be embedded in other pages
+pasteEmd.ErrorNotFound=404 Not Found
+
+about.Title=About
+about.AboutServerTitle=About this server
+about.RulesTitle=Rules of this server
+about.Limit=Limits
+about.LimitTitle=Maximum title length: <code>%d</code> characters.
+about.LimitTitleNo=There is no limit to the length of the title.
+about.LimitTitleDisable=On this server, you cannot set a header for the paste.
+about.LimitBody=Maximum length of the paste: <code>%d</code> symbols.
+about.LimitBodyNo=The length of the paste is unlimited.
+about.AdminTitle=Contact the administrator
+about.AdminName=Administrator's name:
+about.AdminEmail=Administrator's mail:
+about.LenpasteTitle=What is Lenpaste?
+about.LenpasteMessage=This server uses a Lenpaste version of <code>%s</code>. A little bit about it:
+about.Lenpaste1=Lenpaste is free software. All of its <a href="%s">source code</a> is available under the <a href="%s">%s</a> license.
+about.Lenpaste2=You do not need to register here.
+about.Lenpaste3=This site does not use cookies to keep track of you.
+about.Lenpaste4=This site can work without JavaScript.
+about.Lenpaste5=Lenpaste has its own <a href="%s">API</a>.
+
+sourceCode.Title=Source Code
+sourceCode.Message=Unfortunately, it is not yet possible to download the source code directly from this server. But you can download it from the link:
+
+license.LicenseTitle=License
+
+docs.Title=Documentation
+
+docsAPIv1.Title=API v1
+docsAPIv1.TableOfContent=Table of content
+docsAPIv1.RequestParameters=Request parameters:
+docsAPIv1.Field=Field
+docsAPIv1.Required=Required?
+docsAPIv1.RequiredYes=Yes
+docsAPIv1.Default=Default
+docsAPIv1.Description=Description
+docsAPIv1.ReqNewTitle=Paste title
+docsAPIv1.ReqNewBody=Paste text.
+docsAPIv1.ReqNewLineEnd=Line end in the text of the excerpt will automatically be replaced by the one specified by this parameter. Can be <code>LF</code>, <code>CRLF</code> or <code>CR</code>. 
+docsAPIv1.ReqNewSyntax=Syntax highlighting in paste. A list of available syntaxes can be obtained using the <a href="%s"><code>getServerInfo</code></a> method.
+docsAPIv1.ReqNewOneUse=If it is <code>true</code>, the paste can be opened only once and then it will be deleted.
+docsAPIv1.ReqNewExpiration=Indicates expiration of paste in seconds. If this parameter is <code>0</code>, the storage time will be unlimited.
+docsAPIv1.ReqGetID=Paste ID.
+docsAPIv1.ReqGetOpenOneUse=If <code>true</code>, the entire contents of the paste will be returned, after which it will be deleted. If <code>false</code>, the API will return only <code>id</code> and <code>oneUse</code>, and the paste will not be deleted.
+docsAPIv1.ResponseExample=Response example:
+docsAPIv1.PossibleAPIErrors=Possible API errors
+docsAPIv1.Error400=This API method exists on the server, but you passed the wrong arguments for it.
+docsAPIv1.Error404n1=There is no paste with this ID.
+docsAPIv1.Error404n2=There is no such API method.
+docsAPIv1.Error405=You made a mistake with HTTP request (example: you made POST instead of GET).
+docsAPIv1.Error500=There was a failure on the server. Contact your server administrator to find out what the problem is.
+
+docsAPIv1Libs.Title=Libraries for working with API
+docsAPIv1Libs.Recommended=Recommended
+docsAPIv1Libs.Name=Name
+docsAPIv1Libs.Language=Language
+docsAPIv1Libs.ApiVersion=API version
+docsAPIv1Libs.Status=Status
+docsAPIv1Libs.StatusOfficial=Official
+docsAPIv1Libs.StatusUnofficial=Unofficial
+docsAPIv1Libs.GPL3Later=GPL 3.0 or later
+docsAPIv1Libs.OutOfDateTitle=Out of date
+docsAPIv1Libs.OutOfDataMessage=These libraries are no longer being updated. This means that they cannot use the Lenpaste API v1.0 and higher.

@@ -3,9 +3,9 @@ base.About=О сайте
 base.Docs=Документация
 
 error.Error=Ошибка
-error.BadRequest=Неверный запрос
-error.NotFound=Не найдено
-error.InternalServerError=Внутренняя ошибка сервера
+//error.BadRequest=Неверный запрос
+//error.NotFound=Не найдено
+//error.InternalServerError=Внутренняя ошибка сервера
 error.AdminContacts=Связаться с администратором
 error.BackToHome=Вернуться на главную
 

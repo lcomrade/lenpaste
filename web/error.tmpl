@@ -1,15 +1,15 @@
 {{define "titlePrefix"}}{{.Code}} {{ call .Translate .Error }} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3>{{ call .Translate `Error` }} {{.Code}}</h3>
+<h3>{{ call .Translate `error.Error` }} {{.Code}}</h3>
 <p>{{ call .Translate .Error }}</p>
 
 {{if and (ne .AdminName ``) (ne .AdminMail ``)}}
-<p>{{ call .Translate `Administrator contacts:` }} <code>{{.AdminName}} &lt<a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a>&gt</code></p>
+<p>{{ call .Translate `error.AdminContacts` }} <code>{{.AdminName}} &lt<a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a>&gt</code></p>
 {{else}}
-{{if ne .AdminName ``}}<p>{{ call .Translate `Administrator contacts:` }} <code>{{.AdminName}}</code></p>{{end}}
-{{if ne .AdminMail ``}}<p>{{ call .Translate `Administrator contacts:` }} <code><a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a></code></p>{{end}}
+{{if ne .AdminName ``}}<p>{{ call .Translate `error.AdminContacts` }} <code>{{.AdminName}}</code></p>{{end}}
+{{if ne .AdminMail ``}}<p>{{ call .Translate `error.AdminContacts` }} <code><a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a></code></p>{{end}}
 {{end}}
 
-<p><a href="/"><< {{ call .Translate `Back to home page` }}</a></p>
+<p><a href="/"><< {{ call .Translate `error.BackToHome` }}</a></p>
 {{end}}
