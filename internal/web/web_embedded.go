@@ -34,7 +34,7 @@ type embTmpl struct {
 	Body          template.HTML
 
 	ErrorNotFound bool
-	Translate     func(string) string
+	Translate     func(string, ...interface{}) template.HTML
 }
 
 // Pattern: /emb/

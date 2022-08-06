@@ -19,6 +19,7 @@
 package web
 
 import (
+	"html/template"
 	"net/http"
 )
 
@@ -27,7 +28,7 @@ type errorTmpl struct {
 	Error     string
 	AdminName string
 	AdminMail string
-	Translate func(string) string
+	Translate func(string, ...interface{}) template.HTML
 }
 
 func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {

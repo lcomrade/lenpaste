@@ -33,7 +33,7 @@ type embHelpTmpl struct {
 	Protocol string
 	Host     string
 
-	Translate func(string) string
+	Translate func(string, ...interface{}) template.HTML
 	Highlight func(string, string) template.HTML
 }
 

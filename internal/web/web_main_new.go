@@ -20,6 +20,7 @@ package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"html/template"
 	"net/http"
 )
 
@@ -28,7 +29,7 @@ type createTmpl struct {
 	BodyMaxLen  int
 	MaxLifeTime int64
 	Lexers      []string
-	Translate   func(string) string
+	Translate   func(string, ...interface{}) template.HTML
 }
 
 func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {

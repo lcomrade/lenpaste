@@ -38,12 +38,12 @@ type pasteTmpl struct {
 	LineEnd       string
 	CreateTimeStr string
 	DeleteTimeStr string
-	Translate     func(string) string
+	Translate     func(string, ...interface{}) template.HTML
 }
 
 type pasteContinueTmpl struct {
 	ID        string
-	Translate func(string) string
+	Translate func(string, ...interface{}) template.HTML
 }
 
 func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {

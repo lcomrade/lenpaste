@@ -1,96 +1,89 @@
-{{define "titlePrefix"}}API v1 | {{end}}
+{{define "titlePrefix"}}{{call .Translate `docsAPIv1.Title`}} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3><a href="/docs">Documentation</a> / API v1</h3>
+<h3><a href="/docs">{{call .Translate `docs.Title`}}</a> / {{call .Translate `docsAPIv1.Title`}}</h3>
 
 
-<h4 id="table-of-content">Table of content</h4>
+<h4 id="table-of-content">{{call .Translate `docsAPIv1.TableOfContent`}}</h4>
 <ul>
 	<li><a href="#new">POST <code>/api/v1/new</code></a></li>
 	<li><a href="#get">GET <code>/api/v1/get</code></a></li>
 	<li><a href="#getServerInfo">GET <code>/api/v1/getServerInfo</code></a></li>
-	<li><a href="#errors">Possible API Errors</a></li>
+	<li><a href="#errors">{{call .Translate `docsAPIv1.PossibleAPIErrors`}}</a></li>
 </ul>
 
 
 <h4 id="new">POST <code>/api/v1/new</code></h4>
-<p>Request parameters:</p>
+<p>{{call .Translate `docsAPIv1.RequestParameters`}}</p>
 <table>
-	<th>Field</th>
-	<th>Required?</th>
-	<th>Default</th>
-	<th>Description</th>
+	<th>{{call .Translate `docsAPIv1.Field`}}</th>
+	<th>{{call .Translate `docsAPIv1.Required`}}</th>
+	<th>{{call .Translate `docsAPIv1.Default`}}</th>
+	<th>{{call .Translate `docsAPIv1.Description`}}</th>
 	<tr>
 		<td><code>title</code></td>
 		<td></td>
 		<td></td>
-		<td>Paste title.</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewTitle`}}</td>
 	</tr>
 	<tr>
 		<td><code>body</code></td>
-		<td>Yes</td>
+		<td>{{call .Translate `docsAPIv1.RequiredYes`}}</td>
 		<td></td>
-		<td>Paste text.</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewBody`}}</td>
 	</tr>
 	<tr>
 		<td><code>lineEnd</code></td>
 		<td></td>
 		<td><code>LF</code></td>
-		<td>
-			The end of a line in the paste body.
-			The text will be automatically recoded to match the selected end of line.
-			Can accept <code>LF</code>, <code>CRLF</code> or <code>CR</code>.
-		</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewLineEnd`}}</td>
 	</tr>
 	<tr>
 		<td><code>syntax</code></td>
 		<td></td>
 		<td><code>plaintext</code></td>
-		<td>Paste syntax. You can get a list of semi-retained syntaxes using the <a href="#getServerInfo"><code>getServerInfo</code></a> method.</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewSyntax` `#getServerInfo`}}</td>
 	</tr>
 	<tr>
 		<td><code>oneUse</code></td>
 		<td></td>
 		<td><code>false</code></td>
-		<td>If <code>true</code> then the paste is removed after opening.</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewOneUse`}}</td>
 	</tr>
 	<tr>
 		<td><code>expiration</code></td>
 		<td></td>
 		<td><code>0</code></td>
-		<td>The "lifetime" of the paste in seconds. To prevent the paste from expiring, simply do not set this parameter.</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewExpiration`}}</td>
 	</tr>
 </table>
-<p>Response example:</p>
+<p>{{call .Translate `docsAPIv1.ResponseExample`}}</p>
 {{ call .Highlight `{
 	"id": "XcmX9ON1"
 }` `json`}}
 
 
 <h4 id="get">GET <code>/api/v1/get</code></h4>
-<p>Request parameters:</p>
+<p>{{call .Translate `docsAPIv1.RequestParameters`}}</p>
 <table>
-	<th>Field</th>
-	<th>Required?</th>
-	<th>Default</th>
-	<th>Description</th>
+	<th>{{call .Translate `docsAPIv1.Field`}}</th>
+	<th>{{call .Translate `docsAPIv1.Required`}}</th>
+	<th>{{call .Translate `docsAPIv1.Default`}}</th>
+	<th>{{call .Translate `docsAPIv1.Description`}}</th>
 	<tr>
 		<td><code>id</code></td>
-		<td>Yes</td>
+		<td>{{call .Translate `docsAPIv1.RequiredYes`}}</td>
 		<td></td>
-		<td>Paste ID.</td>
+		<td>{{call .Translate `docsAPIv1.ReqGetID`}}</td>
 	</tr>
 	<tr>
 		<td><code>openOneUse</code></td>
 		<td></td>
 		<td><code>false</code></td>
-		<td>
-			If <code>true</code>, it will be all the contents of the paste after which it will be deleted.
-			If it's <code>false</code>, you will only get the <code>id</code> and <code>oneUse</code>, but the paste will stay on the server.
-		</td>
+		<td>{{call .Translate `docsAPIv1.ReqGetOpenOneUse`}}</td>
 	</tr>
 </table>
-<p>Response example:</p>
+<p>{{call .Translate `docsAPIv1.ResponseExample`}}</p>
 {{ call .Highlight `{
 	"id": "XcmX9ON1",
 	"title": "Paste title.",
@@ -112,7 +105,7 @@
 
 
 <h4 id="getServerInfo">GET <code>/api/v1/getServerInfo</code></h4>
-<p>Response example:</p>
+<p>{{call .Translate `docsAPIv1.ResponseExample`}}</p>
 {{ call .Highlight `{
 	"version": "0.2-60-g3fcc9ce",
 	"titleMaxlength": 100,
@@ -141,32 +134,32 @@
 }` `json`}}
 
 
-<h4 id="errors">Possible API Errors</h4>
-<p>This API method exists on the server, but you passed the wrong arguments for it.</p>
+<h4 id="errors">{{call .Translate `docsAPIv1.PossibleAPIErrors`}}</h4>
+<p>{{call .Translate `docsAPIv1.Error400`}}</p>
 {{ call .Highlight `{
 	"code": 400,
 	"error": "Bad Request"
 }` `json`}}
 
-<p>There is no paste with this ID.</p>
+<p>{{call .Translate `docsAPIv1.Error404n1`}}</p>
 {{ call .Highlight `{
 	"code": 404,
 	"error": "Could not find ID"
 }` `json`}}
 
-<p>There is no such API method.</p>
+<p>{{call .Translate `docsAPIv1.Error404n2`}}</p>
 {{ call .Highlight `{
 	"code": 404,
 	"error": "Not Found"
 }` `json`}}
 
-<p>You made a mistake with HTTP request (example: you made POST instead of GET).</p>
+<p>{{call .Translate `docsAPIv1.Error405`}}</p>
 {{ call .Highlight `{
 	"code": 405,
 	"error": "Method Not Allowed"
 }` `json`}}
 
-<p>There was a failure on the server. Contact your server administrator to find out what the problem is.</p>
+<p>{{call .Translate `docsAPIv1.Error500`}}</p>
 {{ call .Highlight `{
 	"code": 500,
 	"error": "Internal Server Error"

@@ -21,6 +21,8 @@ package web
 import (
 	"bytes"
 	"errors"
+	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -145,12 +147,12 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	return *locale
 }
 
-func (locale Locale) translate(s string) string {
+func (locale Locale) translate(s string, a ...interface{}) template.HTML {
 	for key, val := range locale {
 		if key == s {
-			return val
+			return template.HTML(fmt.Sprintf(val, a...))
 		}
 	}
 
-	return s
+	return template.HTML(s)
 }

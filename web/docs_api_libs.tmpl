@@ -1,43 +1,43 @@
-{{define "titlePrefix"}}{{ call .Translate `Libraries for working with API` }} | {{end}}
+{{define "titlePrefix"}}{{ call .Translate `docsAPIv1Libs.Title` }} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3><a href="/docs">{{ call .Translate `Documentation` }}</a> / {{ call .Translate `Libraries for working with API` }}</h3>
-<h4 id="recommended">{{ call .Translate `Recommended` }}</h4>
+<h3><a href="/docs">{{ call .Translate `docs.Title` }}</a> / {{ call .Translate `docsAPIv1Libs.Title` }}</h3>
+<h4 id="recommended">{{ call .Translate `docsAPIv1Libs.Recommended` }}</h4>
 <table>
-	<th>{{ call .Translate `Name` }}</th>
-	<th>{{ call .Translate `Language` }}</th>
-	<th>{{ call .Translate `API version` }}</th>
-	<th>{{ call .Translate `Status` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.Name` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.Language` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.ApiVersion` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.Status` }}</th>
 	<th>{{ call .Translate `License` }}</th>
 	<tr>
 		<td><a href="https://git.lcomrade.su/root/pasteapi.go" target="_blank">PasteAPI.go</a></td>
 		<td>Go</td>
 		<td>v1.0</td>
-		<td>{{ call .Translate `Official`}}</td>
+		<td>{{ call .Translate `docsAPIv1Libs.StatusOfficial`}}</td>
 		<td>MIT</td>
 	</tr>
 </table>
-<h4 id="out_of_date">{{ call .Translate `Out of date` }}</h4>
-<p>{{ call .Translate `Updates for these libraries are no longer available. This means that they cannot be used with Lenpaste v1.0 and higher.` }}</p>
+<h4 id="out_of_date">{{ call .Translate `docsAPIv1Libs.OutOfDateTitle` }}</h4>
+<p>{{ call .Translate `docsAPIv1Libs.OutOfDataMessage` }}</p>
 <table>
-	<th>{{ call .Translate `Name` }}</th>
-	<th>{{ call .Translate `Language` }}</th>
-	<th>{{ call .Translate `API version` }}</th>
-	<th>{{ call .Translate `Status` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.Name` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.Language` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.ApiVersion` }}</th>
+	<th>{{ call .Translate `docsAPIv1Libs.Status` }}</th>
 	<th>{{ call .Translate `License` }}</th>
 	<tr>
 		<td><a href="https://git.lcomrade.su/root/lenin" target="_blank">Lenin</a></td>
 		<td>Go</td>
 		<td>v0.2</td>
-		<td>{{ call .Translate `Official` }}</td>
-		<td>{{ call .Translate `GPL 3.0 or later` }}</td>
+		<td>{{ call .Translate `docsAPIv1Libs.StatusOfficial` }}</td>
+		<td>{{ call .Translate `docsAPIv1Libs.GPL3Later` }}</td>
 	</tr>
 	<tr>
 		<td><a href="https://github.com/rjdbcm/pylenin" target="_blank">PyLenin</a></td>
 		<td>Python</td>
 		<td>v0.1</td>
-		<td>{{ call .Translate `Unofficial` }}</td>
-		<td>{{ call .Translate `GPL 3.0 or later` }}</td>
+		<td>{{ call .Translate `docsAPIv1Libs.StatusUnofficial` }}</td>
+		<td>{{ call .Translate `docsAPIv1Libs.GPL3Later` }}</td>
 	</tr>
 </table>
 {{end}}

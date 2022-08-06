@@ -56,22 +56,22 @@ pasteEmd.ErrorNotFound=404 Не найдено
 about.Title=О сайте
 about.AboutServerTitle=Об этом сервер
 about.RulesTitle=Правила этого сервера
-about.LimitTitle=Лимиты
-about.LimitTitle=Максимальная длина заголовка:
+about.Limit=Лимиты
+about.LimitTitle=Максимальная длина заголовка: <code>%d</code> символов.
 about.LimitTitleNo=Длина заголовка не ограничена.
 about.LimitTitleDisable=На этом сервере нельзя задать заголовок для отрывка.
-about.LimitBody=Максимальная длина отрывка:
+about.LimitBody=Максимальная длина отрывка: <code>%d</code> символов.
 about.LimitBodyNo=Длина отрывка неограниченна.
 about.AdminTitle=Связаться с администратором
-about.AdminName=Имя:
-about.AdminEmail=Почта:
-about.LenpasteTitle=Что такое ЛенОтрывок
+about.AdminName=Имя администратора:
+about.AdminEmail=Почта администратора:
+about.LenpasteTitle=Что такое ЛенОтрывок?
 about.LenpasteMessage=На этом сервере использует ЛенОтрывок версии <code>%s</code>. Немного о нём:
-about.Lenpaste1=ЛенОтрывок - это свободное ПО. Весь его исходный код доступен под лицензией %s.
+about.Lenpaste1=ЛенОтрывок - это свободное ПО. Весь его <a href="%s">исходный код</a> доступен под лицензией <a href="%s">%s</a>.
 about.Lenpaste2=Вам не нужно регистрироваться здесь.
 about.Lenpaste3=Этот сайт не использует Cookie что бы следить за вами.
 about.Lenpaste4=Этот сайт может работать без JavaScript.
-about.Lenpaste5=У ЛенОтрывка есть свой собственный API.
+about.Lenpaste5=У ЛенОтрывка есть свой собственный <a href="%s">API</a>.
 
 sourceCode.Title=Исходный код
 sourceCode.Message=К сожалению, пока нет возможности скачать исходный код непосредственно с этого сервера. Но вы можете загрузить его по ссылке:
@@ -79,6 +79,30 @@ sourceCode.Message=К сожалению, пока нет возможности
 license.LicenseTitle=Лицензия
 
 docs.Title=Документация
+
+docsAPIv1.Title=API v1
+docsAPIv1.TableOfContent=Оглавление
+docsAPIv1.RequestParameters=Параметры запроса:
+docsAPIv1.Field=Параметер
+docsAPIv1.Required=Обязателен?
+docsAPIv1.RequiredYes=Да
+docsAPIv1.Default=По умолчанию
+docsAPIv1.Description=Описание
+docsAPIv1.ReqNewTitle=Заголовок отрывка.
+docsAPIv1.ReqNewBody=Текст отрывка.
+docsAPIv1.ReqNewLineEnd=Конец строки в тексте отрывка будет автоматически заменён на тот который указан этим параметром. Может принимать значения <code>LF</code>, <code>CRLF</code> или <code>CR</code>. 
+docsAPIv1.ReqNewSyntax=Подсветка синтаксиса в отрывке. Список доступных синтаксисов можно получить с помощью метода <a href="%s"><code>getServerInfo</code></a>.
+docsAPIv1.ReqNewOneUse=Если равен <code>true</code>, то отрывок можно будет открыть только один раз после чего он будет удалён.
+docsAPIv1.ReqNewExpiration=Указывает срок хранения отрывка в секундах. Если этот параметер равен <code>0</code>, то срок хранения будет не ограничен.
+docsAPIv1.ReqGetID=Идентификатор отрывка.
+docsAPIv1.ReqGetOpenOneUse=Если <code>true</code>, то будет возврашено всё содержимое отрывка, после чего он будет удалена. Если <code>false</code>, то API вернёт только <code>id</code> и <code>oneUse</code>, а отрывок не будет удалён.
+docsAPIv1.ResponseExample=Пример ответа:
+docsAPIv1.PossibleAPIErrors=Ошибки, возвращаемые API
+docsAPIv1.Error400=Этот метод API существует на сервере, но вы вызвали его с неверными аргументами.
+docsAPIv1.Error404n1=Отрывок с таким идентификатором отсутствует.
+docsAPIv1.Error404n2=Такой метод API не существует.
+docsAPIv1.Error405=Вы допустили ошибку в HTTP запросе (например: отправили POST вместо GET).
+docsAPIv1.Error500=На сервере произошел сбой. Свяжитесь с администратором сервера, чтобы выяснить, в чем проблема.
 
 docsAPIv1Libs.Title=Библиотеки для работа с API
 docsAPIv1Libs.Recommended=Рекомендованые
@@ -91,5 +115,3 @@ docsAPIv1Libs.StatusUnofficial=Не офицальный
 docsAPIv1Libs.GPL3Later=GPL 3.0 или старше
 docsAPIv1Libs.OutOfDateTitle=Больше не обновляются
 docsAPIv1Libs.OutOfDataMessage=Эти библиотеки больше не обновляются. Это означает, что они не могут использовать ЛенОтрывок API v1.0 и выше.
-
-docsAPIv1.Title=API v1

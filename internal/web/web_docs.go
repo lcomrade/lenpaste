@@ -25,7 +25,7 @@ import (
 
 type docsTmpl struct {
 	Highlight func(string, string) template.HTML
-	Translate func(string) string
+	Translate func(string, ...interface{}) template.HTML
 }
 
 // Pattern: /docs

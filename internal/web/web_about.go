@@ -34,11 +34,11 @@ type aboutTmpl struct {
 	AdminName string
 	AdminMail string
 
-	Translate func(string) string
+	Translate func(string, ...interface{}) template.HTML
 }
 
 type aboutMinTmp struct {
-	Translate func(string) string
+	Translate func(string, ...interface{}) template.HTML
 }
 
 // Pattern: /about
