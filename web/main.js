@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// Add HTML and CSS code for line numbers support
-	editor.insertAdjacentHTML("beforebegin", "<textarea id='editorLines' wrap='off' readonly>1</textarea>");
+	editor.insertAdjacentHTML("beforebegin", "<textarea id='editorLines' wrap='off' tabindex=-1 readonly>1</textarea>");
 	var editorLines = document.getElementById("editorLines");
 	editorLines.rows = editor.rows;
 	
@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 `;
 	document.head.appendChild(styleSheet);
+
+	editorLines.addEventListener("focus", () => {
+		editor.focus();
+	});
 
 	// Add JS code for line numbers
 	editor.addEventListener("scroll", () => {
