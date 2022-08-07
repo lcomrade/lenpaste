@@ -52,7 +52,7 @@ func loadLocales(localeDir string) (Locales, error) {
 		if strings.HasSuffix(fileName, ".locale") == false {
 			continue
 		}
-		localeCode := fileName[:len(fileName)-5]
+		localeCode := fileName[:len(fileName)-7]
 
 		// Read file
 		filePath := filepath.Join(localeDir, fileName)
@@ -107,7 +107,7 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	if err == nil {
 		if langCookie.Value != "" {
 			locale, ok := locales[langCookie.Value]
-			if ok != true {
+			if ok == true {
 				return *locale
 			}
 		}
@@ -127,8 +127,8 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	}
 
 	// Search locale
-	for localeCode, locale := range locales {
-		for _, lang := range langs {
+	for _, lang := range langs {
+		for localeCode, locale := range locales {
 			if localeCode == lang {
 				return *locale
 			}

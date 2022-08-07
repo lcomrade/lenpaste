@@ -1,0 +1,18 @@
+{{define "titlePrefix"}}{{call .Translate `settings.Title`}} | {{end}}
+{{define "headAppend"}}{{end}}
+{{define "article"}}
+<h3>{{call .Translate `settings.Title`}}</h3>
+<form action="/settings" method="post">
+	<div>
+		<label for="expiration">{{ call .Translate `settings.Language` }}</label
+		><select name="lang" tabindex=1 size=1>
+			<option value="">{{call .Translate `settings.LanguageDefault`}}</option>
+			{{ $language := .Language }}
+			{{range $element := .AvailableLangs}}
+			<option value="{{$element}}"{{if eq $element $language}} selected="true"{{end}}>{{$element}}</option>
+			{{end}}
+		</select>
+	</div>
+	<div><button class="button-green" type="submit" tabindex=2>{{ call .Translate `settings.Save` }}</button></div>
+</form>
+{{end}}

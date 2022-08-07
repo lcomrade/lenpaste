@@ -282,6 +282,10 @@ func main() {
 		webData.PasteJSHand(rw, req)
 	})
 
+	http.HandleFunc("/settings", func(rw http.ResponseWriter, req *http.Request) {
+		webData.SettingsHand(rw, req)
+	})
+
 	http.HandleFunc("/raw/", func(rw http.ResponseWriter, req *http.Request) {
 		rawData.RawHand(rw, req)
 	})

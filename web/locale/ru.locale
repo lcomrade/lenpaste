@@ -1,6 +1,7 @@
 base.Lenpaste=ЛенОтрывок
 base.About=О сайте
 base.Docs=Документация
+base.Settings=Настройки
 
 error.Error=Ошибка
 //error.BadRequest=Неверный запрос
@@ -31,6 +32,11 @@ main.2Months=2 месяца
 main.6Months=6 месяцев
 main.1Year=1 год
 main.Create=Создать
+
+settings.Title=Настройки
+settings.Language=Язык:
+settings.LanguageDefault=Использовать язык браузера
+settings.Save=Сохранить
 
 paste.Raw=Исходник
 paste.Download=Скачать

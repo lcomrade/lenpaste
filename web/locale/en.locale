@@ -1,6 +1,7 @@
 base.Lenpaste=Lenpaste
 base.About=About
 base.Docs=Docs
+base.Settings=Settings
 
 error.Error=Error
 //error.BadRequest=Bad Request
@@ -31,6 +32,11 @@ main.2Months=2 months
 main.6Months=6 months
 main.1Year=1 year
 main.Create=Create
+
+settings.Title=Settings
+settings.Language=Language:
+settings.LanguageDefault=Use browser language
+settings.Save=Save
 
 paste.Raw=Raw
 paste.Download=Download

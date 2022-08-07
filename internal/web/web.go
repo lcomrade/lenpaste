@@ -41,6 +41,7 @@ type Data struct {
 	PastePage      *template.Template
 	PasteJS        *[]byte
 	PasteContinue  *template.Template
+	Settings       *template.Template
 	About          *template.Template
 	License        *template.Template
 	SourceCodePage *template.Template
@@ -143,6 +144,15 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	data.PasteContinue, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "paste_continue.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// settings.tmpl
+	data.Settings, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "settings.tmpl"),
 	)
 	if err != nil {
 		return data, err
