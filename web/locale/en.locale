@@ -38,12 +38,12 @@ main.AuthorEmail=Author email:
 main.AuthorEmailPlaceholder=me@example.org
 main.AuthorURL=Author URL:
 main.AuthorURLPlaceholder=https://example.org
-main.Create=Create
+main.Create=Create New Paste
 
 settings.Title=Settings
 settings.Language=Language:
 settings.LanguageDefault=Use browser language
-settings.Save=Save
+settings.Save=Save Settings
 
 paste.Raw=Raw
 paste.Download=Download

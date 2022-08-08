@@ -38,12 +38,12 @@ main.AuthorEmail=Почта автора:
 main.AuthorEmailPlaceholder=me@example.org
 main.AuthorURL=Сайт автора:
 main.AuthorURLPlaceholder=https://example.org
-main.Create=Создать
+main.Create=Создать новый отрывок
 
 settings.Title=Настройки
 settings.Language=Язык:
 settings.LanguageDefault=Использовать язык браузера
-settings.Save=Сохранить
+settings.Save=Сохранить настройки
 
 paste.Raw=Исходник
 paste.Download=Скачать

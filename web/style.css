@@ -237,6 +237,11 @@ pre code {
 	background-color: inherit;
 }
 
+details {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 summary {
 	cursor: pointer;
 }
@@ -254,6 +259,12 @@ th, td {
 	font-size: inherit;
 	font-family: inherit;
 	color: inherit;
+}
+
+.table-hidden td {
+	text-align: right;
+	padding: 0;
+	border: 0;
 }
 
 a, a:hover {
