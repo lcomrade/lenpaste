@@ -13,6 +13,33 @@
 			{{end}}
 		</select>
 	</div>
-	<div><button class="button-green" type="submit" tabindex=2><strong>{{ call .Translate `settings.Save` }}</strong></button></div>
+	<h4>{{ call .Translate `main.AdvancedParameters` }}</h4>
+	<table class="table-hidden">
+		<tr>
+			<td><label>{{ call .Translate `main.Author` }}</label></td>
+			<td><input
+				name="author" value="{{.Author}}"
+				autocomplete="off" autocorrect="off" spellcheck="true"
+				placeholder="{{call .Translate `main.AuthorPlaceholder`}}" tabindex=2
+			></td>
+		</tr>
+		<tr>
+			<td><label>{{ call .Translate `main.AuthorEmail` }}</label></td>
+			<td><input
+				name="authorEmail" value="{{.AuthorEmail}}"
+				autocomplete="off" autocorrect="off" spellcheck="true"
+				placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}" tabindex=3
+			></td>
+		</tr>
+		<tr>
+			<td><label>{{ call .Translate `main.AuthorURL` }}</label></td>
+			<td><input
+				name="authorURL" value="{{.AuthorURL}}"
+				autocomplete="off" autocorrect="off" spellcheck="true"
+				placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}" tabindex=4
+			></td>
+		</tr>
+	</table>
+	<div><button class="button-green" type="submit" tabindex=5>{{ call .Translate `settings.Save` }}</button></div>
 </form>
 {{end}}

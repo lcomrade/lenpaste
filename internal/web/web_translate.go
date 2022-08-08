@@ -103,13 +103,11 @@ func loadLocales(localeDir string) (Locales, error) {
 
 func (locales Locales) findLocale(req *http.Request) Locale {
 	// Get accept language by cookie
-	langCookie, err := req.Cookie("lang")
-	if err == nil {
-		if langCookie.Value != "" {
-			locale, ok := locales[langCookie.Value]
-			if ok == true {
-				return *locale
-			}
+	langCookie := getCookie(req, "lang")
+	if langCookie != "" {
+		locale, ok := locales[langCookie]
+		if ok == true {
+			return *locale
 		}
 	}
 

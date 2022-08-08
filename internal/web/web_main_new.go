@@ -29,7 +29,12 @@ type createTmpl struct {
 	BodyMaxLen  int
 	MaxLifeTime int64
 	Lexers      []string
-	Translate   func(string, ...interface{}) template.HTML
+
+	AuthorDefault      string
+	AuthorEmailDefault string
+	AuthorURLDefault   string
+
+	Translate func(string, ...interface{}) template.HTML
 }
 
 func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
@@ -56,11 +61,14 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	// Else show create page
 	tmplData := createTmpl{
-		TitleMaxLen: *data.TitleMaxLen,
-		BodyMaxLen:  *data.BodyMaxLen,
-		MaxLifeTime: *data.MaxLifeTime,
-		Lexers:      *data.Lexers,
-		Translate:   data.Locales.findLocale(req).translate,
+		TitleMaxLen:        *data.TitleMaxLen,
+		BodyMaxLen:         *data.BodyMaxLen,
+		MaxLifeTime:        *data.MaxLifeTime,
+		Lexers:             *data.Lexers,
+		AuthorDefault:      getCookie(req, "author"),
+		AuthorEmailDefault: getCookie(req, "authorEmail"),
+		AuthorURLDefault:   getCookie(req, "authorURL"),
+		Translate:          data.Locales.findLocale(req).translate,
 	}
 
 	rw.Header().Set("Content-Type", "text/html")

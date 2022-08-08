@@ -38,6 +38,7 @@ main.AuthorEmail=Почта автора:
 main.AuthorEmailPlaceholder=me@example.org
 main.AuthorURL=Сайт автора:
 main.AuthorURLPlaceholder=https://example.org
+main.AdvancedParametersHelp=*Вы можете установить значения по умолчанию для этих параметров в <a href="%s" target="_blank">настройках</a>.
 main.Create=Создать новый отрывок
 
 settings.Title=Настройки

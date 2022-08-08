@@ -195,7 +195,7 @@ button, checkbox, select, input, textarea {
 button {
 	 background: #888888;
 	 font-size: 16px;
-	 padding: 6px 6px 6px 6px;
+	 padding: 8px 8px 8px 8px;
 	 border: 2px;
 	 color: #FFFFFF;
 }

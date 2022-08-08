@@ -20,6 +20,7 @@ package web
 
 import (
 	"io/ioutil"
+	"net/http"
 	"os"
 )
 
@@ -38,4 +39,13 @@ func readFile(path string) ([]byte, error) {
 	}
 
 	return fileByte, nil
+}
+
+func getCookie(req *http.Request, name string) string {
+	cookie, err := req.Cookie(name)
+	if err != nil {
+		return ""
+	}
+
+	return cookie.Value
 }

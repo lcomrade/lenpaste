@@ -38,6 +38,7 @@ main.AuthorEmail=Author email:
 main.AuthorEmailPlaceholder=me@example.org
 main.AuthorURL=Author URL:
 main.AuthorURLPlaceholder=https://example.org
+main.AdvancedParametersHelp=*You can set the default values for these parameters in the <a href="%s" target="_blank">settings</a>.
 main.Create=Create New Paste
 
 settings.Title=Settings
