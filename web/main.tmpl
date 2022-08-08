@@ -63,6 +63,27 @@
 			{{if or (ge .MaxLifeTime 31557600) (lt .MaxLifeTime 0)}}<option value="31557600">{{ call .Translate `main.1Year` }}</option>{{end}}
 		</select>
 	</div>
+	<details>
+		<summary>{{ call .Translate `main.AdvancedParameters` }}</summary>
+		<div><label for="author">{{ call .Translate `main.Author` }}</label
+		><input
+			name="author" {{if gt .TitleMaxLen 0}}{{end}}
+			autocomplete="off" autocorrect="off" spellcheck="true"
+			placeholder="{{call .Translate `main.AuthorPlaceholder`}}" tabindex=-1
+		></div>
+		<div><label for="authorEmail">{{ call .Translate `main.AuthorEmail` }}</label
+		><input
+			name="authorEmail" {{if gt .TitleMaxLen 0}}{{end}}
+			autocomplete="off" autocorrect="off" spellcheck="true"
+			placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}" tabindex=-1
+		></div>
+		<div><label for="authorURL">{{ call .Translate `main.AuthorURL` }}</label
+		><input
+			name="authorURL" {{if gt .TitleMaxLen 0}}{{end}}
+			autocomplete="off" autocorrect="off" spellcheck="true"
+			placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}" tabindex=-1
+		></div>
+	</details>
 	<div><button class="button-green" type="submit" tabindex=7>{{ call .Translate `main.Create` }}</button></div>
 </form>
 {{end}}

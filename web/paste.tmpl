@@ -16,6 +16,14 @@
 
 {{.Body}}
 
+{{if and (ne .Author ``) (ne .AuthorEmail ``) (ne .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} {{.Author}} &lt<a href="mailto:{{.AuthorEmail}}">{{.AuthorEmail}}</a>&gt - <a target="_blank" href="{{.AuthorURL}}">{{.AuthorURL}}</a></p>{{end}}
+{{if and (ne .Author ``) (ne .AuthorEmail ``) (eq .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} {{.Author}} &lt<a href="mailto:{{.AuthorEmail}}">{{.AuthorEmail}}</a>&gt</p>{{end}}
+{{if and (ne .Author ``) (eq .AuthorEmail ``) (ne .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} {{.Author}} - <a target="_blank" href="{{.AuthorURL}}">{{.AuthorURL}}</a></p>{{end}}
+{{if and (eq .Author ``) (ne .AuthorEmail ``) (ne .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} <a href="mailto:{{.AuthorEmail}}">{{.AuthorEmail}}</a> - <a target="_blank" href="{{.AuthorURL}}">{{.AuthorURL}}</a></p>{{end}}
+{{if and (ne .Author ``) (eq .AuthorEmail ``) (eq .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} {{.Author}}</p>{{end}}
+{{if and (eq .Author ``) (ne .AuthorEmail ``) (eq .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} <a href="mailto:{{.AuthorEmail}}">{{.AuthorEmail}}</a></p>{{end}}
+{{if and (eq .Author ``) (eq .AuthorEmail ``) (ne .AuthorURL ``) }}<p>{{ call .Translate `paste.Author` }} <a target="_blank" href="{{.AuthorURL}}">{{.AuthorURL}}</a></p>{{end}}
+
 <p>{{ call .Translate `paste.Created` }} <span id="createTime">{{.CreateTimeStr}}</span></p>
 
 {{if .OneUse}}

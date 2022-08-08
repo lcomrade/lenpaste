@@ -31,6 +31,10 @@ type Paste struct {
 	DeleteTime int64  `json:"deleteTime"`
 	OneUse     bool   `json:"oneUse"`
 	Syntax     string `json:"syntax"`
+
+	Author      string `json:"author"`
+	AuthorEmail string `json:"authorEmail"`
+	AuthorURL   string `json:"authorURL"`
 }
 
 func (dbInfo DB) PasteAdd(paste Paste) (string, error) {
@@ -57,8 +61,8 @@ func (dbInfo DB) PasteAdd(paste Paste) (string, error) {
 
 	// Add
 	_, err = db.Exec(
-		`INSERT INTO pastes (id, title, body, syntax, create_time, delete_time, one_use) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse,
+		`INSERT INTO pastes (id, title, body, syntax, create_time, delete_time, one_use, author, author_email, author_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse, paste.Author, paste.AuthorEmail, paste.AuthorURL,
 	)
 	if err != nil {
 		return paste.ID, err
@@ -109,12 +113,12 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 
 	// Make query
 	row := db.QueryRow(
-		`SELECT id, title, body, syntax, create_time, delete_time, one_use FROM pastes WHERE id = $1`,
+		`SELECT id, title, body, syntax, create_time, delete_time, one_use, author, author_email, author_url FROM pastes WHERE id = $1`,
 		id,
 	)
 
 	// Read query
-	err = row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse)
+	err = row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse, &paste.Author, &paste.AuthorEmail, &paste.AuthorURL)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return paste, ErrNotFoundID

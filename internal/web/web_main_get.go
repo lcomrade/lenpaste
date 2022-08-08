@@ -38,7 +38,12 @@ type pasteTmpl struct {
 	LineEnd       string
 	CreateTimeStr string
 	DeleteTimeStr string
-	Translate     func(string, ...interface{}) template.HTML
+
+	Author      string
+	AuthorEmail string
+	AuthorURL   string
+
+	Translate func(string, ...interface{}) template.HTML
 }
 
 type pasteContinueTmpl struct {
@@ -106,6 +111,10 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 
 		CreateTimeStr: createTime.Format("Mon, 02 Jan 2006 15:04:05 -0700"),
 		DeleteTimeStr: deleteTime.Format("Mon, 02 Jan 2006 15:04:05 -0700"),
+
+		Author:      paste.Author,
+		AuthorEmail: paste.AuthorEmail,
+		AuthorURL:   paste.AuthorURL,
 
 		Translate: data.Locales.findLocale(req).translate,
 	}

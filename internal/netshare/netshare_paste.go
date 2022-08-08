@@ -30,11 +30,14 @@ import (
 func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, error) {
 	// Read form
 	paste := storage.Paste{
-		Title:      form.Get("title"),
-		Body:       form.Get("body"),
-		Syntax:     form.Get("syntax"),
-		DeleteTime: 0,
-		OneUse:     false,
+		Title:       form.Get("title"),
+		Body:        form.Get("body"),
+		Syntax:      form.Get("syntax"),
+		DeleteTime:  0,
+		OneUse:      false,
+		Author:      form.Get("author"),
+		AuthorEmail: form.Get("authorEmail"),
+		AuthorURL:   form.Get("authorURL"),
 	}
 
 	// Remove new line from title

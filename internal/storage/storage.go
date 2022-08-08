@@ -63,5 +63,40 @@ func (dbInfo DB) InitDB() error {
 		return err
 	}
 
+	// Crutch for SQLite3
+	if dbInfo.DriverName == "sqlite3" {
+		_, err = db.Exec(`ALTER TABLE pastes ADD COLUMN author       TEXT NOT NULL DEFAULT ''`)
+		if err != nil {
+			if err.Error() != "duplicate column name: author" {
+				return err
+			}
+		}
+
+		_, err = db.Exec(`ALTER TABLE pastes ADD COLUMN author_email TEXT NOT NULL DEFAULT ''`)
+		if err != nil {
+			if err.Error() != "duplicate column name: author_email" {
+				return err
+			}
+		}
+
+		_, err = db.Exec(`ALTER TABLE pastes ADD COLUMN author_url TEXT NOT NULL DEFAULT ''`)
+		if err != nil {
+			if err.Error() != "duplicate column name: author_url" {
+				return err
+			}
+		}
+
+		// Normal SQL for all other DBs
+	} else {
+		_, err = db.Exec(`
+			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author       TEXT NOT NULL DEFAULT '';
+			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author_email TEXT NOT NULL DEFAULT '';
+			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author_url   TEXT NOT NULL DEFAULT '';
+		`)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
