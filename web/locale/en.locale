@@ -103,12 +103,15 @@ docsAPIv1.Required=Required?
 docsAPIv1.RequiredYes=Yes
 docsAPIv1.Default=Default
 docsAPIv1.Description=Description
-docsAPIv1.ReqNewTitle=Paste title
+docsAPIv1.ReqNewTitle=Paste title.
 docsAPIv1.ReqNewBody=Paste text.
 docsAPIv1.ReqNewLineEnd=Line end in the text of the excerpt will automatically be replaced by the one specified by this parameter. Can be <code>LF</code>, <code>CRLF</code> or <code>CR</code>. 
 docsAPIv1.ReqNewSyntax=Syntax highlighting in paste. A list of available syntaxes can be obtained using the <a href="%s"><code>getServerInfo</code></a> method.
 docsAPIv1.ReqNewOneUse=If it is <code>true</code>, the paste can be opened only once and then it will be deleted.
 docsAPIv1.ReqNewExpiration=Indicates expiration of paste in seconds. If this parameter is <code>0</code>, the storage time will be unlimited.
+docsAPIv1.ReqNewAuthor=Author name.
+docsAPIv1.ReqNewAuthorEmail=Author email.
+docsAPIv1.ReqNewAuthorURL=Author URL.
 docsAPIv1.ReqGetID=Paste ID.
 docsAPIv1.ReqGetOpenOneUse=If <code>true</code>, the entire contents of the paste will be returned, after which it will be deleted. If <code>false</code>, the API will return only <code>id</code> and <code>oneUse</code>, and the paste will not be deleted.
 docsAPIv1.ResponseExample=Response example:

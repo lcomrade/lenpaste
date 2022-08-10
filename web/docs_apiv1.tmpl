@@ -56,6 +56,24 @@
 		<td><code>0</code></td>
 		<td>{{call .Translate `docsAPIv1.ReqNewExpiration`}}</td>
 	</tr>
+	<tr>
+		<td><code>author</code></td>
+		<td></td>
+		<td></td>
+		<td>{{call .Translate `docsAPIv1.ReqNewAuthor`}}</td>
+	</tr>
+	<tr>
+		<td><code>authorEmail</code></td>
+		<td></td>
+		<td></td>
+		<td>{{call .Translate `docsAPIv1.ReqNewAuthorEmail`}}</td>
+	</tr>
+	<tr>
+		<td><code>authorURL</code></td>
+		<td></td>
+		<td></td>
+		<td>{{call .Translate `docsAPIv1.ReqNewAuthorURL`}}</td>
+	</tr>
 </table>
 <p>{{call .Translate `docsAPIv1.ResponseExample`}}</p>
 {{ call .Highlight `{
@@ -91,7 +109,10 @@
 	"createTime": 1653387358,
 	"deleteTime": 0,
 	"oneUse": false,
-	"syntax": "plaintext"
+	"syntax": "plaintext",
+	"author": "Anon",
+	"authorEmail": "me@example.org",
+	"authorURL": "https://example.org"
 }` `json`}}
 {{ call .Highlight `{
 	"id": "5mqqHZRg",
@@ -100,7 +121,10 @@
 	"createTime": 0,
 	"deleteTime": 0,
 	"oneUse": true,
-	"syntax": ""
+	"syntax": "",
+	"author": "",
+	"authorEmail": "",
+	"authorURL": ""
 }` `json`}}
 
 
