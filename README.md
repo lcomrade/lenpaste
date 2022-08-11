@@ -17,12 +17,6 @@
 
 
 
-## Documentation
-- [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
-- [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
-
-
-
 ## Launch your own server
 1. If you don't already have Docker installed, do so:
 ```
@@ -67,9 +61,6 @@ docker-compose pull && docker-compose up -d
 
 PS: If you want to install updates, run: `docker-compose pull && docker-compose stop && docker-compose up -d && docker system prune -a -f`
 
-Read more:
-- [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
-- [Database: PostgreSQL](docs/db_postgresql.md)
 
 
 ## Build from source code
@@ -83,6 +74,17 @@ make
 ```
 
 You can find the result of the build in the `./dist/` directory.
+
+
+
+## Other documentation
+For instance administrators:
+- [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
+- [Database: PostgreSQL](docs/db_postgresql.md)
+
+For developers:
+- [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
+- [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
 
 
 
