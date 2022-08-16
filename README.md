@@ -3,7 +3,7 @@
 
 ## Features
 - No need to register
-- Does not use cookies
+- Uses cookies only to store settings
 - Can work without JavaScript
 - Has its own API
 - Open source and self-hosted
@@ -11,9 +11,10 @@
 
 
 ## Public servers list
-| Server                                         | Description                              |
-| ---------------------------------------------- | ---------------------------------------- |
-| [paste.lcomrade.su](https://paste.lcomrade.su) | Server managed by the Lenpaste developer |
+| Server                                         | Description                                                                                                       |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [paste.lcomrade.su](https://paste.lcomrade.su) | Server managed by the Lenpaste developer.                                                                         |
+| [code.dbt3ch.com](https://code.dbt3ch.com)     | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
 
 
 
@@ -85,6 +86,12 @@ For instance administrators:
 For developers:
 - [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
 - [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
+
+
+
+## Might be interesting
+Reviews and testimonials:
+- [Pastebin Clone in Docker with Lenpaste](https://www.youtube.com/watch?v=YxcHxsZHh9A) (YouTube video)
 
 
 
