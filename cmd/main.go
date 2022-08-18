@@ -36,7 +36,7 @@ import (
 	"time"
 )
 
-var Version = ""
+var Version = "unknown"
 
 func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Config) {
 	for {
@@ -87,7 +87,7 @@ func printHelp(noErrors bool) {
 	println("  -robots-disallow    Prohibits search engine crawlers from indexing site using robots.txt file.")
 	println("  -title-max-length   Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
 	println("  -body-max-length    Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
-	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 1w, 30d, 365d. (default: never)")
+	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 1w, 30d, 365d. (default: unlimited)")
 	println("  -server-about       Path to the HTML file that contains the server description.")
 	println("  -server-rules       Path to the HTML file that contains the server rules.")
 	println("  -admin-name         Name of the administrator of this server.")
@@ -165,12 +165,6 @@ func parseDuration(s string) (int64, error) {
 	return out, nil
 }
 
-func init() {
-	if Version == "" {
-		Version = "unknown"
-	}
-}
-
 func main() {
 	// Get ./bin/ dir
 	binFile, err := os.Executable()
@@ -199,7 +193,7 @@ func main() {
 	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 10000, "")
-	flagMaxLifetime := flag.String("max-paste-lifetime", "never", "")
+	flagMaxLifetime := flag.String("max-paste-lifetime", "unlimited", "")
 	flagServerAbout := flag.String("server-about", "", "")
 	flagServerRules := flag.String("server-rules", "", "")
 	flagAdminName := flag.String("admin-name", "", "")
@@ -233,7 +227,7 @@ func main() {
 	// -max-paste-lifetime
 	maxLifeTime := int64(-1)
 
-	if *flagMaxLifetime != "never" {
+	if *flagMaxLifetime != "never" && *flagMaxLifetime != "unlimited" {
 		maxLifeTime, err = parseDuration(*flagMaxLifetime)
 		if err != nil {
 			exitOnError(err)

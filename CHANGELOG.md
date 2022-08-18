@@ -2,6 +2,12 @@
 Semantic versioning is used (https://semver.org/).
 
 
+
+## v1.1.1
+- Fixed: Incorrect operation of the maximum paste life parameter.
+- Updated README.
+
+
 ## v1.1
 - You can now specify author, author email and author URL for paste.
 - Full localization into Russian.
