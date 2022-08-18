@@ -32,6 +32,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -81,15 +82,15 @@ func printHelp(noErrors bool) {
 	println("  -addres             ADDRES:PORT (default: :80)")
 	println("  -web-dir            Dir with page templates and static content")
 	println("  -db-driver          Currently supported drivers: 'sqlite3' and 'postgres' (default: sqlite3)")
-	println("  -db-source          DB source")
+	println("  -db-source          DB source.")
 	println("  -db-cleanup-period  Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
 	println("  -robots-disallow    Prohibits search engine crawlers from indexing site using robots.txt file.")
 	println("  -title-max-length   Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
 	println("  -body-max-length    Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 100000)")
-	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 12h, 7m, 10s. (default: never)")
+	println("  -max-paste-lifetime Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 1w, 30d, 365d. (default: never)")
 	println("  -server-about       Path to the HTML file that contains the server description.")
 	println("  -server-rules       Path to the HTML file that contains the server rules.")
-	println("  -admin-name         Name of the administrator of this server")
+	println("  -admin-name         Name of the administrator of this server.")
 	println("  -admin-mail         Email of the administrator of this server.")
 	println("  -version            Display version and exit")
 	println("  -help               Display this help and exit")
@@ -116,6 +117,52 @@ func printFlagNotSet(flg string) {
 	println("flag is not set:", flg)
 
 	os.Exit(2)
+}
+
+func parseDuration(s string) (int64, error) {
+	var out int64
+
+	for _, part := range strings.Split(s, " ") {
+		if strings.HasSuffix(part, "m") {
+			val, err := strconv.Atoi(part[:len(part)-1])
+			if err != nil {
+				return out, errors.New(`parse duration: invalid format "` + part + `"`)
+			}
+			out = out + (int64(val) * 60)
+			continue
+		}
+
+		if strings.HasSuffix(part, "h") {
+			val, err := strconv.Atoi(part[:len(part)-1])
+			if err != nil {
+				return out, errors.New(`parse duration: invalid format "` + part + `"`)
+			}
+			out = out + (int64(val) * 60 * 60)
+			continue
+		}
+
+		if strings.HasSuffix(part, "d") {
+			val, err := strconv.Atoi(part[:len(part)-1])
+			if err != nil {
+				return out, errors.New(`parse duration: invalid format "` + part + `"`)
+			}
+			out = out + int64((val)*60*60*24)
+			continue
+		}
+
+		if strings.HasSuffix(part, "w") {
+			val, err := strconv.Atoi(part[:len(part)-1])
+			if err != nil {
+				return out, errors.New(`parse duration: invalid format "` + part + `"`)
+			}
+			out = out + int64((val)*60*60*24*7)
+			continue
+		}
+
+		return out, errors.New(`parse duration: invalid format "` + part + `"`)
+	}
+
+	return out, nil
 }
 
 func init() {
@@ -187,12 +234,10 @@ func main() {
 	maxLifeTime := int64(-1)
 
 	if *flagMaxLifetime != "never" {
-		maxLifeTimeTmp, err := time.ParseDuration(*flagMaxLifetime)
+		maxLifeTime, err = parseDuration(*flagMaxLifetime)
 		if err != nil {
 			exitOnError(err)
 		}
-
-		maxLifeTime = int64(maxLifeTimeTmp.Seconds())
 
 		if maxLifeTime < 600 {
 			println("-max-paste-lifetime flag cannot have a value less than 10 minutes")

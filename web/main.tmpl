@@ -57,10 +57,10 @@
 			{{if or (ge .MaxLifeTime 86400)    (lt .MaxLifeTime 0)}}<option value="86400">{{ call .Translate `main.1Day` }}</option>{{end}}
 			{{if or (ge .MaxLifeTime 604800)   (lt .MaxLifeTime 0)}}<option value="604800">{{ call .Translate `main.1Week` }}</option>{{end}}
 			{{if or (ge .MaxLifeTime 1209600)  (lt .MaxLifeTime 0)}}<option value="1209600">{{ call .Translate `main.2Weeks` }}</option>{{end}}
-			{{if or (ge .MaxLifeTime 2629800)  (lt .MaxLifeTime 0)}}<option value="2629800">{{ call .Translate `main.1Month` }}</option>{{end}}
-			{{if or (ge .MaxLifeTime 5259600)  (lt .MaxLifeTime 0)}}<option value="5259600">{{ call .Translate `main.2Months` }}</option>{{end}}
-			{{if or (ge .MaxLifeTime 15778800) (lt .MaxLifeTime 0)}}<option value="15778800">{{ call .Translate `main.6Months` }}</option>{{end}}
-			{{if or (ge .MaxLifeTime 31557600) (lt .MaxLifeTime 0)}}<option value="31557600">{{ call .Translate `main.1Year` }}</option>{{end}}
+			{{if or (ge .MaxLifeTime 2592000)  (lt .MaxLifeTime 0)}}<option value="2592000">{{ call .Translate `main.1Month` }}</option>{{end}}
+			{{if or (ge .MaxLifeTime 5184000)  (lt .MaxLifeTime 0)}}<option value="5184000">{{ call .Translate `main.2Months` }}</option>{{end}}
+			{{if or (ge .MaxLifeTime 15552000) (lt .MaxLifeTime 0)}}<option value="15552000">{{ call .Translate `main.6Months` }}</option>{{end}}
+			{{if or (ge .MaxLifeTime 31536000) (lt .MaxLifeTime 0)}}<option value="31536000">{{ call .Translate `main.1Year` }}</option>{{end}}
 		</select>
 	</div>
 	<details>
