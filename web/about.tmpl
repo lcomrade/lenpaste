@@ -14,17 +14,22 @@
 <h3>{{ call .Translate `about.Limit` }}</h3>
 {{if ne .TitleMaxLen 0}}
 	{{if gt .TitleMaxLen 0}}
-	<p>{{call .Translate `about.LimitTitle` .TitleMaxLen}}<br/>
+	<p>{{call .Translate `about.LimitTitle` .TitleMaxLen}}<br>
 	{{else}}
-	<p>{{ call .Translate `about.LimitTitleNo` }}</br>
+	<p>{{ call .Translate `about.LimitTitleNo` }}<br>
 	{{end}}
 {{else}}
-<p>{{ call .Translate `about.LimitTitleDisable` }}<br/>
+<p>{{ call .Translate `about.LimitTitleDisable` }}<br>
 {{end}}
 {{if gt .BodyMaxLen 0}}
-{{call .Translate `about.LimitBody` .BodyMaxLen }}</p>
+{{call .Translate `about.LimitBody` .BodyMaxLen }}<br>
 {{else}}
-{{ call .Translate `about.LimitBodyNo` }}</p>
+{{ call .Translate `about.LimitBodyNo` }}<br>
+{{end}}
+{{if gt .MaxLifeTime 0}}
+{{call .Translate `about.LimitLifeTime` .MaxLifeTime }}</p>
+{{else}}
+{{ call .Translate `about.LimitLifeTimeNo` }}</p>
 {{end}}
 
 {{if or (ne .AdminName ``) (ne .AdminMail ``)}}

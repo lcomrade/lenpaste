@@ -61,7 +61,7 @@ services:
 docker-compose pull && docker-compose up -d
 ```
 
-PS: If you want to install updates, run: `docker-compose pull && docker-compose up -d && docker system prune -a -f`
+TIP: If you want to install updates, run: `docker-compose pull && docker-compose up -d && docker system prune -a -f`
 
 
 
@@ -102,4 +102,5 @@ If you want to:
 - Ask a question.
 - Become a contributor.
 - Or something else.
+
 Then write to me: Leonid Maslakov <root@lcomrade.su>

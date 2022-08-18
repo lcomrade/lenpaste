@@ -27,6 +27,7 @@ type aboutTmpl struct {
 	Version     string
 	TitleMaxLen int
 	BodyMaxLen  int
+	MaxLifeTime int64
 
 	ServerAbout template.HTML
 	ServerRules template.HTML
@@ -51,6 +52,7 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		Version:     *data.Version,
 		TitleMaxLen: *data.TitleMaxLen,
 		BodyMaxLen:  *data.BodyMaxLen,
+		MaxLifeTime: *data.MaxLifeTime,
 		ServerAbout: template.HTML(*data.ServerAbout),
 		ServerRules: template.HTML(*data.ServerRules),
 		AdminName:   *data.AdminName,
