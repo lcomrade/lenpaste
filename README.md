@@ -8,6 +8,8 @@
 - Has its own API
 - Open source and self-hosted
 
+Find out what's coming in the next release on the [roadmap](ROADMAP.md).
+
 
 
 ## Public servers list
@@ -101,6 +103,9 @@ You can use it in `docker-compose.yml` or copy it to another machine.
 
 
 ## Other documentation
+For all:
+- [Roadmap for new release](ROADMAP.md)
+
 For instance administrators:
 - [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
 - [Database: PostgreSQL](docs/db_postgresql.md)
