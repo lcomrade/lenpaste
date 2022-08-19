@@ -17,6 +17,7 @@ Find out what's coming in the next release on the [roadmap](ROADMAP.md).
 | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | [paste.lcomrade.su](https://paste.lcomrade.su) | Server managed by the Lenpaste developer.                                                                         |
 | [code.dbt3ch.com](https://code.dbt3ch.com)     | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
+| [notepad.co.il](https://notepad.co.il)         | Server managed by Shlomi Porush.                                                                                  |
 
 
 
@@ -105,6 +106,7 @@ You can use it in `docker-compose.yml` or copy it to another machine.
 ## Other documentation
 For all:
 - [Roadmap for new release](ROADMAP.md)
+- [Frequently Asked Questions](FAQ.md)
 
 For instance administrators:
 - [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)

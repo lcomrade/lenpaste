@@ -9,5 +9,5 @@ Intended to set the default lifetime value selected in the web interface.
 The value of this parameter will not be forwarded through the API.
 
 I need help creating a **Lenpaste logo**.
-If you are ready to create a logo and license it under a Creative Commons license
+If you are ready to create a logo (favicon) and license it under a Creative Commons license
 (I need it so there would be no legal problems), then email me at root@lcomrade.su
