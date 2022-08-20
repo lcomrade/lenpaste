@@ -44,7 +44,7 @@ services:
       - LENPASTE_DB_CLEANUP_PERIOD=3h         # Interval at which the DB is cleared of expired but not yet deleted pastes.
       - LENPASTE_ROBOTS_DISALLOW=false        # Prohibits search engine crawlers from indexing site using robots.txt file.
       - LENPASTE_TITLE_MAX_LENGTH=100         # Maximum length of the paste title. If 0 disable title, if -1 disable length limit.
-      - LENPASTE_BODY_MAX_LENGTH=10000        # Maximum length of the paste body. If -1 disable length limit. Can't be -1.
+      - LENPASTE_BODY_MAX_LENGTH=20000        # Maximum length of the paste body. If -1 disable length limit. Can't be -1.
       - LENPASTE_MAX_PASTE_LIFETIME=unlimited # Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 7w, 30d, 365d.
       - LENPASTE_ADMIN_NAME=                  # Name of the administrator of this server.
       - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
