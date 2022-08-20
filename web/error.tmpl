@@ -1,8 +1,10 @@
-{{define "titlePrefix"}}{{.Code}} {{ call .Translate .Error }} | {{end}}
+{{define "titlePrefix"}}{{.Code}} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3>{{ call .Translate `error.Error` }} {{.Code}}</h3>
-<p>{{ call .Translate .Error }}</p>
+<h3>{{.Code}}</h3>
+{{if eq .Code 400 }}<p>{{ call .Translate `error.400` }}</p>{{end}}
+{{if eq .Code 404 }}<p>{{ call .Translate `error.404` }}</p>{{end}}
+{{if eq .Code 500 }}<p>{{ call .Translate `error.500` }}</p>{{end}}
 
 {{if and (ne .AdminName ``) (ne .AdminMail ``)}}
 <p>{{ call .Translate `error.AdminContacts` }} <code>{{.AdminName}} &lt<a href="mailto:{{.AdminMail}}">{{.AdminMail}}</a>&gt</code></p>

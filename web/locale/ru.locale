@@ -4,9 +4,9 @@ base.Docs=Документация
 base.Settings=Настройки
 
 error.Error=Ошибка
-//error.BadRequest=Неверный запрос
-//error.NotFound=Не найдено
-//error.InternalServerError=Внутренняя ошибка сервера
+error.400=Неверный запрос
+error.404=Ничего не найдено
+error.500=Внутренняя ошибка сервера
 error.AdminContacts=Связаться с администратором
 error.BackToHome=Вернуться на главную
 

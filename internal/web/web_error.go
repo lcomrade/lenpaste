@@ -25,7 +25,6 @@ import (
 
 type errorTmpl struct {
 	Code      int
-	Error     string
 	AdminName string
 	AdminMail string
 	Translate func(string, ...interface{}) template.HTML
@@ -38,7 +37,6 @@ func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
 
 	// Render template
 	errData := errorTmpl{
-		Error:     "Bad Request",
 		Code:      400,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,
@@ -58,7 +56,6 @@ func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
 
 	// Render template
 	errData := errorTmpl{
-		Error:     "Not Found",
 		Code:      404,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,
@@ -81,7 +78,6 @@ func (data Data) errorInternal(rw http.ResponseWriter, req *http.Request, err er
 
 	// Render template
 	errData := errorTmpl{
-		Error:     "Internal Server Error",
 		Code:      500,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,

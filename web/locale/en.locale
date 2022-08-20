@@ -4,9 +4,9 @@ base.Docs=Docs
 base.Settings=Settings
 
 error.Error=Error
-//error.BadRequest=Bad Request
-//error.NotFound=Not Found
-//error.InternalServerError=Internal Server Error
+error.400=Bad Request
+error.404=Not Found
+error.500=Internal Server Error
 error.AdminContacts=Contact administrator:
 error.BackToHome=Back to Home
 
