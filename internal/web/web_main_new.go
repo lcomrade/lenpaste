@@ -25,10 +25,11 @@ import (
 )
 
 type createTmpl struct {
-	TitleMaxLen int
-	BodyMaxLen  int
-	MaxLifeTime int64
-	Lexers      []string
+	TitleMaxLen     int
+	BodyMaxLen      int
+	MaxLifeTime     int64
+	DefaultLifeTime string
+	Lexers          []string
 
 	AuthorDefault      string
 	AuthorEmailDefault string
@@ -64,6 +65,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		TitleMaxLen:        *data.TitleMaxLen,
 		BodyMaxLen:         *data.BodyMaxLen,
 		MaxLifeTime:        *data.MaxLifeTime,
+		DefaultLifeTime:    *data.DefaultLifeTime,
 		Lexers:             *data.Lexers,
 		AuthorDefault:      getCookie(req, "author"),
 		AuthorEmailDefault: getCookie(req, "authorEmail"),

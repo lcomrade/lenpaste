@@ -55,9 +55,10 @@ type Data struct {
 
 	Version *string
 
-	TitleMaxLen *int
-	BodyMaxLen  *int
-	MaxLifeTime *int64
+	TitleMaxLen     *int
+	BodyMaxLen      *int
+	MaxLifeTime     *int64
+	DefaultLifeTime *string
 
 	ServerAbout *string
 	ServerRules *string
@@ -68,7 +69,7 @@ type Data struct {
 	RobotsDisallow *bool
 }
 
-func Load(cfg config.Config, webDir string) (Data, error) {
+func Load(cfg config.Config, webDir string, defaultPasteLifetime string) (Data, error) {
 	var data Data
 	var err error
 
@@ -81,6 +82,7 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	data.TitleMaxLen = &cfg.TitleMaxLen
 	data.BodyMaxLen = &cfg.BodyMaxLen
 	data.MaxLifeTime = &cfg.MaxLifeTime
+	data.DefaultLifeTime = &defaultPasteLifetime
 
 	data.ServerAbout = &cfg.ServerAbout
 	data.ServerRules = &cfg.ServerRules

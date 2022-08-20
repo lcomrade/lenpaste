@@ -60,6 +60,12 @@ if [[ -n "$LENPASTE_MAX_PASTE_LIFETIME" ]]; then
 fi
 
 
+# LENPASTE_MAX_PASTE_LIFETIME
+if [[ -n "$LENPASTE_DEFAULT_PASTE_LIFETIME" ]]; then
+	RUN_CMD="$RUN_CMD -default-paste-lifetime '$LENPASTE_DEFAULT_PASTE_LIFETIME'"
+fi
+
+
 # Server about
 if [[ -f "/data/about.html" ]]; then
 	RUN_CMD="$RUN_CMD -server-about /data/about.html"
