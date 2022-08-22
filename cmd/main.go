@@ -262,13 +262,13 @@ func main() {
 	}
 
 	// Load server "terms of use"
-	if serverRules == "" {
-		println("In order to set the Terms of Use you must also specify the Server Rules. Server rules - this is a document written clearly for ordinary users. A Terms of Use is needed to protect the owner of the server from legal problems.")
-		os.Exit(2)
-	}
-
 	serverTermsOfUse := ""
 	if *flagServerTerms != "" {
+		if serverRules == "" {
+			println("In order to set the Terms of Use you must also specify the Server Rules. Server rules - this is a document written clearly for ordinary users. A Terms of Use is needed to protect the owner of the server from legal problems.")
+			os.Exit(2)
+		}
+
 		serverTermsOfUse, err = readFile(*flagServerTerms)
 		if err != nil {
 			exitOnError(err)
