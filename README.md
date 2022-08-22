@@ -51,8 +51,9 @@ services:
       - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
     volumes:
       # /data/lenpaste.db - SQLite DB
-      # /data/about.html  - About this server
-      # /data/rules.html  - This server rules
+      # /data/about       - About this server (TXT file)
+      # /data/rules       - This server rules (TXT file)
+      # /data/terms       - This server "terms of use" (TXT file)
       - "${PWD}/data:/data"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"

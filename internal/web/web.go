@@ -43,6 +43,7 @@ type Data struct {
 	PasteContinue  *template.Template
 	Settings       *template.Template
 	About          *template.Template
+	TermsOfUse     *template.Template
 	License        *template.Template
 	SourceCodePage *template.Template
 
@@ -60,8 +61,10 @@ type Data struct {
 	MaxLifeTime     *int64
 	DefaultLifeTime *string
 
-	ServerAbout *string
-	ServerRules *string
+	ServerAbout      *string
+	ServerRules      *string
+	ServerTermsExist *bool
+	ServerTermsOfUse *string
 
 	AdminName *string
 	AdminMail *string
@@ -86,6 +89,13 @@ func Load(cfg config.Config, webDir string, defaultPasteLifetime string) (Data, 
 
 	data.ServerAbout = &cfg.ServerAbout
 	data.ServerRules = &cfg.ServerRules
+	data.ServerTermsOfUse = &cfg.ServerTermsOfUse
+
+	serverTermsExist := false
+	if cfg.ServerTermsOfUse != "" {
+		serverTermsExist = true
+	}
+	data.ServerTermsExist = &serverTermsExist
 
 	data.AdminName = &cfg.AdminName
 	data.AdminMail = &cfg.AdminMail
@@ -164,6 +174,15 @@ func Load(cfg config.Config, webDir string, defaultPasteLifetime string) (Data, 
 	data.About, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "about.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// terms.tmpl
+	data.TermsOfUse, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "terms.tmpl"),
 	)
 	if err != nil {
 		return data, err

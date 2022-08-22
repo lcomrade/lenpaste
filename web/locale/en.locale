@@ -40,6 +40,7 @@ main.AuthorURL=Author URL:
 main.AuthorURLPlaceholder=https://example.org
 main.AdvancedParametersHelp=*You can set the default values for these parameters in the <a href="%s" target="_blank">settings</a>.
 main.Create=Create New Paste
+main.AcceptTerms=<a href="%s" target="_blank">See Terms of Use</a>
 
 settings.Title=Settings
 settings.Language=Language:
@@ -71,6 +72,7 @@ pasteEmd.ErrorNotFound=404 Not Found
 about.Title=About
 about.AboutServerTitle=About this server
 about.RulesTitle=Rules of this server
+about.SeeTerms=See the <a href="%s">terms of use</a> for more information.
 about.Limit=Limits
 about.LimitTitle=Maximum title length: <code>%d</code> characters.
 about.LimitTitleNo=There is no limit to the length of the title.
@@ -89,6 +91,10 @@ about.Lenpaste2=You do not need to register here.
 about.Lenpaste3=This site does not use cookies to keep track of you.
 about.Lenpaste4=This site can work without JavaScript.
 about.Lenpaste5=Lenpaste has its own <a href="%s">API</a>.
+
+terms.Title=Terms of Use
+terms.Notice=The Terms of Use apply to this server only, not to the Lenpaste software.
+terms.NoTerms=This server has no terms of use.
 
 sourceCode.Title=Source Code
 sourceCode.Message=Unfortunately, it is not yet possible to download the source code directly from this server. But you can download it from the link:

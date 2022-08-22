@@ -33,8 +33,9 @@ type Config struct {
 	BodyMaxLen  int
 	MaxLifeTime int64
 
-	ServerAbout string
-	ServerRules string
+	ServerAbout      string
+	ServerRules      string
+	ServerTermsOfUse string
 
 	AdminName string
 	AdminMail string

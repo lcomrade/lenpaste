@@ -3,12 +3,13 @@
 {{define "article"}}
 {{if ne .ServerAbout ``}}
 <h3>{{ call .Translate `about.AboutServerTitle` }}</h3>
-{{.ServerAbout}}
+{{ call .Highlight .ServerAbout `plaintext` }}
 {{end}}
 
 {{if ne .ServerRules ``}}
 <h3>{{ call .Translate `about.RulesTitle` }}</h3>
-{{.ServerRules}}
+{{ call .Highlight .ServerRules `plaintext` }}
+{{if .ServerTermsExist}}<p>{{ call .Translate `about.SeeTerms` `/terms` }}</p>{{end}}
 {{end}}
 
 <h3>{{ call .Translate `about.Limit` }}</h3>

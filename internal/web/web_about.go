@@ -29,12 +29,14 @@ type aboutTmpl struct {
 	BodyMaxLen  int
 	MaxLifeTime int64
 
-	ServerAbout template.HTML
-	ServerRules template.HTML
+	ServerAbout      string
+	ServerRules      string
+	ServerTermsExist bool
 
 	AdminName string
 	AdminMail string
 
+	Highlight func(string, string) template.HTML
 	Translate func(string, ...interface{}) template.HTML
 }
 
@@ -49,15 +51,17 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	dataTmpl := aboutTmpl{
-		Version:     *data.Version,
-		TitleMaxLen: *data.TitleMaxLen,
-		BodyMaxLen:  *data.BodyMaxLen,
-		MaxLifeTime: *data.MaxLifeTime,
-		ServerAbout: template.HTML(*data.ServerAbout),
-		ServerRules: template.HTML(*data.ServerRules),
-		AdminName:   *data.AdminName,
-		AdminMail:   *data.AdminMail,
-		Translate:   data.Locales.findLocale(req).translate,
+		Version:          *data.Version,
+		TitleMaxLen:      *data.TitleMaxLen,
+		BodyMaxLen:       *data.BodyMaxLen,
+		MaxLifeTime:      *data.MaxLifeTime,
+		ServerAbout:      *data.ServerAbout,
+		ServerRules:      *data.ServerRules,
+		ServerTermsExist: *data.ServerTermsExist,
+		AdminName:        *data.AdminName,
+		AdminMail:        *data.AdminMail,
+		Highlight:        tryHighlight,
+		Translate:        data.Locales.findLocale(req).translate,
 	}
 
 	// Show page

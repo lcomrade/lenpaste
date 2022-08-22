@@ -67,14 +67,20 @@ fi
 
 
 # Server about
-if [[ -f "/data/about.html" ]]; then
-	RUN_CMD="$RUN_CMD -server-about /data/about.html"
+if [[ -f "/data/about" ]]; then
+	RUN_CMD="$RUN_CMD -server-about /data/about"
 fi
 
 
 # Server rules
-if [[ -f "/data/rules.html" ]]; then
-	RUN_CMD="$RUN_CMD -server-rules /data/rules.html"
+if [[ -f "/data/rules" ]]; then
+	RUN_CMD="$RUN_CMD -server-rules /data/rules"
+fi
+
+
+# Server terms of use
+if [[ -f "/data/terms" ]]; then
+	RUN_CMD="$RUN_CMD -server-terms /data/terms"
 fi
 
 

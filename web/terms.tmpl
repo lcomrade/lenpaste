@@ -1,0 +1,11 @@
+{{define "titlePrefix"}}{{ call .Translate `terms.Title`}} | {{end}}
+{{define "headAppend"}}{{end}}
+{{define "article"}}
+<h3>{{ call .Translate `terms.Title` }}</h3>
+{{if ne .TermsOfUse ``}}
+<div class="info">{{ call .Translate `terms.Notice` }}</div>
+{{ call .Highlight .TermsOfUse `plaintext` }}
+{{else}}
+{{ call .Translate `terms.NoTerms` }}
+{{end}}
+{{end}}

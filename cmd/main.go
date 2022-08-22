@@ -89,8 +89,9 @@ func printHelp(noErrors bool) {
 	println("  -body-max-length        Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 20000)")
 	println("  -max-paste-lifetime     Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 1w, 30d, 365d. (default: unlimited)")
 	println("  -default-paste-lifetime Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.")
-	println("  -server-about           Path to the HTML file that contains the server description.")
-	println("  -server-rules           Path to the HTML file that contains the server rules.")
+	println("  -server-about           Path to the TXT file that contains the server description.")
+	println("  -server-rules           Path to the TXT file that contains the server rules.")
+	println("  -server-terms           Path to the TXT file that contains the server terms of use.")
 	println("  -admin-name             Name of the administrator of this server.")
 	println("  -admin-mail             Email of the administrator of this server.")
 	println("  -version                Display version and exit")
@@ -198,6 +199,7 @@ func main() {
 	flagDefaultPasteLifetime := flag.String("default-paste-lifetime", "", "")
 	flagServerAbout := flag.String("server-about", "", "")
 	flagServerRules := flag.String("server-rules", "", "")
+	flagServerTerms := flag.String("server-terms", "", "")
 	flagAdminName := flag.String("admin-name", "", "")
 	flagAdminMail := flag.String("admin-mail", "", "")
 	flagVersion := flag.Bool("version", false, "")
@@ -259,6 +261,20 @@ func main() {
 		}
 	}
 
+	// Load server "terms of use"
+	if serverRules == "" {
+		println("In order to set the Terms of Use you must also specify the Server Rules. Server rules - this is a document written clearly for ordinary users. A Terms of Use is needed to protect the owner of the server from legal problems.")
+		os.Exit(2)
+	}
+
+	serverTermsOfUse := ""
+	if *flagServerTerms != "" {
+		serverTermsOfUse, err = readFile(*flagServerTerms)
+		if err != nil {
+			exitOnError(err)
+		}
+	}
+
 	// Settings
 	db := storage.DB{
 		DriverName:     *flagDbDriver,
@@ -270,17 +286,18 @@ func main() {
 	}
 
 	cfg := config.Config{
-		DB:             db,
-		Log:            log,
-		Version:        Version,
-		TitleMaxLen:    *flagTitleMaxLen,
-		BodyMaxLen:     *flagBodyMaxLen,
-		MaxLifeTime:    maxLifeTime,
-		ServerAbout:    serverAbout,
-		ServerRules:    serverRules,
-		AdminName:      *flagAdminName,
-		AdminMail:      *flagAdminMail,
-		RobotsDisallow: *flagRobotsDisallow,
+		DB:               db,
+		Log:              log,
+		Version:          Version,
+		TitleMaxLen:      *flagTitleMaxLen,
+		BodyMaxLen:       *flagBodyMaxLen,
+		MaxLifeTime:      maxLifeTime,
+		ServerAbout:      serverAbout,
+		ServerRules:      serverRules,
+		ServerTermsOfUse: serverTermsOfUse,
+		AdminName:        *flagAdminName,
+		AdminMail:        *flagAdminMail,
+		RobotsDisallow:   *flagRobotsDisallow,
 	}
 
 	apiv1Data := apiv1.Load(cfg)
@@ -325,6 +342,9 @@ func main() {
 
 	http.HandleFunc("/settings", func(rw http.ResponseWriter, req *http.Request) {
 		webData.SettingsHand(rw, req)
+	})
+	http.HandleFunc("/terms", func(rw http.ResponseWriter, req *http.Request) {
+		webData.TermsOfUseHand(rw, req)
 	})
 
 	http.HandleFunc("/raw/", func(rw http.ResponseWriter, req *http.Request) {

@@ -93,6 +93,9 @@
 		</table>
 		<p class="text-grey">{{call .Translate `main.AdvancedParametersHelp` `/settings`}}</p>
 	</details>
-	<div><button class="button-green" type="submit" tabindex=7>{{ call .Translate `main.Create` }}</button></div>
+	<div class="text-bar">
+		<div><button class="button-green" type="submit" tabindex=7>{{ call .Translate `main.Create` }}</button></div>
+		<div class="text-bar-right">{{if .ServerTermsExist}}{{ call .Translate `main.AcceptTerms` `/terms` }}{{end}}</div>
+	</div>
 </form>
 {{end}}

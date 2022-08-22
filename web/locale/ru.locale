@@ -40,6 +40,7 @@ main.AuthorURL=Сайт автора:
 main.AuthorURLPlaceholder=https://example.org
 main.AdvancedParametersHelp=*Вы можете установить значения по умолчанию для этих параметров в <a href="%s" target="_blank">настройках</a>.
 main.Create=Создать новый отрывок
+main.AcceptTerms=<a href="%s" target="_blank">См. условия использования</a>
 
 settings.Title=Настройки
 settings.Language=Язык:
@@ -71,6 +72,7 @@ pasteEmd.ErrorNotFound=404 Не найдено
 about.Title=О сайте
 about.AboutServerTitle=Об этом сервер
 about.RulesTitle=Правила этого сервера
+about.SeeTerms=Для получения более подробной информации смотрите <a href="%s">условия использования</a>.
 about.Limit=Лимиты
 about.LimitTitle=Максимальная длина заголовка: <code>%d</code> символов.
 about.LimitTitleNo=Длина заголовка не ограничена.
@@ -89,6 +91,10 @@ about.Lenpaste2=Вам не нужно регистрироваться здес
 about.Lenpaste3=Этот сайт не использует Cookie что бы следить за вами.
 about.Lenpaste4=Этот сайт может работать без JavaScript.
 about.Lenpaste5=У ЛенОтрывка есть свой собственный <a href="%s">API</a>.
+
+terms.Title=Условия использования
+terms.Notice=Эти условия использования не имеет ни какого отношения к ПО ЛенОтрывок, они распространяются только на этот сервер.
+terms.NoTerms=У этого сервера нет условий использования.
 
 sourceCode.Title=Исходный код
 sourceCode.Message=К сожалению, пока нет возможности скачать исходный код непосредственно с этого сервера. Но вы можете загрузить его по ссылке:

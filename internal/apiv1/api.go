@@ -37,8 +37,9 @@ type Data struct {
 	BodyMaxLen  *int
 	MaxLifeTime *int64
 
-	ServerAbout *string
-	ServerRules *string
+	ServerAbout      *string
+	ServerRules      *string
+	ServerTermsOfUse *string
 
 	AdminName *string
 	AdminMail *string
@@ -48,16 +49,17 @@ func Load(cfg config.Config) Data {
 	lexers := chromaLexers.Names(false)
 
 	return Data{
-		DB:          cfg.DB,
-		Log:         cfg.Log,
-		Lexers:      &lexers,
-		Version:     &cfg.Version,
-		TitleMaxLen: &cfg.TitleMaxLen,
-		BodyMaxLen:  &cfg.BodyMaxLen,
-		MaxLifeTime: &cfg.MaxLifeTime,
-		ServerAbout: &cfg.ServerAbout,
-		ServerRules: &cfg.ServerRules,
-		AdminName:   &cfg.AdminName,
-		AdminMail:   &cfg.AdminMail,
+		DB:               cfg.DB,
+		Log:              cfg.Log,
+		Lexers:           &lexers,
+		Version:          &cfg.Version,
+		TitleMaxLen:      &cfg.TitleMaxLen,
+		BodyMaxLen:       &cfg.BodyMaxLen,
+		MaxLifeTime:      &cfg.MaxLifeTime,
+		ServerAbout:      &cfg.ServerAbout,
+		ServerRules:      &cfg.ServerRules,
+		ServerTermsOfUse: &cfg.ServerTermsOfUse,
+		AdminName:        &cfg.AdminName,
+		AdminMail:        &cfg.AdminMail,
 	}
 }
