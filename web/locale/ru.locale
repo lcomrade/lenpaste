@@ -56,6 +56,9 @@ paste.Expires=Конец срока хранения:
 paste.Now=Сейчас
 paste.Never=Никогда
 
+pasteJS.ShortWeekDay="Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"
+pasteJS.ShortMonth="Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"
+
 pasteContinue.Continue=Продолжить?
 pasteContinue.Message=Этот отрывок можно просмотреть только один раз после чего он будет удалён. Продолжить?
 pasteContinue.Cancel=Отмена

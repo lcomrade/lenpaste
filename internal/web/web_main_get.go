@@ -46,6 +46,10 @@ type pasteTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
+type pasteJsTmpl struct {
+	Translate func(string, ...interface{}) template.HTML
+}
+
 type pasteContinueTmpl struct {
 	ID        string
 	Translate func(string, ...interface{}) template.HTML
@@ -135,4 +139,11 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		data.errorInternal(rw, req, err)
 		return
 	}
+}
+
+func (data Data) PasteJSHand(rw http.ResponseWriter, req *http.Request) {
+	data.Log.HttpRequest(req)
+
+	rw.Header().Set("Content-Type", "application/javascript")
+	data.PasteJS.Execute(rw, pasteJsTmpl{Translate: data.Locales.findLocale(req).translate})
 }

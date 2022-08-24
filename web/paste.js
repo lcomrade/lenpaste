@@ -3,14 +3,11 @@
 // Therefore, if you are concerned about privacy, you can disable JavaScript in your browser.
 
 document.addEventListener("DOMContentLoaded", () => {
-	const shortWeekDayEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	const shortMonthEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-	const shortWeekDayRu = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-	const shortMonthRu = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+	const shortWeekDay = [{{call .Translate `pasteJS.ShortWeekDay`}}];
+	const shortMonth = [{{call .Translate `pasteJS.ShortMonth`}}];
 
 	function dateToString(date) {
-		let dateStr = shortWeekDayEn[date.getDay()] + ", " + date.getDate() + " " + shortMonthEn[date.getMonth()];
+		let dateStr = shortWeekDay[date.getDay()] + ", " + date.getDate() + " " + shortMonth[date.getMonth()];
 		dateStr = dateStr + " " + date.getFullYear();
 		dateStr = dateStr + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 		
