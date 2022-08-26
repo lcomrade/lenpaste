@@ -119,7 +119,10 @@ For developers:
 
 
 ## Might be interesting
-Reviews and testimonials:
+Manuals:
+- [How to Install LenPaste on Your Synology NAS](https://mariushosting.com/how-to-install-lenpaste-on-your-synology-nas/) (WEB site)
+
+Reviews:
 - [Pastebin Clone in Docker with Lenpaste](https://www.youtube.com/watch?v=YxcHxsZHh9A) (YouTube video)
 
 
