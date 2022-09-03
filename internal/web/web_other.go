@@ -19,8 +19,13 @@
 package web
 
 import (
+	"html/template"
 	"net/http"
 )
+
+type codeJsTmpl struct {
+	Translate func(string, ...interface{}) template.HTML
+}
 
 func (data Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
@@ -34,4 +39,11 @@ func (data Data) MainJSHand(rw http.ResponseWriter, req *http.Request) {
 
 	rw.Header().Set("Content-Type", "application/javascript")
 	rw.Write(*data.MainJS)
+}
+
+func (data Data) CodeJSHand(rw http.ResponseWriter, req *http.Request) {
+	data.Log.HttpRequest(req)
+
+	rw.Header().Set("Content-Type", "application/javascript")
+	data.CodeJS.Execute(rw, codeJsTmpl{Translate: data.Locales.findLocale(req).translate})
 }

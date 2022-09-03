@@ -42,6 +42,8 @@ main.AdvancedParametersHelp=*You can set the default values for these parameters
 main.Create=Create New Paste
 main.AcceptTerms=<a href="%s" target="_blank">See Terms of Use</a>
 
+codeJS.Paste=Copy
+
 settings.Title=Settings
 settings.Language=Language:
 settings.LanguageDefault=Use browser language

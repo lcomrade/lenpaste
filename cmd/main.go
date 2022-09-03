@@ -336,6 +336,9 @@ func main() {
 	http.HandleFunc("/main.js", func(rw http.ResponseWriter, req *http.Request) {
 		webData.MainJSHand(rw, req)
 	})
+	http.HandleFunc("/code.js", func(rw http.ResponseWriter, req *http.Request) {
+		webData.CodeJSHand(rw, req)
+	})
 	http.HandleFunc("/paste.js", func(rw http.ResponseWriter, req *http.Request) {
 		webData.PasteJSHand(rw, req)
 	})

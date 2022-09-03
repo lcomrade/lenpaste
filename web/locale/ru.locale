@@ -42,6 +42,8 @@ main.AdvancedParametersHelp=*Вы можете установить значен
 main.Create=Создать новый отрывок
 main.AcceptTerms=<a href="%s" target="_blank">См. условия использования</a>
 
+codeJS.Paste=Копировать
+
 settings.Title=Настройки
 settings.Language=Язык:
 settings.LanguageDefault=Использовать язык браузера

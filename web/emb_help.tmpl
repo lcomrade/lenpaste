@@ -1,5 +1,5 @@
 {{define "titlePrefix"}}{{ call .Translate `pasteEmbHelp.Title` }} {{.ID}} | {{end}}
-{{define "headAppend"}}{{end}}
+{{define "headAppend"}}<script src="/code.js"></script>{{end}}
 {{define "article"}}
 <h3><a href="/{{.ID}}">{{.ID}}</a> / {{ call .Translate `pasteEmbHelp.Title` }}</h3>
 {{if or (.OneUse) (ne .DeleteTime 0)}}

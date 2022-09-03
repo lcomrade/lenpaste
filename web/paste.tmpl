@@ -1,5 +1,8 @@
 {{define "titlePrefix"}}{{if .Title}}{{.Title}}{{else}}{{.ID}}{{end}} | {{end}}
-{{define "headAppend"}}<script src="/paste.js"></script>{{end}}
+{{define "headAppend"}}
+<script src="/paste.js"></script>
+<script src="/code.js"></script>
+{{end}}
 {{define "article"}}
 {{if .Title}}<input class="stretch-width" value="{{.Title}}" tabindex=1 readonly>
 {{end}}
