@@ -39,6 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	let preElements = document.getElementsByTagName("pre");
 	for (var i = 0; preElements.length > i; i++) {
-		preElements[i].insertAdjacentHTML("afterbegin", "<button class='button-green' style='float: right;' onclick='copyButton(this)'>"+pasteTxt+"</button>");
+		preElements[i].insertAdjacentHTML("beforeend", "<button class='button-green' style='position: absolute; top: 16px; right: 16px; margin: 0; visibility: hidden;' onclick='copyButton(this)'>"+pasteTxt+"</button>");
+		preElements[i].style.position = "relative";
+		preElements[i].style.overflow = "auto";
+
+		preElements[i].addEventListener("mouseover", (event) => {
+			event.currentTarget.getElementsByTagName("button")[0].style.visibility = "visible";
+		});
+
+		preElements[i].addEventListener("mouseout", (event) => {
+			event.currentTarget.getElementsByTagName("button")[0].style.visibility = "hidden";
+		});
 	}
 });
