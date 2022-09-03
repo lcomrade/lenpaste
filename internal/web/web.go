@@ -25,6 +25,7 @@ import (
 	chromaLexers "github.com/alecthomas/chroma/lexers"
 	"html/template"
 	"path/filepath"
+	textTemplate "text/template"
 )
 
 type Data struct {
@@ -38,9 +39,9 @@ type Data struct {
 	ErrorPage      *template.Template
 	Main           *template.Template
 	MainJS         *[]byte
-	CodeJS         *template.Template
+	CodeJS         *textTemplate.Template
 	PastePage      *template.Template
-	PasteJS        *template.Template
+	PasteJS        *textTemplate.Template
 	PasteContinue  *template.Template
 	Settings       *template.Template
 	About          *template.Template
@@ -138,7 +139,7 @@ func Load(cfg config.Config, webDir string, defaultPasteLifetime string) (Data, 
 	data.MainJS = &mainJS
 
 	// code.js
-	data.CodeJS, err = template.ParseFiles(filepath.Join(webDir, "code.js"))
+	data.CodeJS, err = textTemplate.ParseFiles(filepath.Join(webDir, "code.js"))
 	if err != nil {
 		return data, err
 	}
@@ -153,7 +154,7 @@ func Load(cfg config.Config, webDir string, defaultPasteLifetime string) (Data, 
 	}
 
 	// paste.js
-	data.PasteJS, err = template.ParseFiles(filepath.Join(webDir, "paste.js"))
+	data.PasteJS, err = textTemplate.ParseFiles(filepath.Join(webDir, "paste.js"))
 	if err != nil {
 		return data, err
 	}
