@@ -35,11 +35,10 @@ function copyButton(element) {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-	const pasteTxt = "{{call .Translate `codeJS.Paste`}}";
-
 	let preElements = document.getElementsByTagName("pre");
+
 	for (var i = 0; preElements.length > i; i++) {
-		preElements[i].insertAdjacentHTML("beforeend", "<button class='button-green' style='position: absolute; top: 16px; right: 16px; margin: 0; visibility: hidden;' onclick='copyButton(this)'>"+pasteTxt+"</button>");
+		preElements[i].insertAdjacentHTML("beforeend", "<button class='button-green' style='position: absolute; top: 16px; right: 16px; margin: 0; visibility: hidden;' onclick='copyButton(this)'>{{call .Translate `codeJS.Paste`}}</button>");
 		preElements[i].style.position = "relative";
 		preElements[i].style.overflow = "auto";
 
