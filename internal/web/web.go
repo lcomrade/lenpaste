@@ -32,8 +32,9 @@ type Data struct {
 	DB  storage.DB
 	Log logger.Config
 
-	Lexers  *[]string
-	Locales *Locales
+	Lexers         *[]string
+	Locales        *Locales
+	LocaleSelector *map[string]string
 
 	StyleCSS       *[]byte
 	ErrorPage      *template.Template
@@ -114,6 +115,15 @@ func Load(cfg config.Config, webDir string, defaultPasteLifetime string) (Data, 
 		return data, err
 	}
 	data.Locales = &locales
+
+	// Get locale selector
+	localeSelector := make(map[string]string, len(locales))
+	for key, val := range locales {
+		valLoad := *val
+		localeSelector[key] = valLoad["locale.Name"]
+	}
+
+	data.LocaleSelector = &localeSelector
 
 	// style.css file
 	styleCSS, err := readFile(filepath.Join(webDir, "style.css"))

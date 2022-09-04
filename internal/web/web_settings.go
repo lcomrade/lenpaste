@@ -6,8 +6,8 @@ import (
 )
 
 type settingsTmpl struct {
-	Language       string
-	AvailableLangs []string
+	Language         string
+	LanguageSelector map[string]string
 
 	Author      string
 	AuthorEmail string
@@ -24,17 +24,14 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 	// Show settings page
 	if req.Method != "POST" {
 		// Prepare data
-		var dataTmpl settingsTmpl
-		dataTmpl.Translate = data.Locales.findLocale(req).translate
-
-		for code, _ := range *data.Locales {
-			dataTmpl.AvailableLangs = append(dataTmpl.AvailableLangs, code)
+		dataTmpl := settingsTmpl{
+			Language:         getCookie(req, "lang"),
+			LanguageSelector: *data.LocaleSelector,
+			Author:           getCookie(req, "author"),
+			AuthorEmail:      getCookie(req, "authorEmail"),
+			AuthorURL:        getCookie(req, "authorURL"),
+			Translate:        data.Locales.findLocale(req).translate,
 		}
-
-		dataTmpl.Language = getCookie(req, "lang")
-		dataTmpl.Author = getCookie(req, "author")
-		dataTmpl.AuthorEmail = getCookie(req, "authorEmail")
-		dataTmpl.AuthorURL = getCookie(req, "authorURL")
 
 		// Show page
 		rw.Header().Set("Content-Type", "text/html")

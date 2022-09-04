@@ -8,8 +8,8 @@
 		><select name="lang" tabindex=1 size=1>
 			<option value="">{{call .Translate `settings.LanguageDefault`}}</option>
 			{{ $language := .Language }}
-			{{range $element := .AvailableLangs}}
-			<option value="{{$element}}"{{if eq $element $language}} selected="true"{{end}}>{{$element}}</option>
+			{{range $key, $value := .LanguageSelector}}
+			<option value="{{$key}}"{{if eq $key $language}} selected="true"{{end}}>{{$value}}</option>
 			{{end}}
 		</select>
 	</div>
