@@ -37,6 +37,11 @@ function copyButton(element) {
 document.addEventListener("DOMContentLoaded", () => {
 	// Edit CSS
 	let newStyleSheet = `
+pre {
+	position: relative;
+	overflow: auto;
+}
+	
 pre button {
 	visibility: hidden;
 }
@@ -54,7 +59,5 @@ pre:hover > button {
 
 	for (var i = 0; preElements.length > i; i++) {
 		preElements[i].insertAdjacentHTML("beforeend", "<button class='button-green' style='position: absolute; top: 16px; right: 16px; margin: 0; animation: fadeout .2s both;' onclick='copyButton(this)'>{{call .Translate `codeJS.Paste`}}</button>");
-		preElements[i].style.position = "relative";
-		preElements[i].style.overflow = "auto";
 	}
 });

@@ -23,7 +23,7 @@ import (
 	"net/http"
 )
 
-type codeJsTmpl struct {
+type jsTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
@@ -45,5 +45,12 @@ func (data Data) CodeJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "application/javascript")
-	data.CodeJS.Execute(rw, codeJsTmpl{Translate: data.Locales.findLocale(req).translate})
+	data.CodeJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
+}
+
+func (data Data) HistoryJSHand(rw http.ResponseWriter, req *http.Request) {
+	data.Log.HttpRequest(req)
+
+	rw.Header().Set("Content-Type", "application/javascript")
+	data.HistoryJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
 }

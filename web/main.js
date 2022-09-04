@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (editor.maxLength !== -1) {
 			symbolCounter.textContent = symbolCounter.textContent + "/" + editor.maxLength;
 		} else {
-			symbolCounter.textContent = symbolCounter.textContent + "/∞";
+			symbolCounter.textContent = symbolCounter.textContent + "/&infin;";
 		}
 	}
 

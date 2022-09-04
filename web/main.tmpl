@@ -2,7 +2,7 @@
 {{define "headAppend"}}<script src="/main.js"></script>{{end}}
 {{define "article"}}
 {{if ne .TitleMaxLen 0}}<h3>{{call .Translate `main.CreatePaste`}}</h3>{{end}}
-<form action="/" method="post">
+<form id="create-paste-form" action="/" method="post">
 	<div class="text-bar">
 		<div>
 			{{if ne .TitleMaxLen 0}}<input
