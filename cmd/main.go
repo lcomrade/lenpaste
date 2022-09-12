@@ -77,9 +77,9 @@ func exitOnError(e error) {
 }
 
 func printHelp(noErrors bool) {
-	println("Usage:", os.Args[0], "[-web-dir] [OPTION]...")
+	println("Usage:", os.Args[0], "[-db-source] [OPTION]...")
 	println("")
-	println("  -addres                 ADDRES:PORT (default: :80)")
+	println("  -address                ADDRESS:PORT (default: :80)")
 	println("  -web-dir                Dir with page templates and static content")
 	println("  -db-driver              Currently supported drivers: 'sqlite3' and 'postgres' (default: sqlite3)")
 	println("  -db-source              DB source.")

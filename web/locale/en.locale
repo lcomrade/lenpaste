@@ -45,6 +45,9 @@ main.Create=Create New Paste
 main.AcceptTerms=<a href="%s" target="_blank">See Terms of Use</a>
 
 historyJS.History=History
+historyJS.EnableHistory=Remember history
+historyJS.ClearHistory=Clear history...
+historyJS.ClearHistoryConfirm=Are you sure you want to clear the history?
 
 codeJS.Paste=Copy
 

@@ -17,14 +17,7 @@ all:
 	cp -r ./web ./dist/share/$(NAME)
 
 fmt:
-	gofmt -w ./cmd/*.go
-	gofmt -w ./internal/apiv1/*.go
-	gofmt -w ./internal/config/*.go
-	gofmt -w ./internal/logger/*.go
-	gofmt -w ./internal/netshare/*.go
-	gofmt -w ./internal/raw/*.go
-	gofmt -w ./internal/storage/*.go
-	gofmt -w ./internal/web/*.go
+	@gofmt -w $(shell find ./ -type f -name '*.go')
 
 clean:
 	rm -rf ./dist/

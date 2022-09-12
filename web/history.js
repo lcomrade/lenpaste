@@ -21,6 +21,7 @@ function historyRefreshList() {
 function historyPopUpShow() {
 	document.getElementById("js-history-popup").style.visibility = "visible";
 	document.getElementById("js-history-popup-background").style.visibility = "visible";
+	document.getElementsByTagName("body")[0].style.overflow = "hidden";
 	document.addEventListener("keydown", historyPopUpEscEvent);
 	historyRefreshList();
 }
@@ -28,6 +29,7 @@ function historyPopUpShow() {
 function historyPopUpHide() {
 	document.getElementById("js-history-popup").style.visibility = "hidden";
 	document.getElementById("js-history-popup-background").style.visibility = "hidden";
+	document.getElementsByTagName("body")[0].style.overflow = null;
 	document.removeEventListener("keydown", historyPopUpEscEvent);
 }
 
@@ -39,8 +41,10 @@ function historyPopUpEscEvent(event) {
 }
 
 function historyClear() {
-	localStorage.removeItem("history");
-	historyRefreshList();
+	if (window.confirm("{{ call .Translate `historyJS.ClearHistoryConfirm` }}")) {
+		localStorage.removeItem("history");
+		historyRefreshList();
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -87,8 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 #js-history-popup-list-div {
-	overflow-x: hidden;
-	overflow-y: auto;
+    max-width: 100%;
+    max-height: 100%;
+	overflow: scroll;
 }
 `;
 	let styleSheet = document.createElement("style")
@@ -99,15 +104,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementsByClassName("header-right")[0].insertAdjacentHTML("afterbegin", "<h4 id='js-history-button' onclick='historyPopUpShow()'>{{ call .Translate `historyJS.History` }}</h4>");
 
 	// Add history pop-up
-	document.body.insertAdjacentHTML("afterbegin", "<div style='visibility: hidden;' id='js-history-popup-background'></div>")	
+	document.body.insertAdjacentHTML("afterbegin", "<div style='visibility: hidden;' id='js-history-popup-background' onclick='historyPopUpHide()'></div>")	
 	document.body.insertAdjacentHTML("afterbegin", `<div style='visibility: hidden;' id='js-history-popup'>
 <div id='js-history-popup-header'>
 	<div><h4 style='margin: 0;'>{{ call .Translate `historyJS.History` }}</h4></div
 	><div id='js-history-popup-close' onclick='historyPopUpHide()'>&times;</div>
 </div>
 <hr/>
+<label class='checkbox'><input type='checkbox' value='true'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
+><span style='margin-left: 15px;' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
 <div id='js-history-popup-list-div'><ul id='js-history-popup-list'></ul></div>
-<div onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</div>
 </div>`);
 
 	// If exist "create paste" form path it
@@ -116,13 +122,53 @@ document.addEventListener("DOMContentLoaded", () => {
 		createPasteForm.addEventListener("submit", (event) => {
 			event.preventDefault();
 
-			let historyJSON = localStorage.getItem("history");
-			let history = [];
-			if (historyJSON != null) {
-				history = JSON.parse(historyJSON);
-			}
-			history.push({id: "404", title: "Test 124"});
-			localStorage.setItem("history", JSON.stringify(history));
+			// Get form data
+			let data = "";
+			let title = "";
+			
+			Array.from(createPasteForm.elements)
+				.filter((item) => !!item.name)
+				.map((element) => {
+					let { name, value, type } = element;
+
+					if (type == "checkbox") {
+						if (element.checked) {
+							value = "true";
+						} else {
+							value = "false";
+						}
+					}
+
+					if (name == "title") {
+						title = value;
+					}
+
+					data = data + "&" + name + "=" + encodeURIComponent(value);
+				})
+			data = data.slice(1);
+
+			// Send request
+			var xhr = new XMLHttpRequest();
+			xhr.responseType = "json";
+			xhr.open("POST", "/api/v1/new", true);
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+			xhr.onload = () => {
+				// Save to history
+				let historyJSON = localStorage.getItem("history");
+				let history = [];
+				if (historyJSON != null) {
+					history = JSON.parse(historyJSON);
+				}
+				
+				history.splice(0, 0, {id: xhr.response.id, title: title});
+				localStorage.setItem("history", JSON.stringify(history));	
+
+				// Redirect
+				window.location = window.location + xhr.response.id;
+			};
+			
+			xhr.send(data);
 			
 			return false;
 		});
