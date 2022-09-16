@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	bottom: 15%;
 	right: 20%;
 	left: 20%;
+
+	overflow-y:scroll;
 }
 
 #js-history-popup-background {
@@ -90,10 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	cursor: pointer;
 }
 
-#js-history-popup-list-div {
-    max-width: 100%;
-    max-height: 100%;
-	overflow: scroll;
+#js-history-popup-clear {
+	margin-right: 15px;
+}
+
+#js-history-popup-clear:hover {
+	cursor: pointer;
 }
 `;
 	let styleSheet = document.createElement("style")
@@ -112,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 <hr/>
 <label class='checkbox'><input type='checkbox' value='true'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
-><span style='margin-left: 15px;' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
+><span id='js-history-popup-clear' class='text-red' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
 <div id='js-history-popup-list-div'><ul id='js-history-popup-list'></ul></div>
 </div>`);
 
