@@ -48,6 +48,7 @@ historyJS.History=История
 historyJS.EnableHistory=Сохранять историю
 historyJS.ClearHistory=Очистить историю...
 historyJS.ClearHistoryConfirm=Вы уверены что хотите очистить историю?
+historyJS.Untitled=Безымянный
 
 codeJS.Paste=Копировать
 

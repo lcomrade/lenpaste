@@ -27,7 +27,7 @@ import (
 	"time"
 )
 
-func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, error) {
+func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
 	// Read form
 	paste := storage.Paste{
 		Title:       form.Get("title"),
@@ -46,16 +46,16 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 
 	// Check title
 	if len(paste.Title) > titleMaxLen && titleMaxLen >= 0 {
-		return "", ErrBadRequest
+		return "", 0, 0, ErrBadRequest
 	}
 
 	// Check paste body
 	if paste.Body == "" {
-		return "", ErrBadRequest
+		return "", 0, 0, ErrBadRequest
 	}
 
 	if len(paste.Body) > bodyMaxLen && bodyMaxLen > 0 {
-		return "", ErrBadRequest
+		return "", 0, 0, ErrBadRequest
 	}
 
 	// Change paste body lines end
@@ -70,7 +70,7 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 		paste.Body = lineend.UnknownToOldMac(paste.Body)
 
 	default:
-		return "", ErrBadRequest
+		return "", 0, 0, ErrBadRequest
 	}
 
 	// Check syntax
@@ -83,7 +83,7 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	if syntaxOk == false {
-		return "", ErrBadRequest
+		return "", 0, 0, ErrBadRequest
 	}
 
 	// Get delete time
@@ -92,13 +92,13 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 		// Convert string to int
 		expir, err := strconv.ParseInt(expirStr, 10, 64)
 		if err != nil {
-			return "", ErrBadRequest
+			return "", 0, 0, ErrBadRequest
 		}
 
 		// Check limits
 		if maxLifeTime > 0 {
 			if expir > maxLifeTime || expir <= 0 {
-				return "", ErrBadRequest
+				return "", 0, 0, ErrBadRequest
 			}
 		}
 
@@ -114,10 +114,10 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	// Create paste
-	pasteID, err := db.PasteAdd(paste)
+	pasteID, createTime, deleteTime, err := db.PasteAdd(paste)
 	if err != nil {
-		return pasteID, err
+		return pasteID, createTime, deleteTime, err
 	}
 
-	return pasteID, nil
+	return pasteID, createTime, deleteTime, nil
 }

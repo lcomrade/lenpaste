@@ -45,7 +45,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	if req.PostForm.Get("body") != "" {
 		// Create paste
-		pasteID, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+		pasteID, _, _, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 		if err != nil {
 			if err == netshare.ErrBadRequest {
 				data.errorBadRequest(rw, req)

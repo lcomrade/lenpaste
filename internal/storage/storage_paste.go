@@ -37,18 +37,18 @@ type Paste struct {
 	AuthorURL   string `json:"authorURL"`
 }
 
-func (dbInfo DB) PasteAdd(paste Paste) (string, error) {
+func (dbInfo DB) PasteAdd(paste Paste) (string, int64, int64, error) {
 	// Open DB
 	db, err := dbInfo.openDB()
 	if err != nil {
-		return paste.ID, err
+		return paste.ID, paste.CreateTime, paste.DeleteTime, err
 	}
 	defer db.Close()
 
 	// Generate ID
 	paste.ID, err = genTokenCrypto(8)
 	if err != nil {
-		return paste.ID, err
+		return paste.ID, paste.CreateTime, paste.DeleteTime, err
 	}
 
 	// Set paste create time
@@ -65,10 +65,10 @@ func (dbInfo DB) PasteAdd(paste Paste) (string, error) {
 		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse, paste.Author, paste.AuthorEmail, paste.AuthorURL,
 	)
 	if err != nil {
-		return paste.ID, err
+		return paste.ID, paste.CreateTime, paste.DeleteTime, err
 	}
 
-	return paste.ID, nil
+	return paste.ID, paste.CreateTime, paste.DeleteTime, nil
 }
 
 func (dbInfo DB) PasteDelete(id string) error {

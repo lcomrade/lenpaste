@@ -48,6 +48,7 @@ historyJS.History=History
 historyJS.EnableHistory=Remember history
 historyJS.ClearHistory=Clear history...
 historyJS.ClearHistoryConfirm=Are you sure you want to clear the history?
+historyJS.Untitled=Untitled
 
 codeJS.Paste=Copy
 

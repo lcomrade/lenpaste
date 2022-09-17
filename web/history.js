@@ -8,12 +8,24 @@ function historyRefreshList() {
 	listElement.innerHTML = "";
 
 	// Read locale storage
+	let timeNowUnix = Math.floor(Date.now() / 1000)
 	let historyJSON = localStorage.getItem("history");
 	if (historyJSON != null) {
 		let history = JSON.parse(historyJSON);
 
 		for (let i = 0; history.length > i; i++) {
-			listElement.insertAdjacentHTML("beforeend", "<li><a href='/"+history[i].id+"'>"+history[i].title+"</a></li>")
+			// Check title
+			let title = history[i].title;
+			if (title == "") {
+				title = "{{ call .Translate `historyJS.Untitled` }}";
+			}
+
+			// Add row
+			if (timeNowUnix < history[i].deleteTime || history[i].deleteTime == 0) {
+				listElement.insertAdjacentHTML("beforeend", "<li><a href='/"+history[i].id+"'>"+title+"</a></li>");
+			} else {
+				listElement.insertAdjacentHTML("beforeend", "<li><del><a class='text-grey' href='/"+history[i].id+"'>"+title+"</a></del></li>");
+			}
 		}
 	}
 }
@@ -165,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					history = JSON.parse(historyJSON);
 				}
 				
-				history.splice(0, 0, {id: xhr.response.id, title: title});
+				history.splice(0, 0, {id: xhr.response.id, createTime: xhr.response.createTime, deleteTime: xhr.response.deleteTime, title: title});
 				localStorage.setItem("history", JSON.stringify(history));	
 
 				// Redirect
