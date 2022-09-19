@@ -13,11 +13,12 @@ Find out what's coming in the next release on the [roadmap](ROADMAP.md).
 
 
 ## Public servers list
-| Server                                         | Description                                                                                                       |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| [paste.lcomrade.su](https://paste.lcomrade.su) | Server managed by the Lenpaste developer.                                                                         |
-| [code.dbt3ch.com](https://code.dbt3ch.com)     | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
-| [notepad.co.il](https://notepad.co.il)         | Server managed by Shlomi Porush.                                                                                  |
+| Server                                                     | Description                                                                                                       |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [paste.lcomrade.su](https://paste.lcomrade.su)             | Server managed by the Lenpaste developer.                                                                         |
+| [code.dbt3ch.com](https://code.dbt3ch.com)                 | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
+| [notepad.co.il](https://notepad.co.il)                     | Server managed by Shlomi Porush. He reported the bug and made some suggestions.                                   |
+| [pastebin.pardesicat.xyz](https://pastebin.pardesicat.xyz) | Server managed by Pardesi_Cat. He helped correct the documentation.                                               |
 
 
 
@@ -33,7 +34,7 @@ version: "2"
 
 services:
   lenpaste:
-  	# If you want to run Lenpaste on your Raspberry Pi, use 'latest-armhf' instead of 'latest'.
+    # If you want to run Lenpaste on your Raspberry Pi, use 'latest-armhf' instead of 'latest'.
     image: git.lcomrade.su/root/lenpaste:latest
     restart: always
     environment:
@@ -97,7 +98,7 @@ sudo apt -y install git docker docker.io
 git clone https://git.lcomrade.su/root/lenpaste.git
 cd ./lenpaste/
 git checkout vX.X
-sudo docker -t localhost/lenpaste:latest ./
+sudo docker build -t localhost/lenpaste:latest ./
 ```
 
 The `localhost/lenpaste:latest` image should now have appeared on your local machine.
