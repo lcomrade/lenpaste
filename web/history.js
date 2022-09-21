@@ -3,6 +3,8 @@
 // Therefore, if you are concerned about privacy, you can disable JavaScript in your browser.
 
 function historyRefreshList() {
+	const shortMonth = [{{call .Translate `pasteJS.ShortMonth`}}];
+
 	// Get and clean list
 	let listElement = document.getElementById("js-history-popup-list");
 	listElement.innerHTML = "";
@@ -20,11 +22,20 @@ function historyRefreshList() {
 				title = "{{ call .Translate `historyJS.Untitled` }}";
 			}
 
+			// Convert create date to string
+			let date = new Date(history[i].createTime * 1000)
+
+			let dateDayStr = date.getDate();
+			if (date.getDate() < 10) {
+				dateDayStr = "0" + dateDayStr;
+			}
+			let dateStr = dateDayStr + " " + shortMonth[date.getMonth()] + ", " + date.getFullYear();
+
 			// Add row
 			if (timeNowUnix < history[i].deleteTime || history[i].deleteTime == 0) {
-				listElement.insertAdjacentHTML("beforeend", "<li><a href='/"+history[i].id+"'>"+title+"</a></li>");
+				listElement.insertAdjacentHTML("beforeend", "<li>[" + dateStr + "] <a href='/"+history[i].id+"'>"+title+"</a></li>");
 			} else {
-				listElement.insertAdjacentHTML("beforeend", "<li><del><a class='text-grey' href='/"+history[i].id+"'>"+title+"</a></del></li>");
+				listElement.insertAdjacentHTML("beforeend", "<li><del>[" + dateStr + "] <a class='text-grey' href='/"+history[i].id+"'>"+title+"</a></del></li>");
 			}
 		}
 	}
@@ -49,6 +60,14 @@ function historyPopUpEscEvent(event) {
 	// If ESC pressed
 	if (event.keyCode == 27) {
 		historyPopUpHide();
+	}
+}
+
+function historyEnable() {
+	if (document.getElementById("js-history-popup-enable").checked == true) {
+		localStorage.removeItem("DisableHistory");
+	} else {
+		localStorage.setItem("DisableHistory", true);
 	}
 }
 
@@ -111,6 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
 #js-history-popup-clear:hover {
 	cursor: pointer;
 }
+
+#js-history-popup-list-div {
+	font-family: monospace;
+}
 `;
 	let styleSheet = document.createElement("style")
 	styleSheet.innerText = newStyleSheet
@@ -127,10 +150,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	><div id='js-history-popup-close' onclick='historyPopUpHide()'>&times;</div>
 </div>
 <hr/>
-<label class='checkbox'><input type='checkbox' value='true'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
+<label class='checkbox'><input id='js-history-popup-enable' onchange = 'historyEnable()' type='checkbox'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
 ><span id='js-history-popup-clear' class='text-red' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
 <div id='js-history-popup-list-div'><ul id='js-history-popup-list'></ul></div>
 </div>`);
+
+	// Set "Remember history" checkbox state
+	document.getElementById("js-history-popup-enable").checked = !localStorage.getItem("DisableHistory");
 
 	// If exist "create paste" form path it
 	let createPasteForm = document.getElementById("create-paste-form");
@@ -171,14 +197,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			xhr.onload = () => {
 				// Save to history
-				let historyJSON = localStorage.getItem("history");
-				let history = [];
-				if (historyJSON != null) {
-					history = JSON.parse(historyJSON);
+				if (localStorage.getItem("DisableHistory") != "true") {
+					let historyJSON = localStorage.getItem("history");
+					let history = [];
+					if (historyJSON != null) {
+						history = JSON.parse(historyJSON);
+					}
+					
+					history.splice(0, 0, {id: xhr.response.id, createTime: xhr.response.createTime, deleteTime: xhr.response.deleteTime, title: title});
+					localStorage.setItem("history", JSON.stringify(history));	
 				}
-				
-				history.splice(0, 0, {id: xhr.response.id, createTime: xhr.response.createTime, deleteTime: xhr.response.deleteTime, title: title});
-				localStorage.setItem("history", JSON.stringify(history));	
 
 				// Redirect
 				window.location = window.location + xhr.response.id;
