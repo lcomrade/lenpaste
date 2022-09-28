@@ -41,4 +41,6 @@ type Config struct {
 	AdminMail string
 
 	RobotsDisallow bool
+
+	UiDefaultLifetime string
 }

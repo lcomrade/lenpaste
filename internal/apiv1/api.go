@@ -43,23 +43,26 @@ type Data struct {
 
 	AdminName *string
 	AdminMail *string
+
+	UiDefaultLifeTime *string
 }
 
 func Load(cfg config.Config) Data {
 	lexers := chromaLexers.Names(false)
 
 	return Data{
-		DB:               cfg.DB,
-		Log:              cfg.Log,
-		Lexers:           &lexers,
-		Version:          &cfg.Version,
-		TitleMaxLen:      &cfg.TitleMaxLen,
-		BodyMaxLen:       &cfg.BodyMaxLen,
-		MaxLifeTime:      &cfg.MaxLifeTime,
-		ServerAbout:      &cfg.ServerAbout,
-		ServerRules:      &cfg.ServerRules,
-		ServerTermsOfUse: &cfg.ServerTermsOfUse,
-		AdminName:        &cfg.AdminName,
-		AdminMail:        &cfg.AdminMail,
+		DB:                cfg.DB,
+		Log:               cfg.Log,
+		Lexers:            &lexers,
+		Version:           &cfg.Version,
+		TitleMaxLen:       &cfg.TitleMaxLen,
+		BodyMaxLen:        &cfg.BodyMaxLen,
+		MaxLifeTime:       &cfg.MaxLifeTime,
+		ServerAbout:       &cfg.ServerAbout,
+		ServerRules:       &cfg.ServerRules,
+		ServerTermsOfUse:  &cfg.ServerTermsOfUse,
+		AdminName:         &cfg.AdminName,
+		AdminMail:         &cfg.AdminMail,
+		UiDefaultLifeTime: &cfg.UiDefaultLifetime,
 	}
 }
