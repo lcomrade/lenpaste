@@ -9,10 +9,18 @@ body {
 	font-family: sans-serif;
 	font-size: 16px;
 	color: #FFFFFF;
+	overflow: scroll;
 }
 
-@media all and (max-device-width: 480px), all and (orientation: portrait) {
+@media all and (max-device-width: 720px), all and (orientation: portrait) {
 	body {
+		width: 100%;
+	}
+}
+
+@media all and (max-device-width: 640px) {
+	.header-right {
+		display: block;
 		width: 100%;
 	}
 }

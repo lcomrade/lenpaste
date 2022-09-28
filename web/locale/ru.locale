@@ -1,7 +1,7 @@
 locale.Name=Русский
 
 base.Lenpaste=ЛенОтрывок
-base.About=О сайте
+base.About=О сайте
 base.Docs=Документация
 base.Settings=Настройки
 
@@ -48,6 +48,8 @@ historyJS.History=История
 historyJS.EnableHistory=Сохранять историю
 historyJS.ClearHistory=Очистить историю...
 historyJS.ClearHistoryConfirm=Вы уверены что хотите очистить историю?
+historyJS.HistoryEnabledAlert=Теперь история снова сохраняется.
+historyJS.HistoryDisabledAlert=Сохранение истории приостановлено.
 historyJS.Untitled=Безымянный
 
 codeJS.Paste=Копировать

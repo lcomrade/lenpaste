@@ -66,8 +66,10 @@ function historyPopUpEscEvent(event) {
 function historyEnable() {
 	if (document.getElementById("js-history-popup-enable").checked == true) {
 		localStorage.removeItem("DisableHistory");
+		alert("{{ call .Translate `historyJS.HistoryEnabledAlert` }}");
 	} else {
 		localStorage.setItem("DisableHistory", true);
+		alert("{{ call .Translate `historyJS.HistoryDisabledAlert` }}");
 	}
 }
 
@@ -97,6 +99,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	left: 20%;
 
 	overflow-y:scroll;
+}
+
+@media all and (max-device-width: 640px), all and (orientation: portrait) {
+	#js-history-popup {
+		top: 5%;
+		bottom: 5%;
+		right: 0;
+		left: 0;
+	}
 }
 
 #js-history-popup-background {

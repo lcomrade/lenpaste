@@ -46,6 +46,8 @@ main.AcceptTerms=<a href="%s" target="_blank">See Terms of Use</a>
 
 historyJS.History=History
 historyJS.EnableHistory=Remember history
+historyJS.HistoryEnabledAlert=History saving has been ENABLED.
+historyJS.HistoryDisabledAlert=History saving has been DISABLED.
 historyJS.ClearHistory=Clear history...
 historyJS.ClearHistoryConfirm=Are you sure you want to clear the history?
 historyJS.Untitled=Untitled
