@@ -74,6 +74,8 @@ type Data struct {
 
 	RobotsDisallow *bool
 
+	LenPasswdFile *string
+
 	UiDefaultLifeTime *string
 }
 
@@ -91,6 +93,7 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	data.BodyMaxLen = &cfg.BodyMaxLen
 	data.MaxLifeTime = &cfg.MaxLifeTime
 	data.UiDefaultLifeTime = &cfg.UiDefaultLifetime
+	data.LenPasswdFile = &cfg.LenPasswdFile
 
 	data.ServerAbout = &cfg.ServerAbout
 	data.ServerRules = &cfg.ServerRules

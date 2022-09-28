@@ -42,5 +42,7 @@ type Config struct {
 
 	RobotsDisallow bool
 
+	LenPasswdFile string
+
 	UiDefaultLifetime string
 }

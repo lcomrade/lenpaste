@@ -19,6 +19,7 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
@@ -36,13 +37,39 @@ type createTmpl struct {
 	AuthorEmailDefault string
 	AuthorURLDefault   string
 
+	AuthOk bool
+
 	Translate func(string, ...interface{}) template.HTML
 }
 
 func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
-	// Read request
+	var err error
 	req.ParseForm()
 
+	// Check auth
+	authOk := true
+
+	if *data.LenPasswdFile != "" {
+		authOk = false
+
+		user, pass, authExist := req.BasicAuth()
+		if authExist == true {
+			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
+			if err != nil {
+				data.errorInternal(rw, req, err)
+				return
+			}
+
+		} else {
+			if req.PostForm.Get("loginAction") == "true" {
+				rw.Header().Add("WWW-Authenticate", "Basic")
+				rw.WriteHeader(401)
+				return
+			}
+		}
+	}
+
+	// Read request
 	if req.PostForm.Get("body") != "" {
 		// Create paste
 		pasteID, _, _, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
@@ -72,12 +99,13 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		AuthorDefault:      getCookie(req, "author"),
 		AuthorEmailDefault: getCookie(req, "authorEmail"),
 		AuthorURLDefault:   getCookie(req, "authorURL"),
+		AuthOk:             authOk,
 		Translate:          data.Locales.findLocale(req).translate,
 	}
 
 	rw.Header().Set("Content-Type", "text/html")
 
-	err := data.Main.Execute(rw, tmplData)
+	err = data.Main.Execute(rw, tmplData)
 	if err != nil {
 		data.errorInternal(rw, req, err)
 		return

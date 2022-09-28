@@ -1,6 +1,14 @@
 {{define "titlePrefix"}}{{end}}
 {{define "headAppend"}}<script src="/main.js"></script>{{end}}
 {{define "article"}}
+{{if eq .AuthOk false}}
+<h3>{{call .Translate `main.CreatePaste`}}</h3>
+<form action="/" method="post">
+<p>{{call .Translate `main.AuthRequired`}}</p>
+<input type="hidden" name="loginAction" value="true"/>
+<button class="button-green" type="submit" tabindex=1>{{ call .Translate `main.AuthButton` }}</button>
+</form>
+{{else}}
 {{if ne .TitleMaxLen 0}}<h3>{{call .Translate `main.CreatePaste`}}</h3>{{end}}
 <form id="create-paste-form" action="/" method="post">
 	<div class="text-bar">
@@ -98,4 +106,5 @@
 		<div class="text-bar-right">{{if .ServerTermsExist}}{{ call .Translate `main.AcceptTerms` `/terms` }}{{end}}</div>
 	</div>
 </form>
+{{end}}
 {{end}}

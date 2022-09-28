@@ -94,6 +94,7 @@ func printHelp(noErrors bool) {
 	println("  -admin-name             Name of the administrator of this server.")
 	println("  -admin-mail             Email of the administrator of this server.")
 	println("  -ui-default-lifetime    Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.")
+	println("  -lenpasswd-file         File in LenPasswd format. If set, authorization will be required to create pastes.")
 	println("  -version                Display version and exit")
 	println("  -help                   Display this help and exit")
 	println()
@@ -202,6 +203,7 @@ func main() {
 	flagAdminName := flag.String("admin-name", "", "")
 	flagAdminMail := flag.String("admin-mail", "", "")
 	flagUiDefaultLifetime := flag.String("ui-default-lifetime", "", "")
+	flagLenPasswdFile := flag.String("lenpasswd-file", "", "")
 	flagVersion := flag.Bool("version", false, "")
 	flagHelp := flag.Bool("help", false, "")
 
@@ -299,6 +301,7 @@ func main() {
 		AdminMail:         *flagAdminMail,
 		RobotsDisallow:    *flagRobotsDisallow,
 		UiDefaultLifetime: *flagUiDefaultLifetime,
+		LenPasswdFile:     *flagLenPasswdFile,
 	}
 
 	apiv1Data := apiv1.Load(cfg)

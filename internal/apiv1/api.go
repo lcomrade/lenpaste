@@ -44,6 +44,8 @@ type Data struct {
 	AdminName *string
 	AdminMail *string
 
+	LenPasswdFile *string
+
 	UiDefaultLifeTime *string
 }
 
@@ -63,6 +65,7 @@ func Load(cfg config.Config) Data {
 		ServerTermsOfUse:  &cfg.ServerTermsOfUse,
 		AdminName:         &cfg.AdminName,
 		AdminMail:         &cfg.AdminMail,
+		LenPasswdFile:     &cfg.LenPasswdFile,
 		UiDefaultLifeTime: &cfg.UiDefaultLifetime,
 	}
 }

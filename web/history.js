@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	right: 20%;
 	left: 20%;
 
-	overflow-y:scroll;
+	overflow-y: scroll;
 }
 
 @media all and (max-device-width: 640px), all and (orientation: portrait) {
