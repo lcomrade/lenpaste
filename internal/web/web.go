@@ -48,6 +48,7 @@ type Data struct {
 	Settings       *template.Template
 	About          *template.Template
 	TermsOfUse     *template.Template
+	Authors        *template.Template
 	License        *template.Template
 	SourceCodePage *template.Template
 
@@ -211,6 +212,15 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	data.TermsOfUse, err = template.ParseFiles(
 		filepath.Join(webDir, "base.tmpl"),
 		filepath.Join(webDir, "terms.tmpl"),
+	)
+	if err != nil {
+		return data, err
+	}
+
+	// authors.tmpl
+	data.Authors, err = template.ParseFiles(
+		filepath.Join(webDir, "base.tmpl"),
+		filepath.Join(webDir, "authors.tmpl"),
 	)
 	if err != nil {
 		return data, err

@@ -73,6 +73,20 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// Pattern: /about/authors
+func (data Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
+	// Log request
+	data.Log.HttpRequest(req)
+
+	// Show page
+	rw.Header().Set("Content-Type", "text/html")
+
+	err := data.Authors.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
+	if err != nil {
+		data.errorInternal(rw, req, err)
+	}
+}
+
 // Pattern: /about/license
 func (data Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request

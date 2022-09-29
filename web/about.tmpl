@@ -40,7 +40,7 @@
 {{end}}
 
 <h3>{{ call .Translate `about.LenpasteTitle` }}</h3>
-<p>{{call .Translate `about.LenpasteMessage` .Version }}</p>
+<p>{{call .Translate `about.LenpasteMessage` .Version}}</p>
 <ul>
 	<li>{{ call .Translate `about.Lenpaste1` `/about/source_code` `/about/license` `AGPL 3` }}</li>
 	<li>{{ call .Translate `about.Lenpaste2` }}</li>
@@ -48,4 +48,5 @@
 	<li>{{ call .Translate `about.Lenpaste4` }}</li>
 	<li>{{ call .Translate `about.Lenpaste5` `/docs/apiv1` }}</li>
 </ul>
+<p>{{call .Translate `about.LenpasteAuthors` `/about/authors`}}</p>
 {{end}}

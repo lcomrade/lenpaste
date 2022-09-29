@@ -373,6 +373,9 @@ func main() {
 	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
 		webData.AboutHand(rw, req)
 	})
+	http.HandleFunc("/about/authors", func(rw http.ResponseWriter, req *http.Request) {
+		webData.AuthorsHand(rw, req)
+	})
 	http.HandleFunc("/about/license", func(rw http.ResponseWriter, req *http.Request) {
 		webData.LicenseHand(rw, req)
 	})
