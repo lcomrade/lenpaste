@@ -20,6 +20,7 @@ package apiv1
 
 import (
 	"encoding/json"
+	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
 )
@@ -32,8 +33,29 @@ type newPasteAnswer struct {
 
 // POST /api/v1/new
 func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
+	var err error
+
 	// Log request
 	data.Log.HttpRequest(req)
+
+	// Check auth
+	if *data.LenPasswdFile != "" {
+		authOk := false
+
+		user, pass, authExist := req.BasicAuth()
+		if authExist == true {
+			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
+			if err != nil {
+				data.writeError(rw, req, netshare.ErrInternal)
+				return
+			}
+		}
+
+		if authOk == false {
+			data.writeError(rw, req, netshare.ErrUnauthorized)
+			return
+		}
+	}
 
 	// Check method
 	if req.Method != "POST" {

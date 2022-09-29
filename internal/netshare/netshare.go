@@ -24,6 +24,7 @@ import (
 
 var (
 	ErrBadRequest       = errors.New("Bad Request")           // 400
+	ErrUnauthorized     = errors.New("Unauthorized")          // 401
 	ErrNotFound         = errors.New("Not Found")             // 404
 	ErrMethodNotAllowed = errors.New("Method Not Allowed")    // 405
 	ErrInternal         = errors.New("Internal Server Error") // 500

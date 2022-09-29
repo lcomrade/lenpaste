@@ -37,6 +37,11 @@ func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) 
 		resp.Code = 400
 		resp.Error = "Bad Request"
 
+	} else if e == netshare.ErrUnauthorized {
+		rw.Header().Add("WWW-Authenticate", "Basic")
+		resp.Code = 401
+		resp.Error = "Unauthorized"
+
 	} else if e == storage.ErrNotFoundID {
 		resp.Code = 404
 		resp.Error = "Could not find ID"

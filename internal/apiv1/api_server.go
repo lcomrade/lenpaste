@@ -36,6 +36,7 @@ type serverInfoType struct {
 	AdminMail         string   `json:"adminMail"`
 	Syntaxes          []string `json:"syntaxes"`
 	UiDefaultLifeTime string   `json:"uiDefaultLifeTime"`
+	AuthRequired      bool     `json:"authRequired"`
 }
 
 // GET /api/v1/getServerInfo
@@ -62,6 +63,7 @@ func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 		AdminMail:         *data.AdminMail,
 		Syntaxes:          *data.Lexers,
 		UiDefaultLifeTime: *data.UiDefaultLifeTime,
+		AuthRequired:      *data.LenPasswdFile != "",
 	}
 
 	// Return response
