@@ -44,7 +44,6 @@ type createTmpl struct {
 
 func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 	var err error
-	req.ParseForm()
 
 	// Check auth
 	authOk := true
@@ -59,17 +58,17 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 				data.errorInternal(rw, req, err)
 				return
 			}
+		}
 
-		} else {
-			if req.PostForm.Get("loginAction") == "true" {
-				rw.Header().Add("WWW-Authenticate", "Basic")
-				rw.WriteHeader(401)
-				return
-			}
+		if authOk == false {
+			rw.Header().Add("WWW-Authenticate", "Basic")
+			rw.WriteHeader(401)
 		}
 	}
 
 	// Read request
+	req.ParseForm()
+
 	if req.PostForm.Get("body") != "" {
 		// Create paste
 		pasteID, _, _, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)

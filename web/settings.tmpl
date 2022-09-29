@@ -13,6 +13,7 @@
 			{{end}}
 		</select>
 	</div>
+	{{if eq .AuthOk true}}
 	<h4>{{ call .Translate `main.AdvancedParameters` }}</h4>
 	<table class="table-hidden">
 		<tr>
@@ -40,6 +41,7 @@
 			></td>
 		</tr>
 	</table>
+	{{end}}
 	<div><button class="button-green" type="submit" tabindex=5>{{ call .Translate `settings.Save` }}</button></div>
 </form>
 {{end}}

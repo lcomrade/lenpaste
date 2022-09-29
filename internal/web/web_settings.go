@@ -1,6 +1,7 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
 	"html/template"
 	"net/http"
 )
@@ -13,13 +14,33 @@ type settingsTmpl struct {
 	AuthorEmail string
 	AuthorURL   string
 
+	AuthOk bool
+
 	Translate func(string, ...interface{}) template.HTML
 }
 
 // Pattern: /settings
 func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
+	var err error
+
 	// Log request
 	data.Log.HttpRequest(req)
+
+	// Check auth
+	authOk := true
+
+	if *data.LenPasswdFile != "" {
+		authOk = false
+
+		user, pass, authExist := req.BasicAuth()
+		if authExist == true {
+			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
+			if err != nil {
+				data.errorInternal(rw, req, err)
+				return
+			}
+		}
+	}
 
 	// Show settings page
 	if req.Method != "POST" {
@@ -30,6 +51,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),
 			AuthorURL:        getCookie(req, "authorURL"),
+			AuthOk:           authOk,
 			Translate:        data.Locales.findLocale(req).translate,
 		}
 

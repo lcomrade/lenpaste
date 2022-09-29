@@ -3,11 +3,7 @@
 {{define "article"}}
 {{if eq .AuthOk false}}
 <h3>{{call .Translate `main.CreatePaste`}}</h3>
-<form action="/" method="post">
 <p>{{call .Translate `main.AuthRequired`}}</p>
-<input type="hidden" name="loginAction" value="true"/>
-<button class="button-green" type="submit" tabindex=1>{{ call .Translate `main.AuthButton` }}</button>
-</form>
 {{else}}
 {{if ne .TitleMaxLen 0}}<h3>{{call .Translate `main.CreatePaste`}}</h3>{{end}}
 <form id="create-paste-form" action="/" method="post">
