@@ -51,10 +51,12 @@ services:
       - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
       - LENPASTE_UI_DEFAULT_LIFETIME=         # Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.
     volumes:
-      # /data/lenpaste.db - SQLite DB
-      # /data/about       - About this server (TXT file)
-      # /data/rules       - This server rules (TXT file)
-      # /data/terms       - This server "terms of use" (TXT file)
+      # /data/lenpaste.db - SQLite DB if used.
+      # /data/about       - About this server (TXT file).
+      # /data/rules       - This server rules (TXT file).
+      # /data/terms       - This server "terms of use" (TXT file).
+      # /data/lenpasswd   - If this file exists, the server will ask for auth to create new pastes.
+      #                     File format: USER:PLAIN_PASSWORD on each line.
       - "${PWD}/data:/data"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"

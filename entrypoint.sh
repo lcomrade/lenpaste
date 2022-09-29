@@ -96,6 +96,12 @@ if [[ -n "$LENPASTE_ADMIN_MAIL" ]]; then
 fi
 
 
+# Lenpsswd file
+if [[ -f "/data/lenpasswd" ]]; then
+	RUN_CMD="$RUN_CMD -lenpasswd-file /data/lenpasswd"
+fi
+
+
 # Run Lenpaste
 echo "[ENTRYPOINT] $RUN_CMD"
 sh -c "$RUN_CMD"
