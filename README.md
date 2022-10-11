@@ -34,7 +34,8 @@ version: "2"
 
 services:
   lenpaste:
-    # If you want to run Lenpaste on your Raspberry Pi, use 'latest-armhf' instead of 'latest'.
+	# There are images for x86, x64, ARM64, ARM v7, ARM v6.
+	# The Raspberry Pi is supported, including the latest 64-bit versions.
     image: git.lcomrade.su/root/lenpaste:latest
     restart: always
     environment:
@@ -89,7 +90,7 @@ You can find the result of the build in the `./dist/` directory.
 
 ## Build Docker image
 **Why is it necessary?**
-An official image may not support your architecture e.g. ARM64, PowerPC, etc.
+An official image may not support your architecture e.g. MIPS, PowerPC, etc.
 So you can build your own image to run on an officially unsupported architecture
 (of course you have to rebuild it every time you update Lenpaste).
 
