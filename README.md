@@ -8,17 +8,17 @@
 - Has its own API
 - Open source and self-hosted
 
-Find out what's coming in the next release on the [roadmap](ROADMAP.md).
-
 
 
 ## Public servers list
-| Server                                                     | Description                                                                                                       |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| [paste.lcomrade.su](https://paste.lcomrade.su)             | Server managed by the Lenpaste developer.                                                                         |
-| [code.dbt3ch.com](https://code.dbt3ch.com)                 | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
-| [notepad.co.il](https://notepad.co.il)                     | Server managed by Shlomi Porush. He reported the bug and made some suggestions.                                   |
-| [pastebin.pardesicat.xyz](https://pastebin.pardesicat.xyz) | Server managed by Pardesi_Cat. He helped correct the documentation.                                               |
+| Server                                             | Description                                                                                                       |
+| ---------------------------------------------------| ----------------------------------------------------------------------------------------------------------------- |
+| [paste.lcomrade.su](https://paste.lcomrade.su)     | Server managed by the Lenpaste developer.                                                                         |
+| [code.dbt3ch.com](https://code.dbt3ch.com)         | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
+| [notepad.co.il](https://notepad.co.il)             | Server managed by Shlomi Porush. He reported the bug and made some suggestions.                                   |
+| [lenp.pardesicat.xyz](https://lenp.pardesicat.xyz) | Server managed by Pardesi_Cat. He helped correct the documentation.                                               |
+
+Find more public servers here or add your own: https://monitor.lcomrade.su/?srv=lenpaste
 
 
 
@@ -117,6 +117,7 @@ For all:
 For instance administrators:
 - [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
 - [Database: PostgreSQL](docs/db_postgresql.md)
+- [Make Lenpaste server private](docs/private_server.md)
 
 For developers:
 - [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
@@ -127,6 +128,7 @@ For developers:
 ## Might be interesting
 Manuals:
 - [How to Install LenPaste on Your Synology NAS](https://mariushosting.com/how-to-install-lenpaste-on-your-synology-nas/) (WEB site)
+- [Lenpaste | TrueCharts](https://truecharts.org/docs/charts/incubator/lenpaste/) (WEB site)
 
 Reviews:
 - [Pastebin Clone in Docker with Lenpaste](https://www.youtube.com/watch?v=YxcHxsZHh9A) (YouTube video)
@@ -134,10 +136,12 @@ Reviews:
 
 
 ## Bugs and Suggestion
-If you want to:
-- Report a bug.
-- Ask a question.
-- Become a contributor.
-- Or something else.
+If you have any questions or suggestions, you can write here:
+- Join to Matrix room: [`#lenpaste:lcomrade.su`](https://matrix.to/#/#lenpaste:lcomrade.su)
+- Contact me: Leonid Maslakov <root@lcomrade.su>
 
-Then write to me: Leonid Maslakov <root@lcomrade.su>
+
+
+## Donate
+All donations will go to Leonid Maslakov, for now the sole developer:
+- Qiwi: https://qiwi.com/n/LCOMRADE
