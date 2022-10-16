@@ -1,6 +1,6 @@
 module git.lcomrade.su/root/lenpaste
 
-go 1.11
+go 1.16
 
 replace git.lcomrade.su/root/lenpaste/internal => ./internal
 

@@ -24,9 +24,12 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/lexers"
 	"html/template"
-	"path/filepath"
+	"embed"
 	textTemplate "text/template"
 )
+
+//go:embed data/*
+var embFS embed.FS
 
 type Data struct {
 	DB  storage.DB
@@ -80,7 +83,7 @@ type Data struct {
 	UiDefaultLifeTime *string
 }
 
-func Load(cfg config.Config, webDir string) (Data, error) {
+func Load(cfg config.Config) (Data, error) {
 	var data Data
 	var err error
 
@@ -116,7 +119,7 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	data.Lexers = &lexers
 
 	// Load locales
-	locales, err := loadLocales(filepath.Join(webDir, "locale"))
+	locales, err := loadLocales(embFS, "data/locale")
 	if err != nil {
 		return data, err
 	}
@@ -132,167 +135,123 @@ func Load(cfg config.Config, webDir string) (Data, error) {
 	data.LocaleSelector = &localeSelector
 
 	// style.css file
-	styleCSS, err := readFile(filepath.Join(webDir, "style.css"))
+	styleCSS, err := embFS.ReadFile("data/style.css")
 	if err != nil {
 		return data, err
 	}
 	data.StyleCSS = &styleCSS
 
 	// main.tmpl
-	data.Main, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "main.tmpl"),
-	)
+	data.Main, err = template.ParseFS(embFS, "data/base.tmpl", "data/main.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// main.js
-	mainJS, err := readFile(filepath.Join(webDir, "main.js"))
+	mainJS, err := embFS.ReadFile("data/main.js")
 	if err != nil {
 		return data, err
 	}
 	data.MainJS = &mainJS
 
 	// history.js
-	data.HistoryJS, err = textTemplate.ParseFiles(filepath.Join(webDir, "history.js"))
+	data.HistoryJS, err = textTemplate.ParseFS(embFS, "data/history.js")
 	if err != nil {
 		return data, err
 	}
 
 	// code.js
-	data.CodeJS, err = textTemplate.ParseFiles(filepath.Join(webDir, "code.js"))
+	data.CodeJS, err = textTemplate.ParseFS(embFS, "data/code.js")
 	if err != nil {
 		return data, err
 	}
 
 	// paste.tmpl
-	data.PastePage, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "paste.tmpl"),
-	)
+	data.PastePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// paste.js
-	data.PasteJS, err = textTemplate.ParseFiles(filepath.Join(webDir, "paste.js"))
+	data.PasteJS, err = textTemplate.ParseFS(embFS, "data/paste.js")
 	if err != nil {
 		return data, err
 	}
 
 	// paste_continue.tmpl
-	data.PasteContinue, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "paste_continue.tmpl"),
-	)
+	data.PasteContinue, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste_continue.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// settings.tmpl
-	data.Settings, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "settings.tmpl"),
-	)
+	data.Settings, err = template.ParseFS(embFS, "data/base.tmpl", "data/settings.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// about.tmpl
-	data.About, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "about.tmpl"),
-	)
+	data.About, err = template.ParseFS(embFS, "data/base.tmpl", "data/about.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// terms.tmpl
-	data.TermsOfUse, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "terms.tmpl"),
-	)
+	data.TermsOfUse, err = template.ParseFS(embFS, "data/base.tmpl", "data/terms.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// authors.tmpl
-	data.Authors, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "authors.tmpl"),
-	)
+	data.Authors, err = template.ParseFS(embFS, "data/base.tmpl", "data/authors.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// license.tmpl
-	data.License, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "license.tmpl"),
-	)
+	data.License, err = template.ParseFS(embFS, "data/base.tmpl", "data/license.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// source_code.tmpl
-	data.SourceCodePage, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "source_code.tmpl"),
-	)
+	data.SourceCodePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/source_code.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// docs.tmpl
-	data.Docs, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "docs.tmpl"),
-	)
+	data.Docs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// docs_apiv1.tmpl
-	data.DocsApiV1, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "docs_apiv1.tmpl"),
-	)
+	data.DocsApiV1, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv1.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// docs_api_libs.tmpl
-	data.DocsApiLibs, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "docs_api_libs.tmpl"),
-	)
+	data.DocsApiLibs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_api_libs.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// error.tmpl
-	data.ErrorPage, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "error.tmpl"),
-	)
+	data.ErrorPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/error.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// emb.tmpl
-	data.EmbeddedPage, err = template.ParseFiles(
-		filepath.Join(webDir, "emb.tmpl"),
-	)
+	data.EmbeddedPage, err = template.ParseFS(embFS, "data/emb.tmpl")
 	if err != nil {
 		return data, err
 	}
 
 	// emb_help.tmpl
-	data.EmbeddedHelpPage, err = template.ParseFiles(
-		filepath.Join(webDir, "base.tmpl"),
-		filepath.Join(webDir, "emb_help.tmpl"),
-	)
+	data.EmbeddedHelpPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/emb_help.tmpl")
 	if err != nil {
 		return data, err
 	}

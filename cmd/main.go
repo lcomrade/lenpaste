@@ -30,7 +30,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -80,7 +79,6 @@ func printHelp(noErrors bool) {
 	println("Usage:", os.Args[0], "[-db-source] [OPTION]...")
 	println("")
 	println("  -address                ADDRESS:PORT (default: :80)")
-	println("  -web-dir                Dir with page templates and static content")
 	println("  -db-driver              Currently supported drivers: 'sqlite3' and 'postgres' (default: sqlite3)")
 	println("  -db-source              DB source.")
 	println("  -db-cleanup-period      Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
@@ -169,27 +167,12 @@ func parseDuration(s string) (int64, error) {
 }
 
 func main() {
-	// Get ./bin/ dir
-	binFile, err := os.Executable()
-	if err != nil {
-		exitOnError(err)
-	}
-
-	binFile, err = filepath.EvalSymlinks(binFile)
-	if err != nil {
-		exitOnError(err)
-	}
-
-	binDir := filepath.Dir(binFile)
-
-	// Get ./share/lenpaste/web dir
-	defaultWebDir := filepath.Join(binDir, "../share/lenpaste/web")
+	var err error
 
 	// Read cmd args
 	flag.Usage = func() { printHelp(false) }
 
 	flagAddress := flag.String("address", ":80", "")
-	flagWebDir := flag.String("web-dir", defaultWebDir, "")
 	flagDbDriver := flag.String("db-driver", "sqlite3", "")
 	flagDbSource := flag.String("db-source", "", "")
 	flagDbCleanupPeriod := flag.String("db-cleanup-period", "3h", "")
@@ -315,7 +298,7 @@ func main() {
 	}
 
 	// Load pages
-	webData, err := web.Load(cfg, *flagWebDir)
+	webData, err := web.Load(cfg)
 	if err != nil {
 		exitOnError(err)
 	}

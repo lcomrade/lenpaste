@@ -23,21 +23,21 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"embed"
 )
 
 type Locale map[string]string
 type Locales map[string]*Locale
 
-func loadLocales(localeDir string) (Locales, error) {
+func loadLocales(f embed.FS, localeDir string) (Locales, error) {
 	locales := make(Locales)
 
 	// Get locale files list
-	files, err := ioutil.ReadDir(localeDir)
+	files, err := f.ReadDir(localeDir)
 	if err != nil {
 		return locales, err
 	}
@@ -56,7 +56,7 @@ func loadLocales(localeDir string) (Locales, error) {
 
 		// Read file
 		filePath := filepath.Join(localeDir, fileName)
-		fileByte, err := readFile(filePath)
+		fileByte, err := f.ReadFile(filePath)
 		if err != nil {
 			return locales, err
 		}
