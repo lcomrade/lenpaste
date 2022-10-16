@@ -19,12 +19,12 @@
 package web
 
 import (
+	"embed"
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/lexers"
 	"html/template"
-	"embed"
 	textTemplate "text/template"
 )
 

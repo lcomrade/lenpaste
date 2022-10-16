@@ -74,6 +74,10 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	// Check syntax
+	if paste.Syntax == "" {
+		paste.Syntax = "plaintext"
+	}
+
 	syntaxOk := false
 	for _, name := range lexerNames {
 		if name == paste.Syntax {

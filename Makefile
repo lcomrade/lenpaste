@@ -17,7 +17,7 @@ all:
 	chmod +x ./dist/bin/$(NAME)
 
 fmt:
-	@$(GO) -w $(shell find ./ -type f -name '*.go')
+	@$(GOFMT) -w $(shell find ./ -type f -name '*.go')
 
 clean:
 	rm -rf ./dist/

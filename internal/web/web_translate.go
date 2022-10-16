@@ -20,6 +20,7 @@ package web
 
 import (
 	"bytes"
+	"embed"
 	"errors"
 	"fmt"
 	"html/template"
@@ -27,7 +28,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"embed"
 )
 
 type Locale map[string]string
