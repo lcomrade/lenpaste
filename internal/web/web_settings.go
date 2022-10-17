@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+const cookieMaxAge = 60 * 60 * 24 * 360 * 50 // 50 year
+
 type settingsTmpl struct {
 	Language         string
 	LanguageSelector map[string]string
@@ -79,7 +81,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			http.SetCookie(rw, &http.Cookie{
 				Name:   "lang",
 				Value:  lang,
-				MaxAge: 0,
+				MaxAge: cookieMaxAge,
 			})
 		}
 
@@ -95,7 +97,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			http.SetCookie(rw, &http.Cookie{
 				Name:   "author",
 				Value:  author,
-				MaxAge: 0,
+				MaxAge: cookieMaxAge,
 			})
 		}
 
@@ -111,7 +113,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			http.SetCookie(rw, &http.Cookie{
 				Name:   "authorEmail",
 				Value:  authorEmail,
-				MaxAge: 0,
+				MaxAge: cookieMaxAge,
 			})
 		}
 
@@ -127,7 +129,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			http.SetCookie(rw, &http.Cookie{
 				Name:   "authorURL",
 				Value:  authorURL,
-				MaxAge: 0,
+				MaxAge: cookieMaxAge,
 			})
 		}
 
