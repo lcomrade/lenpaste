@@ -26,13 +26,9 @@ It's time to take that power away from the capitalists.
 We respect your privacy!
 
 
-## I want to modify the files in the `./web/` dir, do I have to provide the source code?
-No, they shouldn't, because these files are distributed without a license.
-That is, the AGPLv3 license does not apply to them.
-
-But remember that you may violate AGPLv3 item 13 about explicitly providing source code for the program.
-**You can't remove the link to download the source code from Lenpaste!**
-If Lenpaste doesn't offer to download its source code, it's a license violation.
+## I want to modify WEB resources (TMPL, CSS, JavaScript, Locale), do I need to open the source code?
+**Yes**. Because the web resources and all Lenpaste source code are
+distributed under the [GNU AGPL v3 license](https://www.gnu.org/licenses/agpl-3.0.html).
 
 
 ## Why is there no support for encryption of paste?
