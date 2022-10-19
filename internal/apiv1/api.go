@@ -22,7 +22,7 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
-	chromaLexers "github.com/alecthomas/chroma/lexers"
+	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 )
 
 type Data struct {
