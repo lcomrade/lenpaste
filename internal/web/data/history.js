@@ -221,6 +221,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 			xhr.onload = () => {
+				// Check HTTP code
+				if (xhr.status != 200) {
+					alert("Error: server return " + xhr.status + " HTTP status code.");
+					return;
+				}
+
 				// Save to history
 				if (localStorage.getItem("DisableHistory") != "true") {
 					let historyJSON = localStorage.getItem("history");

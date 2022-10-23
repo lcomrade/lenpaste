@@ -26,6 +26,6 @@ func (data Data) TermsOfUseHand(rw http.ResponseWriter, req *http.Request) {
 		Translate:  data.Locales.findLocale(req).translate},
 	)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 	}
 }

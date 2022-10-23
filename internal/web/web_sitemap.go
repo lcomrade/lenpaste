@@ -41,7 +41,7 @@ func (data Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/plain")
 	_, err := io.WriteString(rw, robotsTxt)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }
@@ -66,7 +66,7 @@ func (data Data) SitemapHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/xml")
 	_, err := io.WriteString(rw, sitemapXML)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }

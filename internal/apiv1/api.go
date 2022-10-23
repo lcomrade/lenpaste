@@ -21,6 +21,7 @@ package apiv1
 import (
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 )
@@ -28,6 +29,8 @@ import (
 type Data struct {
 	Log logger.Config
 	DB  storage.DB
+
+	RateLimit netshare.RateLimit
 
 	Lexers *[]string
 
@@ -55,6 +58,7 @@ func Load(cfg config.Config) Data {
 	return Data{
 		DB:                cfg.DB,
 		Log:               cfg.Log,
+		RateLimit:         cfg.RateLimit,
 		Lexers:            &lexers,
 		Version:           &cfg.Version,
 		TitleMaxLen:       &cfg.TitleMaxLen,

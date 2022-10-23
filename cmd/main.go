@@ -24,6 +24,7 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/apiv1"
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/raw"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lenpaste/internal/web"
@@ -86,6 +87,7 @@ func printHelp(noErrors bool) {
 	println("  -title-max-length       Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
 	println("  -body-max-length        Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 20000)")
 	println("  -max-paste-lifetime     Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 1w, 30d, 365d. (default: unlimited)")
+	println("  -new-pastes-per-5min    Maximum number of paste that can be created in 5 minutes from one IP. If 0 disable rate-limit. (default: 15)")
 	println("  -server-about           Path to the TXT file that contains the server description.")
 	println("  -server-rules           Path to the TXT file that contains the server rules.")
 	println("  -server-terms           Path to the TXT file that contains the server terms of use.")
@@ -93,8 +95,8 @@ func printHelp(noErrors bool) {
 	println("  -admin-mail             Email of the administrator of this server.")
 	println("  -ui-default-lifetime    Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.")
 	println("  -lenpasswd-file         File in LenPasswd format. If set, authorization will be required to create pastes.")
-	println("  -version                Display version and exit")
-	println("  -help                   Display this help and exit")
+	println("  -version                Display version and exit.")
+	println("  -help                   Display this help and exit.")
 	println()
 	println("Exit status:")
 	println(" 0  if you used the -help or -version flag")
@@ -180,6 +182,7 @@ func main() {
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 20000, "")
 	flagMaxLifetime := flag.String("max-paste-lifetime", "unlimited", "")
+	flagNewPastesPer5Min := flag.Int("new-pastes-per-5min", 15, "")
 	flagServerAbout := flag.String("server-about", "", "")
 	flagServerRules := flag.String("server-rules", "", "")
 	flagServerTerms := flag.String("server-terms", "", "")
@@ -228,6 +231,12 @@ func main() {
 		}
 	}
 
+	// -new-pastes-per-5min flag
+	if *flagNewPastesPer5Min < 0 {
+		println("-new-pastes-per-5min flag cannot be negative")
+		os.Exit(2)
+	}
+
 	// Load server about
 	serverAbout := ""
 	if *flagServerAbout != "" {
@@ -273,6 +282,7 @@ func main() {
 	cfg := config.Config{
 		DB:                db,
 		Log:               log,
+		RateLimit:         netshare.NewRateLimit(*flagNewPastesPer5Min),
 		Version:           Version,
 		TitleMaxLen:       *flagTitleMaxLen,
 		BodyMaxLen:        *flagBodyMaxLen,

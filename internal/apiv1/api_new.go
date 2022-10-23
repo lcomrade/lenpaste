@@ -64,16 +64,9 @@ func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Get form data and create paste
-	req.ParseForm()
-
-	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimit, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 	if err != nil {
-		if err == netshare.ErrBadRequest {
-			data.writeError(rw, req, netshare.ErrBadRequest)
-			return
-		}
-
-		data.writeError(rw, req, netshare.ErrInternal)
+		data.writeError(rw, req, err)
 		return
 	}
 

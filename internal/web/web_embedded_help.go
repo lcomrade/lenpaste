@@ -20,7 +20,6 @@ package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
 )
@@ -48,14 +47,8 @@ func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 	// Read DB
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		if err == storage.ErrNotFoundID {
-			data.errorNotFound(rw, req)
-			return
-
-		} else {
-			data.errorInternal(rw, req, err)
-			return
-		}
+		data.writeError(rw, req, err)
+		return
 	}
 
 	// Show paste
@@ -71,7 +64,7 @@ func (data Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 
 	err = data.EmbeddedHelpPage.Execute(rw, tmplData)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }

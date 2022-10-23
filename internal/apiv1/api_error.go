@@ -23,6 +23,7 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
+	"strconv"
 )
 
 type errorType struct {
@@ -54,9 +55,22 @@ func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) 
 		resp.Code = 405
 		resp.Error = "Method Not Allowed"
 
+	} else if e == netshare.ErrPayloadTooLarge {
+		resp.Code = 413
+		resp.Error = "Payload Too Large"
+
+	} else if e == netshare.ErrTooManyRequests {
+		resp.Code = 429
+		resp.Error = "Too Many Requests"
+		rw.Header().Set("Retry-After", strconv.Itoa(netshare.RateLimitPeriod))
+
 	} else {
 		resp.Code = 500
 		resp.Error = "Internal Server Error"
+		data.Log.HttpError(req, e)
+	}
+
+	if resp.Code >= 500 && e != netshare.ErrInternal {
 		data.Log.HttpError(req, e)
 	}
 

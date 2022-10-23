@@ -38,7 +38,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 		if authExist == true {
 			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
 			if err != nil {
-				data.errorInternal(rw, req, err)
+				data.writeError(rw, req, err)
 				return
 			}
 		}
@@ -62,7 +62,7 @@ func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 
 		err := data.Settings.Execute(rw, dataTmpl)
 		if err != nil {
-			data.errorInternal(rw, req, err)
+			data.writeError(rw, req, err)
 		}
 
 		// Else update settings

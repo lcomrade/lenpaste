@@ -81,19 +81,19 @@
 		<td><code>author</code></td>
 		<td></td>
 		<td></td>
-		<td>{{call .Translate `docsAPIv1.ReqNewAuthor`}}</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewAuthor` .MaxLenAuthorAll}}</td>
 	</tr>
 	<tr>
 		<td><code>authorEmail</code></td>
 		<td></td>
 		<td></td>
-		<td>{{call .Translate `docsAPIv1.ReqNewAuthorEmail`}}</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewAuthorEmail` .MaxLenAuthorAll}}</td>
 	</tr>
 	<tr>
 		<td><code>authorURL</code></td>
 		<td></td>
 		<td></td>
-		<td>{{call .Translate `docsAPIv1.ReqNewAuthorURL`}}</td>
+		<td>{{call .Translate `docsAPIv1.ReqNewAuthorURL` .MaxLenAuthorAll}}</td>
 	</tr>
 </table>
 <p>{{call .Translate `docsAPIv1.ResponseExample`}}</p>
@@ -213,6 +213,18 @@
 {{ call .Highlight `{
 	"code": 405,
 	"error": "Method Not Allowed"
+}` `json`}}
+
+<p>{{call .Translate `docsAPIv1.Error413`}}</p>
+{{ call .Highlight `{
+	"code": 413,
+	"error": "Payload Too Large"
+}` `json`}}
+
+<p>{{call .Translate `docsAPIv1.Error429` .RateLimitPeriod .RateLimitPeriod}}</p>
+{{ call .Highlight `{
+	"code": 429,
+	"error": "Too Many Requests"
 }` `json`}}
 
 <p>{{call .Translate `docsAPIv1.Error500`}}</p>

@@ -21,32 +21,47 @@ package netshare
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lineend"
-	"net/url"
+	"net"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
-func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
+func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit RateLimit, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
+	req.ParseForm()
+
+	// Check rate limit
+	cleanIP, _, err := net.SplitHostPort(req.RemoteAddr)
+	if err != nil {
+		return "", 0, 0, err
+	}
+
+	if rateLimit.CheckAndUse(cleanIP) == false {
+		return "", 0, 0, ErrTooManyRequests
+	}
+
 	// Read form
 	paste := storage.Paste{
-		Title:       form.Get("title"),
-		Body:        form.Get("body"),
-		Syntax:      form.Get("syntax"),
+		Title:       req.PostForm.Get("title"),
+		Body:        req.PostForm.Get("body"),
+		Syntax:      req.PostForm.Get("syntax"),
 		DeleteTime:  0,
 		OneUse:      false,
-		Author:      form.Get("author"),
-		AuthorEmail: form.Get("authorEmail"),
-		AuthorURL:   form.Get("authorURL"),
+		Author:      req.PostForm.Get("author"),
+		AuthorEmail: req.PostForm.Get("authorEmail"),
+		AuthorURL:   req.PostForm.Get("authorURL"),
 	}
 
 	// Remove new line from title
 	paste.Title = strings.Replace(paste.Title, "\n", "", -1)
 	paste.Title = strings.Replace(paste.Title, "\r", "", -1)
+	paste.Title = strings.Replace(paste.Title, "\t", " ", -1)
 
 	// Check title
-	if len(paste.Title) > titleMaxLen && titleMaxLen >= 0 {
-		return "", 0, 0, ErrBadRequest
+	if utf8.RuneCountInString(paste.Title) > titleMaxLen && titleMaxLen >= 0 {
+		return "", 0, 0, ErrPayloadTooLarge
 	}
 
 	// Check paste body
@@ -54,12 +69,12 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 		return "", 0, 0, ErrBadRequest
 	}
 
-	if len(paste.Body) > bodyMaxLen && bodyMaxLen > 0 {
-		return "", 0, 0, ErrBadRequest
+	if utf8.RuneCountInString(paste.Body) > bodyMaxLen && bodyMaxLen > 0 {
+		return "", 0, 0, ErrPayloadTooLarge
 	}
 
 	// Change paste body lines end
-	switch form.Get("lineEnd") {
+	switch req.PostForm.Get("lineEnd") {
 	case "", "LF", "lf":
 		paste.Body = lineend.UnknownToUnix(paste.Body)
 
@@ -91,7 +106,7 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	// Get delete time
-	expirStr := form.Get("expiration")
+	expirStr := req.PostForm.Get("expiration")
 	if expirStr != "" {
 		// Convert string to int
 		expir, err := strconv.ParseInt(expirStr, 10, 64)
@@ -113,8 +128,21 @@ func PasteAddFromForm(form url.Values, db storage.DB, titleMaxLen int, bodyMaxLe
 	}
 
 	// Get "one use" parameter
-	if form.Get("oneUse") == "true" {
+	if req.PostForm.Get("oneUse") == "true" {
 		paste.OneUse = true
+	}
+
+	// Check author name, email and URL length.
+	if utf8.RuneCountInString(paste.Author) > MaxLengthAuthorAll {
+		return "", 0, 0, ErrPayloadTooLarge
+	}
+
+	if utf8.RuneCountInString(paste.AuthorEmail) > MaxLengthAuthorAll {
+		return "", 0, 0, ErrPayloadTooLarge
+	}
+
+	if utf8.RuneCountInString(paste.AuthorURL) > MaxLengthAuthorAll {
+		return "", 0, 0, ErrPayloadTooLarge
 	}
 
 	// Create paste

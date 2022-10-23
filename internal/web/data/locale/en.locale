@@ -25,7 +25,11 @@ base.Settings=Settings
 
 error.Error=Error
 error.400=Bad Request
+error.401=Unauthorized
 error.404=Not Found
+error.405=Method Not Allowed
+error.413=Payload Too Large
+error.429=Too Many Requests
 error.500=Internal Server Error
 error.AdminContacts=Contact administrator:
 error.BackToHome=Back to Home
@@ -155,9 +159,9 @@ docsAPIv1.ReqNewLineEnd=Line end in the text of the excerpt will automatically b
 docsAPIv1.ReqNewSyntax=Syntax highlighting in paste. A list of available syntaxes can be obtained using the <a href="%s"><code>getServerInfo</code></a> method.
 docsAPIv1.ReqNewOneUse=If it is <code>true</code>, the paste can be opened only once and then it will be deleted.
 docsAPIv1.ReqNewExpiration=Indicates expiration of paste in seconds. If this parameter is <code>0</code>, the storage time will be unlimited.
-docsAPIv1.ReqNewAuthor=Author name.
-docsAPIv1.ReqNewAuthorEmail=Author email.
-docsAPIv1.ReqNewAuthorURL=Author URL.
+docsAPIv1.ReqNewAuthor=Author name. Must not be more than %d characters.
+docsAPIv1.ReqNewAuthorEmail=Author email. Must not be more than %d characters.
+docsAPIv1.ReqNewAuthorURL=Author URL. Must not be more than %d characters.
 docsAPIv1.ReqGetID=Paste ID.
 docsAPIv1.ReqGetOpenOneUse=If <code>true</code>, the entire contents of the paste will be returned, after which it will be deleted. If <code>false</code>, the API will return only <code>id</code> and <code>oneUse</code>, and the paste will not be deleted.
 docsAPIv1.ResponseExample=Response example:
@@ -167,6 +171,8 @@ docsAPIv1.Error401=This server requires "HTTP Basic Authentication" authorizatio
 docsAPIv1.Error404n1=There is no paste with this ID.
 docsAPIv1.Error404n2=There is no such API method.
 docsAPIv1.Error405=You made a mistake with HTTP request (example: you made POST instead of GET).
+docsAPIv1.Error413=You have exceeded the maximum size of one or more fields (<code>title</code>, <code>body</code>, <code>author</code>, <code>authorEmail</code>, <code>authorURL</code>).
+docsAPIv1.Error429=You have made too many requests, try again in %d seconds. The <code>Retry-After: %d</code> HTTP header will also be returned along with this error.
 docsAPIv1.Error500=There was a failure on the server. Contact your server administrator to find out what the problem is.
 
 docsAPIv1Libs.Title=Libraries for working with API

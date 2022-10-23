@@ -28,6 +28,7 @@ import (
 type createTmpl struct {
 	TitleMaxLen       int
 	BodyMaxLen        int
+	AuthorAllMaxLen   int
 	MaxLifeTime       int64
 	UiDefaultLifeTime string
 	Lexers            []string
@@ -55,7 +56,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		if authExist == true {
 			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
 			if err != nil {
-				data.errorInternal(rw, req, err)
+				data.writeError(rw, req, err)
 				return
 			}
 		}
@@ -66,19 +67,11 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	// Read request
-	req.ParseForm()
-
-	if req.PostForm.Get("body") != "" {
-		// Create paste
-		pasteID, _, _, err := netshare.PasteAddFromForm(req.PostForm, data.DB, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+	// Create paste if need
+	if req.Method == "POST" {
+		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimit, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 		if err != nil {
-			if err == netshare.ErrBadRequest {
-				data.errorBadRequest(rw, req)
-				return
-			}
-
-			data.errorInternal(rw, req, err)
+			data.writeError(rw, req, err)
 			return
 		}
 
@@ -91,6 +84,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 	tmplData := createTmpl{
 		TitleMaxLen:        *data.TitleMaxLen,
 		BodyMaxLen:         *data.BodyMaxLen,
+		AuthorAllMaxLen:    netshare.MaxLengthAuthorAll,
 		MaxLifeTime:        *data.MaxLifeTime,
 		UiDefaultLifeTime:  *data.UiDefaultLifeTime,
 		Lexers:             *data.Lexers,
@@ -106,7 +100,7 @@ func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	err = data.Main.Execute(rw, tmplData)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }

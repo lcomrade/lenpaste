@@ -19,8 +19,11 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
 type errorTmpl struct {
@@ -30,62 +33,47 @@ type errorTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data Data) errorBadRequest(rw http.ResponseWriter, req *http.Request) {
-	// Write response header
-	rw.Header().Set("Content-type", "text/html")
-	rw.WriteHeader(400)
-
-	// Render template
+func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
 	errData := errorTmpl{
-		Code:      400,
+		Code:      0,
 		AdminName: *data.AdminName,
 		AdminMail: *data.AdminMail,
 		Translate: data.Locales.findLocale(req).translate,
 	}
 
-	e := data.ErrorPage.Execute(rw, errData)
-	if e != nil {
+	// Dectect error
+	switch e {
+	case netshare.ErrBadRequest:
+		errData.Code = 400
+	case netshare.ErrUnauthorized:
+		errData.Code = 401
+	case storage.ErrNotFoundID:
+		errData.Code = 404
+	case netshare.ErrNotFound:
+		errData.Code = 404
+	case netshare.ErrMethodNotAllowed:
+		errData.Code = 405
+	case netshare.ErrPayloadTooLarge:
+		errData.Code = 413
+	case netshare.ErrTooManyRequests:
+		errData.Code = 429
+		rw.Header().Set("Retry-After", strconv.Itoa(netshare.RateLimitPeriod))
+	default:
+		errData.Code = 500
+	}
+
+	// Log Internal Server Error if need
+	if errData.Code >= 500 && e != netshare.ErrInternal {
 		data.Log.HttpError(req, e)
 	}
-}
-
-func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
-	// Write response header
-	rw.Header().Set("Content-type", "text/html")
-	rw.WriteHeader(404)
-
-	// Render template
-	errData := errorTmpl{
-		Code:      404,
-		AdminName: *data.AdminName,
-		AdminMail: *data.AdminMail,
-		Translate: data.Locales.findLocale(req).translate,
-	}
-
-	e := data.ErrorPage.Execute(rw, errData)
-	if e != nil {
-		data.Log.HttpError(req, e)
-	}
-}
-
-func (data Data) errorInternal(rw http.ResponseWriter, req *http.Request, err error) {
-	// Write to log
-	data.Log.HttpError(req, err)
 
 	// Write response header
 	rw.Header().Set("Content-type", "text/html")
-	rw.WriteHeader(500)
+	rw.WriteHeader(errData.Code)
 
 	// Render template
-	errData := errorTmpl{
-		Code:      500,
-		AdminName: *data.AdminName,
-		AdminMail: *data.AdminMail,
-		Translate: data.Locales.findLocale(req).translate,
-	}
-
-	e := data.ErrorPage.Execute(rw, errData)
-	if e != nil {
-		data.Log.HttpError(req, e)
+	err := data.ErrorPage.Execute(rw, errData)
+	if err != nil {
+		data.Log.HttpError(req, err)
 	}
 }

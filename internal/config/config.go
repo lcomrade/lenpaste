@@ -20,12 +20,14 @@ package config
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 )
 
 type Config struct {
-	DB  storage.DB
-	Log logger.Config
+	DB        storage.DB
+	Log       logger.Config
+	RateLimit netshare.RateLimit
 
 	Version string
 

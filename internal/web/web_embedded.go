@@ -54,7 +54,7 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 			errorNotFound = true
 
 		} else {
-			data.errorInternal(rw, req, err)
+			data.writeError(rw, req, err)
 			return
 		}
 	}
@@ -77,7 +77,7 @@ func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	// Show paste
 	err = data.EmbeddedPage.Execute(rw, tmplData)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }

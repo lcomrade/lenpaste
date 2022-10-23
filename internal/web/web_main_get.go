@@ -19,7 +19,6 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lineend"
 	"html/template"
 	"net/http"
@@ -62,14 +61,8 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	// Read DB
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		if err == storage.ErrNotFoundID {
-			data.errorNotFound(rw, req)
-			return
-
-		} else {
-			data.errorInternal(rw, req, err)
-			return
-		}
+		data.writeError(rw, req, err)
+		return
 	}
 
 	// If "one use" paste
@@ -85,7 +78,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 
 			err = data.PasteContinue.Execute(rw, tmplData)
 			if err != nil {
-				data.errorInternal(rw, req, err)
+				data.writeError(rw, req, err)
 				return
 			}
 
@@ -95,7 +88,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 		// If continue button pressed delete paste
 		err = data.DB.PasteDelete(pasteID)
 		if err != nil {
-			data.errorInternal(rw, req, err)
+			data.writeError(rw, req, err)
 			return
 		}
 	}
@@ -136,7 +129,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	// Show paste
 	err = data.PastePage.Execute(rw, tmplData)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }

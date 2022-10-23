@@ -19,11 +19,20 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
 )
 
 type docsTmpl struct {
+	Highlight func(string, string) template.HTML
+	Translate func(string, ...interface{}) template.HTML
+}
+
+type docsApiV1Tmpl struct {
+	MaxLenAuthorAll int
+	RateLimitPeriod int64
+
 	Highlight func(string, string) template.HTML
 	Translate func(string, ...interface{}) template.HTML
 }
@@ -35,7 +44,7 @@ func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/html")
 	err := data.Docs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }
@@ -45,12 +54,14 @@ func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/html")
-	err := data.DocsApiV1.Execute(rw, docsTmpl{
-		Translate: data.Locales.findLocale(req).translate,
-		Highlight: tryHighlight,
+	err := data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
+		MaxLenAuthorAll: netshare.MaxLengthAuthorAll,
+		RateLimitPeriod: netshare.RateLimitPeriod,
+		Translate:       data.Locales.findLocale(req).translate,
+		Highlight:       tryHighlight,
 	})
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }
@@ -62,7 +73,7 @@ func (data Data) DocsApiLibsHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/html")
 	err := data.DocsApiLibs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 		return
 	}
 }

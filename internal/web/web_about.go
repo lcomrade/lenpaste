@@ -69,7 +69,7 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 
 	err := data.About.Execute(rw, dataTmpl)
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 	}
 }
 
@@ -83,7 +83,7 @@ func (data Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
 
 	err := data.Authors.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 	}
 }
 
@@ -97,7 +97,7 @@ func (data Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
 
 	err := data.License.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 	}
 }
 
@@ -111,6 +111,6 @@ func (data Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) {
 
 	err := data.SourceCodePage.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
-		data.errorInternal(rw, req, err)
+		data.writeError(rw, req, err)
 	}
 }

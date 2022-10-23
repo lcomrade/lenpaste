@@ -95,7 +95,8 @@
 				<td><input
 					name="author" value="{{.AuthorDefault}}"
 					autocomplete="off" autocorrect="off" spellcheck="true"
-					placeholder="{{call .Translate `main.AuthorPlaceholder`}}" tabindex=-1
+					placeholder="{{call .Translate `main.AuthorPlaceholder`}}"
+					tabindex=-1 maxlength="{{.AuthorAllMaxLen}}"
 				></td>
 			</tr>
 			<tr>
@@ -103,7 +104,8 @@
 				<td><input
 					name="authorEmail" value="{{.AuthorEmailDefault}}"
 					autocomplete="off" autocorrect="off" spellcheck="true"
-					placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}" tabindex=-1
+					placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}"
+					tabindex=-1 maxlength="{{.AuthorAllMaxLen}}"
 				></td>
 			</tr>
 			<tr>
@@ -111,7 +113,8 @@
 				<td><input
 					name="authorURL"  value="{{.AuthorURLDefault}}"
 					autocomplete="off" autocorrect="off" spellcheck="true"
-					placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}" tabindex=-1
+					placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}"
+					tabindex=-1 maxlength="{{.AuthorAllMaxLen}}"
 				></td>
 			</tr>
 		</table>

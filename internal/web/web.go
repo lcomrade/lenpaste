@@ -22,6 +22,7 @@ import (
 	"embed"
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"html/template"
@@ -34,6 +35,8 @@ var embFS embed.FS
 type Data struct {
 	DB  storage.DB
 	Log logger.Config
+
+	RateLimit netshare.RateLimit
 
 	Lexers         *[]string
 	Locales        *Locales
@@ -90,6 +93,7 @@ func Load(cfg config.Config) (Data, error) {
 	// Setup base info
 	data.DB = cfg.DB
 	data.Log = cfg.Log
+	data.RateLimit = cfg.RateLimit
 
 	data.Version = &cfg.Version
 

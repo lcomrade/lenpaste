@@ -19,7 +19,6 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"net/http"
 	"strings"
@@ -36,14 +35,8 @@ func (data Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		if err == storage.ErrNotFoundID {
-			data.errorNotFound(rw, req)
-			return
-
-		} else {
-			data.errorInternal(rw, req, err)
-			return
-		}
+		data.writeError(rw, req, err)
+		return
 	}
 
 	// If "one use" paste
@@ -51,7 +44,7 @@ func (data Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 		// Delete paste
 		err = data.DB.PasteDelete(pasteID)
 		if err != nil {
-			data.errorInternal(rw, req, err)
+			data.writeError(rw, req, err)
 			return
 		}
 	}
