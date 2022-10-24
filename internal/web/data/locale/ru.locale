@@ -68,6 +68,8 @@ main.Create=Создать новый отрывок
 main.AcceptTerms=<a href="%s" target="_blank">См. условия использования</a>
 
 historyJS.History=История
+historyJS.Error=Ошибка HTTP: %d %s
+historyJS.ErrorUnknown=Неизвестная ошибка: %s
 historyJS.EnableHistory=Сохранять историю
 historyJS.ClearHistory=Очистить историю...
 historyJS.ClearHistoryConfirm=Вы уверены что хотите очистить историю?

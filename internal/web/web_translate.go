@@ -102,17 +102,6 @@ func loadLocales(f embed.FS, localeDir string) (Locales, error) {
 }
 
 func (locales Locales) findLocale(req *http.Request) Locale {
-	// Get accept language by request
-	req.ParseForm()
-
-	langReq := req.Form.Get("lang")
-	if langReq != "" {
-		locale, ok := locales[langReq]
-		if ok == true {
-			return *locale
-		}
-	}
-
 	// Get accept language by cookie
 	langCookie := getCookie(req, "lang")
 	if langCookie != "" {

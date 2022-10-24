@@ -68,6 +68,8 @@ main.Create=Create New Paste
 main.AcceptTerms=<a href="%s" target="_blank">See Terms of Use</a>
 
 historyJS.History=History
+historyJS.Error=HTTP error: %d %s
+historyJS.ErrorUnknown=Unknown error: %s
 historyJS.EnableHistory=Remember history
 historyJS.HistoryEnabledAlert=History saving has been ENABLED.
 historyJS.HistoryDisabledAlert=History saving has been DISABLED.

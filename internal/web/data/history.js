@@ -223,7 +223,16 @@ document.addEventListener("DOMContentLoaded", () => {
 			xhr.onload = () => {
 				// Check HTTP code
 				if (xhr.status != 200) {
-					alert("Error: server return " + xhr.status + " HTTP status code.");
+					switch (xhr.status) {
+						case 400: alert("{{ call .Translate `error.400` | call .Translate `historyJS.Error` 400 }}"); break;
+						case 401: alert("{{ call .Translate `error.401` | call .Translate `historyJS.Error` 401 }}"); break;
+						case 404: alert("{{ call .Translate `error.404` | call .Translate `historyJS.Error` 404 }}"); break;
+						case 405: alert("{{ call .Translate `error.405` | call .Translate `historyJS.Error` 405 }}"); break;
+						case 413: alert("{{ call .Translate `error.413` | call .Translate `historyJS.Error` 413 }}"); break;
+						case 429: alert("{{ call .Translate `error.429` | call .Translate `historyJS.Error` 429 }}"); break;
+						case 500: alert("{{ call .Translate `error.500` | call .Translate `historyJS.Error` 500 }}"); break;
+						default: alert("{{ call .Translate `historyJS.ErrorUnknown` `"+xhr.status+"` }}"); break;	
+					}
 					return;
 				}
 
