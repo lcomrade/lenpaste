@@ -118,6 +118,7 @@ For all:
 For instance administrators:
 - [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
 - [Database: PostgreSQL](docs/db_postgresql.md)
+- [Rate limiting](docs/ratelimits.md)
 - [Make Lenpaste server private](docs/private_server.md)
 
 For developers:
