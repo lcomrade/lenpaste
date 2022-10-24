@@ -147,3 +147,4 @@ If you have any questions or suggestions, you can write here:
 ## Donate
 All donations will go to Leonid Maslakov, for now the sole developer:
 - Qiwi: https://qiwi.com/n/LCOMRADE
+- YooMoney (aka Yandex Money): https://yoomoney.ru/to/4100118011659535
