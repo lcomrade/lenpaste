@@ -2,6 +2,19 @@
 Semantic versioning is used (https://semver.org/).
 
 
+## v1.2
+- UI: Add history tab.
+- UI: Add copy to clipboard button.
+- Admin: Rate-limits on paste creation (`LENPASTE_NEW_PASTES_PER_5MIN` or `-new-pastes-per-5min`).
+- Admin: Add terms of use support (`/data/terms` or `-server-terms`).
+- Admin: Add default paste life time for WEB interface (`LENPASTE_UI_DEFAULT_LIFETIME` or `-ui-default-lifetime`).
+- Admin: Private servers - password request to create paste (`/data/lenpasswd` or `-lenpasswd-file`).
+- Fix: **Critical security fix!**
+- Fix: not saving cookies.
+- Fix: display language name in WEB.
+- Fix: compatibility with WebKit (Gnome WEB).
+- Dev: Drop Go 1.15 support. Update dependencies.
+
 
 ## v1.1.1
 - Fixed: Incorrect operation of the maximum paste life parameter.

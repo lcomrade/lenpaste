@@ -51,7 +51,7 @@ Full list of contributors here: https://paste.lcomrade.su/about/authors
 **Yes.** You can do the following:
 - Create logo (favicon) to Lenpaste.
 - Translation into other languages.
-- Run your server and add it to [Lenmonitor](https://monitor.lcomrade.su/add).
+- Run your server and add it to [Lenmonitor](https://monitor.lcomrade.su/add?srv=lenpaste).
 - Write a tutorial, a review, or make a video.
 - Suggest an idea.
 - Report a bug.
