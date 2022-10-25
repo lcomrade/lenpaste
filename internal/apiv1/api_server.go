@@ -25,6 +25,7 @@ import (
 )
 
 type serverInfoType struct {
+	Software          string   `json:"software"`
 	Version           string   `json:"version"`
 	TitleMaxLen       int      `json:"titleMaxlength"`
 	BodyMaxLen        int      `json:"bodyMaxlength"`
@@ -52,9 +53,10 @@ func (data Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Prepare data
 	serverInfo := serverInfoType{
+		Software:          "Lenpaste",
+		Version:           *data.Version,
 		TitleMaxLen:       *data.TitleMaxLen,
 		BodyMaxLen:        *data.BodyMaxLen,
-		Version:           *data.Version,
 		MaxLifeTime:       *data.MaxLifeTime,
 		ServerAbout:       *data.ServerAbout,
 		ServerRules:       *data.ServerRules,
