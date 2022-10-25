@@ -30,8 +30,6 @@ import (
 )
 
 func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit RateLimit, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
-	req.ParseForm()
-
 	// Check rate limit
 	cleanIP, _, err := net.SplitHostPort(req.RemoteAddr)
 	if err != nil {
@@ -43,6 +41,8 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit RateLimit, tit
 	}
 
 	// Read form
+	req.ParseForm()
+
 	paste := storage.Paste{
 		Title:       req.PostForm.Get("title"),
 		Body:        req.PostForm.Get("body"),
