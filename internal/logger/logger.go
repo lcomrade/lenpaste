@@ -20,6 +20,7 @@ package logger
 
 import (
 	"fmt"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
 	"time"
 )
@@ -40,10 +41,10 @@ func (config Config) Error(err error) {
 
 func (config Config) HttpRequest(req *http.Request) {
 	now := time.Now()
-	fmt.Println(now.Format(config.TimeFormat), "[REQUEST]", req.RemoteAddr, req.Method, req.URL.Path)
+	fmt.Println(now.Format(config.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req), req.Method, req.URL.Path)
 }
 
 func (config Config) HttpError(req *http.Request, err error) {
 	now := time.Now()
-	fmt.Println(now.Format(config.TimeFormat), "[ERROR]", req.RemoteAddr, req.Method, req.URL.Path, "Error:", err.Error())
+	fmt.Println(now.Format(config.TimeFormat), "[ERROR]", netshare.GetClientAddr(req), req.Method, req.URL.Path, "Error:", err.Error())
 }

@@ -20,6 +20,7 @@ package netshare
 
 import (
 	"net/http"
+	"strings"
 )
 
 func GetHost(req *http.Request) string {
@@ -44,4 +45,17 @@ func GetProtocol(header http.Header) string {
 	}
 
 	return "http"
+}
+
+func GetClientAddr(req *http.Request) string {
+	// Read header
+	xFor := req.Header.Get("X-Forwarded-For")
+	xFor = strings.Split(xFor, ",")[0]
+
+	// Check
+	if xFor != "" {
+		return xFor
+	}
+
+	return req.RemoteAddr
 }
