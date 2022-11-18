@@ -19,19 +19,18 @@
 package raw
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 )
 
 type Data struct {
 	DB  storage.DB
-	Log logger.Config
+	Log logger.Logger
 }
 
-func Load(cfg config.Config) Data {
+func Load(db storage.DB, log logger.Logger) Data {
 	return Data{
-		DB:  cfg.DB,
-		Log: cfg.Log,
+		DB:  db,
+		Log: log,
 	}
 }

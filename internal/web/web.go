@@ -34,7 +34,7 @@ var embFS embed.FS
 
 type Data struct {
 	DB  storage.DB
-	Log logger.Config
+	Log logger.Logger
 
 	RateLimit netshare.RateLimit
 
@@ -86,12 +86,12 @@ type Data struct {
 	UiDefaultLifeTime *string
 }
 
-func Load(cfg config.Config) (Data, error) {
+func Load(db storage.DB, cfg config.Config) (Data, error) {
 	var data Data
 	var err error
 
 	// Setup base info
-	data.DB = cfg.DB
+	data.DB = db
 	data.Log = cfg.Log
 	data.RateLimit = cfg.RateLimit
 

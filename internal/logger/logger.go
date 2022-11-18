@@ -22,29 +22,36 @@ import (
 	"fmt"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
+	"os"
 	"time"
 )
 
-type Config struct {
+type Logger struct {
 	TimeFormat string
 }
 
-func (config Config) Info(msg string) {
-	now := time.Now()
-	fmt.Println(now.Format(config.TimeFormat), "[INFO]", msg)
+func New(timeFormat string) Logger {
+	return Logger{
+		TimeFormat: timeFormat,
+	}
 }
 
-func (config Config) Error(err error) {
+func (cfg Logger) Info(msg string) {
 	now := time.Now()
-	fmt.Println(now.Format(config.TimeFormat), "[ERROR]", err.Error())
+	fmt.Println(now.Format(cfg.TimeFormat), "[INFO]", msg)
 }
 
-func (config Config) HttpRequest(req *http.Request) {
+func (cfg Logger) Error(err error) {
 	now := time.Now()
-	fmt.Println(now.Format(config.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req), req.Method, req.URL.Path)
+	fmt.Fprintln(os.Stderr, now.Format(cfg.TimeFormat), "[ERROR]", err.Error())
 }
 
-func (config Config) HttpError(req *http.Request, err error) {
+func (cfg Logger) HttpRequest(req *http.Request) {
 	now := time.Now()
-	fmt.Println(now.Format(config.TimeFormat), "[ERROR]", netshare.GetClientAddr(req), req.Method, req.URL.Path, "Error:", err.Error())
+	fmt.Println(now.Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req), req.Method, req.URL.Path)
+}
+
+func (cfg Logger) HttpError(req *http.Request, err error) {
+	now := time.Now()
+	fmt.Fprintln(os.Stderr, now.Format(cfg.TimeFormat), "[ERROR]", netshare.GetClientAddr(req), req.Method, req.URL.Path, "Error:", err.Error())
 }

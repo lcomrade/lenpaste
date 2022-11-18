@@ -27,7 +27,7 @@ import (
 )
 
 type Data struct {
-	Log logger.Config
+	Log logger.Logger
 	DB  storage.DB
 
 	RateLimit netshare.RateLimit
@@ -52,11 +52,11 @@ type Data struct {
 	UiDefaultLifeTime *string
 }
 
-func Load(cfg config.Config) Data {
+func Load(db storage.DB, cfg config.Config) Data {
 	lexers := chromaLexers.Names(false)
 
 	return Data{
-		DB:                cfg.DB,
+		DB:                db,
 		Log:               cfg.Log,
 		RateLimit:         cfg.RateLimit,
 		Lexers:            &lexers,

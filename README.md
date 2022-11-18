@@ -43,6 +43,8 @@ services:
       - LENPASTE_ADDRESS=:80                  # ADDRES:PORT for HTTP server.
       - LENPASTE_DB_DRIVER=sqlite3            # Currently supported drivers: 'sqlite3' and 'postgres'.
       - LENPASTE_DB_SOURCE=/data/lenpaste.db  # DB source.
+      - LENPASTE_DB_MAX_OPEN_CONNS=25         # Maximum number of connections to the database.
+      - LENPASTE_DB_MAX_IDLE_CONNS=5          # Maximum number of idle connections to the database.
       - LENPASTE_DB_CLEANUP_PERIOD=3h         # Interval at which the DB is cleared of expired but not yet deleted pastes.
       - LENPASTE_ROBOTS_DISALLOW=false        # Prohibits search engine crawlers from indexing site using robots.txt file.
       - LENPASTE_TITLE_MAX_LENGTH=100         # Maximum length of the paste title. If 0 disable title, if -1 disable length limit.

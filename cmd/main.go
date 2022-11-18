@@ -21,6 +21,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"git.lcomrade.su/root/lenpaste/internal/apiv1"
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
@@ -38,7 +39,7 @@ import (
 
 var Version = "unknown"
 
-func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Config) {
+func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Logger) {
 	for {
 		// Delete expired pastes
 		count, err := db.PasteDeleteExpired()
@@ -72,7 +73,7 @@ func readFile(path string) (string, error) {
 }
 
 func exitOnError(e error) {
-	println("error:", e.Error())
+	fmt.Fprintln(os.Stderr, "error:", e.Error())
 	os.Exit(1)
 }
 
@@ -82,6 +83,8 @@ func printHelp(noErrors bool) {
 	println("  -address                ADDRESS:PORT (default: :80)")
 	println("  -db-driver              Currently supported drivers: 'sqlite3' and 'postgres' (default: sqlite3)")
 	println("  -db-source              DB source.")
+	println("  -db-max-open-conns      Maximum number of connections to the database. (default: 25)")
+	println("  -db-max-idle-conns      Maximum number of idle connections to the database. (default: 5)")
 	println("  -db-cleanup-period      Interval at which the DB is cleared of expired but not yet deleted pastes. (default: 3h)")
 	println("  -robots-disallow        Prohibits search engine crawlers from indexing site using robots.txt file.")
 	println("  -title-max-length       Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
@@ -177,6 +180,8 @@ func main() {
 	flagAddress := flag.String("address", ":80", "")
 	flagDbDriver := flag.String("db-driver", "sqlite3", "")
 	flagDbSource := flag.String("db-source", "", "")
+	flagDbMaxOpenConns := flag.Int("db-max-open-conns", 25, "")
+	flagDbMaxIdleConns := flag.Int("db-max-idle-conns", 5, "")
 	flagDbCleanupPeriod := flag.String("db-cleanup-period", "3h", "")
 	flagRobotsDisallow := flag.Bool("robots-disallow", false, "")
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
@@ -270,17 +275,14 @@ func main() {
 	}
 
 	// Settings
-	db := storage.DB{
-		DriverName:     *flagDbDriver,
-		DataSourceName: *flagDbSource,
-	}
+	log := logger.New("2006/01/02 15:04:05")
 
-	log := logger.Config{
-		TimeFormat: "2006/01/02 15:04:05",
+	db, err := storage.NewPool(*flagDbDriver, *flagDbSource, *flagDbMaxOpenConns, *flagDbMaxIdleConns)
+	if err != nil {
+		exitOnError(err)
 	}
 
 	cfg := config.Config{
-		DB:                db,
 		Log:               log,
 		RateLimit:         netshare.NewRateLimit(*flagNewPastesPer5Min),
 		Version:           Version,
@@ -297,18 +299,18 @@ func main() {
 		LenPasswdFile:     *flagLenPasswdFile,
 	}
 
-	apiv1Data := apiv1.Load(cfg)
+	apiv1Data := apiv1.Load(db, cfg)
 
-	rawData := raw.Load(cfg)
+	rawData := raw.Load(db, log)
 
 	// Init data base
-	err = db.InitDB()
+	err = storage.InitDB(*flagDbDriver, *flagDbSource)
 	if err != nil {
 		exitOnError(err)
 	}
 
 	// Load pages
-	webData, err := web.Load(cfg)
+	webData, err := web.Load(db, cfg)
 	if err != nil {
 		exitOnError(err)
 	}

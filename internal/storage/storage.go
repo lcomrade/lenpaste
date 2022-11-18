@@ -30,25 +30,38 @@ var (
 )
 
 type DB struct {
-	DriverName     string
-	DataSourceName string
+	pool *sql.DB
 }
 
-func (dbInfo DB) openDB() (*sql.DB, error) {
-	db, err := sql.Open(dbInfo.DriverName, dbInfo.DataSourceName)
-	return db, err
+func NewPool(driverName string, dataSourceName string, maxOpenConns int, maxIdleConns int) (DB, error) {
+	var db DB
+	var err error
+
+	db.pool, err = sql.Open(driverName, dataSourceName)
+	if err != nil {
+		return db, err
+	}
+
+	db.pool.SetMaxOpenConns(maxOpenConns)
+	db.pool.SetMaxIdleConns(maxIdleConns)
+
+	return db, nil
 }
 
-func (dbInfo DB) InitDB() error {
+func (db DB) Close() error {
+	return db.pool.Close()
+}
+
+func InitDB(driverName string, dataSourceName string) error {
 	// Open DB
-	db, err := dbInfo.openDB()
+	db, err := NewPool(driverName, dataSourceName, 1, 0)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
 	// Create tables
-	_, err = db.Exec(`
+	_, err = db.pool.Exec(`
 		CREATE TABLE IF NOT EXISTS pastes (
 			id          TEXT    PRIMARY KEY,
 			title       TEXT    NOT NULL,
@@ -64,22 +77,22 @@ func (dbInfo DB) InitDB() error {
 	}
 
 	// Crutch for SQLite3
-	if dbInfo.DriverName == "sqlite3" {
-		_, err = db.Exec(`ALTER TABLE pastes ADD COLUMN author       TEXT NOT NULL DEFAULT ''`)
+	if driverName == "sqlite3" {
+		_, err = db.pool.Exec(`ALTER TABLE pastes ADD COLUMN author       TEXT NOT NULL DEFAULT ''`)
 		if err != nil {
 			if err.Error() != "duplicate column name: author" {
 				return err
 			}
 		}
 
-		_, err = db.Exec(`ALTER TABLE pastes ADD COLUMN author_email TEXT NOT NULL DEFAULT ''`)
+		_, err = db.pool.Exec(`ALTER TABLE pastes ADD COLUMN author_email TEXT NOT NULL DEFAULT ''`)
 		if err != nil {
 			if err.Error() != "duplicate column name: author_email" {
 				return err
 			}
 		}
 
-		_, err = db.Exec(`ALTER TABLE pastes ADD COLUMN author_url TEXT NOT NULL DEFAULT ''`)
+		_, err = db.pool.Exec(`ALTER TABLE pastes ADD COLUMN author_url TEXT NOT NULL DEFAULT ''`)
 		if err != nil {
 			if err.Error() != "duplicate column name: author_url" {
 				return err
@@ -88,7 +101,7 @@ func (dbInfo DB) InitDB() error {
 
 		// Normal SQL for all other DBs
 	} else {
-		_, err = db.Exec(`
+		_, err = db.pool.Exec(`
 			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author       TEXT NOT NULL DEFAULT '';
 			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author_email TEXT NOT NULL DEFAULT '';
 			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author_url   TEXT NOT NULL DEFAULT '';

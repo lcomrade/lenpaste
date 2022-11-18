@@ -37,13 +37,8 @@ type Paste struct {
 	AuthorURL   string `json:"authorURL"`
 }
 
-func (dbInfo DB) PasteAdd(paste Paste) (string, int64, int64, error) {
-	// Open DB
-	db, err := dbInfo.openDB()
-	if err != nil {
-		return paste.ID, paste.CreateTime, paste.DeleteTime, err
-	}
-	defer db.Close()
+func (db DB) PasteAdd(paste Paste) (string, int64, int64, error) {
+	var err error
 
 	// Generate ID
 	paste.ID, err = genTokenCrypto(8)
@@ -60,7 +55,7 @@ func (dbInfo DB) PasteAdd(paste Paste) (string, int64, int64, error) {
 	}
 
 	// Add
-	_, err = db.Exec(
+	_, err = db.pool.Exec(
 		`INSERT INTO pastes (id, title, body, syntax, create_time, delete_time, one_use, author, author_email, author_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
 		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse, paste.Author, paste.AuthorEmail, paste.AuthorURL,
 	)
@@ -71,16 +66,9 @@ func (dbInfo DB) PasteAdd(paste Paste) (string, int64, int64, error) {
 	return paste.ID, paste.CreateTime, paste.DeleteTime, nil
 }
 
-func (dbInfo DB) PasteDelete(id string) error {
-	// Open DB
-	db, err := dbInfo.openDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
+func (db DB) PasteDelete(id string) error {
 	// Delete
-	result, err := db.Exec(
+	result, err := db.pool.Exec(
 		`DELETE FROM pastes WHERE id = $1`,
 		id,
 	)
@@ -101,24 +89,17 @@ func (dbInfo DB) PasteDelete(id string) error {
 	return nil
 }
 
-func (dbInfo DB) PasteGet(id string) (Paste, error) {
+func (db DB) PasteGet(id string) (Paste, error) {
 	var paste Paste
 
-	// Open DB
-	db, err := dbInfo.openDB()
-	if err != nil {
-		return paste, err
-	}
-	defer db.Close()
-
 	// Make query
-	row := db.QueryRow(
+	row := db.pool.QueryRow(
 		`SELECT id, title, body, syntax, create_time, delete_time, one_use, author, author_email, author_url FROM pastes WHERE id = $1`,
 		id,
 	)
 
 	// Read query
-	err = row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse, &paste.Author, &paste.AuthorEmail, &paste.AuthorURL)
+	err := row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse, &paste.Author, &paste.AuthorEmail, &paste.AuthorURL)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return paste, ErrNotFoundID
@@ -130,7 +111,7 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 	// Check paste expiration
 	if paste.DeleteTime < time.Now().Unix() && paste.DeleteTime > 0 {
 		// Delete expired paste
-		_, err = db.Exec(
+		_, err = db.pool.Exec(
 			`DELETE FROM pastes WHERE id = $1`,
 			paste.ID,
 		)
@@ -145,16 +126,9 @@ func (dbInfo DB) PasteGet(id string) (Paste, error) {
 	return paste, nil
 }
 
-func (dbInfo DB) PasteDeleteExpired() (int64, error) {
-	// Open DB
-	db, err := dbInfo.openDB()
-	if err != nil {
-		return 0, err
-	}
-	defer db.Close()
-
+func (db DB) PasteDeleteExpired() (int64, error) {
 	// Delete
-	result, err := db.Exec(
+	result, err := db.pool.Exec(
 		`DELETE FROM pastes WHERE (delete_time < $1) AND (delete_time > 0)`,
 		time.Now().Unix(),
 	)

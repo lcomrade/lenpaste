@@ -25,6 +25,18 @@ else
 fi
 
 
+# LENPASTE_DB_MAX_OPEN_CONNS
+if [[ -n "$LENPASTE_DB_MAX_OPEN_CONNS" ]]; then
+	RUN_CMD="$RUN_CMD -db-max-open-conns '$LENPASTE_DB_MAX_OPEN_CONNS'"
+fi
+
+
+# LENPASTE_DB_MAX_IDLE_CONNS
+if [[ -n "$LENPASTE_DB_MAX_IDLE_CONNS" ]]; then
+	RUN_CMD="$RUN_CMD -db-max-idle-conns '$LENPASTE_DB_MAX_IDLE_CONNS'"
+fi
+
+
 # LENPASTE_DB_CLEANUP_PERIOD
 if [[ -n "$LENPASTE_DB_CLEANUP_PERIOD" ]]; then
 	RUN_CMD="$RUN_CMD -db-cleanup-period '$LENPASTE_DB_CLEANUP_PERIOD'"
