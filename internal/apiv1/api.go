@@ -30,7 +30,7 @@ type Data struct {
 	Log logger.Logger
 	DB  storage.DB
 
-	RateLimit netshare.RateLimit
+	RateLimit *netshare.RateLimit
 
 	Lexers *[]string
 

@@ -36,7 +36,7 @@ type Data struct {
 	DB  storage.DB
 	Log logger.Logger
 
-	RateLimit netshare.RateLimit
+	RateLimit *netshare.RateLimit
 
 	Lexers         *[]string
 	Locales        *Locales

@@ -43,8 +43,8 @@ type RateLimit struct {
 	List RateLimitList
 }
 
-func NewRateLimit(reqPer5Minute int) RateLimit {
-	return RateLimit{
+func NewRateLimit(reqPer5Minute int) *RateLimit {
+	return &RateLimit{
 		ReqPer5Minute: reqPer5Minute,
 		List: RateLimitList{
 			m: make(map[string]RateLimitIP),

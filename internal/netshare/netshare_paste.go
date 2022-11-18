@@ -29,7 +29,7 @@ import (
 	"unicode/utf8"
 )
 
-func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit RateLimit, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
+func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit *RateLimit, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
 	// Check rate limit
 	cleanIP, _, err := net.SplitHostPort(GetClientAddr(req))
 	if err != nil {
