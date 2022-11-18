@@ -16,6 +16,20 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
+function isLocalStoageSupported() {
+	if (typeof localStorage === 'object') {
+		try {
+			localStorage.setItem("__local_storage_test__", 1);
+			localStorage.removeItem("__local_storage_test__");
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+
+	return false;
+}
+
 function historyRefreshList() {
 	const shortMonth = [{{call .Translate `pasteJS.ShortMonth`}}];
 
@@ -167,8 +181,24 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Add button to header
 	document.getElementsByClassName("header-right")[0].insertAdjacentHTML("afterbegin", "<h4 id='js-history-button' onclick='historyPopUpShow()'>{{ call .Translate `historyJS.History` }}</h4>");
 
-	// Add history pop-up
+	// Add history pop-up background
 	document.body.insertAdjacentHTML("afterbegin", "<div style='visibility: hidden;' id='js-history-popup-background' onclick='historyPopUpHide()'></div>")	
+
+	// If local storage is not supported
+	if (isLocalStoageSupported() == false) {
+	document.body.insertAdjacentHTML("afterbegin", `<div style='visibility: hidden;' id='js-history-popup'>
+<div id='js-history-popup-header'>
+	<div><h4 style='margin: 0;'>{{ call .Translate `historyJS.History` }}</h4></div
+	><div id='js-history-popup-close' onclick='historyPopUpHide()'>&times;</div>
+</div>
+<hr/>
+<p>{{ call .Translate `historyJS.LocalStorageNotSupported1` }}</p>
+<p>{{ call .Translate `historyJS.LocalStorageNotSupported2` }}</p>
+`);
+		return;
+	}
+
+	// Add history pop-up
 	document.body.insertAdjacentHTML("afterbegin", `<div style='visibility: hidden;' id='js-history-popup'>
 <div id='js-history-popup-header'>
 	<div><h4 style='margin: 0;'>{{ call .Translate `historyJS.History` }}</h4></div
@@ -177,8 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <hr/>
 <label class='checkbox'><input id='js-history-popup-enable' onchange = 'historyEnable()' type='checkbox'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
 ><span id='js-history-popup-clear' class='text-red' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
-<div id='js-history-popup-list-div'><ul id='js-history-popup-list'></ul></div>
-</div>`);
+<div id='js-history-popup-list-div'><ul id='js-history-popup-list'></ul></div>`);
 
 	// Set "Remember history" checkbox state
 	document.getElementById("js-history-popup-enable").checked = !localStorage.getItem("DisableHistory");

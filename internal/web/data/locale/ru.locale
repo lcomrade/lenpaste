@@ -70,6 +70,8 @@ main.AcceptTerms=<a href="%s" target="_blank">См. условия исполь�
 historyJS.History=История
 historyJS.Error=Ошибка HTTP: %d %s
 historyJS.ErrorUnknown=Неизвестная ошибка: %s
+historyJS.LocalStorageNotSupported1=Ваш браузер не поддерживает JavaScript localStorage по этому функция сохранения истории отключена.
+historyJS.LocalStorageNotSupported2=Если вы используете Safari, то попробуйте выйти из режима приватного просмотра, это должно исправить ошибку.
 historyJS.EnableHistory=Сохранять историю
 historyJS.ClearHistory=Очистить историю...
 historyJS.ClearHistoryConfirm=Вы уверены что хотите очистить историю?
