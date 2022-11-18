@@ -32,7 +32,7 @@ type newPasteAnswer struct {
 }
 
 // POST /api/v1/new
-func (data Data) NewHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	var err error
 
 	// Log request

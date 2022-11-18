@@ -45,7 +45,7 @@ type aboutMinTmp struct {
 }
 
 // Pattern: /about
-func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 
@@ -74,7 +74,7 @@ func (data Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Pattern: /about/authors
-func (data Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 
@@ -88,7 +88,7 @@ func (data Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Pattern: /about/license
-func (data Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 
@@ -102,7 +102,7 @@ func (data Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Pattern: /about/source_code
-func (data Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 

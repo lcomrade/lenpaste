@@ -33,7 +33,7 @@ type errorTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
+func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
 	errData := errorTmpl{
 		Code:      0,
 		AdminName: *data.AdminName,

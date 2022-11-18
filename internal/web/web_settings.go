@@ -22,7 +22,7 @@ type settingsTmpl struct {
 }
 
 // Pattern: /settings
-func (data Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 	var err error
 
 	// Log request

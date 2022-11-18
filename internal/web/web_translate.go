@@ -101,13 +101,13 @@ func loadLocales(f embed.FS, localeDir string) (Locales, error) {
 	return locales, nil
 }
 
-func (locales Locales) findLocale(req *http.Request) Locale {
+func (locales Locales) findLocale(req *http.Request) *Locale {
 	// Get accept language by cookie
 	langCookie := getCookie(req, "lang")
 	if langCookie != "" {
 		locale, ok := locales[langCookie]
 		if ok == true {
-			return *locale
+			return locale
 		}
 	}
 
@@ -128,7 +128,7 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	for _, lang := range langs {
 		for localeCode, locale := range locales {
 			if localeCode == lang {
-				return *locale
+				return locale
 			}
 		}
 	}
@@ -138,15 +138,15 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	if ok != true {
 		// If en locale not found load first locale
 		for _, l := range locales {
-			return *l
+			return l
 		}
 	}
 
-	return *locale
+	return locale
 }
 
-func (locale Locale) translate(s string, a ...interface{}) template.HTML {
-	for key, val := range locale {
+func (locale *Locale) translate(s string, a ...interface{}) template.HTML {
+	for key, val := range *locale {
 		if key == s {
 			return template.HTML(fmt.Sprintf(val, a...))
 		}

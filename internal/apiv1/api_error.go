@@ -31,7 +31,7 @@ type errorType struct {
 	Error string `json:"error"`
 }
 
-func (data Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
+func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
 	var resp errorType
 
 	if e == netshare.ErrBadRequest {

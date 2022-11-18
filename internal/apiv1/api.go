@@ -52,10 +52,10 @@ type Data struct {
 	UiDefaultLifeTime *string
 }
 
-func Load(db storage.DB, cfg config.Config) Data {
+func Load(db storage.DB, cfg config.Config) *Data {
 	lexers := chromaLexers.Names(false)
 
-	return Data{
+	return &Data{
 		DB:                db,
 		Log:               cfg.Log,
 		RateLimit:         cfg.RateLimit,

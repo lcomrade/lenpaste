@@ -24,7 +24,7 @@ import (
 	"net/http"
 )
 
-func (data Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	// Generate robots.txt
@@ -46,7 +46,7 @@ func (data Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (data Data) SitemapHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) SitemapHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	// Get protocol and host

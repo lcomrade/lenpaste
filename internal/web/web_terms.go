@@ -13,7 +13,7 @@ type termsOfUseTmpl struct {
 }
 
 // Pattern: /terms
-func (data Data) TermsOfUseHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) TermsOfUseHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 

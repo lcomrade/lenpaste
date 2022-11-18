@@ -43,7 +43,7 @@ type createTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data Data) newPaste(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 	var err error
 
 	// Check auth

@@ -28,8 +28,8 @@ type Data struct {
 	Log logger.Logger
 }
 
-func Load(db storage.DB, log logger.Logger) Data {
-	return Data{
+func Load(db storage.DB, log logger.Logger) *Data {
+	return &Data{
 		DB:  db,
 		Log: log,
 	}

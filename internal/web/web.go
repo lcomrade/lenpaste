@@ -86,7 +86,7 @@ type Data struct {
 	UiDefaultLifeTime *string
 }
 
-func Load(db storage.DB, cfg config.Config) (Data, error) {
+func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	var data Data
 	var err error
 
@@ -125,7 +125,7 @@ func Load(db storage.DB, cfg config.Config) (Data, error) {
 	// Load locales
 	locales, err := loadLocales(embFS, "data/locale")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 	data.Locales = &locales
 
@@ -141,124 +141,124 @@ func Load(db storage.DB, cfg config.Config) (Data, error) {
 	// style.css file
 	styleCSS, err := embFS.ReadFile("data/style.css")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 	data.StyleCSS = &styleCSS
 
 	// main.tmpl
 	data.Main, err = template.ParseFS(embFS, "data/base.tmpl", "data/main.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// main.js
 	mainJS, err := embFS.ReadFile("data/main.js")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 	data.MainJS = &mainJS
 
 	// history.js
 	data.HistoryJS, err = textTemplate.ParseFS(embFS, "data/history.js")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// code.js
 	data.CodeJS, err = textTemplate.ParseFS(embFS, "data/code.js")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// paste.tmpl
 	data.PastePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// paste.js
 	data.PasteJS, err = textTemplate.ParseFS(embFS, "data/paste.js")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// paste_continue.tmpl
 	data.PasteContinue, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste_continue.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// settings.tmpl
 	data.Settings, err = template.ParseFS(embFS, "data/base.tmpl", "data/settings.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// about.tmpl
 	data.About, err = template.ParseFS(embFS, "data/base.tmpl", "data/about.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// terms.tmpl
 	data.TermsOfUse, err = template.ParseFS(embFS, "data/base.tmpl", "data/terms.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// authors.tmpl
 	data.Authors, err = template.ParseFS(embFS, "data/base.tmpl", "data/authors.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// license.tmpl
 	data.License, err = template.ParseFS(embFS, "data/base.tmpl", "data/license.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// source_code.tmpl
 	data.SourceCodePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/source_code.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// docs.tmpl
 	data.Docs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// docs_apiv1.tmpl
 	data.DocsApiV1, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv1.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// docs_api_libs.tmpl
 	data.DocsApiLibs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_api_libs.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// error.tmpl
 	data.ErrorPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/error.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// emb.tmpl
 	data.EmbeddedPage, err = template.ParseFS(embFS, "data/emb.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
 	// emb_help.tmpl
 	data.EmbeddedHelpPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/emb_help.tmpl")
 	if err != nil {
-		return data, err
+		return &data, err
 	}
 
-	return data, nil
+	return &data, nil
 }

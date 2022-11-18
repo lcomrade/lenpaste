@@ -26,7 +26,7 @@ import (
 )
 
 // Pattern: /dl/
-func (data Data) DlHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 	// Log request
 	data.Log.HttpRequest(req)
 

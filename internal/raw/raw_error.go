@@ -23,7 +23,7 @@ import (
 	"net/http"
 )
 
-func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
 	// Write response header
 	rw.Header().Set("Content-type", "text/plain")
 	rw.WriteHeader(404)
@@ -35,7 +35,7 @@ func (data Data) errorNotFound(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (data Data) errorInternal(rw http.ResponseWriter, req *http.Request, err error) {
+func (data *Data) errorInternal(rw http.ResponseWriter, req *http.Request, err error) {
 	// Write to log
 	data.Log.HttpError(req, err)
 

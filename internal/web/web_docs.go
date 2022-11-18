@@ -38,7 +38,7 @@ type docsApiV1Tmpl struct {
 }
 
 // Pattern: /docs
-func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/html")
@@ -50,7 +50,7 @@ func (data Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Pattern: /docs/apiv1
-func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/html")
@@ -67,7 +67,7 @@ func (data Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Pattern: /docs/api_libs
-func (data Data) DocsApiLibsHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) DocsApiLibsHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/html")

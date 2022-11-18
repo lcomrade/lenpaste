@@ -38,7 +38,7 @@ type embTmpl struct {
 }
 
 // Pattern: /emb/
-func (data Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	errorNotFound := false
 
 	// Log request

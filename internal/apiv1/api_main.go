@@ -24,6 +24,6 @@ import (
 )
 
 // GET /api/v1/
-func (data Data) MainHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) MainHand(rw http.ResponseWriter, req *http.Request) {
 	data.writeError(rw, req, netshare.ErrNotFound)
 }

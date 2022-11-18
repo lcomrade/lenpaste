@@ -54,7 +54,7 @@ type pasteContinueTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	// Get paste ID
 	pasteID := string([]rune(req.URL.Path)[1:])
 
@@ -134,7 +134,7 @@ func (data Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (data Data) PasteJSHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) PasteJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "application/javascript")
