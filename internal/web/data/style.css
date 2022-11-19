@@ -231,7 +231,7 @@ label {
 	margin-right: 10px;
 }
 
-button, checkbox, select, input, textarea {
+button, select, input, textarea {
 	border-radius: 0;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
@@ -258,7 +258,7 @@ button:hover {
 	background: #74D117;
 }
 
-input[type="checkbox" i] {
+input[type="checkbox"] {
 	cursor: pointer;
 	overflow: hidden;
 }
