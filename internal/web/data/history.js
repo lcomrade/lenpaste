@@ -205,8 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	><div id='js-history-popup-close' onclick='historyPopUpHide()'>&times;</div>
 </div>
 <hr/>
-<label class='checkbox'><input id='js-history-popup-enable' onchange = 'historyEnable()' type='checkbox'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
-><span id='js-history-popup-clear' class='text-red' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
+<div>
+	<label class='checkbox'><input id='js-history-popup-enable' onchange = 'historyEnable()' type='checkbox'></input>{{ call .Translate `historyJS.EnableHistory` }}</label
+	><span id='js-history-popup-clear' class='text-red' onclick='historyClear()'>{{ call .Translate `historyJS.ClearHistory` }}</span>
+</div>
 <div id='js-history-popup-list-div'><ul id='js-history-popup-list'></ul></div>`);
 
 	// Set "Remember history" checkbox state

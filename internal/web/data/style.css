@@ -231,7 +231,7 @@ label {
 	margin-right: 10px;
 }
 
-button, select, input, input[type="checkbox"], textarea {
+button, select, input, textarea {
 	border-radius: 0;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
