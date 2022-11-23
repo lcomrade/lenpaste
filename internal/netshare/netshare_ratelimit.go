@@ -19,6 +19,7 @@
 package netshare
 
 import (
+	"net"
 	"sync"
 	"time"
 )
@@ -52,7 +53,7 @@ func NewRateLimit(reqPer5Minute int) *RateLimit {
 	}
 }
 
-func (rateLimit *RateLimit) CheckAndUse(ip string) bool {
+func (rateLimit *RateLimit) CheckAndUse(ip net.IP) bool {
 	// If rate limit not need
 	if rateLimit.ReqPer5Minute <= 0 {
 		return true
@@ -62,9 +63,11 @@ func (rateLimit *RateLimit) CheckAndUse(ip string) bool {
 	rateLimit.List.Lock()
 	defer rateLimit.List.Unlock()
 
+	ipStr := ip.String()
+
 	// If last use time out
-	if rateLimit.List.m[ip].UseTime+RateLimitPeriod < time.Now().Unix() {
-		rateLimit.List.m[ip] = RateLimitIP{
+	if rateLimit.List.m[ipStr].UseTime+RateLimitPeriod < time.Now().Unix() {
+		rateLimit.List.m[ipStr] = RateLimitIP{
 			UseTime:  time.Now().Unix(),
 			UseCount: 1,
 		}
@@ -73,10 +76,10 @@ func (rateLimit *RateLimit) CheckAndUse(ip string) bool {
 
 		// Else
 	} else {
-		if rateLimit.List.m[ip].UseCount < rateLimit.ReqPer5Minute {
-			tmp := rateLimit.List.m[ip]
+		if rateLimit.List.m[ipStr].UseCount < rateLimit.ReqPer5Minute {
+			tmp := rateLimit.List.m[ipStr]
 			tmp.UseCount = tmp.UseCount + 1
-			rateLimit.List.m[ip] = tmp
+			rateLimit.List.m[ipStr] = tmp
 			return true
 		}
 	}

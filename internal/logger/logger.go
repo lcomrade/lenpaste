@@ -45,9 +45,9 @@ func (cfg Logger) Error(e error) {
 }
 
 func (cfg Logger) HttpRequest(req *http.Request) {
-	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
+	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req).String(), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
 }
 
 func (cfg Logger) HttpError(req *http.Request, e error) {
-	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", netshare.GetClientAddr(req), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", e.Error())
+	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", netshare.GetClientAddr(req).String(), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", e.Error())
 }

@@ -19,6 +19,7 @@
 package netshare
 
 import (
+	"net"
 	"net/http"
 	"strings"
 )
@@ -47,15 +48,21 @@ func GetProtocol(header http.Header) string {
 	return "http"
 }
 
-func GetClientAddr(req *http.Request) string {
+func GetClientAddr(req *http.Request) net.IP {
 	// Read header
 	xFor := req.Header.Get("X-Forwarded-For")
 	xFor = strings.Split(xFor, ",")[0]
 
 	// Check
 	if xFor != "" {
-		return xFor
+		return net.ParseIP(xFor)
 	}
 
-	return req.RemoteAddr
+	// Else use client address
+	host, _, err := net.SplitHostPort(req.RemoteAddr)
+	if err != nil {
+		return nil
+	}
+
+	return net.ParseIP(host)
 }
