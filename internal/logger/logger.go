@@ -37,21 +37,17 @@ func New(timeFormat string) Logger {
 }
 
 func (cfg Logger) Info(msg string) {
-	now := time.Now()
-	fmt.Println(now.Format(cfg.TimeFormat), "[INFO]", msg)
+	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[INFO]   ", msg)
 }
 
-func (cfg Logger) Error(err error) {
-	now := time.Now()
-	fmt.Fprintln(os.Stderr, now.Format(cfg.TimeFormat), "[ERROR]", err.Error())
+func (cfg Logger) Error(e error) {
+	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", e.Error())
 }
 
 func (cfg Logger) HttpRequest(req *http.Request) {
-	now := time.Now()
-	fmt.Println(now.Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req), req.Method, req.URL.Path)
+	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
 }
 
-func (cfg Logger) HttpError(req *http.Request, err error) {
-	now := time.Now()
-	fmt.Fprintln(os.Stderr, now.Format(cfg.TimeFormat), "[ERROR]", netshare.GetClientAddr(req), req.Method, req.URL.Path, "Error:", err.Error())
+func (cfg Logger) HttpError(req *http.Request, e error) {
+	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", netshare.GetClientAddr(req), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", e.Error())
 }

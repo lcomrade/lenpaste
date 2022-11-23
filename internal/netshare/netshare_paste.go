@@ -21,7 +21,6 @@ package netshare
 import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lineend"
-	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -30,13 +29,13 @@ import (
 )
 
 func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit *RateLimit, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
-	// Check rate limit
-	cleanIP, _, err := net.SplitHostPort(GetClientAddr(req))
-	if err != nil {
-		return "", 0, 0, err
+	// Check HTTP method
+	if req.Method != "POST" {
+		return "", 0, 0, ErrMethodNotAllowed
 	}
 
-	if rateLimit.CheckAndUse(cleanIP) == false {
+	// Check rate limit
+	if rateLimit.CheckAndUse(GetClientAddr(req)) == false {
 		return "", 0, 0, ErrTooManyRequests
 	}
 
