@@ -120,10 +120,10 @@ func (themes Themes) findTheme(req *http.Request) Theme {
 	return theme
 }
 
-func (theme Theme) get(s string, a ...interface{}) string {
+func (theme Theme) theme(s string) string {
 	for key, val := range theme {
 		if key == s {
-			return fmt.Sprintf(val, a...)
+			return val
 		}
 	}
 

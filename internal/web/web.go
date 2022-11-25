@@ -44,7 +44,7 @@ type Data struct {
 	Themes      Themes
 	ThemesList  map[string]string
 
-	StyleCSS       *[]byte
+	StyleCSS       *textTemplate.Template
 	ErrorPage      *template.Template
 	Main           *template.Template
 	MainJS         *[]byte
@@ -137,11 +137,10 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	}
 
 	// style.css file
-	styleCSS, err := embFS.ReadFile("data/style.css")
+	data.StyleCSS, err = textTemplate.ParseFS(embFS, "data/style.css")
 	if err != nil {
 		return nil, err
 	}
-	data.StyleCSS = &styleCSS
 
 	// main.tmpl
 	data.Main, err = template.ParseFS(embFS, "data/base.tmpl", "data/main.tmpl")

@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 #js-history-popup {
-	background: #444444;
+	background: {{ call .Theme `color.Article` }};
 	padding: 20px;
 
 	position: fixed;
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	top: 0;
 	left: 0;
 	z-index: 1;
-	background-color: black;
+	background-color: {{ call .Theme `color.BackgroundBlack` }};
 	opacity: 0.5; 
 }
 

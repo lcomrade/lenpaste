@@ -29,13 +29,17 @@ import (
 
 type jsTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
+	Theme     func(string) string
 }
 
 func (data *Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "text/css")
-	rw.Write(*data.StyleCSS)
+	data.StyleCSS.Execute(rw, jsTmpl{
+		Translate: data.Locales.findLocale(req).translate,
+		Theme:     data.Themes.findTheme(req).theme,
+	})
 }
 
 func (data *Data) MainJSHand(rw http.ResponseWriter, req *http.Request) {
@@ -56,7 +60,10 @@ func (data *Data) HistoryJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	rw.Header().Set("Content-Type", "application/javascript")
-	data.HistoryJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
+	data.HistoryJS.Execute(rw, jsTmpl{
+		Translate: data.Locales.findLocale(req).translate,
+		Theme:     data.Themes.findTheme(req).theme,
+	})
 }
 
 func init() {

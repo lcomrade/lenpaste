@@ -1,14 +1,16 @@
 theme.Name = Dark
 
-font.Family = sans-serif
+font.Default   = sans-serif
+font.Monospace = monospace
 
-color.Font       = #FFFFFF
-color.SVG        = white
-color.Background = #333333
-color.Header     = #E88B2E
-color.Article    = #444444
-color.Focus      = #3DAEE9
-color.Element    = #666666
+color.Font             = #FFFFFF
+color.SVG              = white
+color.BackgroundBody   = #333333
+color.Header           = #E88B2E
+color.Article          = #444444
+color.BackgroundBlack  = #000000
+color.FocusOutline     = #3DAEE9
+color.Element          = #666666
 
 color.TextRed  = #FF1F1F
 color.TextGrey = #888888
