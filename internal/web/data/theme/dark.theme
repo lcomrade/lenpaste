@@ -1,4 +1,5 @@
-theme.Name = Dark
+theme.Name    = Dark
+theme.Name.ru = Тёмная
 
 font.Default   = sans-serif
 font.Monospace = monospace
@@ -7,6 +8,7 @@ color.Font             = #FFFFFF
 color.SVG              = white
 color.BackgroundBody   = #333333
 color.Header           = #E88B2E
+color.HeaderFont       = #FFFFFF
 color.Article          = #444444
 color.BackgroundBlack  = #000000
 color.FocusOutline     = #3DAEE9
