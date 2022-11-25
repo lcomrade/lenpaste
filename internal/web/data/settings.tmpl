@@ -23,16 +23,27 @@
 {{define "article"}}
 <h3>{{call .Translate `settings.Title`}}</h3>
 <form action="/settings" method="post">
-	<div>
-		<label for="expiration">{{ call .Translate `settings.Language` }}</label
-		><select name="lang" tabindex=1 size=1>
-			<option value="">{{call .Translate `settings.LanguageDefault`}}</option>
-			{{ $language := .Language }}
-			{{range $key, $value := .LanguageSelector}}
-			<option value="{{$key}}"{{if eq $key $language}} selected="true"{{end}}>{{$value}}</option>
-			{{end}}
-		</select>
-	</div>
+	<table class="table-hidden">
+		<tr>
+			<td><label>{{ call .Translate `settings.Language` }}</label></td>
+			<td style="text-align: left;"><select name="lang" tabindex=1 size=1>
+				<option value="">{{call .Translate `settings.LanguageDefault`}}</option>
+				{{ $language := .Language }}
+				{{range $key, $value := .LanguageSelector}}
+				<option value="{{$key}}"{{if eq $key $language}} selected="true"{{end}}>{{$value}}</option>
+				{{end}}
+			</select></td>
+		</tr>
+		<tr>
+			<td><label>{{ call .Translate `settings.Theme` }}</label></td>
+			<td style="text-align: left;"><select name="theme" tabindex=2 size=1>
+				{{ $theme := .Theme }}
+				{{range $key, $value := .ThemeSelector}}
+				<option value="{{$key}}"{{if eq $key $theme}} selected="true"{{end}}>{{$value}}</option>
+				{{end}}
+			</select></td>
+		</tr>
+	</table>
 	{{if eq .AuthOk true}}
 	<h4>{{ call .Translate `main.AdvancedParameters` }}</h4>
 	<table class="table-hidden">
@@ -41,7 +52,7 @@
 			<td><input
 				name="author" value="{{.Author}}"
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="{{call .Translate `main.AuthorPlaceholder`}}" tabindex=2
+				placeholder="{{call .Translate `main.AuthorPlaceholder`}}" tabindex=3
 			></td>
 		</tr>
 		<tr>
@@ -49,7 +60,7 @@
 			<td><input
 				name="authorEmail" value="{{.AuthorEmail}}"
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}" tabindex=3
+				placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}" tabindex=4
 			></td>
 		</tr>
 		<tr>
@@ -57,11 +68,11 @@
 			<td><input
 				name="authorURL" value="{{.AuthorURL}}"
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}" tabindex=4
+				placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}" tabindex=5
 			></td>
 		</tr>
 	</table>
 	{{end}}
-	<div><button class="button-green" type="submit" tabindex=5>{{ call .Translate `settings.Save` }}</button></div>
+	<div><button class="button-green" type="submit" tabindex=6>{{ call .Translate `settings.Save` }}</button></div>
 </form>
 {{end}}

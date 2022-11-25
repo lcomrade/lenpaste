@@ -84,6 +84,7 @@ codeJS.Paste = Копировать
 
 settings.Title           = Настройки
 settings.Language        = Язык:
+settings.Theme           = Тема:
 settings.LanguageDefault = Использовать язык браузера
 settings.Save            = Сохранить настройки
 

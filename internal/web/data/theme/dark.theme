@@ -1,0 +1,22 @@
+theme.Name = Dark
+
+font.Family = sans-serif
+
+color.Font       = #FFFFFF
+color.SVG        = white
+color.Background = #333333
+color.Header     = #E88B2E
+color.Article    = #444444
+color.Focus      = #3DAEE9
+color.Element    = #666666
+
+color.TextRed  = #FF1F1F
+color.TextGrey = #888888
+
+color.ButtonHover      = #999999
+color.ButtonGreen      = #66CC00
+color.ButtonGreenHover = #74D117
+
+color.InputHover       = #777777
+color.InputPlaceholder = #B9B9B9
+

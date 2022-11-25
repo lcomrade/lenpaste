@@ -84,6 +84,7 @@ codeJS.Paste = Copy
 
 settings.Title           = Settings
 settings.Language        = Language:
+settings.Theme           = Theme:
 settings.LanguageDefault = Use browser language
 settings.Save            = Save Settings
 

@@ -41,6 +41,8 @@ type Data struct {
 	Lexers      *[]string
 	Locales     Locales
 	LocalesList map[string]string
+	Themes      Themes
+	ThemesList  map[string]string
 
 	StyleCSS       *[]byte
 	ErrorPage      *template.Template
@@ -124,6 +126,12 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 
 	// Load locales
 	data.Locales, data.LocalesList, err = loadLocales(embFS, "data/locale")
+	if err != nil {
+		return nil, err
+	}
+
+	// Load themes
+	data.Themes, data.ThemesList, err = loadThemes(embFS, "data/theme")
 	if err != nil {
 		return nil, err
 	}

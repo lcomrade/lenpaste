@@ -12,6 +12,9 @@ type settingsTmpl struct {
 	Language         string
 	LanguageSelector map[string]string
 
+	Theme         string
+	ThemeSelector map[string]string
+
 	Author      string
 	AuthorEmail string
 	AuthorURL   string
@@ -50,6 +53,8 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 		dataTmpl := settingsTmpl{
 			Language:         getCookie(req, "lang"),
 			LanguageSelector: data.LocalesList,
+			Theme:            getCookie(req, "theme"),
+			ThemeSelector:    data.ThemesList,
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),
 			AuthorURL:        getCookie(req, "authorURL"),
@@ -81,6 +86,22 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			http.SetCookie(rw, &http.Cookie{
 				Name:   "lang",
 				Value:  lang,
+				MaxAge: cookieMaxAge,
+			})
+		}
+
+		theme := req.PostForm.Get("theme")
+		if theme == "" {
+			http.SetCookie(rw, &http.Cookie{
+				Name:   "theme",
+				Value:  "",
+				MaxAge: -1,
+			})
+
+		} else {
+			http.SetCookie(rw, &http.Cookie{
+				Name:   "theme",
+				Value:  theme,
 				MaxAge: cookieMaxAge,
 			})
 		}

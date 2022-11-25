@@ -41,7 +41,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, erro
 	// Get locale files list
 	files, err := f.ReadDir(localeDir)
 	if err != nil {
-		return locales, localesList, errors.New("web: failed read dir '" + localeDir + "': " + err.Error())
+		return nil, nil, errors.New("web: failed read dir '" + localeDir + "': " + err.Error())
 	}
 
 	// Load locales
@@ -61,7 +61,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, erro
 		filePath := filepath.Join(localeDir, fileName)
 		fileByte, err := f.ReadFile(filePath)
 		if err != nil {
-			return locales, localesList, errors.New("web: failed open file '" + filePath + "': " + err.Error())
+			return nil, nil, errors.New("web: failed open file '" + filePath + "': " + err.Error())
 		}
 
 		fileStr := bytes.NewBuffer(fileByte).String()
@@ -69,7 +69,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, erro
 		// Load locale
 		locale, err := readKVCfg(fileStr)
 		if err != nil {
-			return locales, localesList, errors.New("web: failed read file '" + filePath + "': " + err.Error())
+			return nil, nil, errors.New("web: failed read file '" + filePath + "': " + err.Error())
 		}
 
 		locales[localeCode] = Locale(locale)
@@ -80,7 +80,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, erro
 		// Get locale name
 		localeName := val["locale.Name"]
 		if localeName == "" {
-			return locales, localesList, errors.New("web: empty locale.Name parameter in '" + key + "' locale")
+			return nil, nil, errors.New("web: empty locale.Name parameter in '" + key + "' locale")
 		}
 
 		// Append to the translation, if it is not complete
@@ -97,7 +97,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, erro
 		}
 
 		if curTotal == 0 {
-			return locales, localesList, errors.New("web: locale '" + key + "' is empty")
+			return nil, nil, errors.New("web: locale '" + key + "' is empty")
 		}
 
 		localesList[key] = localeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
@@ -139,14 +139,7 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	}
 
 	// Load default locale
-	locale, ok := locales[defaultLocale]
-	if ok != true {
-		// If en locale not found load first locale
-		for _, l := range locales {
-			return l
-		}
-	}
-
+	locale, _ := locales[defaultLocale]
 	return locale
 }
 
