@@ -26,7 +26,6 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -61,41 +60,16 @@ func loadLocales(f embed.FS, localeDir string) (Locales, error) {
 			return locales, err
 		}
 
-		file := bytes.NewBuffer(fileByte).String()
+		fileStr := bytes.NewBuffer(fileByte).String()
 
 		// Load locale
-		locale := make(Locale)
-		for num, str := range strings.Split(file, "\n") {
-			if str == "" || strings.HasPrefix(str, "//") {
-				continue
-			}
-
-			key := ""
-			val := ""
-
-			afterEqual := false
-			for _, char := range []rune(str) {
-				if afterEqual == false {
-					if char == '=' {
-						afterEqual = true
-
-					} else {
-						key = key + string(char)
-					}
-
-				} else {
-					val = val + string(char)
-				}
-			}
-
-			if afterEqual == false {
-				return locales, errors.New("locale: error in line " + strconv.Itoa(num) + " in the file " + filePath)
-			}
-
-			locale[key] = val
+		locale, err := readKVCfg(fileStr)
+		if err != nil {
+			return locales, errors.New("web: failed read file '" + filePath + "': " + err.Error())
 		}
 
-		locales[localeCode] = &locale
+		localeLocale := Locale(locale)
+		locales[localeCode] = &localeLocale
 	}
 
 	return locales, nil
