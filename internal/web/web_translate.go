@@ -29,18 +29,22 @@ import (
 	"strings"
 )
 
-type Locale map[string]string
-type Locales map[string]*Locale
+const defaultLocale = "en"
 
-func loadLocales(f embed.FS, localeDir string) (Locales, error) {
+type Locale map[string]string
+type Locales map[string]Locale
+
+func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, error) {
 	locales := make(Locales)
+	localesList := make(map[string]string)
 
 	// Get locale files list
 	files, err := f.ReadDir(localeDir)
 	if err != nil {
-		return locales, err
+		return locales, localesList, errors.New("web: failed read dir '" + localeDir + "': " + err.Error())
 	}
 
+	// Load locales
 	for _, fileInfo := range files {
 		// Check file
 		if fileInfo.IsDir() {
@@ -57,7 +61,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, error) {
 		filePath := filepath.Join(localeDir, fileName)
 		fileByte, err := f.ReadFile(filePath)
 		if err != nil {
-			return locales, err
+			return locales, localesList, errors.New("web: failed open file '" + filePath + "': " + err.Error())
 		}
 
 		fileStr := bytes.NewBuffer(fileByte).String()
@@ -65,17 +69,44 @@ func loadLocales(f embed.FS, localeDir string) (Locales, error) {
 		// Load locale
 		locale, err := readKVCfg(fileStr)
 		if err != nil {
-			return locales, errors.New("web: failed read file '" + filePath + "': " + err.Error())
+			return locales, localesList, errors.New("web: failed read file '" + filePath + "': " + err.Error())
 		}
 
-		localeLocale := Locale(locale)
-		locales[localeCode] = &localeLocale
+		locales[localeCode] = Locale(locale)
 	}
 
-	return locales, nil
+	// Prepare locales list
+	for key, val := range locales {
+		// Get locale name
+		localeName := val["locale.Name"]
+		if localeName == "" {
+			return locales, localesList, errors.New("web: empty locale.Name parameter in '" + key + "' locale")
+		}
+
+		// Append to the translation, if it is not complete
+		defLocale := locales[defaultLocale]
+		defTotal := len(defLocale)
+		curTotal := 0
+		for defKey, defVal := range defLocale {
+			_, isExist := val[defKey]
+			if isExist {
+				curTotal = curTotal + 1
+			} else {
+				val[defKey] = defVal
+			}
+		}
+
+		if curTotal == 0 {
+			return locales, localesList, errors.New("web: locale '" + key + "' is empty")
+		}
+
+		localesList[key] = localeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+	}
+
+	return locales, localesList, nil
 }
 
-func (locales Locales) findLocale(req *http.Request) *Locale {
+func (locales Locales) findLocale(req *http.Request) Locale {
 	// Get accept language by cookie
 	langCookie := getCookie(req, "lang")
 	if langCookie != "" {
@@ -108,7 +139,7 @@ func (locales Locales) findLocale(req *http.Request) *Locale {
 	}
 
 	// Load default locale
-	locale, ok := locales["en"]
+	locale, ok := locales[defaultLocale]
 	if ok != true {
 		// If en locale not found load first locale
 		for _, l := range locales {
@@ -119,8 +150,8 @@ func (locales Locales) findLocale(req *http.Request) *Locale {
 	return locale
 }
 
-func (locale *Locale) translate(s string, a ...interface{}) template.HTML {
-	for key, val := range *locale {
+func (locale Locale) translate(s string, a ...interface{}) template.HTML {
+	for key, val := range locale {
 		if key == s {
 			return template.HTML(fmt.Sprintf(val, a...))
 		}

@@ -38,9 +38,9 @@ type Data struct {
 
 	RateLimit *netshare.RateLimit
 
-	Lexers         *[]string
-	Locales        *Locales
-	LocaleSelector *map[string]string
+	Lexers      *[]string
+	Locales     Locales
+	LocalesList map[string]string
 
 	StyleCSS       *[]byte
 	ErrorPage      *template.Template
@@ -123,141 +123,131 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	data.Lexers = &lexers
 
 	// Load locales
-	locales, err := loadLocales(embFS, "data/locale")
+	data.Locales, data.LocalesList, err = loadLocales(embFS, "data/locale")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
-	data.Locales = &locales
-
-	// Get locale selector
-	localeSelector := make(map[string]string, len(locales))
-	for key, val := range locales {
-		valLoad := *val
-		localeSelector[key] = valLoad["locale.Name"]
-	}
-
-	data.LocaleSelector = &localeSelector
 
 	// style.css file
 	styleCSS, err := embFS.ReadFile("data/style.css")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 	data.StyleCSS = &styleCSS
 
 	// main.tmpl
 	data.Main, err = template.ParseFS(embFS, "data/base.tmpl", "data/main.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// main.js
 	mainJS, err := embFS.ReadFile("data/main.js")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 	data.MainJS = &mainJS
 
 	// history.js
 	data.HistoryJS, err = textTemplate.ParseFS(embFS, "data/history.js")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// code.js
 	data.CodeJS, err = textTemplate.ParseFS(embFS, "data/code.js")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// paste.tmpl
 	data.PastePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// paste.js
 	data.PasteJS, err = textTemplate.ParseFS(embFS, "data/paste.js")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// paste_continue.tmpl
 	data.PasteContinue, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste_continue.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// settings.tmpl
 	data.Settings, err = template.ParseFS(embFS, "data/base.tmpl", "data/settings.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// about.tmpl
 	data.About, err = template.ParseFS(embFS, "data/base.tmpl", "data/about.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// terms.tmpl
 	data.TermsOfUse, err = template.ParseFS(embFS, "data/base.tmpl", "data/terms.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// authors.tmpl
 	data.Authors, err = template.ParseFS(embFS, "data/base.tmpl", "data/authors.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// license.tmpl
 	data.License, err = template.ParseFS(embFS, "data/base.tmpl", "data/license.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// source_code.tmpl
 	data.SourceCodePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/source_code.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// docs.tmpl
 	data.Docs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// docs_apiv1.tmpl
 	data.DocsApiV1, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv1.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// docs_api_libs.tmpl
 	data.DocsApiLibs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_api_libs.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// error.tmpl
 	data.ErrorPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/error.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// emb.tmpl
 	data.EmbeddedPage, err = template.ParseFS(embFS, "data/emb.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	// emb_help.tmpl
 	data.EmbeddedHelpPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/emb_help.tmpl")
 	if err != nil {
-		return &data, err
+		return nil, err
 	}
 
 	return &data, nil

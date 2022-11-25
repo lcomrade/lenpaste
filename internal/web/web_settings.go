@@ -49,7 +49,7 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 		// Prepare data
 		dataTmpl := settingsTmpl{
 			Language:         getCookie(req, "lang"),
-			LanguageSelector: *data.LocaleSelector,
+			LanguageSelector: data.LocalesList,
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),
 			AuthorURL:        getCookie(req, "authorURL"),
