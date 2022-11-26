@@ -41,7 +41,7 @@ type docsApiV1Tmpl struct {
 func (data *Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	err := data.Docs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
 		data.writeError(rw, req, err)
@@ -53,7 +53,7 @@ func (data *Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
 func (data *Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	err := data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
 		MaxLenAuthorAll: netshare.MaxLengthAuthorAll,
 		RateLimitPeriod: netshare.RateLimitPeriod,
@@ -70,7 +70,7 @@ func (data *Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 func (data *Data) DocsApiLibsHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	err := data.DocsApiLibs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
 		data.writeError(rw, req, err)

@@ -137,6 +137,6 @@ func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 func (data *Data) PasteJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "application/javascript")
+	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 	data.PasteJS.Execute(rw, pasteJsTmpl{Translate: data.Locales.findLocale(req).translate})
 }

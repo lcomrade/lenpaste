@@ -35,7 +35,7 @@ type jsTmpl struct {
 func (data *Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "text/css")
+	rw.Header().Set("Content-Type", "text/css; charset=utf-8")
 	data.StyleCSS.Execute(rw, jsTmpl{
 		Translate: data.Locales.findLocale(req).translate,
 		Theme:     data.Themes.findTheme(req).theme,
@@ -45,21 +45,21 @@ func (data *Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
 func (data *Data) MainJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "application/javascript")
+	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 	rw.Write(*data.MainJS)
 }
 
 func (data *Data) CodeJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "application/javascript")
+	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 	data.CodeJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
 }
 
 func (data *Data) HistoryJSHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
-	rw.Header().Set("Content-Type", "application/javascript")
+	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 	data.HistoryJS.Execute(rw, jsTmpl{
 		Translate: data.Locales.findLocale(req).translate,
 		Theme:     data.Themes.findTheme(req).theme,

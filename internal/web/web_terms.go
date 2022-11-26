@@ -18,7 +18,7 @@ func (data *Data) TermsOfUseHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	// Show page
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	err := data.TermsOfUse.Execute(rw, termsOfUseTmpl{
 		TermsOfUse: *data.ServerTermsOfUse,

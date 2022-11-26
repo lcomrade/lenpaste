@@ -96,7 +96,7 @@ func (data *Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		Translate:          data.Locales.findLocale(req).translate,
 	}
 
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	err = data.Main.Execute(rw, tmplData)
 	if err != nil {

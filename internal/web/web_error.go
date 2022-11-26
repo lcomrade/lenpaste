@@ -68,7 +68,7 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	}
 
 	// Write response header
-	rw.Header().Set("Content-type", "text/html")
+	rw.Header().Set("Content-type", "text/html; charset=utf-8")
 	rw.WriteHeader(errData.Code)
 
 	// Render template

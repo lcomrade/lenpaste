@@ -65,7 +65,7 @@ func (data *Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Show page
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	err := data.About.Execute(rw, dataTmpl)
 	if err != nil {
@@ -79,7 +79,7 @@ func (data *Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	// Show page
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	err := data.Authors.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
@@ -93,7 +93,7 @@ func (data *Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
 	data.Log.HttpRequest(req)
 
 	// Show page
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	err := data.License.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {
@@ -107,7 +107,7 @@ func (data *Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) 
 	data.Log.HttpRequest(req)
 
 	// Show page
-	rw.Header().Set("Content-Type", "text/html")
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	err := data.SourceCodePage.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 	if err != nil {

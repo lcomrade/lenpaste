@@ -38,7 +38,7 @@ func (data *Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Write response
-	rw.Header().Set("Content-Type", "text/plain")
+	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	_, err := io.WriteString(rw, robotsTxt)
 	if err != nil {
 		data.writeError(rw, req, err)
@@ -63,7 +63,7 @@ func (data *Data) SitemapHand(rw http.ResponseWriter, req *http.Request) {
 	sitemapXML = sitemapXML + "</urlset>\n"
 
 	// Write response
-	rw.Header().Set("Content-Type", "text/xml")
+	rw.Header().Set("Content-Type", "text/xml; charset=utf-8")
 	_, err := io.WriteString(rw, sitemapXML)
 	if err != nil {
 		data.writeError(rw, req, err)

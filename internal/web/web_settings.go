@@ -66,7 +66,7 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 		}
 
 		// Show page
-		rw.Header().Set("Content-Type", "text/html")
+		rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 		err := data.Settings.Execute(rw, dataTmpl)
 		if err != nil {
