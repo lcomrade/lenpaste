@@ -128,7 +128,7 @@ func (theme Theme) theme(s string) string {
 		}
 	}
 
-	return s
+	panic(errors.New("web: theme: unknown theme key: " + s))
 }
 
 func (theme Theme) tryHighlight(source string, lexer string) template.HTML {

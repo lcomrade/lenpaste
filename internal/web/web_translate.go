@@ -150,5 +150,5 @@ func (locale Locale) translate(s string, a ...interface{}) template.HTML {
 		}
 	}
 
-	return template.HTML(s)
+	panic(errors.New("web: translate: unknown locale key: " + s))
 }
