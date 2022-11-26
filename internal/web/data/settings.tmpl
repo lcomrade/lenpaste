@@ -52,7 +52,8 @@
 			<td><input
 				name="author" value="{{.Author}}"
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="{{call .Translate `main.AuthorPlaceholder`}}" tabindex=3
+				placeholder="{{call .Translate `main.AuthorPlaceholder`}}"
+				tabindex=3 maxlength="{{.AuthorAllMaxLen}}"
 			></td>
 		</tr>
 		<tr>
@@ -60,7 +61,8 @@
 			<td><input
 				name="authorEmail" value="{{.AuthorEmail}}"
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}" tabindex=4
+				placeholder="{{call .Translate `main.AuthorEmailPlaceholder`}}"
+				tabindex=4 maxlength="{{.AuthorAllMaxLen}}"
 			></td>
 		</tr>
 		<tr>
@@ -68,7 +70,8 @@
 			<td><input
 				name="authorURL" value="{{.AuthorURL}}"
 				autocomplete="off" autocorrect="off" spellcheck="true"
-				placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}" tabindex=5
+				placeholder="{{call .Translate `main.AuthorURLPlaceholder`}}"
+				tabindex=5 maxlength="{{.AuthorAllMaxLen}}"
 			></td>
 		</tr>
 	</table>

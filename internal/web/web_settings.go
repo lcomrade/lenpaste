@@ -2,6 +2,7 @@ package web
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
 )
@@ -15,9 +16,10 @@ type settingsTmpl struct {
 	Theme         string
 	ThemeSelector map[string]string
 
-	Author      string
-	AuthorEmail string
-	AuthorURL   string
+	AuthorAllMaxLen int
+	Author          string
+	AuthorEmail     string
+	AuthorURL       string
 
 	AuthOk bool
 
@@ -55,6 +57,7 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			LanguageSelector: data.LocalesList,
 			Theme:            getCookie(req, "theme"),
 			ThemeSelector:    data.ThemesList,
+			AuthorAllMaxLen:  netshare.MaxLengthAuthorAll,
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),
 			AuthorURL:        getCookie(req, "authorURL"),
