@@ -136,11 +136,11 @@ article {
 
 /* TEXT */
 .text-red, .text-red:hover {
-	color: {{call .Theme `color.TextRed`}};
+	color: {{call .Theme `color.Red`}};
 }
 
 .text-grey, .text-grey:hover {
-	color: {{call .Theme `color.TextGrey`}};
+	color: {{call .Theme `color.Grey`}};
 }
 
 
@@ -243,11 +243,11 @@ button, select, input, textarea {
 }
 
 button {
-	 background: {{call .Theme `color.TextGrey`}};
+	 background: {{call .Theme `color.Grey`}};
 	 font-size: 16px;
 	 padding: 8px 8px 8px 8px;
 	 border: 2px;
-	 color: {{call .Theme `color.Font`}};
+	 color: {{call .Theme `color.ButtonFont`}};
 }
 
 button:hover {
@@ -257,6 +257,7 @@ button:hover {
 
 .button-green {
 	background: {{call .Theme `color.ButtonGreen`}};
+	color: {{call .Theme `color.ButtonGreenFont`}};
 }
 
 .button-green:hover {

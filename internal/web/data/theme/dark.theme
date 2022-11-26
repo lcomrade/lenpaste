@@ -18,12 +18,15 @@ color.BackgroundBlack  = #000000
 color.FocusOutline     = #3DAEE9
 color.Element          = #666666
 
-color.TextRed  = #FF1F1F
-color.TextGrey = #888888
+color.Red  = #FF1F1F
+color.Grey = #888888
 
+color.Button           = #888888
 color.ButtonHover      = #999999
+color.ButtonFont       = #FFFFFF
 color.ButtonGreen      = #66CC00
 color.ButtonGreenHover = #74D117
+color.ButtonGreenFont  = #FFFFFF
 
 color.InputHover       = #777777
 color.InputPlaceholder = #B9B9B9
