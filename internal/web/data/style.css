@@ -75,6 +75,7 @@ header h2 a, header h2 a:hover,
 header h4 a, header h4 a:hover {
 	color: {{call .Theme `color.HeaderFont`}};
 	text-decoration: none;
+	white-space: nowrap;
 }
 
 

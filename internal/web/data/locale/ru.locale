@@ -19,7 +19,7 @@
 locale.Name = Русский
 
 base.Lenpaste = ЛенОтрывок
-base.About    = О сайте
+base.About    = О сайте
 base.Docs     = Документация
 base.Settings = Настройки
 
