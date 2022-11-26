@@ -23,6 +23,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"html/template"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -128,4 +129,8 @@ func (theme Theme) theme(s string) string {
 	}
 
 	return s
+}
+
+func (theme Theme) tryHighlight(source string, lexer string) template.HTML {
+	return tryHighlight(source, lexer, theme.theme("highlight.Theme"))
 }

@@ -68,7 +68,7 @@ func (data *Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 		DeleteTime:    paste.DeleteTime,
 		OneUse:        paste.OneUse,
 		Title:         paste.Title,
-		Body:          tryHighlight(paste.Body, paste.Syntax),
+		Body:          tryHighlight(paste.Body, paste.Syntax, "monokai"),
 
 		ErrorNotFound: errorNotFound,
 		Translate:     data.Locales.findLocale(req).translate,

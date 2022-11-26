@@ -60,7 +60,7 @@ func (data *Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		ServerTermsExist: *data.ServerTermsExist,
 		AdminName:        *data.AdminName,
 		AdminMail:        *data.AdminMail,
-		Highlight:        tryHighlight,
+		Highlight:        data.Themes.findTheme(req).tryHighlight,
 		Translate:        data.Locales.findLocale(req).translate,
 	}
 

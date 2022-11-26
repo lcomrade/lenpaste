@@ -4,6 +4,10 @@ theme.Name.ru = Тёмная
 font.Default   = sans-serif
 font.Monospace = monospace
 
+// Full theme list here:
+// https://pkg.go.dev/github.com/alecthomas/chroma/v2/styles#pkg-variables
+highlight.Theme = monokai
+
 color.Font             = #FFFFFF
 color.SVG              = white
 color.BackgroundBody   = #333333
@@ -23,4 +27,3 @@ color.ButtonGreenHover = #74D117
 
 color.InputHover       = #777777
 color.InputPlaceholder = #B9B9B9
-

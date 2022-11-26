@@ -4,6 +4,10 @@ theme.Name.ru = Светлая
 font.Default   = sans-serif
 font.Monospace = monospace
 
+// Full theme list here:
+// https://pkg.go.dev/github.com/alecthomas/chroma/v2/styles#pkg-variables
+highlight.Theme = monokailight
+
 color.Font             = #000000
 color.SVG              = black
 color.BackgroundBody   = #CCCCCC

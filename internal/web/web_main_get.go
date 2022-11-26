@@ -100,7 +100,7 @@ func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	tmplData := pasteTmpl{
 		ID:         paste.ID,
 		Title:      paste.Title,
-		Body:       tryHighlight(paste.Body, paste.Syntax),
+		Body:       data.Themes.findTheme(req).tryHighlight(paste.Body, paste.Syntax),
 		Syntax:     paste.Syntax,
 		CreateTime: paste.CreateTime,
 		DeleteTime: paste.DeleteTime,

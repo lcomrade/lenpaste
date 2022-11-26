@@ -27,7 +27,7 @@ import (
 	"html/template"
 )
 
-func tryHighlight(source string, lexer string) template.HTML {
+func tryHighlight(source string, lexer string, theme string) template.HTML {
 	// Determine lexer
 	l := lexers.Get(lexer)
 	if l == nil {
@@ -45,7 +45,7 @@ func tryHighlight(source string, lexer string) template.HTML {
 		html.WrapLongLines(true),
 	)
 
-	s := styles.Get("monokai")
+	s := styles.Get(theme)
 
 	it, err := l.Tokenise(nil, source)
 	if err != nil {

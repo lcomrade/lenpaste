@@ -58,7 +58,7 @@ func (data *Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 		MaxLenAuthorAll: netshare.MaxLengthAuthorAll,
 		RateLimitPeriod: netshare.RateLimitPeriod,
 		Translate:       data.Locales.findLocale(req).translate,
-		Highlight:       tryHighlight,
+		Highlight:       data.Themes.findTheme(req).tryHighlight,
 	})
 	if err != nil {
 		data.writeError(rw, req, err)
