@@ -76,12 +76,6 @@ if [[ -n "$LENPASTE_NEW_PASTES_PER_5MIN" ]]; then
 	RUN_CMD="$RUN_CMD -new-pastes-per-5min '$LENPASTE_NEW_PASTES_PER_5MIN'"
 fi
 
-# LENPASTE_UI_DEFAULT_LIFETIME
-if [[ -n "$LENPASTE_UI_DEFAULT_LIFETIME" ]]; then
-	RUN_CMD="$RUN_CMD -ui-default-lifetime '$LENPASTE_UI_DEFAULT_LIFETIME'"
-fi
-
-
 # Server about
 if [[ -f "/data/about" ]]; then
 	RUN_CMD="$RUN_CMD -server-about /data/about"
@@ -109,6 +103,18 @@ fi
 # LENPASTE_ADMIN_MAIL
 if [[ -n "$LENPASTE_ADMIN_MAIL" ]]; then
 	RUN_CMD="$RUN_CMD -admin-mail '$LENPASTE_ADMIN_MAIL'"
+fi
+
+
+# LENPASTE_UI_DEFAULT_LIFETIME
+if [[ -n "$LENPASTE_UI_DEFAULT_LIFETIME" ]]; then
+	RUN_CMD="$RUN_CMD -ui-default-lifetime '$LENPASTE_UI_DEFAULT_LIFETIME'"
+fi
+
+
+# LENPASTE_UI_DEFAULT_THEME
+if [[ -n "$LENPASTE_UI_DEFAULT_THEME" ]]; then
+	RUN_CMD="$RUN_CMD -ui-default-theme $LENPASTE_UI_DEFAULT_THEME"
 fi
 
 

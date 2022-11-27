@@ -59,7 +59,7 @@ func (data *Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 		Protocol:   netshare.GetProtocol(req.Header),
 		Host:       netshare.GetHost(req),
 		Translate:  data.Locales.findLocale(req).translate,
-		Highlight:  data.Themes.findTheme(req).tryHighlight,
+		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 	}
 
 	err = data.EmbeddedHelpPage.Execute(rw, tmplData)

@@ -29,7 +29,7 @@ import (
 	"strings"
 )
 
-const defaultLocale = "en"
+const baseLocale = "en"
 
 type Locale map[string]string
 type Locales map[string]Locale
@@ -85,7 +85,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 		}
 
 		// Append to the translation, if it is not complete
-		defLocale := locales[defaultLocale]
+		defLocale := locales[baseLocale]
 		defTotal := len(defLocale)
 		curTotal := 0
 		for defKey, defVal := range defLocale {
@@ -140,7 +140,7 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	}
 
 	// Load default locale
-	locale, _ := locales[defaultLocale]
+	locale, _ := locales[baseLocale]
 	return locale
 }
 

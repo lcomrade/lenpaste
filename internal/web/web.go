@@ -86,6 +86,7 @@ type Data struct {
 	LenPasswdFile *string
 
 	UiDefaultLifeTime *string
+	UiDefaultTheme    *string
 }
 
 func Load(db storage.DB, cfg config.Config) (*Data, error) {
@@ -103,6 +104,7 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	data.BodyMaxLen = &cfg.BodyMaxLen
 	data.MaxLifeTime = &cfg.MaxLifeTime
 	data.UiDefaultLifeTime = &cfg.UiDefaultLifetime
+	data.UiDefaultTheme = &cfg.UiDefaultTheme
 	data.LenPasswdFile = &cfg.LenPasswdFile
 
 	data.ServerAbout = &cfg.ServerAbout
@@ -131,7 +133,7 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	}
 
 	// Load themes
-	data.Themes, data.ThemesList, err = loadThemes(embFS, "data/theme", data.LocalesList)
+	data.Themes, data.ThemesList, err = loadThemes(embFS, "data/theme", data.LocalesList, data.UiDefaultTheme)
 	if err != nil {
 		return nil, err
 	}

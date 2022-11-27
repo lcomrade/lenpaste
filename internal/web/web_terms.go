@@ -22,7 +22,7 @@ func (data *Data) TermsOfUseHand(rw http.ResponseWriter, req *http.Request) {
 
 	err := data.TermsOfUse.Execute(rw, termsOfUseTmpl{
 		TermsOfUse: *data.ServerTermsOfUse,
-		Highlight:  data.Themes.findTheme(req).tryHighlight,
+		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 		Translate:  data.Locales.findLocale(req).translate},
 	)
 	if err != nil {

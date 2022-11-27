@@ -38,7 +38,7 @@ func (data *Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/css; charset=utf-8")
 	data.StyleCSS.Execute(rw, jsTmpl{
 		Translate: data.Locales.findLocale(req).translate,
-		Theme:     data.Themes.findTheme(req).theme,
+		Theme:     data.Themes.findTheme(req, data.UiDefaultTheme).theme,
 	})
 }
 
@@ -62,7 +62,7 @@ func (data *Data) HistoryJSHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 	data.HistoryJS.Execute(rw, jsTmpl{
 		Translate: data.Locales.findLocale(req).translate,
-		Theme:     data.Themes.findTheme(req).theme,
+		Theme:     data.Themes.findTheme(req, data.UiDefaultTheme).theme,
 	})
 }
 

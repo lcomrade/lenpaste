@@ -54,6 +54,7 @@ services:
       - LENPASTE_ADMIN_NAME=                  # Name of the administrator of this server.
       - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
       - LENPASTE_UI_DEFAULT_LIFETIME=         # Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.
+      - LENPASTE_UI_DEFAULT_THEME=dark        # Sets the default theme for the WEB interface. Examples: dark, light.
     volumes:
       # /data/lenpaste.db - SQLite DB if used.
       # /data/about       - About this server (TXT file).

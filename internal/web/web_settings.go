@@ -65,6 +65,10 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			Translate:        data.Locales.findLocale(req).translate,
 		}
 
+		if dataTmpl.Theme == "" {
+			dataTmpl.Theme = *data.UiDefaultTheme
+		}
+
 		// Show page
 		rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 

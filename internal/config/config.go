@@ -45,4 +45,5 @@ type Config struct {
 	LenPasswdFile string
 
 	UiDefaultLifetime string
+	UiDefaultTheme    string
 }
