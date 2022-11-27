@@ -1,4 +1,4 @@
-theme.Name    = Dark
+theme.Name.en  = Dark
 theme.Name.ru = Тёмная
 
 font.Default   = sans-serif

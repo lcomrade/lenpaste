@@ -56,7 +56,7 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 			Language:         getCookie(req, "lang"),
 			LanguageSelector: data.LocalesList,
 			Theme:            getCookie(req, "theme"),
-			ThemeSelector:    data.ThemesList,
+			ThemeSelector:    data.ThemesList.getForLocale(req),
 			AuthorAllMaxLen:  netshare.MaxLengthAuthorAll,
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),

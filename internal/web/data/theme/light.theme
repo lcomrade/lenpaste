@@ -1,4 +1,4 @@
-theme.Name    = Light
+theme.Name.en = Light
 theme.Name.ru = Светлая
 
 font.Default   = sans-serif

@@ -33,10 +33,11 @@ const defaultLocale = "en"
 
 type Locale map[string]string
 type Locales map[string]Locale
+type LocalesList map[string]string
 
-func loadLocales(f embed.FS, localeDir string) (Locales, map[string]string, error) {
+func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 	locales := make(Locales)
-	localesList := make(map[string]string)
+	localesList := make(LocalesList)
 
 	// Get locale files list
 	files, err := f.ReadDir(localeDir)

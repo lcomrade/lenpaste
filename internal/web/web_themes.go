@@ -34,9 +34,16 @@ const defaultTheme = "dark"
 type Theme map[string]string
 type Themes map[string]Theme
 
-func loadThemes(f embed.FS, themeDir string) (Themes, map[string]string, error) {
+type ThemesListPart map[string]string
+type ThemesList map[string]ThemesListPart
+
+func loadThemes(f embed.FS, themeDir string, localesList LocalesList) (Themes, ThemesList, error) {
 	themes := make(Themes)
-	themesList := make(map[string]string)
+	themesList := make(ThemesList)
+
+	for localeCode, _ := range localesList {
+		themesList[localeCode] = make(ThemesListPart)
+	}
 
 	// Get theme files list
 	files, err := f.ReadDir(themeDir)
@@ -78,9 +85,9 @@ func loadThemes(f embed.FS, themeDir string) (Themes, map[string]string, error) 
 	// Prepare themes list
 	for key, val := range themes {
 		// Get theme name
-		themeName := val["theme.Name"]
+		themeName := val["theme.Name."+defaultLocale]
 		if themeName == "" {
-			return nil, nil, errors.New("web: empty theme.Name parameter in '" + key + "' theme")
+			return nil, nil, errors.New("web: empty theme.Name." + defaultLocale + " parameter in '" + key + "' theme")
 		}
 
 		// Append to the translation, if it is not complete
@@ -92,7 +99,11 @@ func loadThemes(f embed.FS, themeDir string) (Themes, map[string]string, error) 
 			if isExist {
 				curTotal = curTotal + 1
 			} else {
-				val[defKey] = defVal
+				if strings.HasPrefix(defKey, "theme.Name.") {
+					val[defKey] = val["theme.Name."+defaultLocale]
+				} else {
+					val[defKey] = defVal
+				}
 			}
 		}
 
@@ -100,14 +111,41 @@ func loadThemes(f embed.FS, themeDir string) (Themes, map[string]string, error) 
 			return nil, nil, errors.New("web: theme '" + key + "' is empty")
 		}
 
-		themesList[key] = themeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+		// Add theme to themes list
+		themeNameSuffix := fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+		themesList[defaultLocale][key] = themeName + themeNameSuffix
+
+		for localeCode, _ := range localesList {
+			result, ok := val["theme.Name."+localeCode]
+			if ok {
+				themesList[localeCode][key] = result + themeNameSuffix
+			} else {
+				themesList[localeCode][key] = themeName + themeNameSuffix
+			}
+		}
 	}
 
+	fmt.Println(themesList)
 	return themes, themesList, nil
 }
 
+func (themesList ThemesList) getForLocale(req *http.Request) ThemesListPart {
+	// Get theme by cookie
+	langCookie := getCookie(req, "lang")
+	if langCookie != "" {
+		theme, ok := themesList[langCookie]
+		if ok == true {
+			return theme
+		}
+	}
+
+	// Load default part theme
+	theme, _ := themesList[defaultLocale]
+	return theme
+}
+
 func (themes Themes) findTheme(req *http.Request) Theme {
-	// Get accept language by cookie
+	// Get theme by cookie
 	themeCookie := getCookie(req, "theme")
 	if themeCookie != "" {
 		theme, ok := themes[themeCookie]
