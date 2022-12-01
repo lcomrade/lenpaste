@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	right: 20%;
 	left: 20%;
 
-	overflow-y: scroll;
+	overflow: hidden;
 }
 
 @media all and (max-device-width: 640px), all and (orientation: portrait) {
@@ -172,6 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 #js-history-popup-list-div {
 	font-family: monospace;
+
+	overflow: auto;
+	width: 100%;
+	height: 100%;
 }
 `;
 	let styleSheet = document.createElement("style")
