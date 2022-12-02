@@ -8,19 +8,6 @@ trigger:
     - push
 
 steps:
-  - name: upload
-    pull: always
-    image: jonasfranz/crowdin
-    settings:
-      files:
-        en.locale: internal/web/data/locale/en.locale
-        ru.locale: internal/web/data/locale/ru.locale
-      ignore_branch: true
-      project_identifier: lenpaste
-    environment:
-      CROWDIN_KEY:
-        from_secret: crowdin_key
-
   - name: download
     pull: always
     image: jonasfranz/crowdin
@@ -46,3 +33,16 @@ steps:
     environment:
       GIT_PUSH_SSH_KEY:
         from_secret: ci_ssh_key
+
+  - name: upload
+    pull: always
+    image: jonasfranz/crowdin
+    settings:
+      files:
+        en.locale: internal/web/data/locale/en.locale
+        ru.locale: internal/web/data/locale/ru.locale
+      ignore_branch: true
+      project_identifier: lenpaste
+    environment:
+      CROWDIN_KEY:
+        from_secret: crowdin_key
