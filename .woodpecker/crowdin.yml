@@ -1,15 +1,7 @@
-kind: pipeline
-name: translate
+branches: develop
 
-trigger:
-  branch:
-    - develop
-  event:
-    - push
-
-steps:
-  - name: upload
-    pull: always
+pipeline:
+  upload:
     image: git.lcomrade.su/root/drone-crowdin-v2
     settings:
       crowdin_key:
@@ -18,8 +10,7 @@ steps:
       target: upload
       upload_files: {"internal/web/data/locale/en.locale": "en.ini"}
 
-  - name: download
-    pull: always
+  download:
     image: git.lcomrade.su/root/drone-crowdin-v2
     settings:
       crowdin_key:
@@ -31,8 +22,7 @@ steps:
       download_skip_untranslated_files: true
       download_export_approved_only: false
 
-  - name: push
-    pull: always
+  push:
     image: appleboy/drone-git-push
     settings:
       author_email: "translatebot@lcomrade.su"
