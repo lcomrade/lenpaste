@@ -8,17 +8,28 @@ trigger:
     - push
 
 steps:
+  - name: upload
+    pull: always
+    image: git.lcomrade.su/root/drone-crowdin-v2
+    settings:
+      crowdin_key:
+        from_secret: crowdin_key
+      project_id: 553341
+      target: upload
+      upload_files: {"internal/web/data/locale/en.locale": "en.ini"}
+
   - name: download
     pull: always
-    image: jonasfranz/crowdin
+    image: git.lcomrade.su/root/drone-crowdin-v2
     settings:
-      download: true
-      export_dir: internal/web/data/locale/
-      ignore_branch: true
-      project_identifier: lenpaste
-    environment:
-      CROWDIN_KEY:
+      crowdin_key:
         from_secret: crowdin_key
+      project_id: 553341
+      target: download
+      download_to: internal/web/data/locale/
+      download_skip_untranslated_strings: true
+      download_skip_untranslated_files: true
+      download_export_approved_only: false
 
   - name: push
     pull: always
@@ -30,19 +41,5 @@ steps:
       commit: true
       commit_message: "[skip ci] Updated translations"
       remote: "git@git.lcomrade.su:root/lenpaste.git"
-    environment:
-      GIT_PUSH_SSH_KEY:
+      ssh_key:
         from_secret: ci_ssh_key
-
-  - name: upload
-    pull: always
-    image: jonasfranz/crowdin
-    settings:
-      files:
-        en.locale: internal/web/data/locale/en.locale
-        ru.locale: internal/web/data/locale/ru.locale
-      ignore_branch: true
-      project_identifier: lenpaste
-    environment:
-      CROWDIN_KEY:
-        from_secret: crowdin_key
