@@ -18,9 +18,9 @@ pipeline:
       project_id: 553341
       target: download
       download_to: internal/web/data/locale/
-      download_skip_untranslated_strings: true
+      #download_skip_untranslated_strings: true
       download_skip_untranslated_files: true
-      download_export_approved_only: false
+      #download_export_approved_only: false
 
   push:
     image: appleboy/drone-git-push
