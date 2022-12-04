@@ -177,6 +177,7 @@ docsAPIv1Libs.ApiVersion       = API version
 docsAPIv1Libs.Status           = Status
 docsAPIv1Libs.StatusOfficial   = Official
 docsAPIv1Libs.StatusUnofficial = Unofficial
+docsAPIv1Libs.License          = License
 docsAPIv1Libs.GPL3Later        = GPL 3.0 or later
 docsAPIv1Libs.OutOfDateTitle   = Out of date
 docsAPIv1Libs.OutOfDataMessage = These libraries are no longer being updated. This means that they cannot use the Lenpaste API v1.0 and higher.
