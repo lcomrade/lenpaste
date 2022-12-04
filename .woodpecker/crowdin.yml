@@ -9,6 +9,9 @@ pipeline:
       project_id: 553341
       target: upload
       upload_files: {"internal/web/data/locale/en.locale": "en.ini"}
+    when:
+      event: push
+      path: ["internal/web/data/locale/*", ".woodpecker/crowdin.yml"]
 
   download:
     image: git.lcomrade.su/root/drone-crowdin-v2
