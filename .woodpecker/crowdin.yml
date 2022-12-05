@@ -1,4 +1,6 @@
-branches: develop
+when:
+  event: [push, cron]
+  branch: develop
 
 pipeline:
   upload:
