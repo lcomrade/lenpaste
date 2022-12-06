@@ -129,20 +129,27 @@ For developers:
 - [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
 - [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
 
-
-
-## Might be interesting
-Manuals:
+Might be interesting:
 - [How to Install LenPaste on Your Synology NAS](https://mariushosting.com/how-to-install-lenpaste-on-your-synology-nas/) (WEB site)
 - [Lenpaste | TrueCharts](https://truecharts.org/docs/charts/incubator/lenpaste/) (WEB site)
-
-Reviews:
 - [Pastebin Clone in Docker with Lenpaste](https://www.youtube.com/watch?v=YxcHxsZHh9A) (YouTube video)
 
 
 
-## Bugs and Suggestion
-If you have any questions or suggestions, you can write here:
+## Contribute
+What can I do?
+- Translate Lenpaste to you Language: [Crowdin.com/Lenpaste](https://crwd.in/lenpaste)
+  If you want to add a language that is not on the list, then write to me: root@lcomrade.su
+- Write an article (DevTo, Medium, your website, and so on) or make a video (YouTube, PeerTube, and so on).
+  A link to your article/video will be included in this README.
+- Create or update a package:
+	- Create NixOS package.
+	- Update TrueCharts package.
+	- Other.
+- Install the Lenpaste server. And add it to [Lenmonitor](https://monitor.lcomrade.su/).
+- Recommend Lenpaste to your friends
+
+Contacts:
 - Join to Matrix room: [`#lenpaste:lcomrade.su`](https://matrix.to/#/#lenpaste:lcomrade.su)
 - Contact me: Leonid Maslakov <root@lcomrade.su>
 
