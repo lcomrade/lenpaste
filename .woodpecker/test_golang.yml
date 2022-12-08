@@ -1,7 +1,7 @@
 when:
   event: [push, pull_request]
   branch: develop
-  path: ["**.go", ".woodpecker/test.yml"]
+  path: ["**/*.go", ".woodpecker/test_golang.yml"]
 
 matrix:
   GO_VERSION:
