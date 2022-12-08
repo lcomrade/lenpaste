@@ -118,6 +118,12 @@ if [[ -n "$LENPASTE_UI_DEFAULT_THEME" ]]; then
 fi
 
 
+# External UI themes
+if [[ -d "/data/themes" ]]; then
+	RUN_CMD="$RUN_CMD -ui-themes-dir /data/themes"
+fi
+
+
 # Lenpsswd file
 if [[ -f "/data/lenpasswd" ]]; then
 	RUN_CMD="$RUN_CMD -lenpasswd-file /data/lenpasswd"

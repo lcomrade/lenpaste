@@ -46,4 +46,5 @@ type Config struct {
 
 	UiDefaultLifetime string
 	UiDefaultTheme    string
+	UiThemesDir       string
 }

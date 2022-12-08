@@ -60,6 +60,7 @@ services:
       # /data/about       - About this server (TXT file).
       # /data/rules       - This server rules (TXT file).
       # /data/terms       - This server "terms of use" (TXT file).
+      # /data/themes/*    - External WEB interface themes.
       # /data/lenpasswd   - If this file exists, the server will ask for auth to create new pastes.
       #                     File format: USER:PLAIN_PASSWORD on each line.
       - "${PWD}/data:/data"

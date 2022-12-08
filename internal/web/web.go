@@ -133,7 +133,7 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	}
 
 	// Load themes
-	data.Themes, data.ThemesList, err = loadThemes(embFS, "data/theme", data.LocalesList, data.UiDefaultTheme)
+	data.Themes, data.ThemesList, err = loadThemes(cfg.UiThemesDir, data.LocalesList, data.UiDefaultTheme)
 	if err != nil {
 		return nil, err
 	}
