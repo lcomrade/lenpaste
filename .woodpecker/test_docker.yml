@@ -5,7 +5,7 @@ when:
 
 pipeline:
   check:
-    image: hadolint/hadolint
+    image: hadolint/hadolint:latest-alpine
     pull: true
     commands:
       - hadolint --version
