@@ -173,9 +173,17 @@ document.addEventListener("DOMContentLoaded", () => {
 #js-history-popup-list-div {
 	font-family: monospace;
 
+	margin-top: 15px;
+	margin-bottom: 15px;
+
 	overflow: auto;
 	width: 100%;
 	height: 100%;
+}
+
+#js-history-popup-list {
+	margin: 0;
+	margin-bottom: 65px;
 }
 `;
 	let styleSheet = document.createElement("style")
