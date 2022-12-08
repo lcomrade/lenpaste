@@ -1,0 +1,15 @@
+when:
+  event: [push]
+  branch: develop
+  path: ["internal/web/data/locale/*", ".woodpecker/crowdin_upload.yml"]
+
+pipeline:
+  upload:
+    image: git.lcomrade.su/root/drone-crowdin-v2
+    pull: true
+    settings:
+      crowdin_key:
+        from_secret: crowdin_key
+      project_id: 553341
+      target: upload
+      upload_files: {"internal/web/data/locale/en.locale": "en.ini"}

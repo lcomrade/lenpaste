@@ -13,6 +13,7 @@ matrix:
 pipeline:
   build:
     image: golang:${GO_VERSION}
+    pull: true
     commands:
       - go mod download
       - go test ./...

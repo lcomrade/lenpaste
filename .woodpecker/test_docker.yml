@@ -4,6 +4,9 @@ when:
   path: ["Dockerfile", ".woodpecker/test_docker.yml"]
 
 pipeline:
-  build:
+  check:
     image: hadolint/hadolint
-    command: hadolint ./Dockerfile
+    pull: true
+    commands:
+      - hadolint --version
+      - hadolint  Dockerfile
