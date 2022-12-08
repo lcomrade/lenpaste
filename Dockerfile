@@ -1,9 +1,9 @@
 # BUILD
-FROM golang:1.18.8-alpine as build
+FROM golang:1.18.9-alpine3.17 as build
 
 WORKDIR /build
 
-RUN apk update && apk upgrade && apk add --no-cache make git gcc musl-dev
+RUN apk add --no-cache make=4.3-r1 git=2.38.1-r0 gcc=12.2.1_git20220924-r4 musl-dev=1.2.3-r4
 
 COPY ./go.mod ./
 COPY go.sum ./
@@ -15,7 +15,7 @@ RUN make
 
 
 # RUN
-FROM alpine:latest as run
+FROM alpine:3.17.0 as run
 
 WORKDIR /
 
