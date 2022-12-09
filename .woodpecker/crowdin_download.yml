@@ -1,5 +1,4 @@
 when:
-  event: cron
   branch: develop
 
 pipeline:
