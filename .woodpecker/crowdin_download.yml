@@ -14,8 +14,8 @@ pipeline:
       #download_skip_untranslated_strings: true
       download_skip_untranslated_files: true
       #download_export_approved_only: false
-      when:
-        event: cron
+    when:
+      event: cron
 
   push:
     image: appleboy/drone-git-push
@@ -29,5 +29,5 @@ pipeline:
       remote: "git@git.lcomrade.su:root/lenpaste.git"
       ssh_key:
         from_secret: ci_ssh_key
-      when:
-        event: cron
+    when:
+      event: cron
