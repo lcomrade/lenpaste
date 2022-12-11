@@ -318,7 +318,7 @@ func main() {
 
 	apiv1Data := apiv1.Load(db, cfg)
 
-	rawData := raw.Load(db, log)
+	rawData := raw.Load(db, cfg)
 
 	// Init data base
 	err = storage.InitDB(*flagDbDriver, *flagDbSource)

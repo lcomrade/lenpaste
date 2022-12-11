@@ -19,18 +19,23 @@
 package raw
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 )
 
 type Data struct {
 	DB  storage.DB
 	Log logger.Logger
+
+	RateLimitGet *netshare.RateLimitSystem
 }
 
-func Load(db storage.DB, log logger.Logger) *Data {
+func Load(db storage.DB, cfg config.Config) *Data {
 	return &Data{
-		DB:  db,
-		Log: log,
+		DB:           db,
+		Log:          cfg.Log,
+		RateLimitGet: cfg.RateLimitGet,
 	}
 }

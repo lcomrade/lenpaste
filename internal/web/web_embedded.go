@@ -19,6 +19,7 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
@@ -39,9 +40,15 @@ type embTmpl struct {
 
 // Pattern: /emb/
 func (data *Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
-	errorNotFound := false
+	// Check rate limit
+	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	if err != nil {
+		data.writeError(rw, req, err)
+		return
+	}
 
 	// Log request
+	errorNotFound := false
 	data.Log.HttpRequest(req)
 
 	// Get paste ID

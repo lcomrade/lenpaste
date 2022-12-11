@@ -38,6 +38,13 @@ type embHelpTmpl struct {
 
 // Pattern: /emb_help/
 func (data *Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
+	// Check rate limit
+	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	if err != nil {
+		data.writeError(rw, req, err)
+		return
+	}
+
 	// Log request
 	data.Log.HttpRequest(req)
 

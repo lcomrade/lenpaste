@@ -19,6 +19,7 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"net/http"
 	"strings"
@@ -27,6 +28,13 @@ import (
 
 // Pattern: /dl/
 func (data *Data) DlHand(rw http.ResponseWriter, req *http.Request) {
+	// Check rate limit
+	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	if err != nil {
+		data.writeError(rw, req, err)
+		return
+	}
+
 	// Log request
 	data.Log.HttpRequest(req)
 
