@@ -30,7 +30,7 @@ type Data struct {
 	Log logger.Logger
 	DB  storage.DB
 
-	RateLimit *netshare.RateLimit
+	RateLimitNew *netshare.RateLimitSystem
 
 	Lexers *[]string
 
@@ -58,7 +58,7 @@ func Load(db storage.DB, cfg config.Config) *Data {
 	return &Data{
 		DB:                db,
 		Log:               cfg.Log,
-		RateLimit:         cfg.RateLimit,
+		RateLimitNew:      cfg.RateLimitNew,
 		Lexers:            &lexers,
 		Version:           &cfg.Version,
 		TitleMaxLen:       &cfg.TitleMaxLen,

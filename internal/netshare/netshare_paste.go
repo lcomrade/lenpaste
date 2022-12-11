@@ -28,15 +28,16 @@ import (
 	"unicode/utf8"
 )
 
-func PasteAddFromForm(req *http.Request, db storage.DB, rateLimit *RateLimit, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
+func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
 	// Check HTTP method
 	if req.Method != "POST" {
 		return "", 0, 0, ErrMethodNotAllowed
 	}
 
 	// Check rate limit
-	if rateLimit.CheckAndUse(GetClientAddr(req)) == false {
-		return "", 0, 0, ErrTooManyRequests
+	err := rateSys.CheckAndUse(GetClientAddr(req))
+	if err != nil {
+		return "", 0, 0, err
 	}
 
 	// Read form

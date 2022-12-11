@@ -31,7 +31,6 @@ type docsTmpl struct {
 
 type docsApiV1Tmpl struct {
 	MaxLenAuthorAll int
-	RateLimitPeriod int64
 
 	Highlight func(string, string) template.HTML
 	Translate func(string, ...interface{}) template.HTML
@@ -56,7 +55,6 @@ func (data *Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	err := data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
 		MaxLenAuthorAll: netshare.MaxLengthAuthorAll,
-		RateLimitPeriod: netshare.RateLimitPeriod,
 		Translate:       data.Locales.findLocale(req).translate,
 		Highlight:       data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 	})

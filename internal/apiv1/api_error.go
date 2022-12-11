@@ -20,6 +20,7 @@ package apiv1
 
 import (
 	"encoding/json"
+	"errors"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
@@ -33,6 +34,8 @@ type errorType struct {
 
 func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
 	var resp errorType
+
+	var eTmp429 *netshare.ErrTooManyRequests
 
 	if e == netshare.ErrBadRequest {
 		resp.Code = 400
@@ -59,18 +62,14 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 		resp.Code = 413
 		resp.Error = "Payload Too Large"
 
-	} else if e == netshare.ErrTooManyRequests {
+	} else if errors.As(e, &eTmp429) {
 		resp.Code = 429
 		resp.Error = "Too Many Requests"
-		rw.Header().Set("Retry-After", strconv.Itoa(netshare.RateLimitPeriod))
+		rw.Header().Set("Retry-After", strconv.FormatInt(eTmp429.RetryAfter, 10))
 
 	} else {
 		resp.Code = 500
 		resp.Error = "Internal Server Error"
-		data.Log.HttpError(req, e)
-	}
-
-	if resp.Code >= 500 && e != netshare.ErrInternal {
 		data.Log.HttpError(req, e)
 	}
 

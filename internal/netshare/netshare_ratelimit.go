@@ -24,65 +24,114 @@ import (
 	"time"
 )
 
-const (
-	RateLimitPeriod = 5 * 60
-)
-
-type RateLimitIP struct {
-	UseTime  int64
-	UseCount int
+type RateLimitSystem struct {
+	per5Min  *RateLimit
+	per15Min *RateLimit
+	per1Hour *RateLimit
 }
 
-type RateLimitList struct {
-	sync.RWMutex
-	m map[string]RateLimitIP
+func NewRateLimitSystem(per5Min, per15Min, per1Hour uint) *RateLimitSystem {
+	return &RateLimitSystem{
+		per5Min:  NewRateLimit(5*60, per5Min),
+		per15Min: NewRateLimit(15*60, per15Min),
+		per1Hour: NewRateLimit(60*60, per1Hour),
+	}
+}
+
+func (rateSys *RateLimitSystem) CheckAndUse(ip net.IP) error {
+	var tmp int64
+
+	tmp = rateSys.per5Min.CheckAndUse(ip)
+	if tmp != 0 {
+		return ErrTooManyRequestsNew(tmp)
+	}
+
+	tmp = rateSys.per15Min.CheckAndUse(ip)
+	if tmp != 0 {
+		return ErrTooManyRequestsNew(tmp)
+	}
+
+	tmp = rateSys.per1Hour.CheckAndUse(ip)
+	if tmp != 0 {
+		return ErrTooManyRequestsNew(tmp)
+	}
+
+	return nil
 }
 
 type RateLimit struct {
-	ReqPer5Minute int
+	sync.RWMutex
 
-	List RateLimitList
+	limitPeriod int  // N - Rate limit period (in seconds)
+	limitCount  uint // X - Max request count per N seconds period
+
+	list map[string]rateLimitIP // Rate limit bucket
 }
 
-func NewRateLimit(reqPer5Minute int) *RateLimit {
-	return &RateLimit{
-		ReqPer5Minute: reqPer5Minute,
-		List: RateLimitList{
-			m: make(map[string]RateLimitIP),
-		},
+type rateLimitIP struct {
+	UseTime  int64 // Fist IP use time
+	UseCount uint  // Requests count by IP
+}
+
+func NewRateLimit(rateLimitPeriod int, limitCount uint) *RateLimit {
+	rateLimit := &RateLimit{
+		limitCount: limitCount,
+		list:       make(map[string]rateLimitIP),
+	}
+
+	rateLimit.runWorker()
+
+	return rateLimit
+}
+
+func (rateLimit *RateLimit) runWorker() {
+	for {
+		time.Sleep(time.Duration(rateLimit.limitPeriod) * time.Second)
+
+		timeNow := time.Now().Unix()
+		rateLimit.Lock()
+
+		for ipStr, data := range rateLimit.list {
+			if data.UseTime+int64(rateLimit.limitPeriod) <= timeNow {
+				delete(rateLimit.list, ipStr)
+			}
+		}
+
+		rateLimit.Unlock()
 	}
 }
 
-func (rateLimit *RateLimit) CheckAndUse(ip net.IP) bool {
+func (rateLimit *RateLimit) CheckAndUse(ip net.IP) int64 {
 	// If rate limit not need
-	if rateLimit.ReqPer5Minute <= 0 {
-		return true
+	if rateLimit.limitCount == 0 {
+		return 0
 	}
 
 	// Lock
-	rateLimit.List.Lock()
-	defer rateLimit.List.Unlock()
+	rateLimit.Lock()
+	defer rateLimit.Unlock()
 
 	ipStr := ip.String()
+	timeNow := time.Now().Unix()
 
 	// If last use time out
-	if rateLimit.List.m[ipStr].UseTime+RateLimitPeriod < time.Now().Unix() {
-		rateLimit.List.m[ipStr] = RateLimitIP{
+	if rateLimit.list[ipStr].UseTime+int64(rateLimit.limitPeriod) <= timeNow {
+		rateLimit.list[ipStr] = rateLimitIP{
 			UseTime:  time.Now().Unix(),
 			UseCount: 1,
 		}
 
-		return true
+		return 0
 
 		// Else
 	} else {
-		if rateLimit.List.m[ipStr].UseCount < rateLimit.ReqPer5Minute {
-			tmp := rateLimit.List.m[ipStr]
+		if rateLimit.list[ipStr].UseCount <= rateLimit.limitCount {
+			tmp := rateLimit.list[ipStr]
 			tmp.UseCount = tmp.UseCount + 1
-			rateLimit.List.m[ipStr] = tmp
-			return true
+			rateLimit.list[ipStr] = tmp
+			return 0
 		}
 	}
 
-	return false
+	return rateLimit.list[ipStr].UseTime + int64(rateLimit.limitPeriod) - timeNow
 }

@@ -19,6 +19,7 @@
 package web
 
 import (
+	"errors"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
@@ -42,28 +43,32 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	}
 
 	// Dectect error
-	switch e {
-	case netshare.ErrBadRequest:
-		errData.Code = 400
-	case netshare.ErrUnauthorized:
-		errData.Code = 401
-	case storage.ErrNotFoundID:
-		errData.Code = 404
-	case netshare.ErrNotFound:
-		errData.Code = 404
-	case netshare.ErrMethodNotAllowed:
-		errData.Code = 405
-	case netshare.ErrPayloadTooLarge:
-		errData.Code = 413
-	case netshare.ErrTooManyRequests:
-		errData.Code = 429
-		rw.Header().Set("Retry-After", strconv.Itoa(netshare.RateLimitPeriod))
-	default:
-		errData.Code = 500
-	}
+	var eTmp429 *netshare.ErrTooManyRequests
 
-	// Log Internal Server Error if need
-	if errData.Code >= 500 && e != netshare.ErrInternal {
+	if e == netshare.ErrBadRequest {
+		errData.Code = 400
+
+	} else if e == netshare.ErrUnauthorized {
+		errData.Code = 401
+
+	} else if e == storage.ErrNotFoundID {
+		errData.Code = 404
+
+	} else if e == netshare.ErrNotFound {
+		errData.Code = 404
+
+	} else if e == netshare.ErrMethodNotAllowed {
+		errData.Code = 405
+
+	} else if e == netshare.ErrPayloadTooLarge {
+		errData.Code = 413
+
+	} else if errors.As(e, &eTmp429) {
+		errData.Code = 429
+		rw.Header().Set("Retry-After", strconv.FormatInt(eTmp429.RetryAfter, 10))
+
+	} else {
+		errData.Code = 500
 		data.Log.HttpError(req, e)
 	}
 

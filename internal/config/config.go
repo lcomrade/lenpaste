@@ -24,8 +24,10 @@ import (
 )
 
 type Config struct {
-	Log       logger.Logger
-	RateLimit *netshare.RateLimit
+	Log logger.Logger
+
+	RateLimitNew *netshare.RateLimitSystem
+	//	RateLimitGet *netshare.RateLimitSystem
 
 	Version string
 

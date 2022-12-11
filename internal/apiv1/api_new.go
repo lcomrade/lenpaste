@@ -64,7 +64,7 @@ func (data *Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Get form data and create paste
-	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimit, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 	if err != nil {
 		data.writeError(rw, req, err)
 		return

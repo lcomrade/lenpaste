@@ -165,8 +165,8 @@ docsAPIv1.Error404n2        = There is no such API method.
 docsAPIv1.Error405          = You made a mistake with HTTP request (example: you made POST instead of GET).
 docsAPIv1.Error413          = You have exceeded the maximum size of one or more fields \
                               (<code>title</code>, <code>body</code>, <code>author</code>, <code>authorEmail</code>, <code>authorURL</code>).
-docsAPIv1.Error429          = You have made too many requests, try again in %d seconds. \
-                              The <code>Retry-After: %d</code> HTTP header will also be returned along with this error.
+docsAPIv1.Error429          = You have made too many requests, try again after some time. \
+                              The <code>Retry-After</code> HTTP header will also be returned along with this error.
 docsAPIv1.Error500          = There was a failure on the server. Contact your server administrator to find out what the problem is.
 
 docsAPIv1Libs.Title            = Libraries for working with API

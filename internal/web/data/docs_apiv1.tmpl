@@ -222,7 +222,7 @@
 	"error": "Payload Too Large"
 }` `json`}}
 
-<p>{{call .Translate `docsAPIv1.Error429` .RateLimitPeriod .RateLimitPeriod}}</p>
+<p>{{call .Translate `docsAPIv1.Error429`}}</p>
 {{ call .Highlight `{
 	"code": 429,
 	"error": "Too Many Requests"
