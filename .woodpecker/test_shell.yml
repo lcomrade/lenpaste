@@ -4,7 +4,7 @@ when:
   path: ["**/*.sh", ".woodpecker/test_shell.yml"]
 
 pipeline:
-  build:
+  check:
     image: koalaman/shellcheck-alpine
     pull: true
     commands:
