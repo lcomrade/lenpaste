@@ -27,7 +27,7 @@ type Config struct {
 	Log logger.Logger
 
 	RateLimitNew *netshare.RateLimitSystem
-	//	RateLimitGet *netshare.RateLimitSystem
+	RateLimitGet *netshare.RateLimitSystem
 
 	Version string
 

@@ -50,9 +50,12 @@ services:
       - LENPASTE_TITLE_MAX_LENGTH=100         # Maximum length of the paste title. If 0 disable title, if -1 disable length limit.
       - LENPASTE_BODY_MAX_LENGTH=20000        # Maximum length of the paste body. If -1 disable length limit. Can't be -1.
       - LENPASTE_MAX_PASTE_LIFETIME=unlimited # Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 7w, 30d, 365d.
-      - LENPASTE_NEW_PASTES_PER_5MIN=15       # Maximum number of paste that can be created in 5 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_NEW_PASTES_PER_15MIN=15      # Maximum number of paste that can be created in 15 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_NEW_PASTES_PER_1HOUR=40      # Maximum number of paste that can be created in 1 hour from one IP. If 0 disable rate-limit.
+      - LENPASTE_GET_PASTES_PER_5MIN=50       # Maximum number of pastes that can be VIEWED in 5 minutes from one IP. If 0 disable rate-limit.
+      - LENPASTE_GET_PASTES_PER_15MIN=100     # Maximum number of pastes that can be VIEWED in 15 minutes from one IP. If 0 disable rate-limit.
+      - LENPASTE_GET_PASTES_PER_1HOUR=200     # Maximum number of pastes that can be VIEWED in 1 hour from one IP. If 0 disable rate-limit.
+      - LENPASTE_NEW_PASTES_PER_5MIN=15       # Maximum number of pastes that can be CREATED in 5 minutes from one IP. If 0 disable rate-limit.
+      - LENPASTE_NEW_PASTES_PER_15MIN=15      # Maximum number of pastes that can be CREATED in 15 minutes from one IP. If 0 disable rate-limit.
+      - LENPASTE_NEW_PASTES_PER_1HOUR=40      # Maximum number of pastes that can be CREATED in 1 hour from one IP. If 0 disable rate-limit.
       - LENPASTE_ADMIN_NAME=                  # Name of the administrator of this server.
       - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
       - LENPASTE_UI_DEFAULT_LIFETIME=         # Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.

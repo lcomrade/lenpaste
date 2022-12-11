@@ -19,6 +19,7 @@
 package web
 
 import (
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lineend"
 	"html/template"
 	"net/http"
@@ -55,6 +56,13 @@ type pasteContinueTmpl struct {
 }
 
 func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
+	// Check rate limit
+	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	if err != nil {
+		data.writeError(rw, req, err)
+		return
+	}
+
 	// Get paste ID
 	pasteID := string([]rune(req.URL.Path)[1:])
 

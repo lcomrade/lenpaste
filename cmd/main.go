@@ -90,9 +90,12 @@ func printHelp(noErrors bool) {
 	println("  -title-max-length       Maximum length of the paste title. If 0 disable title, if -1 disable length limit. (default: 100)")
 	println("  -body-max-length        Maximum length of the paste body. If -1 disable length limit. Can't be -1. (default: 20000)")
 	println("  -max-paste-lifetime     Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 1w, 30d, 365d. (default: unlimited)")
-	println("  -new-pastes-per-5min    Maximum number of paste that can be created in 5 minutes from one IP. If 0 disable rate-limit. (default: 15)")
-	println("  -new-pastes-per-15min   Maximum number of paste that can be created in 15 minutes from one IP. If 0 disable rate-limit. (default: 30)")
-	println("  -new-pastes-per-1hour   Maximum number of paste that can be created in 1 hour from one IP. If 0 disable rate-limit. (default: 40)")
+	println("  -get-pastes-per-5min    Maximum number of pastes that can be VIEWED in 5 minutes from one IP. If 0 disable rate-limit. (default: 50)")
+	println("  -get-pastes-per-15min   Maximum number of pastes that can be VIEWED in 15 minutes from one IP. If 0 disable rate-limit. (default: 100)")
+	println("  -get-pastes-per-1hour   Maximum number of pastes that can be VIEWED in 1 hour from one IP. If 0 disable rate-limit. (default: 200)")
+	println("  -new-pastes-per-5min    Maximum number of pastes that can be CREATED in 5 minutes from one IP. If 0 disable rate-limit. (default: 15)")
+	println("  -new-pastes-per-15min   Maximum number of pastes that can be CREATED in 15 minutes from one IP. If 0 disable rate-limit. (default: 30)")
+	println("  -new-pastes-per-1hour   Maximum number of pastes that can be CREATED in 1 hour from one IP. If 0 disable rate-limit. (default: 40)")
 	println("  -server-about           Path to the TXT file that contains the server description.")
 	println("  -server-rules           Path to the TXT file that contains the server rules.")
 	println("  -server-terms           Path to the TXT file that contains the server terms of use.")
@@ -191,6 +194,9 @@ func main() {
 	flagTitleMaxLen := flag.Int("title-max-length", 100, "")
 	flagBodyMaxLen := flag.Int("body-max-length", 20000, "")
 	flagMaxLifetime := flag.String("max-paste-lifetime", "unlimited", "")
+	flagGetPastesPer5Min := flag.Uint("get-pastes-per-5min", 50, "")
+	flagGetPastesPer15Min := flag.Uint("get-pastes-per-15min", 100, "")
+	flagGetPastesPer1Hour := flag.Uint("get-pastes-per-1hour", 200, "")
 	flagNewPastesPer5Min := flag.Uint("new-pastes-per-5min", 15, "")
 	flagNewPastesPer15Min := flag.Uint("new-pastes-per-15min", 30, "")
 	flagNewPastesPer1Hour := flag.Uint("new-pastes-per-1hour", 40, "")
@@ -292,6 +298,7 @@ func main() {
 
 	cfg := config.Config{
 		Log:               log,
+		RateLimitGet:      netshare.NewRateLimitSystem(*flagGetPastesPer5Min, *flagGetPastesPer15Min, *flagGetPastesPer1Hour),
 		RateLimitNew:      netshare.NewRateLimitSystem(*flagNewPastesPer5Min, *flagNewPastesPer15Min, *flagNewPastesPer1Hour),
 		Version:           Version,
 		TitleMaxLen:       *flagTitleMaxLen,

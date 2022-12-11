@@ -27,6 +27,13 @@ import (
 
 // GET /api/v1/get
 func (data *Data) GetHand(rw http.ResponseWriter, req *http.Request) {
+	// Check rate limit
+	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	if err != nil {
+		data.writeError(rw, req, err)
+		return
+	}
+
 	// Log request
 	data.Log.HttpRequest(req)
 

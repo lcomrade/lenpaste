@@ -75,11 +75,12 @@ type rateLimitIP struct {
 
 func NewRateLimit(rateLimitPeriod int, limitCount uint) *RateLimit {
 	rateLimit := &RateLimit{
-		limitCount: limitCount,
-		list:       make(map[string]rateLimitIP),
+		limitPeriod: rateLimitPeriod,
+		limitCount:  limitCount,
+		list:        make(map[string]rateLimitIP),
 	}
 
-	rateLimit.runWorker()
+	go rateLimit.runWorker()
 
 	return rateLimit
 }
@@ -117,7 +118,7 @@ func (rateLimit *RateLimit) CheckAndUse(ip net.IP) int64 {
 	// If last use time out
 	if rateLimit.list[ipStr].UseTime+int64(rateLimit.limitPeriod) <= timeNow {
 		rateLimit.list[ipStr] = rateLimitIP{
-			UseTime:  time.Now().Unix(),
+			UseTime:  timeNow,
 			UseCount: 1,
 		}
 
@@ -125,7 +126,7 @@ func (rateLimit *RateLimit) CheckAndUse(ip net.IP) int64 {
 
 		// Else
 	} else {
-		if rateLimit.list[ipStr].UseCount <= rateLimit.limitCount {
+		if rateLimit.list[ipStr].UseCount < rateLimit.limitCount {
 			tmp := rateLimit.list[ipStr]
 			tmp.UseCount = tmp.UseCount + 1
 			rateLimit.list[ipStr] = tmp

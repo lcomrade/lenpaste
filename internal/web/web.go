@@ -37,6 +37,7 @@ type Data struct {
 	Log logger.Logger
 
 	RateLimitNew *netshare.RateLimitSystem
+	RateLimitGet *netshare.RateLimitSystem
 
 	Lexers      *[]string
 	Locales     Locales
@@ -96,7 +97,9 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	// Setup base info
 	data.DB = db
 	data.Log = cfg.Log
+
 	data.RateLimitNew = cfg.RateLimitNew
+	data.RateLimitGet = cfg.RateLimitGet
 
 	data.Version = &cfg.Version
 
