@@ -22,7 +22,7 @@ So you can build your own image to run on an officially unsupported architecture
 On Debian/Ubuntu:
 ```
 sudo apt update
-sudo apt -y install git docker docker.io
+sudo apt -y install git docker.io
 git clone https://git.lcomrade.su/root/lenpaste.git
 cd ./lenpaste/
 git checkout vX.X
