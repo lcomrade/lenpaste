@@ -40,24 +40,38 @@ services:
     restart: always
     environment:
       # All parameters are optional
+      #
+      # HTTP server
       - LENPASTE_ADDRESS=:80                  # ADDRES:PORT for HTTP server.
+      #
+      # Database settings
       - LENPASTE_DB_DRIVER=sqlite3            # Currently supported drivers: 'sqlite3' and 'postgres'.
       - LENPASTE_DB_SOURCE=/data/lenpaste.db  # DB source.
       - LENPASTE_DB_MAX_OPEN_CONNS=25         # Maximum number of connections to the database.
       - LENPASTE_DB_MAX_IDLE_CONNS=5          # Maximum number of idle connections to the database.
       - LENPASTE_DB_CLEANUP_PERIOD=3h         # Interval at which the DB is cleared of expired but not yet deleted pastes.
+      #
+      # Search engines
       - LENPASTE_ROBOTS_DISALLOW=false        # Prohibits search engine crawlers from indexing site using robots.txt file.
+      #
+      # Storage limits
       - LENPASTE_TITLE_MAX_LENGTH=100         # Maximum length of the paste title. If 0 disable title, if -1 disable length limit.
       - LENPASTE_BODY_MAX_LENGTH=20000        # Maximum length of the paste body. If -1 disable length limit. Can't be -1.
       - LENPASTE_MAX_PASTE_LIFETIME=unlimited # Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 7w, 30d, 365d.
+      #
+      # Rate limits
       - LENPASTE_GET_PASTES_PER_5MIN=50       # Maximum number of pastes that can be VIEWED in 5 minutes from one IP. If 0 disable rate-limit.
       - LENPASTE_GET_PASTES_PER_15MIN=100     # Maximum number of pastes that can be VIEWED in 15 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_GET_PASTES_PER_1HOUR=200     # Maximum number of pastes that can be VIEWED in 1 hour from one IP. If 0 disable rate-limit.
+      - LENPASTE_GET_PASTES_PER_1HOUR=500     # Maximum number of pastes that can be VIEWED in 1 hour from one IP. If 0 disable rate-limit.
       - LENPASTE_NEW_PASTES_PER_5MIN=15       # Maximum number of pastes that can be CREATED in 5 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_NEW_PASTES_PER_15MIN=15      # Maximum number of pastes that can be CREATED in 15 minutes from one IP. If 0 disable rate-limit.
+      - LENPASTE_NEW_PASTES_PER_15MIN=30      # Maximum number of pastes that can be CREATED in 15 minutes from one IP. If 0 disable rate-limit.
       - LENPASTE_NEW_PASTES_PER_1HOUR=40      # Maximum number of pastes that can be CREATED in 1 hour from one IP. If 0 disable rate-limit.
+      #
+      # Information about server admin
       - LENPASTE_ADMIN_NAME=                  # Name of the administrator of this server.
       - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
+      #
+      # WEB interface settings
       - LENPASTE_UI_DEFAULT_LIFETIME=         # Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.
       - LENPASTE_UI_DEFAULT_THEME=dark        # Sets the default theme for the WEB interface. Examples: dark, light.
     volumes:
@@ -84,44 +98,8 @@ TIP: If you want to install updates, run: `docker-compose pull && docker-compose
 
 
 
-## Build from source code
-On Debian/Ubuntu:
-```
-sudo apt update
-sudo apt -y install git make gcc golang
-git clone https://git.lcomrade.su/root/lenpaste.git
-cd ./lenpaste/
-make
-```
-
-You can find the result of the build in the `./dist/` directory.
-
-
-
-## Build Docker image
-**Why is it necessary?**
-An official image may not support your architecture e.g. MIPS, PowerPC, etc.
-So you can build your own image to run on an officially unsupported architecture
-(of course you have to rebuild it every time you update Lenpaste).
-
-On Debian/Ubuntu:
-```
-sudo apt update
-sudo apt -y install git docker docker.io
-git clone https://git.lcomrade.su/root/lenpaste.git
-cd ./lenpaste/
-git checkout vX.X
-sudo docker build -t localhost/lenpaste:latest ./
-```
-
-The `localhost/lenpaste:latest` image should now have appeared on your local machine.
-You can use it in `docker-compose.yml` or copy it to another machine.
-
-
-
 ## Other documentation
 For all:
-- [Roadmap for new release](ROADMAP.md)
 - [Frequently Asked Questions](FAQ.md)
 
 For instance administrators:
@@ -130,8 +108,14 @@ For instance administrators:
 - [Rate limiting](docs/ratelimits.md)
 - [Add Lenpaste to Search Engines](docs/search_engines.md)
 - [Make Lenpaste server private](docs/private_server.md)
+- [Themes for WEB interface](docs/themes.md)
 
-For developers:
+For contributors:
+- [Build (Docker and bare metal)](docs/build.md)
+- [Translate on Crowdin](https://crowdin.com/project/lenpaste)
+- [Themes for WEB interface](docs/themes.md)
+
+Lenpaste API:
 - [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
 - [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
 
