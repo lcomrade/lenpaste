@@ -11,9 +11,19 @@ pipeline:
       project_id: 553341
       target: download
       download_to: internal/web/data/locale/
-      #download_skip_untranslated_strings: true
-      download_skip_untranslated_files: true
+      download_skip_untranslated_strings: true
+      #download_skip_untranslated_files: true
       #download_export_approved_only: false
+    when:
+      event: cron
+
+  prepare:
+    image: alpine
+    pull: true
+    commands:
+      - chmod +x ./tools/localefmt.sh
+      - ./tools/localefmt.sh --version
+      - ./tools/localefmt.sh --rm-empty $(find ./ -type f -name "*.locale")
     when:
       event: cron
 
