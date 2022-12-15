@@ -19,7 +19,14 @@ error.BackToHome=হোমপেজে ফেরত চলুন
 main.AuthRequired=এটি একটি ব্যক্তিগত সার্ভার এবং এটি ব্যবহার করার জন্য অনুমোদন প্রয়োজন। বিস্তারিত জানার জন্য সার্ভার প্রশাসকের সাথে যোগাযোগ করুন
 main.CreatePaste=পেস্ট তৈরি করুন
 main.EnterTitle=শিরোনাম (ঐচ্ছিক)
+main.Author=পেস্ট অধিকারীর নাম
+main.AuthorPlaceholder=নাম
+main.AuthorEmail=পেস্ট অধিকারীর ইমেল
+main.AuthorEmailPlaceholder=me@example.org
+main.AuthorURL=পেস্ট অধিকারীর URL
+main.Create=নতুন পেস্ট তৈরি করুন
 
+historyJS.History=পেস্টের ইতিহাস
 
 
 
