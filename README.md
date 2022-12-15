@@ -16,7 +16,7 @@
 | [paste.lcomrade.su](https://paste.lcomrade.su)     | Server managed by the Lenpaste developer.                                                                         |
 | [code.dbt3ch.com](https://code.dbt3ch.com)         | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
 | [notepad.co.il](https://notepad.co.il)             | Server managed by Shlomi Porush. He reported the bug and made some suggestions.                                   |
-| [lenp.pardesicat.xyz](https://lenp.pardesicat.xyz) | Server managed by Pardesi_Cat. He helped correct the documentation.                                               |
+| [lenp.pardesicat.xyz](https://lenp.pardesicat.xyz) | Server managed by Pardesi_Cat. He translated Lenpaste into Bengali and helped correct the documentation.          |
 
 Find more public servers here or add your own: https://monitor.lcomrade.su/?srv=lenpaste
 

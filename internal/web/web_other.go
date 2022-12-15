@@ -110,7 +110,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "<li>Leonid Maslakov &lt<a href=\"mailto:root@lcomrade.su\">root@lcomrade.su</a>&gt - Core Developer.</li>") == false {
+	if strings.Contains(string(tmp), "<li>Leonid Maslakov (aka lcomrade) &lt<a href=\"mailto:root@lcomrade.su\">root@lcomrade.su</a>&gt - Core Developer.</li>") == false {
 		println(resp)
 		os.Exit(1)
 	}
