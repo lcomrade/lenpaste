@@ -71,7 +71,21 @@ if [ -n "$LENPASTE_MAX_PASTE_LIFETIME" ]; then
 	RUN_CMD="$RUN_CMD -max-paste-lifetime '$LENPASTE_MAX_PASTE_LIFETIME'"
 fi
 
-# Rate limits
+# Rate limits to get
+if [ -n "$LENPASTE_GET_PASTES_PER_5MIN" ]; then
+	RUN_CMD="$RUN_CMD -get-pastes-per-5min '$LENPASTE_GET_PASTES_PER_5MIN'"
+fi
+
+if [ -n "$LENPASTE_GET_PASTES_PER_15MIN" ]; then
+	RUN_CMD="$RUN_CMD -get-pastes-per-15min '$LENPASTE_GET_PASTES_PER_15MIN'"
+fi
+
+if [ -n "$LENPASTE_GET_PASTES_PER_1HOUR" ]; then
+	RUN_CMD="$RUN_CMD -get-pastes-per-1hour '$LENPASTE_GET_PASTES_PER_1HOUR'"
+fi
+
+
+# Rate limits to create
 if [ -n "$LENPASTE_NEW_PASTES_PER_5MIN" ]; then
 	RUN_CMD="$RUN_CMD -new-pastes-per-5min '$LENPASTE_NEW_PASTES_PER_5MIN'"
 fi
@@ -83,6 +97,7 @@ fi
 if [ -n "$LENPASTE_NEW_PASTES_PER_1HOUR" ]; then
 	RUN_CMD="$RUN_CMD -new-pastes-per-1hour '$LENPASTE_NEW_PASTES_PER_1HOUR'"
 fi
+
 
 
 # Server about
