@@ -41,5 +41,28 @@ historyJS.History=পেস্টের ইতিহাস
 
 
 
+docsAPIv1.ResponseExample=প্রতিক্রিয়ার উদাহরণ:
+docsAPIv1.PossibleAPIErrors=সম্ভভব API ত্রটি
+docsAPIv1.Error400=এই API পদ্ধতি সার্ভারে বিদ্ধমান, কিন্তু আপনি ভুল আর্গুমেন্ট পাশ করেছেন।
+docsAPIv1.Error401=এই সার্ভারের জন্য "HTTP বেসিক Authentication" অনুমোদন প্রয়োজন৷
+docsAPIv1.Error404n1=এই আইডি দিয়ে কোনরকম পেস্ট ডকুমেন্ট উপলব্ধ নেই
+docsAPIv1.Error404n2=এখানে API এর এরকম কোন ব্যবহার পদ্ধতি নেই।
+docsAPIv1.Error405=আপনি HTTP এর সাথে একটি ভুল পদ্ধতি অনুরোধ করেছেন (উদাহরণ: আপনি GET এর পরিবর্তে POST পদ্ধতি অনুরোধ করেছেন)।
+docsAPIv1.Error413=আপনি এখানকার একটি অথবা বাকি ফিল্ডগুলির সর্বোচ্চ মাত্রা অতিক্রম করে ফেলেছেন
+docsAPIv1.Error429=আপনি একসঙ্গে অনেক রিকুয়েস্ট পাঠিয়েছেন, কিছুক্ষণ পর আবার চেষ্টা করুন
+docsAPIv1.Error500=দুঃখিত সার্ভারে ত্রুটি দেখা গিয়েছে । সার্ভার মালিককে ত্রুটি সম্বন্ধে জানান
 
+docsAPIv1Libs.Title=API এর সাথে কাজ করার জন্য লাইব্রেরিগুলি হল
+docsAPIv1Libs.Recommended=প্রস্তাবিত
+docsAPIv1Libs.Name=নাম
+docsAPIv1Libs.Language=ভাষা
+docsAPIv1Libs.ApiVersion=API ভার্সন
+docsAPIv1Libs.Status=স্ট্যাটাস
+docsAPIv1Libs.StatusOfficial=অফিশিয়াল
+docsAPIv1Libs.StatusUnofficial=অফিসিয়াল নয়
+docsAPIv1Libs.License=লাইসেন্স
+docsAPIv1Libs.GPL3Later=GPL 3.0 এবং তারপরের ভার্সন
+docsAPIv1Libs.OutOfDateTitle=পুরনো অযোগ্য হয়ে গেছে
+docsAPIv1Libs.OutOfDataMessage=এই লাইব্রেরিগুলো আর আপডেটেড নয় , এর মানে হল যে তারা লেনপেস্ট API v1.0 এবং তার
+পরের নতুন আপডেট গুলি ব্যবহার করতে পারবে না
 
