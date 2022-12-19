@@ -19,18 +19,56 @@ error.BackToHome=হোমপেজে ফেরত চলুন
 main.AuthRequired=এটি একটি ব্যক্তিগত সার্ভার এবং এটি ব্যবহার করার জন্য অনুমোদন প্রয়োজন। বিস্তারিত জানার জন্য সার্ভার প্রশাসকের সাথে যোগাযোগ করুন
 main.CreatePaste=পেস্ট তৈরি করুন
 main.EnterTitle=শিরোনাম (ঐচ্ছিক)
+main.EnterText=আপনার টেক্সট বাহ পেস্টটি লিখুন
+main.MaximumSymbols=সর্বোচ্চ %d সিম্বল্লস
+main.BurnAfterReading=পড়ার পরে তক্ষনাত মুছে ফেলুন
+main.Expiration=মেয়াদ শেষ হওয়া সময়:
+main.Never=কখনই না
+main.10Minutes=১০ মিনিট
+main.30Minutes=৩০ মিনিট
+main.1Hour=১ ঘণ্টা
+main.2Hour=২ ঘণ্টা
+main.4Hour=৪ ঘণ্টা
+main.12Hour=১২ ঘণ্টা
+main.1Day=১ দিন
+main.1Week=১ সপ্তাহ
+main.2Weeks=২ সপ্তাহ
+main.1Month=১ মাস
+main.2Months=২ মাস
+main.6Months=৬ মাস
+main.1Year=১ বছর
+main.AdvancedParameters=আরও প্যারামিটার যোগ করুন
 main.Author=পেস্ট অধিকারীর নাম
 main.AuthorPlaceholder=নাম
 main.AuthorEmail=পেস্ট অধিকারীর ইমেল
 main.AuthorEmailPlaceholder=me@example.org
 main.AuthorURL=পেস্ট অধিকারীর URL
+main.AdvancedParametersHelp="আপনি  <a href=\"%s\" target=\"_blank\">settings</a>.এ এই ডিফল্ট প্যারামিটার গুলি পার্মানেন্ট সেট করতে পারেন"
 main.Create=নতুন পেস্ট তৈরি করুন
+main.AcceptTerms="<a href=\"%s\" target=\"_blank\">ব্যবহারের শর্তাবলী দেখুন</a>"
 
 historyJS.History=পেস্টের ইতিহাস
+historyJS.Error=HTTP : %d %s
+historyJS.ErrorUnknown=অজানা ত্রুটি: %s
+historyJS.LocalStorageNotSupported1=আপনার ব্রাউজার এ JavaScript করে না, তাই ইতিহাস সংরক্ষণ ফাংশন নিষ্ক্রিয় করা হয়েছে।
+historyJS.LocalStorageNotSupported2=আপনি যদি Safari ব্যবহার করেন, প্রাইভেট ব্রাউজিং মোড থেকে বেরিয়ে আসার চেষ্টা করুন, এটি ত্রুটিটি ঠিক করবে।
+historyJS.EnableHistory=আগের ইতিহাস মনে রাখতে চান
+historyJS.HistoryEnabledAlert=ইতিহাস সংরক্ষণ সক্ষম করা হয়েছে৷
+historyJS.HistoryDisabledAlert=ইতিহাস সংরক্ষণ অক্ষম করা হয়েছে ।
+historyJS.ClearHistory=আগের ইতিহাস মুছে ফেলুন...
+historyJS.ClearHistoryConfirm=আপনি কি নিশ্চিত আপনি ইতিহাস মুছে করতে চান?
+historyJS.Untitled=নামহীন
+
+codeJS.Paste=কপি করুন
+
+settings.Title=সেটিংস
+settings.Language=ভাষা:
+settings.Theme=থিম বাছুন:
+settings.LanguageDefault=ব্রাউজার ভাষটি ব্যাবহার করুন
+settings.Save=সেটিংস গুলো শেভ করুন
 
 
-
-
+pasteJS.ShortWeekDay="\"রবিবার\", \"সোমবার\", \"মঙ্গলবার\", \"বুধবার\", \"বৃহস্পতিবার\", \"শুক্রবার\", \"শনিবার\"."
 
 
 
