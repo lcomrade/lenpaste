@@ -67,18 +67,62 @@ settings.Theme=থিম বাছুন:
 settings.LanguageDefault=ব্রাউজার ভাষটি ব্যাবহার করুন
 settings.Save=সেটিংস গুলো শেভ করুন
 
+paste.Download=ডাউনলোড
+paste.Embedded=এমবেডে হয়ে গেছে
+paste.Author=লেখক
+paste.Created=তৈরি হয়ে গেছে
+paste.Expires=সমাপ্তি হয়ে গেছে
+paste.Now=এখন
+paste.Never=কখনই না
 
 pasteJS.ShortWeekDay="\"রবিবার\", \"সোমবার\", \"মঙ্গলবার\", \"বুধবার\", \"বৃহস্পতিবার\", \"শুক্রবার\", \"শনিবার\"."
+pasteJS.ShortMonth="\"জানুয়ারি\", \"ফেব্রুয়ারি\", \"মার্চ\", \"এপ্রিল\", \"মে\", \"জুন\", \"জুলাই\", \"আগস্ট\", ‘সেপ্টেম্বর’, ‘অক্টোবর’, ‘নভেম্বর’, ‘ডিসেম্বর’।"
+
+pasteContinue.Continue=এগিয়ে যান
+pasteContinue.Message=আপনি নিশ্চিত?, এই পেস্টটি একটিবারই দেখা যাবে তারপর মুছে যাবে
+pasteContinue.Cancel=বাতিল করুন
+
+pasteEmbHelp.Title=এমবেডেড হয়ে গেছে
+pasteEmbHelp.OneUseError=আপনি পেস্টটিকে অন্য পৃষ্ঠায় এম্বেড করতে পারবেন না যদি এটি একবার পড়ার উদ্দেশ্যে হয় এবং সীমিত সময়ের জন্য মেয়াদ থাকে।
+pasteEmbHelp.Message=পেজে নিম্নলিখিত কোড যোগ করুন:
+
+pasteEmd.Error=ত্রুটি দেখা গিয়েছে
+pasteEmb.ErrorCouldNotEmb=এই পেস্টটি অন্য পেজে এম্বেড করা যাবে না
+pasteEmd.ErrorNotFound=404 পাওয়া যায়নি
+
+about.Title=তথ্য
+about.AboutServerTitle=এই সার্ভার সম্পর্কিত তথ্য
+
+about.RulesTitle=সার্ভার এর নিয়মকানুন
+about.LimitLifeTimeNo=এই পেস্টের মেয়াদ চিরকাল থাকবে।
+about.Lenpaste3=এই ওয়েবসাইট আপনাকে কোনরকম cookies স্তাপন করে ট্র্যাক করেনা।
+about.Lenpaste4=এক ওয়েবসাইট JavaScript ছাড়াও কাজ করে।
+about.Lenpaste5="লেনপেস্ট এর নিজস্ব  <a href=\"%s\">API</a> আছে।"
+about.LenpasteAuthors="<a href=\"%s\"> লেনপেস্ট এ যোগদানকারি কর্মকর্তাদের সম্বন্ধে জানুন.</a>"
 
 
 
+sourceCode.Message=দুঃখিত, Source Code গুলি এই সার্ভার থেকে সরাসরি  ডাউনলোড করা সম্ভব নয়। তবে আপনি লিঙ্ক গুলি থেকে এটি ডাউনলোড করতে পারেন:
 
+license.LicenseTitle=লাইসেন্স
 
+docs.Title=ডকুমেন্টস
 
-
-
-
-
+docsAPIv1.Title=API v1
+docsAPIv1.TableOfContent=সূচীপত্র গুলি
+docsAPIv1.RequestParameters=প্যারামিটারের রিকুয়েস্ট গুলি
+docsAPIv1.Field=Field
+docsAPIv1.Required=অতি অবশ্যই থাকতে হবে
+docsAPIv1.RequiredYes=হা
+docsAPIv1.Default=ডিফল্ট
+docsAPIv1.Description=সম্পর্কিত বর্ণনা
+docsAPIv1.NewPasteAuth=আপনি যদি একটি ব্যক্তিগত সার্ভার ব্যবহার করেন তবে "HTTP Basic Authentication" ব্যবহার করে  কানেক্ট করুন। অন্যথায় আপনি  401নাম্বার ত্রুটি পাবেন।
+docsAPIv1.ReqNewTitle=পেস্ট এর শিরোনাম।
+docsAPIv1.ReqNewBody=টেক্সট পেস্ট করুন
+docsAPIv1.ReqNewAuthor=লেখক এর  নাম. %d অক্ষরের বেশি হলে হবে না।
+docsAPIv1.ReqNewAuthorEmail=লেখক এর ইমেল. %d অক্ষরের বেশি হলে হবে না।
+docsAPIv1.ReqNewAuthorURL=লেখক এর URL. %d অক্ষরের বেশি হলে হবে না।
+docsAPIv1.ReqGetID=পেস্ট ডকুমেন্ট এর আইডি
 docsAPIv1.ResponseExample=প্রতিক্রিয়ার উদাহরণ:
 docsAPIv1.PossibleAPIErrors=সম্ভভব API ত্রটি
 docsAPIv1.Error400=এই API পদ্ধতি সার্ভারে বিদ্ধমান, কিন্তু আপনি ভুল আর্গুমেন্ট পাশ করেছেন।
