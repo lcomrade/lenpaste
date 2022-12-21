@@ -67,6 +67,7 @@ settings.Theme=থিম বাছুন:
 settings.LanguageDefault=ব্রাউজার ভাষটি ব্যাবহার করুন
 settings.Save=সেটিংস গুলো শেভ করুন
 
+paste.Raw=র'পেস্ট
 paste.Download=ডাউনলোড
 paste.Embedded=এমবেডে হয়ে গেছে
 paste.Author=লেখক
@@ -94,7 +95,20 @@ about.Title=তথ্য
 about.AboutServerTitle=এই সার্ভার সম্পর্কিত তথ্য
 
 about.RulesTitle=সার্ভার এর নিয়মকানুন
+about.Limit=লিমিট
+about.LimitTitle=সর্বোচ্চ শিরোনামের দৈর্ঘ্য: <code>%d</code> অক্ষরের।
+about.LimitTitleNo=শিরোনামের দৈর্ঘ্যের কোন সীমা নেই।
+about.LimitTitleDisable=এই সার্ভারে, আপনি পেস্টের জন্য কোনও শিরোনাম সেট করতে পারবেন না।
+about.LimitBody=পেস্টের সর্বোচ্চ দৈর্ঘ্য: <code>%d</code> সিম্বলের।
+about.LimitBodyNo=পেস্টের দৈর্ঘ্য সীমাহীন।
+about.LimitLifeTime=পেস্টের সর্বোচ্চ জীবনকাল: <code>%d</code> সেকেন্ডের।
 about.LimitLifeTimeNo=এই পেস্টের মেয়াদ চিরকাল থাকবে।
+about.AdminTitle=মালিকের সাথে যোগাযোগ করুন
+about.AdminName=প্রশাসকের নাম:
+about.AdminEmail=প্রশাসকের ইমেল:
+about.LenpasteTitle=লেনপেস্ট আসলে কি?
+
+about.LenpasteMessage=এই সার্ভারটি লেনপেসট এর  <code>%s</code>. এই ভার্সন ব্যবহার করছে। তার সম্বন্ধে স্বল্পকিছু তথ্য নিচে
 about.Lenpaste3=এই ওয়েবসাইট আপনাকে কোনরকম cookies স্তাপন করে ট্র্যাক করেনা।
 about.Lenpaste4=এক ওয়েবসাইট JavaScript ছাড়াও কাজ করে।
 about.Lenpaste5="লেনপেস্ট এর নিজস্ব  <a href=\"%s\">API</a> আছে।"
@@ -119,6 +133,9 @@ docsAPIv1.Description=সম্পর্কিত বর্ণনা
 docsAPIv1.NewPasteAuth=আপনি যদি একটি ব্যক্তিগত সার্ভার ব্যবহার করেন তবে "HTTP Basic Authentication" ব্যবহার করে  কানেক্ট করুন। অন্যথায় আপনি  401নাম্বার ত্রুটি পাবেন।
 docsAPIv1.ReqNewTitle=পেস্ট এর শিরোনাম।
 docsAPIv1.ReqNewBody=টেক্সট পেস্ট করুন
+docsAPIv1.ReqNewLineEnd=উদ্ধৃতির পাঠ্যের লাইন শেষ স্বয়ংক্রিয়ভাবে এই প্যারামিটার দ্বারা নির্দিষ্ট একটি দ্বারা প্রতিস্থাপিত হবে।\
+<code>LF</code>, <code>CRLF</code> বা <code>CR</code> হতে পারে।
+docsAPIv1.ReqNewSyntax="পেস্টে Syntax Highlighting । উপলব্ধ Syntax এর একটি তালিকা <a href=\"%s\"><code>getServerInfo</code></a> পদ্ধতি ব্যবহার করে প্রাপ্ত করা যেতে পারে।"
 docsAPIv1.ReqNewAuthor=লেখক এর  নাম. %d অক্ষরের বেশি হলে হবে না।
 docsAPIv1.ReqNewAuthorEmail=লেখক এর ইমেল. %d অক্ষরের বেশি হলে হবে না।
 docsAPIv1.ReqNewAuthorURL=লেখক এর URL. %d অক্ষরের বেশি হলে হবে না।
