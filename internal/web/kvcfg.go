@@ -37,6 +37,10 @@ func readKVCfg(data string) (map[string]string, error) {
 			continue
 		}
 
+		if strings.HasPrefix(str, "[") && strings.HasSuffix(str, "]") {
+			continue
+		}
+
 		strSplit := strings.SplitN(str, "=", 2)
 		if len(strSplit) != 2 {
 			return out, errors.New("error in line " + strconv.Itoa(num+1) + ": expected '=' delimiter")
@@ -57,6 +61,11 @@ func readKVCfg(data string) (map[string]string, error) {
 					break
 				}
 			}
+		}
+
+		_, exist := out[key]
+		if exist {
+			return out, errors.New("duplicate key: " + key)
 		}
 
 		out[key] = val

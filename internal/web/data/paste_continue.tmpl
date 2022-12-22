@@ -21,7 +21,7 @@
 {{define "titlePrefix"}}{{.ID}} | {{end}}
 {{define "headAppend"}}{{end}}
 {{define "article"}}
-<h3>{{ call .Translate `pasteContinue.Continue` }}</h3>
+<h3>{{ call .Translate `pasteContinue.Title` }}</h3>
 <p>{{ call .Translate `pasteContinue.Message` }}</p>
 <div class="button-block-right">
 	<form action="/" method="get">

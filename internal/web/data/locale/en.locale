@@ -1,3 +1,5 @@
+[locale]
+
 locale.Name = English
 
 base.Lenpaste = Lenpaste
@@ -82,7 +84,7 @@ paste.Never    = Never
 pasteJS.ShortWeekDay = "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
 pasteJS.ShortMonth   = "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 
-pasteContinue.Continue = Continue?
+pasteContinue.Title    = Continue?
 pasteContinue.Message  = This paste can only be viewed once, after which it will be deleted. Continue?
 pasteContinue.Cancel   = Cancel
 pasteContinue.Continue = Continue
