@@ -128,19 +128,20 @@ Might be interesting:
 
 ## Contribute
 What can I do?
-- Translate Lenpaste to you Language: [Crowdin.com/Lenpaste](https://crwd.in/lenpaste)
-  If you want to add a language that is not on the list, then write to me: root@lcomrade.su
+- Translate Lenpaste to you Language: [Codeberg Weblate/Lenpaste](https://translate.codeberg.org/projects/lenpaste/)
 - Write an article (DevTo, Medium, your website, and so on) or make a video (YouTube, PeerTube, and so on).
   A link to your article/video will be included in this README.
 - Create or update a package:
 	- Create NixOS package.
 	- Update TrueCharts package.
 	- Other.
-- Install the Lenpaste server. And add it to [Lenmonitor](https://monitor.lcomrade.su/).
-- Recommend Lenpaste to your friends
+- Install the Lenpaste server and add it to [Lenmonitor](https://monitor.lcomrade.su/).
+- Recommend Lenpaste to your friends.
 
-Contacts:
-- Join to Matrix room: [`#lenpaste:lcomrade.su`](https://matrix.to/#/#lenpaste:lcomrade.su)
+
+
+## Contacts
+- Matrix room: [`#lenpaste:lcomrade.su`](https://matrix.to/#/#lenpaste:lcomrade.su)
 - Contact me: Leonid Maslakov <root@lcomrade.su>
 
 
