@@ -19,8 +19,8 @@
 package web
 
 import (
-	"bytes"
 	"embed"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -53,22 +53,21 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 		}
 
 		fileName := fileInfo.Name()
-		if strings.HasSuffix(fileName, ".locale") == false {
+		if strings.HasSuffix(fileName, ".json") == false {
 			continue
 		}
-		localeCode := fileName[:len(fileName)-7]
+		localeCode := fileName[:len(fileName)-5]
 
-		// Read file
+		// Open and read file
 		filePath := filepath.Join(localeDir, fileName)
-		fileByte, err := f.ReadFile(filePath)
+		file, err := f.Open(filePath)
 		if err != nil {
 			return nil, nil, errors.New("web: failed open file '" + filePath + "': " + err.Error())
 		}
+		defer file.Close()
 
-		fileStr := bytes.NewBuffer(fileByte).String()
-
-		// Load locale
-		locale, err := readKVCfg(fileStr)
+		var locale Locale
+		err = json.NewDecoder(file).Decode(&locale)
 		if err != nil {
 			return nil, nil, errors.New("web: failed read file '" + filePath + "': " + err.Error())
 		}
