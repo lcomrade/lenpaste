@@ -26,7 +26,7 @@ Find more public servers here or add your own: https://monitor.lcomrade.su/?srv=
 ## Launch your own server
 1. If you don't already have Docker installed, do so:
 ```
-apt-get install -y docker docker.io docker-compose
+apt-get install -y docker.io docker-compose
 ```
 
 2. Use a file like this `docker-compose.yml`:
