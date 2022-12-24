@@ -3,6 +3,7 @@
 
 ## Features
 - No need to register
+- Supports multiple languages
 - Uses cookies only to store settings
 - Can work without JavaScript
 - Has its own API
@@ -112,7 +113,7 @@ For instance administrators:
 
 For contributors:
 - [Build (Docker and bare metal)](docs/build.md)
-- [Translate on Crowdin](https://crowdin.com/project/lenpaste)
+- [Translate on Codeberg Weblate](https://translate.codeberg.org/projects/lenpaste/)
 - [Themes for WEB interface](docs/themes.md)
 
 Lenpaste API:
@@ -142,7 +143,7 @@ What can I do?
 
 ## Contacts
 - Matrix room: [`#lenpaste:lcomrade.su`](https://matrix.to/#/#lenpaste:lcomrade.su)
-- Contact me: Leonid Maslakov <root@lcomrade.su>
+- Contact me: Leonid Maslakov \<root@lcomrade.su\>
 
 
 
