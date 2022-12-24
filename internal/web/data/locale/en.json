@@ -59,6 +59,8 @@
 	"docsAPIv1.ResponseExample": "Response example:",
 	"docsAPIv1.TableOfContent": "Table of content",
 	"docsAPIv1.Title": "API v1",
+	"docsAPIv1.Introduction1": "The Lenpaste API does not require registration to use it.",
+	"docsAPIv1.Introduction2": "Any POST request to the API is sent in <code>application/x-www-form-urlencoded</code> format. Similarly, the API always returns a response to any request in the format <code>application/json</code> and UTF8 encoding.",
 	"docsAPIv1Libs.ApiVersion": "API version",
 	"docsAPIv1Libs.GPL3Later": "GPL 3.0 or later",
 	"docsAPIv1Libs.Language": "Language",
