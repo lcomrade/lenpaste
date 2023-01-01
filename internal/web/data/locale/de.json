@@ -1,1 +1,7 @@
-{}
+{
+    "sourceCode.Message": "Leider ist es noch nicht möglich, den Quellcode direkt von diesem Server herunterzuladen. Sie können ihn aber über den Link herunterladen:",
+    "pasteEmbHelp.OneUseError": "Sie können die Paste nicht in eine andere Seite einbetten, wenn sie nur einmal gelesen werden soll oder eine begrenzte Gültigkeitsdauer hat.",
+    "docsAPIv1.NewPasteAuth": "Wenn Sie einen privaten Server verwenden, authentifizieren Sie sich mit \"HTTP Basic Authentication\". Andernfalls erhalten Sie einen 401-Fehler.",
+    "docsAPIv1Libs.OutOfDataMessage": "Diese Bibliotheken werden nicht mehr aktualisiert. Dies bedeutet, dass sie die Lenpaste-API v1.0 und höher nicht verwenden können.",
+    "main.AuthRequired": "Dies ist ein privater Server, für dessen Nutzung eine Genehmigung erforderlich ist. Bitte kontaktieren Sie den Server-Administrator für weitere Informationen."
+}
