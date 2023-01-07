@@ -1,4 +1,4 @@
-// Copyright (C) 2021-2022 Leonid Maslakov.
+// Copyright (C) 2021-2023 Leonid Maslakov.
 
 // This file is part of Lenpaste.
 
