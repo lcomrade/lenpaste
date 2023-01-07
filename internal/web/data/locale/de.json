@@ -1,4 +1,5 @@
 {
+	"locale.Name": "Deutsch",
     "sourceCode.Message": "Leider ist es noch nicht möglich, den Quellcode direkt von diesem Server herunterzuladen. Sie können ihn aber über den Link herunterladen:",
     "pasteEmbHelp.OneUseError": "Sie können die Paste nicht in eine andere Seite einbetten, wenn sie nur einmal gelesen werden soll oder eine begrenzte Gültigkeitsdauer hat.",
     "docsAPIv1.NewPasteAuth": "Wenn Sie einen privaten Server verwenden, authentifizieren Sie sich mit \"HTTP Basic Authentication\". Andernfalls erhalten Sie einen 401-Fehler.",
