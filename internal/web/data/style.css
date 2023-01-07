@@ -307,8 +307,25 @@ details {
 	margin-bottom: 10px;
 }
 
-summary {
+details summary {
 	cursor: pointer;
+}
+
+details summary::-webkit-details-marker {
+  display:none;
+}
+
+details summary {
+    list-style-type: none;
+	background-image: url("data:image/svg+xml,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 100,50 0,100' style='fill:{{call .Theme `color.SVG`}}'/></svg>");
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: 10px;
+	padding-left: 14px;
+}
+
+details[open] summary {
+	background-image: url("data:image/svg+xml,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 50,100 100,0' style='fill:{{call .Theme `color.SVG`}}'/></svg>");
 }
 
 table {
