@@ -26,21 +26,16 @@ import (
 )
 
 // GET /api/v1/get
-func (data *Data) GetHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) getHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
 	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
-
-	// Log request
-	data.Log.HttpRequest(req)
 
 	// Check method
 	if req.Method != "GET" {
-		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
-		return
+		return netshare.ErrMethodNotAllowed
 	}
 
 	// Get paste ID
@@ -50,15 +45,13 @@ func (data *Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Check paste id
 	if pasteID == "" {
-		data.writeError(rw, req, netshare.ErrBadRequest)
-		return
+		return netshare.ErrBadRequest
 	}
 
 	// Get paste
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
 
 	// If "one use" paste
@@ -67,8 +60,7 @@ func (data *Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 			// Delete paste
 			err = data.DB.PasteDelete(pasteID)
 			if err != nil {
-				data.writeError(rw, req, err)
-				return
+				return err
 			}
 
 		} else {
@@ -82,10 +74,5 @@ func (data *Data) GetHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Return response
 	rw.Header().Set("Content-Type", "application/json")
-
-	err = json.NewEncoder(rw).Encode(paste)
-	if err != nil {
-		data.Log.HttpError(req, err)
-		return
-	}
+	return json.NewEncoder(rw).Encode(paste)
 }

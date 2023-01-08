@@ -45,11 +45,7 @@ type aboutMinTmp struct {
 }
 
 // Pattern: /about
-func (data *Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
-	// Log request
-	data.Log.HttpRequest(req)
-
-	// Prepare data
+func (data *Data) aboutHand(rw http.ResponseWriter, req *http.Request) error {
 	dataTmpl := aboutTmpl{
 		Version:          *data.Version,
 		TitleMaxLen:      *data.TitleMaxLen,
@@ -64,53 +60,24 @@ func (data *Data) AboutHand(rw http.ResponseWriter, req *http.Request) {
 		Translate:        data.Locales.findLocale(req).translate,
 	}
 
-	// Show page
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	err := data.About.Execute(rw, dataTmpl)
-	if err != nil {
-		data.writeError(rw, req, err)
-	}
+	return data.About.Execute(rw, dataTmpl)
 }
 
 // Pattern: /about/authors
-func (data *Data) AuthorsHand(rw http.ResponseWriter, req *http.Request) {
-	// Log request
-	data.Log.HttpRequest(req)
-
-	// Show page
+func (data *Data) authorsHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	err := data.Authors.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
-	if err != nil {
-		data.writeError(rw, req, err)
-	}
+	return data.Authors.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 }
 
 // Pattern: /about/license
-func (data *Data) LicenseHand(rw http.ResponseWriter, req *http.Request) {
-	// Log request
-	data.Log.HttpRequest(req)
-
-	// Show page
+func (data *Data) licenseHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	err := data.License.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
-	if err != nil {
-		data.writeError(rw, req, err)
-	}
+	return data.License.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 }
 
 // Pattern: /about/source_code
-func (data *Data) SourceCodePageHand(rw http.ResponseWriter, req *http.Request) {
-	// Log request
-	data.Log.HttpRequest(req)
-
-	// Show page
+func (data *Data) sourceCodePageHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	err := data.SourceCodePage.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
-	if err != nil {
-		data.writeError(rw, req, err)
-	}
+	return data.SourceCodePage.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
 }

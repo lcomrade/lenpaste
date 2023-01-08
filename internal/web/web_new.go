@@ -43,7 +43,7 @@ type createTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data *Data) newPaste(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error {
 	var err error
 
 	// Check auth
@@ -56,8 +56,7 @@ func (data *Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 		if authExist == true {
 			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
 			if err != nil {
-				data.writeError(rw, req, err)
-				return
+				return err
 			}
 		}
 
@@ -71,13 +70,12 @@ func (data *Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 		if err != nil {
-			data.writeError(rw, req, err)
-			return
+			return err
 		}
 
 		// Redirect to paste
 		writeRedirect(rw, req, "/"+pasteID, 302)
-		return
+		return nil
 	}
 
 	// Else show create page
@@ -98,9 +96,5 @@ func (data *Data) newPaste(rw http.ResponseWriter, req *http.Request) {
 
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	err = data.Main.Execute(rw, tmplData)
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
+	return data.Main.Execute(rw, tmplData)
 }

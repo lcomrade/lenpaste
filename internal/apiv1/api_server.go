@@ -41,14 +41,10 @@ type serverInfoType struct {
 }
 
 // GET /api/v1/getServerInfo
-func (data *Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
-	// Log request
-	data.Log.HttpRequest(req)
-
+func (data *Data) getServerInfoHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check method
 	if req.Method != "GET" {
-		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
-		return
+		return netshare.ErrMethodNotAllowed
 	}
 
 	// Prepare data
@@ -70,10 +66,5 @@ func (data *Data) GetServerInfoHand(rw http.ResponseWriter, req *http.Request) {
 
 	// Return response
 	rw.Header().Set("Content-Type", "application/json")
-
-	err := json.NewEncoder(rw).Encode(serverInfo)
-	if err != nil {
-		data.Log.HttpError(req, err)
-		return
-	}
+	return json.NewEncoder(rw).Encode(serverInfo)
 }

@@ -31,19 +31,11 @@ type termsOfUseTmpl struct {
 }
 
 // Pattern: /terms
-func (data *Data) TermsOfUseHand(rw http.ResponseWriter, req *http.Request) {
-	// Log request
-	data.Log.HttpRequest(req)
-
-	// Show page
+func (data *Data) termsOfUseHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	err := data.TermsOfUse.Execute(rw, termsOfUseTmpl{
+	return data.TermsOfUse.Execute(rw, termsOfUseTmpl{
 		TermsOfUse: *data.ServerTermsOfUse,
 		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 		Translate:  data.Locales.findLocale(req).translate},
 	)
-	if err != nil {
-		data.writeError(rw, req, err)
-	}
 }

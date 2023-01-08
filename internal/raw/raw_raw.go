@@ -20,36 +20,24 @@ package raw
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"io"
 	"net/http"
 )
 
 // Pattern: /raw/
-func (data *Data) RawHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) rawHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
 	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
-
-	// Log request
-	data.Log.HttpRequest(req)
 
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[5:])
 
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		if err == storage.ErrNotFoundID {
-			data.writeError(rw, req, err)
-			return
-
-		} else {
-			data.writeError(rw, req, err)
-			return
-		}
+		return err
 	}
 
 	// If "one use" paste
@@ -57,8 +45,7 @@ func (data *Data) RawHand(rw http.ResponseWriter, req *http.Request) {
 		// Delete paste
 		err = data.DB.PasteDelete(pasteID)
 		if err != nil {
-			data.writeError(rw, req, err)
-			return
+			return err
 		}
 	}
 
@@ -67,7 +54,8 @@ func (data *Data) RawHand(rw http.ResponseWriter, req *http.Request) {
 
 	_, err = io.WriteString(rw, paste.Body)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
+
+	return nil
 }

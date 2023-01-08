@@ -39,17 +39,14 @@ type embTmpl struct {
 }
 
 // Pattern: /emb/
-func (data *Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error {
+	errorNotFound := false
+
 	// Check rate limit
 	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
-
-	// Log request
-	errorNotFound := false
-	data.Log.HttpRequest(req)
 
 	// Get paste ID
 	pasteID := string([]rune(req.URL.Path)[5:])
@@ -61,8 +58,7 @@ func (data *Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 			errorNotFound = true
 
 		} else {
-			data.writeError(rw, req, err)
-			return
+			return err
 		}
 	}
 
@@ -82,9 +78,5 @@ func (data *Data) EmbeddedHand(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Show paste
-	err = data.EmbeddedPage.Execute(rw, tmplData)
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
+	return data.EmbeddedPage.Execute(rw, tmplData)
 }

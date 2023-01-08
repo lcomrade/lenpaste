@@ -46,21 +46,16 @@ type pasteTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-type pasteJsTmpl struct {
-	Translate func(string, ...interface{}) template.HTML
-}
-
 type pasteContinueTmpl struct {
 	ID        string
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) getPasteHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
 	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
 
 	// Get paste ID
@@ -69,8 +64,7 @@ func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	// Read DB
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
 
 	// If "one use" paste
@@ -84,20 +78,13 @@ func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 				Translate: data.Locales.findLocale(req).translate,
 			}
 
-			err = data.PasteContinue.Execute(rw, tmplData)
-			if err != nil {
-				data.writeError(rw, req, err)
-				return
-			}
-
-			return
+			return data.PasteContinue.Execute(rw, tmplData)
 		}
 
 		// If continue button pressed delete paste
 		err = data.DB.PasteDelete(pasteID)
 		if err != nil {
-			data.writeError(rw, req, err)
-			return
+			return err
 		}
 	}
 
@@ -135,16 +122,5 @@ func (data *Data) getPaste(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	// Show paste
-	err = data.PastePage.Execute(rw, tmplData)
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
-}
-
-func (data *Data) PasteJSHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
-	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	data.PasteJS.Execute(rw, pasteJsTmpl{Translate: data.Locales.findLocale(req).translate})
+	return data.PastePage.Execute(rw, tmplData)
 }

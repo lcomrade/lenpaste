@@ -351,89 +351,14 @@ func main() {
 	}
 
 	// Handlers
-	http.HandleFunc("/robots.txt", func(rw http.ResponseWriter, req *http.Request) {
-		webData.RobotsTxtHand(rw, req)
-	})
-	if *flagRobotsDisallow == false {
-		http.HandleFunc("/sitemap.xml", func(rw http.ResponseWriter, req *http.Request) {
-			webData.SitemapHand(rw, req)
-		})
-	}
-
-	http.HandleFunc("/style.css", func(rw http.ResponseWriter, req *http.Request) {
-		webData.StyleCSSHand(rw, req)
-	})
-
 	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-		webData.MainHand(rw, req)
+		webData.Handler(rw, req)
 	})
-	http.HandleFunc("/main.js", func(rw http.ResponseWriter, req *http.Request) {
-		webData.MainJSHand(rw, req)
-	})
-	http.HandleFunc("/history.js", func(rw http.ResponseWriter, req *http.Request) {
-		webData.HistoryJSHand(rw, req)
-	})
-	http.HandleFunc("/code.js", func(rw http.ResponseWriter, req *http.Request) {
-		webData.CodeJSHand(rw, req)
-	})
-	http.HandleFunc("/paste.js", func(rw http.ResponseWriter, req *http.Request) {
-		webData.PasteJSHand(rw, req)
-	})
-
-	http.HandleFunc("/settings", func(rw http.ResponseWriter, req *http.Request) {
-		webData.SettingsHand(rw, req)
-	})
-	http.HandleFunc("/terms", func(rw http.ResponseWriter, req *http.Request) {
-		webData.TermsOfUseHand(rw, req)
-	})
-
 	http.HandleFunc("/raw/", func(rw http.ResponseWriter, req *http.Request) {
-		rawData.RawHand(rw, req)
+		rawData.Hand(rw, req)
 	})
-	http.HandleFunc("/dl/", func(rw http.ResponseWriter, req *http.Request) {
-		webData.DlHand(rw, req)
-	})
-	http.HandleFunc("/emb/", func(rw http.ResponseWriter, req *http.Request) {
-		webData.EmbeddedHand(rw, req)
-	})
-	http.HandleFunc("/emb_help/", func(rw http.ResponseWriter, req *http.Request) {
-		webData.EmbeddedHelpHand(rw, req)
-	})
-
-	http.HandleFunc("/about", func(rw http.ResponseWriter, req *http.Request) {
-		webData.AboutHand(rw, req)
-	})
-	http.HandleFunc("/about/authors", func(rw http.ResponseWriter, req *http.Request) {
-		webData.AuthorsHand(rw, req)
-	})
-	http.HandleFunc("/about/license", func(rw http.ResponseWriter, req *http.Request) {
-		webData.LicenseHand(rw, req)
-	})
-	http.HandleFunc("/about/source_code", func(rw http.ResponseWriter, req *http.Request) {
-		webData.SourceCodePageHand(rw, req)
-	})
-
-	http.HandleFunc("/docs", func(rw http.ResponseWriter, req *http.Request) {
-		webData.DocsHand(rw, req)
-	})
-	http.HandleFunc("/docs/apiv1", func(rw http.ResponseWriter, req *http.Request) {
-		webData.DocsApiV1Hand(rw, req)
-	})
-	http.HandleFunc("/docs/api_libs", func(rw http.ResponseWriter, req *http.Request) {
-		webData.DocsApiLibsHand(rw, req)
-	})
-
 	http.HandleFunc("/api/", func(rw http.ResponseWriter, req *http.Request) {
-		apiv1Data.MainHand(rw, req)
-	})
-	http.HandleFunc("/api/v1/new", func(rw http.ResponseWriter, req *http.Request) {
-		apiv1Data.NewHand(rw, req)
-	})
-	http.HandleFunc("/api/v1/get", func(rw http.ResponseWriter, req *http.Request) {
-		apiv1Data.GetHand(rw, req)
-	})
-	http.HandleFunc("/api/v1/getServerInfo", func(rw http.ResponseWriter, req *http.Request) {
-		apiv1Data.GetServerInfoHand(rw, req)
+		apiv1Data.Hand(rw, req)
 	})
 
 	// Run background job

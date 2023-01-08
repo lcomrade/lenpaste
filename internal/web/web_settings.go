@@ -45,11 +45,8 @@ type settingsTmpl struct {
 }
 
 // Pattern: /settings
-func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error {
 	var err error
-
-	// Log request
-	data.Log.HttpRequest(req)
 
 	// Check auth
 	authOk := true
@@ -61,8 +58,7 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 		if authExist == true {
 			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
 			if err != nil {
-				data.writeError(rw, req, err)
-				return
+				return err
 			}
 		}
 	}
@@ -181,4 +177,6 @@ func (data *Data) SettingsHand(rw http.ResponseWriter, req *http.Request) {
 
 		writeRedirect(rw, req, "/settings", 302)
 	}
+
+	return nil
 }

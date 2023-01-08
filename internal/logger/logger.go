@@ -44,10 +44,10 @@ func (cfg Logger) Error(e error) {
 	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", e.Error())
 }
 
-func (cfg Logger) HttpRequest(req *http.Request) {
-	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req).String(), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
+func (cfg Logger) HttpRequest(req *http.Request, code int) {
+	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req).String(), req.Method, code, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
 }
 
 func (cfg Logger) HttpError(req *http.Request, e error) {
-	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", netshare.GetClientAddr(req).String(), req.Method, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", e.Error())
+	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", netshare.GetClientAddr(req).String(), req.Method, 500, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", e.Error())
 }

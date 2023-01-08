@@ -23,6 +23,7 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"net/http"
 )
 
 type Data struct {
@@ -37,5 +38,21 @@ func Load(db storage.DB, cfg config.Config) *Data {
 		DB:           db,
 		Log:          cfg.Log,
 		RateLimitGet: cfg.RateLimitGet,
+	}
+}
+
+func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
+	err := data.rawHand(rw, req)
+
+	if err == nil {
+		data.Log.HttpRequest(req, 200)
+
+	} else {
+		code, err := data.writeError(rw, req, err)
+		if err != nil {
+			data.Log.HttpError(req, err)
+		} else {
+			data.Log.HttpRequest(req, code)
+		}
 	}
 }

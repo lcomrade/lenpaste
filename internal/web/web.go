@@ -26,6 +26,8 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"html/template"
+	"net/http"
+	"strings"
 	textTemplate "text/template"
 )
 
@@ -263,4 +265,76 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	}
 
 	return &data, nil
+}
+
+func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
+	// Process request
+	var err error
+
+	switch req.URL.Path {
+	// Search engines
+	case "/robots.txt":
+		err = data.robotsTxtHand(rw, req)
+	case "/sitemap.xml":
+		err = data.sitemapHand(rw, req)
+	// Resources
+	case "/style.css":
+		err = data.styleCSSHand(rw, req)
+	case "/main.js":
+		err = data.mainJSHand(rw, req)
+	case "/history.js":
+		err = data.historyJSHand(rw, req)
+	case "/code.js":
+		err = data.codeJSHand(rw, req)
+	case "/paste.js":
+		err = data.pasteJSHand(rw, req)
+	case "/about":
+		err = data.aboutHand(rw, req)
+	case "/about/authors":
+		err = data.authorsHand(rw, req)
+	case "/about/license":
+		err = data.licenseHand(rw, req)
+	case "/about/source_code":
+		err = data.sourceCodePageHand(rw, req)
+	case "/docs":
+		err = data.docsHand(rw, req)
+	case "/docs/apiv1":
+		err = data.docsApiV1Hand(rw, req)
+	case "/docs/api_libs":
+		err = data.docsApiLibsHand(rw, req)
+	// Pages
+	case "/":
+		err = data.newPasteHand(rw, req)
+	case "/settings":
+		err = data.settingsHand(rw, req)
+	case "/terms":
+		err = data.termsOfUseHand(rw, req)
+	// Else
+	default:
+		if strings.HasPrefix(req.URL.Path, "/dl/") {
+			err = data.dlHand(rw, req)
+
+		} else if strings.HasPrefix(req.URL.Path, "/emb/") {
+			err = data.embeddedHand(rw, req)
+
+		} else if strings.HasPrefix(req.URL.Path, "/emb_help/") {
+			err = data.embeddedHelpHand(rw, req)
+
+		} else {
+			err = data.getPasteHand(rw, req)
+		}
+	}
+
+	// Log
+	if err == nil {
+		data.Log.HttpRequest(req, 200)
+
+	} else {
+		code, err := data.writeError(rw, req, err)
+		if err != nil {
+			data.Log.HttpError(req, err)
+		} else {
+			data.Log.HttpRequest(req, code)
+		}
+	}
 }

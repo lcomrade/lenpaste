@@ -32,38 +32,36 @@ type jsTmpl struct {
 	Theme     func(string) string
 }
 
-func (data *Data) StyleCSSHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) styleCSSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/css; charset=utf-8")
-	data.StyleCSS.Execute(rw, jsTmpl{
+	return data.StyleCSS.Execute(rw, jsTmpl{
 		Translate: data.Locales.findLocale(req).translate,
 		Theme:     data.Themes.findTheme(req, data.UiDefaultTheme).theme,
 	})
 }
 
-func (data *Data) MainJSHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) mainJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 	rw.Write(*data.MainJS)
+	return nil
 }
 
-func (data *Data) CodeJSHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) codeJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	data.CodeJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
+	return data.CodeJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
 }
 
-func (data *Data) HistoryJSHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) historyJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	data.HistoryJS.Execute(rw, jsTmpl{
+	return data.HistoryJS.Execute(rw, jsTmpl{
 		Translate: data.Locales.findLocale(req).translate,
 		Theme:     data.Themes.findTheme(req, data.UiDefaultTheme).theme,
 	})
+}
+
+func (data *Data) pasteJSHand(rw http.ResponseWriter, req *http.Request) error {
+	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+	return data.PasteJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
 }
 
 func init() {

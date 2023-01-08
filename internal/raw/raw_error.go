@@ -27,7 +27,7 @@ import (
 	"strconv"
 )
 
-func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
+func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
 	var errText string
 	var errCode int
 
@@ -40,13 +40,12 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 
 	} else if errors.As(e, &eTmp429) {
 		errCode = 429
-		errText = "Too Many Requests"
+		errText = "429 Too Many Requests"
 		rw.Header().Set("Retry-After", strconv.FormatInt(eTmp429.RetryAfter, 10))
 
 	} else {
 		errCode = 500
 		errText = "500 Internal Server Error"
-		data.Log.HttpError(req, e)
 	}
 
 	// Write response
@@ -55,6 +54,8 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 
 	_, err := io.WriteString(rw, errText)
 	if err != nil {
-		data.Log.HttpError(req, e)
+		return 500, err
 	}
+
+	return errCode, nil
 }

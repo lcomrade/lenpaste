@@ -32,11 +32,8 @@ type newPasteAnswer struct {
 }
 
 // POST /api/v1/new
-func (data *Data) NewHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) newHand(rw http.ResponseWriter, req *http.Request) error {
 	var err error
-
-	// Log request
-	data.Log.HttpRequest(req)
 
 	// Check auth
 	if *data.LenPasswdFile != "" {
@@ -46,36 +43,27 @@ func (data *Data) NewHand(rw http.ResponseWriter, req *http.Request) {
 		if authExist == true {
 			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
 			if err != nil {
-				data.writeError(rw, req, netshare.ErrInternal)
-				return
+				return err
 			}
 		}
 
 		if authOk == false {
-			data.writeError(rw, req, netshare.ErrUnauthorized)
-			return
+			return netshare.ErrUnauthorized
 		}
 	}
 
 	// Check method
 	if req.Method != "POST" {
-		data.writeError(rw, req, netshare.ErrMethodNotAllowed)
-		return
+		return netshare.ErrMethodNotAllowed
 	}
 
 	// Get form data and create paste
 	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
 
 	// Return response
 	rw.Header().Set("Content-Type", "application/json")
-
-	err = json.NewEncoder(rw).Encode(newPasteAnswer{ID: pasteID, CreateTime: createTime, DeleteTime: deleteTime})
-	if err != nil {
-		data.Log.HttpError(req, err)
-		return
-	}
+	return json.NewEncoder(rw).Encode(newPasteAnswer{ID: pasteID, CreateTime: createTime, DeleteTime: deleteTime})
 }

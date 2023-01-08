@@ -27,24 +27,19 @@ import (
 )
 
 // Pattern: /dl/
-func (data *Data) DlHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
 	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
-
-	// Log request
-	data.Log.HttpRequest(req)
 
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[4:])
 
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
 
 	// If "one use" paste
@@ -52,8 +47,7 @@ func (data *Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 		// Delete paste
 		err = data.DB.PasteDelete(pasteID)
 		if err != nil {
-			data.writeError(rw, req, err)
-			return
+			return err
 		}
 	}
 
@@ -79,4 +73,6 @@ func (data *Data) DlHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Expires", "0")
 
 	http.ServeContent(rw, req, fileName, createTime, strings.NewReader(paste.Body))
+
+	return nil
 }

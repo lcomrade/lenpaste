@@ -37,41 +37,23 @@ type docsApiV1Tmpl struct {
 }
 
 // Pattern: /docs
-func (data *Data) DocsHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) docsHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := data.Docs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
+	return data.Docs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
 }
 
 // Pattern: /docs/apiv1
-func (data *Data) DocsApiV1Hand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) docsApiV1Hand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
+	return data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
 		MaxLenAuthorAll: netshare.MaxLengthAuthorAll,
 		Translate:       data.Locales.findLocale(req).translate,
 		Highlight:       data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 	})
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
 }
 
 // Pattern: /docs/api_libs
-func (data *Data) DocsApiLibsHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) docsApiLibsHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := data.DocsApiLibs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
+	return data.DocsApiLibs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
 }

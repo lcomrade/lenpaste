@@ -24,9 +24,7 @@ import (
 	"net/http"
 )
 
-func (data *Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
-
+func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error {
 	// Generate robots.txt
 	robotsTxt := "User-agent: *\nDisallow: /\n"
 
@@ -41,13 +39,16 @@ func (data *Data) RobotsTxtHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	_, err := io.WriteString(rw, robotsTxt)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
+
+	return nil
 }
 
-func (data *Data) SitemapHand(rw http.ResponseWriter, req *http.Request) {
-	data.Log.HttpRequest(req)
+func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
+	if *data.RobotsDisallow {
+		return netshare.ErrNotFound
+	}
 
 	// Get protocol and host
 	proto := netshare.GetProtocol(req.Header)
@@ -66,7 +67,8 @@ func (data *Data) SitemapHand(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "text/xml; charset=utf-8")
 	_, err := io.WriteString(rw, sitemapXML)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
+
+	return nil
 }

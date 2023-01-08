@@ -34,7 +34,7 @@ type errorTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
+func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
 	errData := errorTmpl{
 		Code:      0,
 		AdminName: *data.AdminName,
@@ -69,7 +69,6 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 
 	} else {
 		errData.Code = 500
-		data.Log.HttpError(req, e)
 	}
 
 	// Write response header
@@ -79,6 +78,8 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	// Render template
 	err := data.ErrorPage.Execute(rw, errData)
 	if err != nil {
-		data.Log.HttpError(req, err)
+		return 500, err
 	}
+
+	return errData.Code, nil
 }

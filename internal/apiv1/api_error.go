@@ -32,7 +32,7 @@ type errorType struct {
 	Error string `json:"error"`
 }
 
-func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) {
+func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
 	var resp errorType
 
 	var eTmp429 *netshare.ErrTooManyRequests
@@ -70,7 +70,6 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	} else {
 		resp.Code = 500
 		resp.Error = "Internal Server Error"
-		data.Log.HttpError(req, e)
 	}
 
 	rw.Header().Set("Content-Type", "application/json")
@@ -78,7 +77,8 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 
 	err := json.NewEncoder(rw).Encode(resp)
 	if err != nil {
-		data.Log.HttpError(req, err)
-		return
+		return 500, err
 	}
+
+	return resp.Code, nil
 }

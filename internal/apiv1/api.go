@@ -24,6 +24,7 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
+	"net/http"
 )
 
 type Data struct {
@@ -73,5 +74,35 @@ func Load(db storage.DB, cfg config.Config) *Data {
 		AdminMail:         &cfg.AdminMail,
 		LenPasswdFile:     &cfg.LenPasswdFile,
 		UiDefaultLifeTime: &cfg.UiDefaultLifetime,
+	}
+}
+
+func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
+	// Process request
+	var err error
+
+	switch req.URL.Path {
+	// Search engines
+	case "/api/v1/new":
+		err = data.newHand(rw, req)
+	case "/api/v1/get":
+		err = data.getHand(rw, req)
+	case "/api/v1/getServerInfo":
+		err = data.getServerInfoHand(rw, req)
+	default:
+		err = netshare.ErrNotFound
+	}
+
+	// Log
+	if err == nil {
+		data.Log.HttpRequest(req, 200)
+
+	} else {
+		code, err := data.writeError(rw, req, err)
+		if err != nil {
+			data.Log.HttpError(req, err)
+		} else {
+			data.Log.HttpRequest(req, code)
+		}
 	}
 }

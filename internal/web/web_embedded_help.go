@@ -37,16 +37,12 @@ type embHelpTmpl struct {
 }
 
 // Pattern: /emb_help/
-func (data *Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
+func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
 	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
-
-	// Log request
-	data.Log.HttpRequest(req)
 
 	// Get paste ID
 	pasteID := string([]rune(req.URL.Path)[10:])
@@ -54,8 +50,7 @@ func (data *Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 	// Read DB
 	paste, err := data.DB.PasteGet(pasteID)
 	if err != nil {
-		data.writeError(rw, req, err)
-		return
+		return err
 	}
 
 	// Show paste
@@ -69,9 +64,5 @@ func (data *Data) EmbeddedHelpHand(rw http.ResponseWriter, req *http.Request) {
 		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 	}
 
-	err = data.EmbeddedHelpPage.Execute(rw, tmplData)
-	if err != nil {
-		data.writeError(rw, req, err)
-		return
-	}
+	return data.EmbeddedHelpPage.Execute(rw, tmplData)
 }
