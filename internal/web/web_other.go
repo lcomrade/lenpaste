@@ -132,7 +132,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if fmt.Sprintf("%x", md5.Sum(tmp)) != "40f554a2270729b1bf9912b507189398" {
+	if fmt.Sprintf("%x", md5.Sum(tmp)) != "a1d6dd7f4b7470be5197381b85ee4fb5" {
 		println(resp)
 		os.Exit(1)
 	}
