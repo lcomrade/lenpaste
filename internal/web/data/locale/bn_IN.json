@@ -100,7 +100,7 @@
     "main.30Minutes": "৩০ মিনিট",
     "main.4Hour": "৪ ঘণ্টা",
     "main.6Months": "৬ মাস",
-    "main.AcceptTerms": "\"<a href=\\\"%s\\\" target=\\\"_blank\\\">ব্যবহারের শর্তাবলী দেখুন</a>\"",
+    "main.AcceptTerms": "\"<a href=\"%s\" target=\"_blank\">ব্যবহারের শর্তাবলী দেখুন</a>\"",
     "main.AdvancedParameters": "আরও প্যারামিটার যোগ করুন",
     "main.AdvancedParametersHelp": "\"আপনি <a href=\\\"%s\\\" target=\\\"_blank\\\">settings</a>.এ এই ডিফল্ট প্যারামিটার গুলি পার্মানেন্ট সেট করতে পারেন\"",
     "main.AuthRequired": "এটি একটি ব্যক্তিগত সার্ভার এবং এটি ব্যবহার করার জন্য অনুমোদন প্রয়োজন। বিস্তারিত জানার জন্য সার্ভার প্রশাসকের সাথে যোগাযোগ করুন",
