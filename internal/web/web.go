@@ -41,7 +41,7 @@ type Data struct {
 	RateLimitNew *netshare.RateLimitSystem
 	RateLimitGet *netshare.RateLimitSystem
 
-	Lexers      *[]string
+	Lexers      []string
 	Locales     Locales
 	LocalesList LocalesList
 	Themes      Themes
@@ -70,26 +70,26 @@ type Data struct {
 	EmbeddedPage     *template.Template
 	EmbeddedHelpPage *template.Template
 
-	Version *string
+	Version string
 
-	TitleMaxLen *int
-	BodyMaxLen  *int
-	MaxLifeTime *int64
+	TitleMaxLen int
+	BodyMaxLen  int
+	MaxLifeTime int64
 
-	ServerAbout      *string
-	ServerRules      *string
-	ServerTermsExist *bool
-	ServerTermsOfUse *string
+	ServerAbout      string
+	ServerRules      string
+	ServerTermsExist bool
+	ServerTermsOfUse string
 
-	AdminName *string
-	AdminMail *string
+	AdminName string
+	AdminMail string
 
-	RobotsDisallow *bool
+	RobotsDisallow bool
 
-	LenPasswdFile *string
+	LenPasswdFile string
 
-	UiDefaultLifeTime *string
-	UiDefaultTheme    *string
+	UiDefaultLifeTime string
+	UiDefaultTheme    string
 }
 
 func Load(db storage.DB, cfg config.Config) (*Data, error) {
@@ -103,33 +103,32 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	data.RateLimitNew = cfg.RateLimitNew
 	data.RateLimitGet = cfg.RateLimitGet
 
-	data.Version = &cfg.Version
+	data.Version = cfg.Version
 
-	data.TitleMaxLen = &cfg.TitleMaxLen
-	data.BodyMaxLen = &cfg.BodyMaxLen
-	data.MaxLifeTime = &cfg.MaxLifeTime
-	data.UiDefaultLifeTime = &cfg.UiDefaultLifetime
-	data.UiDefaultTheme = &cfg.UiDefaultTheme
-	data.LenPasswdFile = &cfg.LenPasswdFile
+	data.TitleMaxLen = cfg.TitleMaxLen
+	data.BodyMaxLen = cfg.BodyMaxLen
+	data.MaxLifeTime = cfg.MaxLifeTime
+	data.UiDefaultLifeTime = cfg.UiDefaultLifetime
+	data.UiDefaultTheme = cfg.UiDefaultTheme
+	data.LenPasswdFile = cfg.LenPasswdFile
 
-	data.ServerAbout = &cfg.ServerAbout
-	data.ServerRules = &cfg.ServerRules
-	data.ServerTermsOfUse = &cfg.ServerTermsOfUse
+	data.ServerAbout = cfg.ServerAbout
+	data.ServerRules = cfg.ServerRules
+	data.ServerTermsOfUse = cfg.ServerTermsOfUse
 
 	serverTermsExist := false
 	if cfg.ServerTermsOfUse != "" {
 		serverTermsExist = true
 	}
-	data.ServerTermsExist = &serverTermsExist
+	data.ServerTermsExist = serverTermsExist
 
-	data.AdminName = &cfg.AdminName
-	data.AdminMail = &cfg.AdminMail
+	data.AdminName = cfg.AdminName
+	data.AdminMail = cfg.AdminMail
 
-	data.RobotsDisallow = &cfg.RobotsDisallow
+	data.RobotsDisallow = cfg.RobotsDisallow
 
 	// Get Chroma lexers
-	lexers := chromaLexers.Names(false)
-	data.Lexers = &lexers
+	data.Lexers = chromaLexers.Names(false)
 
 	// Load locales
 	data.Locales, data.LocalesList, err = loadLocales(embFS, "data/locale")
@@ -270,6 +269,8 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
 	// Process request
 	var err error
+
+	rw.Header().Set("Server", config.Software+"/"+data.Version)
 
 	switch req.URL.Path {
 	// Search engines

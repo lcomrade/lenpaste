@@ -47,15 +47,15 @@ type aboutMinTmp struct {
 // Pattern: /about
 func (data *Data) aboutHand(rw http.ResponseWriter, req *http.Request) error {
 	dataTmpl := aboutTmpl{
-		Version:          *data.Version,
-		TitleMaxLen:      *data.TitleMaxLen,
-		BodyMaxLen:       *data.BodyMaxLen,
-		MaxLifeTime:      *data.MaxLifeTime,
-		ServerAbout:      *data.ServerAbout,
-		ServerRules:      *data.ServerRules,
-		ServerTermsExist: *data.ServerTermsExist,
-		AdminName:        *data.AdminName,
-		AdminMail:        *data.AdminMail,
+		Version:          data.Version,
+		TitleMaxLen:      data.TitleMaxLen,
+		BodyMaxLen:       data.BodyMaxLen,
+		MaxLifeTime:      data.MaxLifeTime,
+		ServerAbout:      data.ServerAbout,
+		ServerRules:      data.ServerRules,
+		ServerTermsExist: data.ServerTermsExist,
+		AdminName:        data.AdminName,
+		AdminMail:        data.AdminMail,
 		Highlight:        data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 		Translate:        data.Locales.findLocale(req).translate,
 	}

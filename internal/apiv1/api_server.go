@@ -50,18 +50,18 @@ func (data *Data) getServerInfoHand(rw http.ResponseWriter, req *http.Request) e
 	// Prepare data
 	serverInfo := serverInfoType{
 		Software:          "Lenpaste",
-		Version:           *data.Version,
-		TitleMaxLen:       *data.TitleMaxLen,
-		BodyMaxLen:        *data.BodyMaxLen,
-		MaxLifeTime:       *data.MaxLifeTime,
-		ServerAbout:       *data.ServerAbout,
-		ServerRules:       *data.ServerRules,
-		ServerTermsOfUse:  *data.ServerTermsOfUse,
-		AdminName:         *data.AdminName,
-		AdminMail:         *data.AdminMail,
-		Syntaxes:          *data.Lexers,
-		UiDefaultLifeTime: *data.UiDefaultLifeTime,
-		AuthRequired:      *data.LenPasswdFile != "",
+		Version:           data.Version,
+		TitleMaxLen:       data.TitleMaxLen,
+		BodyMaxLen:        data.BodyMaxLen,
+		MaxLifeTime:       data.MaxLifeTime,
+		ServerAbout:       data.ServerAbout,
+		ServerRules:       data.ServerRules,
+		ServerTermsOfUse:  data.ServerTermsOfUse,
+		AdminName:         data.AdminName,
+		AdminMail:         data.AdminMail,
+		Syntaxes:          data.Lexers,
+		UiDefaultLifeTime: data.UiDefaultLifeTime,
+		AuthRequired:      data.LenPasswdFile != "",
 	}
 
 	// Return response

@@ -31,6 +31,8 @@ type Data struct {
 	Log logger.Logger
 
 	RateLimitGet *netshare.RateLimitSystem
+
+	Version string
 }
 
 func Load(db storage.DB, cfg config.Config) *Data {
@@ -38,10 +40,13 @@ func Load(db storage.DB, cfg config.Config) *Data {
 		DB:           db,
 		Log:          cfg.Log,
 		RateLimitGet: cfg.RateLimitGet,
+		Version:      cfg.Version,
 	}
 }
 
 func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
+	rw.Header().Set("Server", config.Software+"/"+data.Version)
+
 	err := data.rawHand(rw, req)
 
 	if err == nil {

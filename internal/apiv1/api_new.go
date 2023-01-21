@@ -36,12 +36,12 @@ func (data *Data) newHand(rw http.ResponseWriter, req *http.Request) error {
 	var err error
 
 	// Check auth
-	if *data.LenPasswdFile != "" {
+	if data.LenPasswdFile != "" {
 		authOk := false
 
 		user, pass, authExist := req.BasicAuth()
 		if authExist == true {
-			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
+			authOk, err = lenpasswd.LoadAndCheck(data.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
@@ -58,7 +58,7 @@ func (data *Data) newHand(rw http.ResponseWriter, req *http.Request) error {
 	}
 
 	// Get form data and create paste
-	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, data.TitleMaxLen, data.BodyMaxLen, data.MaxLifeTime, data.Lexers)
 	if err != nil {
 		return err
 	}

@@ -23,6 +23,8 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
+const Software = "Lenpaste"
+
 type Config struct {
 	Log logger.Logger
 

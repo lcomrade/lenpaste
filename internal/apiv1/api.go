@@ -34,24 +34,24 @@ type Data struct {
 	RateLimitNew *netshare.RateLimitSystem
 	RateLimitGet *netshare.RateLimitSystem
 
-	Lexers *[]string
+	Lexers []string
 
-	Version *string
+	Version string
 
-	TitleMaxLen *int
-	BodyMaxLen  *int
-	MaxLifeTime *int64
+	TitleMaxLen int
+	BodyMaxLen  int
+	MaxLifeTime int64
 
-	ServerAbout      *string
-	ServerRules      *string
-	ServerTermsOfUse *string
+	ServerAbout      string
+	ServerRules      string
+	ServerTermsOfUse string
 
-	AdminName *string
-	AdminMail *string
+	AdminName string
+	AdminMail string
 
-	LenPasswdFile *string
+	LenPasswdFile string
 
-	UiDefaultLifeTime *string
+	UiDefaultLifeTime string
 }
 
 func Load(db storage.DB, cfg config.Config) *Data {
@@ -62,24 +62,26 @@ func Load(db storage.DB, cfg config.Config) *Data {
 		Log:               cfg.Log,
 		RateLimitNew:      cfg.RateLimitNew,
 		RateLimitGet:      cfg.RateLimitGet,
-		Lexers:            &lexers,
-		Version:           &cfg.Version,
-		TitleMaxLen:       &cfg.TitleMaxLen,
-		BodyMaxLen:        &cfg.BodyMaxLen,
-		MaxLifeTime:       &cfg.MaxLifeTime,
-		ServerAbout:       &cfg.ServerAbout,
-		ServerRules:       &cfg.ServerRules,
-		ServerTermsOfUse:  &cfg.ServerTermsOfUse,
-		AdminName:         &cfg.AdminName,
-		AdminMail:         &cfg.AdminMail,
-		LenPasswdFile:     &cfg.LenPasswdFile,
-		UiDefaultLifeTime: &cfg.UiDefaultLifetime,
+		Lexers:            lexers,
+		Version:           cfg.Version,
+		TitleMaxLen:       cfg.TitleMaxLen,
+		BodyMaxLen:        cfg.BodyMaxLen,
+		MaxLifeTime:       cfg.MaxLifeTime,
+		ServerAbout:       cfg.ServerAbout,
+		ServerRules:       cfg.ServerRules,
+		ServerTermsOfUse:  cfg.ServerTermsOfUse,
+		AdminName:         cfg.AdminName,
+		AdminMail:         cfg.AdminMail,
+		LenPasswdFile:     cfg.LenPasswdFile,
+		UiDefaultLifeTime: cfg.UiDefaultLifetime,
 	}
 }
 
 func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
 	// Process request
 	var err error
+
+	rw.Header().Set("Server", config.Software+"/"+data.Version)
 
 	switch req.URL.Path {
 	// Search engines

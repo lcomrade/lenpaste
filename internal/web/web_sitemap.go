@@ -28,7 +28,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 	// Generate robots.txt
 	robotsTxt := "User-agent: *\nDisallow: /\n"
 
-	if *data.RobotsDisallow == false {
+	if data.RobotsDisallow == false {
 		proto := netshare.GetProtocol(req.Header)
 		host := netshare.GetHost(req)
 
@@ -46,7 +46,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 }
 
 func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
-	if *data.RobotsDisallow {
+	if data.RobotsDisallow {
 		return netshare.ErrNotFound
 	}
 

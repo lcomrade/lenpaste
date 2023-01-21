@@ -39,7 +39,7 @@ type Themes map[string]Theme
 type ThemesListPart map[string]string
 type ThemesList map[string]ThemesListPart
 
-func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme *string) (Themes, ThemesList, error) {
+func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme string) (Themes, ThemesList, error) {
 	themes := make(Themes)
 	themesList := make(ThemesList)
 
@@ -154,9 +154,9 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme *stri
 	}
 
 	// Check default theme exist
-	_, ok := themes[*defaultTheme]
+	_, ok := themes[defaultTheme]
 	if ok == false {
-		return nil, nil, errors.New("web: default theme '" + *defaultTheme + "' not found")
+		return nil, nil, errors.New("web: default theme '" + defaultTheme + "' not found")
 	}
 
 	return themes, themesList, nil
@@ -177,7 +177,7 @@ func (themesList ThemesList) getForLocale(req *http.Request) ThemesListPart {
 	return theme
 }
 
-func (themes Themes) findTheme(req *http.Request, defaultTheme *string) Theme {
+func (themes Themes) findTheme(req *http.Request, defaultTheme string) Theme {
 	// Get theme by cookie
 	themeCookie := getCookie(req, "theme")
 	if themeCookie != "" {
@@ -188,7 +188,7 @@ func (themes Themes) findTheme(req *http.Request, defaultTheme *string) Theme {
 	}
 
 	// Load default theme
-	theme, _ := themes[*defaultTheme]
+	theme, _ := themes[defaultTheme]
 	return theme
 }
 

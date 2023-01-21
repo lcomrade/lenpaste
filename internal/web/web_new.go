@@ -49,12 +49,12 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	// Check auth
 	authOk := true
 
-	if *data.LenPasswdFile != "" {
+	if data.LenPasswdFile != "" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
 		if authExist == true {
-			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
+			authOk, err = lenpasswd.LoadAndCheck(data.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
@@ -68,7 +68,7 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 
 	// Create paste if need
 	if req.Method == "POST" {
-		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, *data.TitleMaxLen, *data.BodyMaxLen, *data.MaxLifeTime, *data.Lexers)
+		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, data.TitleMaxLen, data.BodyMaxLen, data.MaxLifeTime, data.Lexers)
 		if err != nil {
 			return err
 		}
@@ -80,13 +80,13 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 
 	// Else show create page
 	tmplData := createTmpl{
-		TitleMaxLen:        *data.TitleMaxLen,
-		BodyMaxLen:         *data.BodyMaxLen,
+		TitleMaxLen:        data.TitleMaxLen,
+		BodyMaxLen:         data.BodyMaxLen,
 		AuthorAllMaxLen:    netshare.MaxLengthAuthorAll,
-		MaxLifeTime:        *data.MaxLifeTime,
-		UiDefaultLifeTime:  *data.UiDefaultLifeTime,
-		Lexers:             *data.Lexers,
-		ServerTermsExist:   *data.ServerTermsExist,
+		MaxLifeTime:        data.MaxLifeTime,
+		UiDefaultLifeTime:  data.UiDefaultLifeTime,
+		Lexers:             data.Lexers,
+		ServerTermsExist:   data.ServerTermsExist,
 		AuthorDefault:      getCookie(req, "author"),
 		AuthorEmailDefault: getCookie(req, "authorEmail"),
 		AuthorURLDefault:   getCookie(req, "authorURL"),

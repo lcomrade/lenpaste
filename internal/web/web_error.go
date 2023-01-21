@@ -37,8 +37,8 @@ type errorTmpl struct {
 func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
 	errData := errorTmpl{
 		Code:      0,
-		AdminName: *data.AdminName,
-		AdminMail: *data.AdminMail,
+		AdminName: data.AdminName,
+		AdminMail: data.AdminMail,
 		Translate: data.Locales.findLocale(req).translate,
 	}
 

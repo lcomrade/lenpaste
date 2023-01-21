@@ -51,12 +51,12 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 	// Check auth
 	authOk := true
 
-	if *data.LenPasswdFile != "" {
+	if data.LenPasswdFile != "" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
 		if authExist == true {
-			authOk, err = lenpasswd.LoadAndCheck(*data.LenPasswdFile, user, pass)
+			authOk, err = lenpasswd.LoadAndCheck(data.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
@@ -80,7 +80,7 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 		}
 
 		if dataTmpl.Theme == "" {
-			dataTmpl.Theme = *data.UiDefaultTheme
+			dataTmpl.Theme = data.UiDefaultTheme
 		}
 
 		// Show page

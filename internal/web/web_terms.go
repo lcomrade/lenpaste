@@ -34,7 +34,7 @@ type termsOfUseTmpl struct {
 func (data *Data) termsOfUseHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	return data.TermsOfUse.Execute(rw, termsOfUseTmpl{
-		TermsOfUse: *data.ServerTermsOfUse,
+		TermsOfUse: data.ServerTermsOfUse,
 		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 		Translate:  data.Locales.findLocale(req).translate},
 	)
