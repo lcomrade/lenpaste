@@ -100,7 +100,11 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 			return nil, nil, errors.New("web: locale '" + key + "' is empty")
 		}
 
-		localesList[key] = localeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+		if curTotal == defTotal {
+			localesList[key] = localeName
+		} else {
+			localesList[key] = localeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+		}
 	}
 
 	return locales, localesList, nil

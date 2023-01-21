@@ -137,7 +137,10 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme *stri
 		}
 
 		// Add theme to themes list
-		themeNameSuffix := fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+		themeNameSuffix := ""
+		if curTotal != defTotal {
+			themeNameSuffix = fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+		}
 		themesList[baseLocale][key] = themeName + themeNameSuffix
 
 		for localeCode, _ := range localesList {

@@ -23,8 +23,8 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
 	"os"
-	"strconv"
 	"runtime"
+	"strconv"
 	"time"
 )
 
