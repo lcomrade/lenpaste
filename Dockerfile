@@ -3,7 +3,7 @@ FROM golang:1.18.10-alpine3.17 as build
 
 WORKDIR /build
 
-RUN apk add --no-cache make=4.3-r1 git=2.38.1-r0 gcc=12.2.1_git20220924-r4 musl-dev=1.2.3-r4
+RUN apk add --no-cache make=4.3-r1 git=2.38.3-r1 gcc=12.2.1_git20220924-r4 musl-dev=1.2.3-r4
 
 COPY ./go.mod ./
 COPY go.sum ./
