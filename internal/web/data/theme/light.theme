@@ -1,5 +1,7 @@
-theme.Name.en = Light
-theme.Name.ru = Светлая
+theme.Name.bn_IN = লাইট থিম 
+theme.Name.de    = Hell
+theme.Name.en    = Light
+theme.Name.ru    = Светлая
 
 font.Default   = sans-serif
 font.Monospace = monospace

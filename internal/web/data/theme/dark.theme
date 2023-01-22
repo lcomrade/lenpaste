@@ -1,5 +1,7 @@
-theme.Name.en = Dark
-theme.Name.ru = Тёмная
+theme.Name.bn_IN = ডার্ক থিম 
+theme.Name.de    = Dunkel
+theme.Name.en    = Dark
+theme.Name.ru    = Тёмная
 
 font.Default   = sans-serif
 font.Monospace = monospace
