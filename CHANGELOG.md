@@ -2,6 +2,15 @@
 Semantic versioning is used (https://semver.org/).
 
 
+## v1.3
+- UI: Added custom themes support. Added light theme.
+- UI: Added translations into Bengali and German (thanks Pardesi_Cat and Hiajen).
+- UI: Check boxes and spoilers now have a custom design.
+- Admin: Added support for `X-Real-IP` header for reverse proxy.
+- Admin: Added Server response header (for example: `Lenpaste/1.3`).
+- Fix: many bugs and errors.
+- Dev: Improved quality of `Dockerfile` and `entrypoint.sh`
+
 ## v1.2
 - UI: Add history tab.
 - UI: Add copy to clipboard button.
