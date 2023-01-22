@@ -58,7 +58,7 @@ func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) er
 		ID:         paste.ID,
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,
-		Protocol:   netshare.GetProtocol(req.Header),
+		Protocol:   netshare.GetProtocol(req),
 		Host:       netshare.GetHost(req),
 		Translate:  data.Locales.findLocale(req).translate,
 		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,

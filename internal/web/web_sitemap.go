@@ -29,7 +29,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 	robotsTxt := "User-agent: *\nDisallow: /\n"
 
 	if data.RobotsDisallow == false {
-		proto := netshare.GetProtocol(req.Header)
+		proto := netshare.GetProtocol(req)
 		host := netshare.GetHost(req)
 
 		robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + proto + "://" + host + "/sitemap.xml\n"
@@ -51,7 +51,7 @@ func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
 	}
 
 	// Get protocol and host
-	proto := netshare.GetProtocol(req.Header)
+	proto := netshare.GetProtocol(req)
 	host := netshare.GetHost(req)
 
 	// Generate sitemap.xml

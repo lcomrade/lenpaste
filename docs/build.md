@@ -6,6 +6,7 @@ sudo apt update
 sudo apt -y install git make gcc golang
 git clone https://git.lcomrade.su/root/lenpaste.git
 cd ./lenpaste/
+git checkout vX.X
 make
 ```
 

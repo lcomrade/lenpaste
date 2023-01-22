@@ -36,29 +36,34 @@ func GetHost(req *http.Request) string {
 	return req.Host
 }
 
-func GetProtocol(header http.Header) string {
-	// Read header
-	xProto := header.Get("X-Forwarded-Proto")
+func GetProtocol(req *http.Request) string {
+	// X-Forwarded-Proto
+	xProto := req.Header.Get("X-Forwarded-Proto")
 
-	// Check
 	if xProto != "" {
 		return xProto
 	}
 
-	return "http"
+	// Else real protocol
+	return req.URL.Scheme
 }
 
 func GetClientAddr(req *http.Request) net.IP {
-	// Read header
+	// X-Real-IP
+	xReal := req.Header.Get("X-Real-IP")
+	if xReal != "" {
+		return net.ParseIP(xReal)
+	}
+
+	// X-Forwarded-For
 	xFor := req.Header.Get("X-Forwarded-For")
 	xFor = strings.Split(xFor, ",")[0]
 
-	// Check
 	if xFor != "" {
 		return net.ParseIP(xFor)
 	}
 
-	// Else use client address
+	// Else use real client address
 	host, _, err := net.SplitHostPort(req.RemoteAddr)
 	if err != nil {
 		return nil
