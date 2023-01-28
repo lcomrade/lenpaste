@@ -155,9 +155,12 @@ Lenpaste API:
 - [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
 - [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
 
+Community driven packages:
+- [Lenpaste | TrueCharts](https://truecharts.org/docs/charts/incubator/lenpaste/)
+- [Lenpaste | Easypanel](https://easypanel.io/docs/templates/lenpaste)
+
 Might be interesting:
 - [How to Install LenPaste on Your Synology NAS](https://mariushosting.com/how-to-install-lenpaste-on-your-synology-nas/) (WEB site)
-- [Lenpaste | TrueCharts](https://truecharts.org/docs/charts/incubator/lenpaste/) (WEB site)
 - [Pastebin Clone in Docker with Lenpaste](https://www.youtube.com/watch?v=YxcHxsZHh9A) (YouTube video)
 
 
