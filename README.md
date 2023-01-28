@@ -156,7 +156,7 @@ Lenpaste API:
 - [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
 
 Community driven packages:
-- [Lenpaste | TrueCharts](https://truecharts.org/docs/charts/incubator/lenpaste/)
+- [Lenpaste | TrueCharts](https://truecharts.org/charts/incubator/lenpaste/)
 - [Lenpaste | Easypanel](https://easypanel.io/docs/templates/lenpaste)
 
 Might be interesting:
