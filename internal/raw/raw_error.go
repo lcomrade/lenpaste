@@ -19,6 +19,7 @@
 package raw
 
 import (
+	"database/sql"
 	"errors"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
@@ -34,7 +35,7 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	// Dectect error
 	var eTmp429 *netshare.ErrTooManyRequests
 
-	if e == storage.ErrNotFoundID && e == netshare.ErrNotFound {
+	if e == sql.ErrNoRows || e == storage.ErrNotFoundID || e == netshare.ErrNotFound {
 		errCode = 404
 		errText = "404 Not Found"
 
