@@ -19,10 +19,12 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 type createTmpl struct {
@@ -82,7 +84,7 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	tmplData := createTmpl{
 		TitleMaxLen:        data.TitleMaxLen,
 		BodyMaxLen:         data.BodyMaxLen,
-		AuthorAllMaxLen:    netshare.MaxLengthAuthorAll,
+		AuthorAllMaxLen:    model.MaxLengthAuthorAll,
 		MaxLifeTime:        data.MaxLifeTime,
 		UiDefaultLifeTime:  data.UiDefaultLifeTime,
 		Lexers:             data.Lexers,

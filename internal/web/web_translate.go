@@ -27,9 +27,9 @@ import (
 	"net/http"
 	"path/filepath"
 	"strings"
-)
 
-const baseLocale = "en"
+	"git.lcomrade.su/root/lenpaste/internal/model"
+)
 
 type Locale map[string]string
 type Locales map[string]Locale
@@ -84,7 +84,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 		}
 
 		// Append to the translation, if it is not complete
-		defLocale := locales[baseLocale]
+		defLocale := locales[model.BaseLocale]
 		defTotal := len(defLocale)
 		curTotal := 0
 		for defKey, defVal := range defLocale {
@@ -143,7 +143,7 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 	}
 
 	// Load default locale
-	locale, _ := locales[baseLocale]
+	locale, _ := locales[model.BaseLocale]
 	return locale
 }
 

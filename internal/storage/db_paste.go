@@ -20,30 +20,19 @@ package storage
 
 import (
 	"database/sql"
+	"errors"
 	"time"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
-type Paste struct {
-	ID         string `json:"id"` // Ignored when creating
-	Title      string `json:"title"`
-	Body       string `json:"body"`
-	CreateTime int64  `json:"createTime"` // Ignored when creating
-	DeleteTime int64  `json:"deleteTime"`
-	OneUse     bool   `json:"oneUse"`
-	Syntax     string `json:"syntax"`
-
-	Author      string `json:"author"`
-	AuthorEmail string `json:"authorEmail"`
-	AuthorURL   string `json:"authorURL"`
-}
-
-func (db DB) PasteAdd(paste Paste) (string, int64, int64, error) {
+func (db *DB) PasteAdd(paste model.Paste) (string, int64, int64, error) {
 	var err error
 
 	// Generate ID
 	paste.ID, err = genTokenCrypto(8)
 	if err != nil {
-		return paste.ID, paste.CreateTime, paste.DeleteTime, err
+		return "", 0, 0, errors.New("storage: add paste: " + err.Error())
 	}
 
 	// Set paste create time
@@ -60,26 +49,26 @@ func (db DB) PasteAdd(paste Paste) (string, int64, int64, error) {
 		paste.ID, paste.Title, paste.Body, paste.Syntax, paste.CreateTime, paste.DeleteTime, paste.OneUse, paste.Author, paste.AuthorEmail, paste.AuthorURL,
 	)
 	if err != nil {
-		return paste.ID, paste.CreateTime, paste.DeleteTime, err
+		return "", 0, 0, errors.New("storage: add paste: " + err.Error())
 	}
 
 	return paste.ID, paste.CreateTime, paste.DeleteTime, nil
 }
 
-func (db DB) PasteDelete(id string) error {
+func (db *DB) PasteDelete(id string) error {
 	// Delete
 	result, err := db.pool.Exec(
 		`DELETE FROM pastes WHERE id = $1`,
 		id,
 	)
 	if err != nil {
-		return err
+		return errors.New("storage: delete paste: " + err.Error())
 	}
 
 	// Check result
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return err
+		return errors.New("storage: delete paste: " + err.Error())
 	}
 
 	if rowsAffected == 0 {
@@ -89,8 +78,8 @@ func (db DB) PasteDelete(id string) error {
 	return nil
 }
 
-func (db DB) PasteGet(id string) (Paste, error) {
-	var paste Paste
+func (db *DB) PasteGet(id string) (model.Paste, error) {
+	var paste model.Paste
 
 	// Make query
 	row := db.pool.QueryRow(
@@ -102,10 +91,10 @@ func (db DB) PasteGet(id string) (Paste, error) {
 	err := row.Scan(&paste.ID, &paste.Title, &paste.Body, &paste.Syntax, &paste.CreateTime, &paste.DeleteTime, &paste.OneUse, &paste.Author, &paste.AuthorEmail, &paste.AuthorURL)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return paste, ErrNotFoundID
+			return model.Paste{}, ErrNotFoundID
 		}
 
-		return paste, err
+		return model.Paste{}, errors.New("storage: delete paste: " + err.Error())
 	}
 
 	// Check paste expiration
@@ -116,30 +105,30 @@ func (db DB) PasteGet(id string) (Paste, error) {
 			paste.ID,
 		)
 		if err != nil {
-			return Paste{}, err
+			return model.Paste{}, err
 		}
 
 		// Return ErrNotFound
-		return Paste{}, ErrNotFoundID
+		return model.Paste{}, ErrNotFoundID
 	}
 
 	return paste, nil
 }
 
-func (db DB) PasteDeleteExpired() (int64, error) {
+func (db *DB) PasteDeleteExpired() (int64, error) {
 	// Delete
 	result, err := db.pool.Exec(
 		`DELETE FROM pastes WHERE (delete_time < $1) AND (delete_time > 0)`,
 		time.Now().Unix(),
 	)
 	if err != nil {
-		return 0, err
+		return 0, errors.New("storage: delete expired pastes: " + err.Error())
 	}
 
 	// Check result
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return rowsAffected, err
+		return 0, errors.New("storage: delete expired pastes: " + err.Error())
 	}
 
 	return rowsAffected, nil

@@ -20,8 +20,9 @@ package apiv1
 
 import (
 	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
 type serverInfoType struct {
@@ -44,24 +45,28 @@ type serverInfoType struct {
 func (data *Data) getServerInfoHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check method
 	if req.Method != "GET" {
-		return netshare.ErrMethodNotAllowed
+		return model.ErrMethodNotAllowed
 	}
+
+	// Get request parameters
+	req.ParseForm()
+	lang := req.Form.Get("lang")
 
 	// Prepare data
 	serverInfo := serverInfoType{
-		Software:          "Lenpaste",
-		Version:           data.Version,
-		TitleMaxLen:       data.TitleMaxLen,
-		BodyMaxLen:        data.BodyMaxLen,
-		MaxLifeTime:       data.MaxLifeTime,
-		ServerAbout:       data.ServerAbout,
-		ServerRules:       data.ServerRules,
-		ServerTermsOfUse:  data.ServerTermsOfUse,
-		AdminName:         data.AdminName,
-		AdminMail:         data.AdminMail,
-		Syntaxes:          data.Lexers,
-		UiDefaultLifeTime: data.UiDefaultLifeTime,
-		AuthRequired:      data.LenPasswdFile != "",
+		Software:          model.Software,
+		Version:           model.Version,
+		TitleMaxLen:       data.cfg.Paste.TitleMaxLen,
+		BodyMaxLen:        data.cfg.Paste.BodyMaxLen,
+		MaxLifeTime:       data.cfg.Paste.MaxLifetime,
+		ServerAbout:       data.cfg.GetAbout(lang),
+		ServerRules:       data.cfg.GetRules(lang),
+		ServerTermsOfUse:  data.cfg.GetTermsOfUse(lang),
+		AdminName:         data.cfg.Public.AdminName,
+		AdminMail:         data.cfg.Public.AdminMail,
+		Syntaxes:          data.lexers,
+		UiDefaultLifeTime: data.cfg.Paste.UiDefaultLifetimeStr,
+		AuthRequired:      data.cfg.LenPasswdFile != "",
 	}
 
 	// Return response

@@ -16,15 +16,23 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package model
 
 import (
-	"net/http"
-
-	"git.lcomrade.su/root/lenpaste/internal/model"
+	"strconv"
 )
 
-// GET /api/v1/
-func (data *Data) MainHand(rw http.ResponseWriter, req *http.Request) {
-	data.writeError(rw, req, model.ErrNotFound)
+var (
+	ErrBadRequest       = NewError(400, "Bad Request")
+	ErrUnauthorized     = NewError(401, "Unauthorized")
+	ErrNotFound         = NewError(404, "Not Found")
+	ErrMethodNotAllowed = NewError(405, "Method Not Allowed")
+	ErrPayloadTooLarge  = NewError(413, "Payload Too Large")
+)
+
+func ErrTooManyRequestsNew(retryAfter int64) error {
+	header := make(map[string]string)
+	header["Retry-After"] = strconv.FormatInt(retryAfter, 10)
+
+	return NewErrorWithHeader(429, "Too Many Requests", header)
 }

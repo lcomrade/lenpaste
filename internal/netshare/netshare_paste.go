@@ -19,23 +19,26 @@
 package netshare
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"git.lcomrade.su/root/lineend"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lineend"
 )
 
-func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem, titleMaxLen int, bodyMaxLen int, maxLifeTime int64, lexerNames []string) (string, int64, int64, error) {
+func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lexerNames []string) (string, int64, int64, error) {
 	// Check HTTP method
 	if req.Method != "POST" {
-		return "", 0, 0, ErrMethodNotAllowed
+		return "", 0, 0, model.ErrMethodNotAllowed
 	}
 
 	// Check rate limit
-	err := rateSys.CheckAndUse(GetClientAddr(req))
+	err := db.RateLimitCheck("paste_new", GetClientAddr(req))
 	if err != nil {
 		return "", 0, 0, err
 	}
@@ -43,7 +46,7 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem
 	// Read form
 	req.ParseForm()
 
-	paste := storage.Paste{
+	paste := model.Paste{
 		Title:       req.PostForm.Get("title"),
 		Body:        req.PostForm.Get("body"),
 		Syntax:      req.PostForm.Get("syntax"),
@@ -60,17 +63,17 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem
 	paste.Title = strings.Replace(paste.Title, "\t", " ", -1)
 
 	// Check title
-	if utf8.RuneCountInString(paste.Title) > titleMaxLen && titleMaxLen >= 0 {
-		return "", 0, 0, ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.Title) > cfg.Paste.TitleMaxLen && cfg.Paste.TitleMaxLen >= 0 {
+		return "", 0, 0, model.ErrPayloadTooLarge
 	}
 
 	// Check paste body
 	if paste.Body == "" {
-		return "", 0, 0, ErrBadRequest
+		return "", 0, 0, model.ErrBadRequest
 	}
 
-	if utf8.RuneCountInString(paste.Body) > bodyMaxLen && bodyMaxLen > 0 {
-		return "", 0, 0, ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.Body) > cfg.Paste.BodyMaxLen && cfg.Paste.BodyMaxLen > 0 {
+		return "", 0, 0, model.ErrPayloadTooLarge
 	}
 
 	// Change paste body lines end
@@ -85,7 +88,7 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem
 		paste.Body = lineend.UnknownToOldMac(paste.Body)
 
 	default:
-		return "", 0, 0, ErrBadRequest
+		return "", 0, 0, model.ErrBadRequest
 	}
 
 	// Check syntax
@@ -101,8 +104,8 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem
 		}
 	}
 
-	if syntaxOk == false {
-		return "", 0, 0, ErrBadRequest
+	if !syntaxOk {
+		return "", 0, 0, model.ErrBadRequest
 	}
 
 	// Get delete time
@@ -111,13 +114,13 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem
 		// Convert string to int
 		expir, err := strconv.ParseInt(expirStr, 10, 64)
 		if err != nil {
-			return "", 0, 0, ErrBadRequest
+			return "", 0, 0, model.ErrBadRequest
 		}
 
 		// Check limits
-		if maxLifeTime > 0 {
-			if expir > maxLifeTime || expir <= 0 {
-				return "", 0, 0, ErrBadRequest
+		if cfg.Paste.MaxLifetime > 0 {
+			if expir > cfg.Paste.MaxLifetime || expir <= 0 {
+				return "", 0, 0, model.ErrBadRequest
 			}
 		}
 
@@ -133,16 +136,16 @@ func PasteAddFromForm(req *http.Request, db storage.DB, rateSys *RateLimitSystem
 	}
 
 	// Check author name, email and URL length.
-	if utf8.RuneCountInString(paste.Author) > MaxLengthAuthorAll {
-		return "", 0, 0, ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.Author) > model.MaxLengthAuthorAll {
+		return "", 0, 0, model.ErrPayloadTooLarge
 	}
 
-	if utf8.RuneCountInString(paste.AuthorEmail) > MaxLengthAuthorAll {
-		return "", 0, 0, ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.AuthorEmail) > model.MaxLengthAuthorAll {
+		return "", 0, 0, model.ErrPayloadTooLarge
 	}
 
-	if utf8.RuneCountInString(paste.AuthorURL) > MaxLengthAuthorAll {
-		return "", 0, 0, ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.AuthorURL) > model.MaxLengthAuthorAll {
+		return "", 0, 0, model.ErrPayloadTooLarge
 	}
 
 	// Create paste

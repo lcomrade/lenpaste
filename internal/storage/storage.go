@@ -21,6 +21,9 @@ package storage
 import (
 	"database/sql"
 	"errors"
+	"time"
+
+	"git.lcomrade.su/root/lenpaste/internal/config"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -30,38 +33,37 @@ var (
 )
 
 type DB struct {
+	cfg  *config.Config
 	pool *sql.DB
 }
 
-func NewPool(driverName string, dataSourceName string, maxOpenConns int, maxIdleConns int) (DB, error) {
-	var db DB
+func Open(cfg *config.Config) (*DB, error) {
+	// Open SQL DB
 	var err error
-
-	db.pool, err = sql.Open(driverName, dataSourceName)
-	if err != nil {
-		return db, err
+	db := DB{
+		cfg: cfg,
 	}
 
-	db.pool.SetMaxOpenConns(maxOpenConns)
-	db.pool.SetMaxIdleConns(maxIdleConns)
+	db.pool, err = sql.Open(db.cfg.DB.Driver, db.cfg.DB.Source)
+	if err != nil {
+		return nil, errors.New("storage: open: " + err.Error())
+	}
 
-	return db, nil
+	// Setup SQL DB
+	db.pool.SetMaxOpenConns(db.cfg.DB.MaxOpenConns)
+	db.pool.SetMaxIdleConns(db.cfg.DB.MaxIdleConns)
+	db.pool.SetConnMaxLifetime(time.Duration(cfg.DB.ConnMaxLifetime) * time.Second)
+
+	return &db, nil
 }
 
 func (db DB) Close() error {
 	return db.pool.Close()
 }
 
-func InitDB(driverName string, dataSourceName string) error {
-	// Open DB
-	db, err := NewPool(driverName, dataSourceName, 1, 0)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
+func (db *DB) InitDB() error {
 	// Create tables
-	_, err = db.pool.Exec(`
+	_, err := db.pool.Exec(`
 		CREATE TABLE IF NOT EXISTS pastes (
 			id          TEXT    PRIMARY KEY,
 			title       TEXT    NOT NULL,
@@ -73,29 +75,29 @@ func InitDB(driverName string, dataSourceName string) error {
 		);
 	`)
 	if err != nil {
-		return err
+		return errors.New("storage: init: " + err.Error())
 	}
 
 	// Crutch for SQLite3
-	if driverName == "sqlite3" {
+	if db.cfg.DB.Driver == "sqlite3" {
 		_, err = db.pool.Exec(`ALTER TABLE pastes ADD COLUMN author       TEXT NOT NULL DEFAULT ''`)
 		if err != nil {
 			if err.Error() != "duplicate column name: author" {
-				return err
+				return errors.New("storage: init: " + err.Error())
 			}
 		}
 
 		_, err = db.pool.Exec(`ALTER TABLE pastes ADD COLUMN author_email TEXT NOT NULL DEFAULT ''`)
 		if err != nil {
 			if err.Error() != "duplicate column name: author_email" {
-				return err
+				return errors.New("storage: init: " + err.Error())
 			}
 		}
 
 		_, err = db.pool.Exec(`ALTER TABLE pastes ADD COLUMN author_url TEXT NOT NULL DEFAULT ''`)
 		if err != nil {
 			if err.Error() != "duplicate column name: author_url" {
-				return err
+				return errors.New("storage: init: " + err.Error())
 			}
 		}
 
@@ -107,7 +109,7 @@ func InitDB(driverName string, dataSourceName string) error {
 			ALTER TABLE pastes ADD COLUMN IF NOT EXISTS author_url   TEXT NOT NULL DEFAULT '';
 		`)
 		if err != nil {
-			return err
+			return errors.New("storage: init: " + err.Error())
 		}
 	}
 

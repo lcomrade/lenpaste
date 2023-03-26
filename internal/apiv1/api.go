@@ -19,61 +19,31 @@
 package apiv1
 
 import (
+	"net/http"
+
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
-	"net/http"
 )
 
 type Data struct {
-	Log logger.Logger
-	DB  storage.DB
+	log *logger.Logger
+	db  *storage.DB
+	cfg *config.Config
 
-	RateLimitNew *netshare.RateLimitSystem
-	RateLimitGet *netshare.RateLimitSystem
-
-	Lexers []string
-
-	Version string
-
-	TitleMaxLen int
-	BodyMaxLen  int
-	MaxLifeTime int64
-
-	ServerAbout      string
-	ServerRules      string
-	ServerTermsOfUse string
-
-	AdminName string
-	AdminMail string
-
-	LenPasswdFile string
-
-	UiDefaultLifeTime string
+	lexers []string
 }
 
-func Load(db storage.DB, cfg config.Config) *Data {
+func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) *Data {
 	lexers := chromaLexers.Names(false)
 
 	return &Data{
-		DB:                db,
-		Log:               cfg.Log,
-		RateLimitNew:      cfg.RateLimitNew,
-		RateLimitGet:      cfg.RateLimitGet,
-		Lexers:            lexers,
-		Version:           cfg.Version,
-		TitleMaxLen:       cfg.TitleMaxLen,
-		BodyMaxLen:        cfg.BodyMaxLen,
-		MaxLifeTime:       cfg.MaxLifeTime,
-		ServerAbout:       cfg.ServerAbout,
-		ServerRules:       cfg.ServerRules,
-		ServerTermsOfUse:  cfg.ServerTermsOfUse,
-		AdminName:         cfg.AdminName,
-		AdminMail:         cfg.AdminMail,
-		LenPasswdFile:     cfg.LenPasswdFile,
-		UiDefaultLifeTime: cfg.UiDefaultLifetime,
+		log:    log,
+		db:     db,
+		cfg:    cfg,
+		lexers: lexers,
 	}
 }
 
@@ -81,10 +51,9 @@ func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
 	// Process request
 	var err error
 
-	rw.Header().Set("Server", config.Software+"/"+data.Version)
+	rw.Header().Set("Server", model.Software+"/"+model.Version)
 
 	switch req.URL.Path {
-	// Search engines
 	case "/api/v1/new":
 		err = data.newHand(rw, req)
 	case "/api/v1/get":
@@ -92,19 +61,19 @@ func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
 	case "/api/v1/getServerInfo":
 		err = data.getServerInfoHand(rw, req)
 	default:
-		err = netshare.ErrNotFound
+		err = model.ErrNotFound
 	}
 
 	// Log
 	if err == nil {
-		data.Log.HttpRequest(req, 200)
+		data.log.HttpRequest(req, 200)
 
 	} else {
 		code, err := data.writeError(rw, req, err)
 		if err != nil {
-			data.Log.HttpError(req, err)
+			data.log.HttpError(req, err)
 		} else {
-			data.Log.HttpRequest(req, code)
+			data.log.HttpRequest(req, code)
 		}
 	}
 }

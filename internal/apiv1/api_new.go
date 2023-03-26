@@ -20,9 +20,11 @@ package apiv1
 
 import (
 	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 type newPasteAnswer struct {
@@ -36,29 +38,29 @@ func (data *Data) newHand(rw http.ResponseWriter, req *http.Request) error {
 	var err error
 
 	// Check auth
-	if data.LenPasswdFile != "" {
+	if data.cfg.LenPasswdFile != "" {
 		authOk := false
 
 		user, pass, authExist := req.BasicAuth()
-		if authExist == true {
-			authOk, err = lenpasswd.LoadAndCheck(data.LenPasswdFile, user, pass)
+		if authExist {
+			authOk, err = lenpasswd.LoadAndCheck(data.cfg.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
 		}
 
-		if authOk == false {
-			return netshare.ErrUnauthorized
+		if !authOk {
+			return model.ErrUnauthorized
 		}
 	}
 
 	// Check method
 	if req.Method != "POST" {
-		return netshare.ErrMethodNotAllowed
+		return model.ErrMethodNotAllowed
 	}
 
 	// Get form data and create paste
-	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, data.TitleMaxLen, data.BodyMaxLen, data.MaxLifeTime, data.Lexers)
+	pasteID, createTime, deleteTime, err := netshare.PasteAddFromForm(req, data.db, data.cfg, data.lexers)
 	if err != nil {
 		return err
 	}

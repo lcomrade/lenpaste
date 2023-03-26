@@ -19,45 +19,42 @@
 package raw
 
 import (
+	"net/http"
+
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"net/http"
 )
 
 type Data struct {
-	DB  storage.DB
-	Log logger.Logger
-
-	RateLimitGet *netshare.RateLimitSystem
-
-	Version string
+	log *logger.Logger
+	db  *storage.DB
+	cfg *config.Config
 }
 
-func Load(db storage.DB, cfg config.Config) *Data {
+func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) *Data {
 	return &Data{
-		DB:           db,
-		Log:          cfg.Log,
-		RateLimitGet: cfg.RateLimitGet,
-		Version:      cfg.Version,
+		log: log,
+		db:  db,
+		cfg: cfg,
 	}
 }
 
 func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
-	rw.Header().Set("Server", config.Software+"/"+data.Version)
+	rw.Header().Set("Server", model.UserAgent)
 
 	err := data.rawHand(rw, req)
 
 	if err == nil {
-		data.Log.HttpRequest(req, 200)
+		data.log.HttpRequest(req, 200)
 
 	} else {
 		code, err := data.writeError(rw, req, err)
 		if err != nil {
-			data.Log.HttpError(req, err)
+			data.log.HttpError(req, err)
 		} else {
-			data.Log.HttpRequest(req, code)
+			data.log.HttpRequest(req, code)
 		}
 	}
 }

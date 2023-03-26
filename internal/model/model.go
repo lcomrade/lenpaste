@@ -16,15 +16,18 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package model
 
-import (
-	"net/http"
+const (
+	Software   = "Lenpaste"
+	BaseLocale = "en"
+	BaseTheme  = "dark"
 
-	"git.lcomrade.su/root/lenpaste/internal/model"
+	// Max length or paste author name, email and URL.
+	MaxLengthAuthorAll = 100
 )
 
-// GET /api/v1/
-func (data *Data) MainHand(rw http.ResponseWriter, req *http.Request) {
-	data.writeError(rw, req, model.ErrNotFound)
-}
+var (
+	Version   = "unknown"
+	UserAgent = Software + "/" + Version
+)

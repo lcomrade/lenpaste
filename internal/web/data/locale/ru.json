@@ -71,6 +71,7 @@
     "docsAPIv1Libs.StatusOfficial": "Официальный",
     "docsAPIv1Libs.StatusUnofficial": "Не официальный",
     "docsAPIv1Libs.Title": "Библиотеки для работа с API",
+    "docsAPIv2.ReqServerInfoLang": "Язык, на котором будут возвращены описание, правила и условия использования.",
     "error.400": "Неверный запрос",
     "error.401": "Не авторизован",
     "error.404": "Ничего не найдено",

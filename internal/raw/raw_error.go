@@ -19,44 +19,34 @@
 package raw
 
 import (
-	"database/sql"
-	"errors"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"io"
 	"net/http"
-	"strconv"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
 func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
-	var errText string
-	var errCode int
+	// Parse error
+	resp := model.ParseError(e)
 
-	// Dectect error
-	var eTmp429 *netshare.ErrTooManyRequests
-
-	if e == sql.ErrNoRows || e == storage.ErrNotFoundID || e == netshare.ErrNotFound {
-		errCode = 404
-		errText = "404 Not Found"
-
-	} else if errors.As(e, &eTmp429) {
-		errCode = 429
-		errText = "429 Too Many Requests"
-		rw.Header().Set("Retry-After", strconv.FormatInt(eTmp429.RetryAfter, 10))
-
-	} else {
-		errCode = 500
-		errText = "500 Internal Server Error"
+	if resp.Code > 499 {
+		data.log.HttpError(req, e)
 	}
 
-	// Write response
-	rw.Header().Set("Content-type", "text/plain; charset=utf-8")
-	rw.WriteHeader(errCode)
+	// Prepare header
+	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	for key, val := range resp.Header {
+		rw.Header().Set(key, val)
+	}
 
-	_, err := io.WriteString(rw, errText)
+	// Set HTTP status code
+	rw.WriteHeader(resp.Code)
+
+	// Send response body
+	_, err := io.WriteString(rw, resp.Text)
 	if err != nil {
 		return 500, err
 	}
 
-	return errCode, nil
+	return resp.Code, nil
 }

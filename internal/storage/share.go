@@ -20,6 +20,7 @@ package storage
 
 import (
 	"crypto/rand"
+	"errors"
 	"math/big"
 )
 
@@ -34,7 +35,7 @@ func genTokenCrypto(tokenLen int) (string, error) {
 	for i := 0; i < tokenLen; i++ {
 		randInt, err := rand.Int(rand.Reader, charsLenBig)
 		if err != nil {
-			return "", err
+			return "", errors.New("storage: generate token: " + err.Error())
 		}
 
 		token = token + string(chars[randInt.Int64()])

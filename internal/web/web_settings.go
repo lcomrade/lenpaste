@@ -19,10 +19,11 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
 const cookieMaxAge = 60 * 60 * 24 * 360 * 50 // 50 year
@@ -71,7 +72,7 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 			LanguageSelector: data.LocalesList,
 			Theme:            getCookie(req, "theme"),
 			ThemeSelector:    data.ThemesList.getForLocale(req),
-			AuthorAllMaxLen:  netshare.MaxLengthAuthorAll,
+			AuthorAllMaxLen:  model.MaxLengthAuthorAll,
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),
 			AuthorURL:        getCookie(req, "authorURL"),

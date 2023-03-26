@@ -19,9 +19,11 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"io"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error {
@@ -47,7 +49,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 
 func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
 	if data.RobotsDisallow {
-		return netshare.ErrNotFound
+		return model.ErrNotFound
 	}
 
 	// Get protocol and host

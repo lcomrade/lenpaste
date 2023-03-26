@@ -20,22 +20,23 @@ package apiv1
 
 import (
 	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 // GET /api/v1/get
 func (data *Data) getHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
-	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
 
 	// Check method
 	if req.Method != "GET" {
-		return netshare.ErrMethodNotAllowed
+		return model.ErrMethodNotAllowed
 	}
 
 	// Get paste ID
@@ -45,27 +46,27 @@ func (data *Data) getHand(rw http.ResponseWriter, req *http.Request) error {
 
 	// Check paste id
 	if pasteID == "" {
-		return netshare.ErrBadRequest
+		return model.ErrBadRequest
 	}
 
 	// Get paste
-	paste, err := data.DB.PasteGet(pasteID)
+	paste, err := data.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
 
 	// If "one use" paste
-	if paste.OneUse == true {
+	if paste.OneUse {
 		if req.Form.Get("openOneUse") == "true" {
 			// Delete paste
-			err = data.DB.PasteDelete(pasteID)
+			err = data.db.PasteDelete(pasteID)
 			if err != nil {
 				return err
 			}
 
 		} else {
 			// Remove secret data
-			paste = storage.Paste{
+			paste = model.Paste{
 				ID:     paste.ID,
 				OneUse: true,
 			}

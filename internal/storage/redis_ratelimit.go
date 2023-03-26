@@ -16,15 +16,13 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package storage
 
 import (
-	"net/http"
-
-	"git.lcomrade.su/root/lenpaste/internal/model"
+	"net"
 )
 
-// GET /api/v1/
-func (data *Data) MainHand(rw http.ResponseWriter, req *http.Request) {
-	data.writeError(rw, req, model.ErrNotFound)
+func (db *DB) RateLimitCheck(name string, ip net.IP) error {
+	// TODO: Write a ratelimit system based on Redis.
+	return nil
 }

@@ -19,9 +19,10 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
 type docsTmpl struct {
@@ -46,7 +47,7 @@ func (data *Data) docsHand(rw http.ResponseWriter, req *http.Request) error {
 func (data *Data) docsApiV1Hand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	return data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
-		MaxLenAuthorAll: netshare.MaxLengthAuthorAll,
+		MaxLenAuthorAll: model.MaxLengthAuthorAll,
 		Translate:       data.Locales.findLocale(req).translate,
 		Highlight:       data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
 	})

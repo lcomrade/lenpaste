@@ -18,37 +18,78 @@
 
 package config
 
-import (
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-)
-
-const Software = "Lenpaste"
+import "git.lcomrade.su/root/lenpaste/internal/model"
 
 type Config struct {
-	Log logger.Logger
+	DB     ConfigDB     `json:"database"`
+	Public ConfigPublic `json:"public"`
+	Paste  ConfigPaste  `json:"paste"`
 
-	RateLimitNew *netshare.RateLimitSystem
-	RateLimitGet *netshare.RateLimitSystem
+	About      map[string]string `json:"-"`
+	Rules      map[string]string `json:"-"`
+	TermsOfUse map[string]string `json:"-"`
 
-	Version string
+	LenPasswdFile string `json:"-"`
+}
 
-	TitleMaxLen int
-	BodyMaxLen  int
-	MaxLifeTime int64
+type ConfigDB struct {
+	Driver             string `json:"driver"`
+	Source             string `json:"source"`
+	MaxOpenConns       int    `json:"max_open_conns"`
+	MaxIdleConns       int    `json:"max_idle_conns"`
+	ConnMaxLifetime    int64  `json:"-"`
+	ConnMaxLifetimeStr string `json:"conn_max_lifetime"`
+}
 
-	ServerAbout      string
-	ServerRules      string
-	ServerTermsOfUse string
+type ConfigPublic struct {
+	AdminName string `json:"admin_name"`
+	AdminMail string `json:"admin_mail"`
 
-	AdminName string
-	AdminMail string
+	RobotsDisallow bool `json:"robots_disallow"`
+}
 
-	RobotsDisallow bool
+type ConfigPaste struct {
+	TitleMaxLen int   `json:"title_max_len"`
+	BodyMaxLen  int   `json:"body_max_len"`
+	MaxLifetime int64 `json:"max_lifetime"`
 
-	LenPasswdFile string
+	UiDefaultLifetime    int64  `json:"-"`
+	UiDefaultLifetimeStr string `json:"ui_default_lifetime"`
+	UiDefaultTheme       string `json:"ui_default_theme"`
+}
 
-	UiDefaultLifetime string
-	UiDefaultTheme    string
-	UiThemesDir       string
+func (cfg *Config) GetAbout(locale string) string {
+	out, ok := cfg.About[locale]
+	if !ok {
+		out, ok = cfg.About[model.BaseLocale]
+		if !ok {
+			return ""
+		}
+	}
+
+	return out
+}
+
+func (cfg *Config) GetRules(locale string) string {
+	out, ok := cfg.Rules[locale]
+	if !ok {
+		out, ok = cfg.Rules[model.BaseLocale]
+		if !ok {
+			return ""
+		}
+	}
+
+	return out
+}
+
+func (cfg *Config) GetTermsOfUse(locale string) string {
+	out, ok := cfg.TermsOfUse[locale]
+	if !ok {
+		out, ok = cfg.TermsOfUse[model.BaseLocale]
+		if !ok {
+			return ""
+		}
+	}
+
+	return out
 }

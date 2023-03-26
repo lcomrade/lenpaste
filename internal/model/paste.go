@@ -16,15 +16,18 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package model
 
-import (
-	"net/http"
+type Paste struct {
+	ID         string `json:"id"` // Ignored when creating
+	Title      string `json:"title"`
+	Body       string `json:"body"`
+	CreateTime int64  `json:"createTime"` // Ignored when creating
+	DeleteTime int64  `json:"deleteTime"`
+	OneUse     bool   `json:"oneUse"`
+	Syntax     string `json:"syntax"`
 
-	"git.lcomrade.su/root/lenpaste/internal/model"
-)
-
-// GET /api/v1/
-func (data *Data) MainHand(rw http.ResponseWriter, req *http.Request) {
-	data.writeError(rw, req, model.ErrNotFound)
+	Author      string `json:"author"`
+	AuthorEmail string `json:"authorEmail"`
+	AuthorURL   string `json:"authorURL"`
 }

@@ -19,15 +19,16 @@
 package raw
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"io"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 // Pattern: /raw/
 func (data *Data) rawHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
-	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -35,15 +36,15 @@ func (data *Data) rawHand(rw http.ResponseWriter, req *http.Request) error {
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[5:])
 
-	paste, err := data.DB.PasteGet(pasteID)
+	paste, err := data.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
 
 	// If "one use" paste
-	if paste.OneUse == true {
+	if paste.OneUse {
 		// Delete paste
-		err = data.DB.PasteDelete(pasteID)
+		err = data.db.PasteDelete(pasteID)
 		if err != nil {
 			return err
 		}

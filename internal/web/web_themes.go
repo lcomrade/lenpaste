@@ -28,9 +28,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
-const baseTheme = "dark"
 const embThemesDir = "data/theme"
 
 type Theme map[string]string
@@ -110,13 +111,13 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 	// Prepare themes list
 	for key, val := range themes {
 		// Get theme name
-		themeName := val["theme.Name."+baseLocale]
+		themeName := val["theme.Name."+model.BaseLocale]
 		if themeName == "" {
-			return nil, nil, errors.New("web: empty theme.Name." + baseLocale + " parameter in '" + key + "' theme")
+			return nil, nil, errors.New("web: empty theme.Name." + model.BaseLocale + " parameter in '" + key + "' theme")
 		}
 
 		// Append to the translation, if it is not complete
-		defTheme := themes[baseTheme]
+		defTheme := themes[model.BaseTheme]
 		defTotal := len(defTheme)
 		curTotal := 0
 		for defKey, defVal := range defTheme {
@@ -125,7 +126,7 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 				curTotal = curTotal + 1
 			} else {
 				if strings.HasPrefix(defKey, "theme.Name.") {
-					val[defKey] = val["theme.Name."+baseLocale]
+					val[defKey] = val["theme.Name."+model.BaseLocale]
 				} else {
 					val[defKey] = defVal
 				}
@@ -141,7 +142,7 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 		if curTotal != defTotal {
 			themeNameSuffix = fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
 		}
-		themesList[baseLocale][key] = themeName + themeNameSuffix
+		themesList[model.BaseLocale][key] = themeName + themeNameSuffix
 
 		for localeCode, _ := range localesList {
 			result, ok := val["theme.Name."+localeCode]
@@ -173,7 +174,7 @@ func (themesList ThemesList) getForLocale(req *http.Request) ThemesListPart {
 	}
 
 	// Load default part theme
-	theme, _ := themesList[baseLocale]
+	theme, _ := themesList[model.BaseLocale]
 	return theme
 }
 

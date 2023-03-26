@@ -20,15 +20,17 @@ package web
 
 import (
 	"embed"
-	"git.lcomrade.su/root/lenpaste/internal/config"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
-	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"html/template"
 	"net/http"
 	"strings"
 	textTemplate "text/template"
+
+	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 )
 
 //go:embed data/*
@@ -270,7 +272,7 @@ func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
 	// Process request
 	var err error
 
-	rw.Header().Set("Server", config.Software+"/"+data.Version)
+	rw.Header().Set("Server", model.Software+"/"+data.Version)
 
 	switch req.URL.Path {
 	// Search engines

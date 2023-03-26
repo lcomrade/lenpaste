@@ -20,12 +20,13 @@ package logger
 
 import (
 	"fmt"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"net/http"
 	"os"
 	"runtime"
 	"strconv"
 	"time"
+
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 type Logger struct {
@@ -52,18 +53,18 @@ func getTrace() string {
 	}
 }
 
-func (cfg Logger) Info(msg string) {
+func (cfg *Logger) Info(msg string) {
 	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[INFO]   ", msg)
 }
 
-func (cfg Logger) Error(e error) {
+func (cfg *Logger) Error(e error) {
 	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", getTrace(), e.Error())
 }
 
-func (cfg Logger) HttpRequest(req *http.Request, code int) {
+func (cfg *Logger) HttpRequest(req *http.Request, code int) {
 	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.TimeFormat), "[REQUEST]", netshare.GetClientAddr(req).String(), req.Method, code, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
 }
 
-func (cfg Logger) HttpError(req *http.Request, e error) {
+func (cfg *Logger) HttpError(req *http.Request, e error) {
 	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.TimeFormat), "[ERROR]  ", netshare.GetClientAddr(req).String(), req.Method, 500, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", getTrace(), e.Error())
 }

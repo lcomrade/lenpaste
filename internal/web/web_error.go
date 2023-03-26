@@ -19,12 +19,10 @@
 package web
 
 import (
-	"errors"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
-	"strconv"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
 type errorTmpl struct {
@@ -42,40 +40,25 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 		Translate: data.Locales.findLocale(req).translate,
 	}
 
-	// Dectect error
-	var eTmp429 *netshare.ErrTooManyRequests
+	// Parse error
+	resp := model.ParseError(e)
 
-	if e == netshare.ErrBadRequest {
-		errData.Code = 400
-
-	} else if e == netshare.ErrUnauthorized {
-		errData.Code = 401
-
-	} else if e == storage.ErrNotFoundID {
-		errData.Code = 404
-
-	} else if e == netshare.ErrNotFound {
-		errData.Code = 404
-
-	} else if e == netshare.ErrMethodNotAllowed {
-		errData.Code = 405
-
-	} else if e == netshare.ErrPayloadTooLarge {
-		errData.Code = 413
-
-	} else if errors.As(e, &eTmp429) {
-		errData.Code = 429
-		rw.Header().Set("Retry-After", strconv.FormatInt(eTmp429.RetryAfter, 10))
-
-	} else {
-		errData.Code = 500
+	if resp.Code > 499 {
+		data.log.HttpError(req, e)
 	}
 
-	// Write response header
-	rw.Header().Set("Content-type", "text/html; charset=utf-8")
-	rw.WriteHeader(errData.Code)
+	errData.Code = resp.Code
 
-	// Render template
+	// Prepare header
+	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	for key, val := range resp.Header {
+		rw.Header().Set(key, val)
+	}
+
+	// Set HTTP status code
+	rw.WriteHeader(resp.Code)
+
+	// Send response body
 	err := data.ErrorPage.Execute(rw, errData)
 	if err != nil {
 		return 500, err

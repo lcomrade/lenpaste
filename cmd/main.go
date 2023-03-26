@@ -22,22 +22,21 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"git.lcomrade.su/root/lenpaste/internal/apiv1"
-	"git.lcomrade.su/root/lenpaste/internal/config"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/raw"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"git.lcomrade.su/root/lenpaste/internal/web"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"time"
-)
 
-var Version = "unknown"
+	"git.lcomrade.su/root/lenpaste/internal/apiv1"
+	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/logger"
+	"git.lcomrade.su/root/lenpaste/internal/model"
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/raw"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"git.lcomrade.su/root/lenpaste/internal/web"
+)
 
 func backgroundJob(cleanJobPeriod time.Duration, db storage.DB, log logger.Logger) {
 	for {
@@ -130,7 +129,7 @@ func printHelp(noErrors bool) {
 }
 
 func printVersion() {
-	println(Version)
+	println(model.Version)
 
 	os.Exit(0)
 }
@@ -139,52 +138,6 @@ func printFlagNotSet(flg string) {
 	println("flag is not set:", flg)
 
 	os.Exit(2)
-}
-
-func parseDuration(s string) (int64, error) {
-	var out int64
-
-	for _, part := range strings.Split(s, " ") {
-		if strings.HasSuffix(part, "m") {
-			val, err := strconv.Atoi(part[:len(part)-1])
-			if err != nil {
-				return out, errors.New(`parse duration: invalid format "` + part + `"`)
-			}
-			out = out + (int64(val) * 60)
-			continue
-		}
-
-		if strings.HasSuffix(part, "h") {
-			val, err := strconv.Atoi(part[:len(part)-1])
-			if err != nil {
-				return out, errors.New(`parse duration: invalid format "` + part + `"`)
-			}
-			out = out + (int64(val) * 60 * 60)
-			continue
-		}
-
-		if strings.HasSuffix(part, "d") {
-			val, err := strconv.Atoi(part[:len(part)-1])
-			if err != nil {
-				return out, errors.New(`parse duration: invalid format "` + part + `"`)
-			}
-			out = out + int64((val)*60*60*24)
-			continue
-		}
-
-		if strings.HasSuffix(part, "w") {
-			val, err := strconv.Atoi(part[:len(part)-1])
-			if err != nil {
-				return out, errors.New(`parse duration: invalid format "` + part + `"`)
-			}
-			out = out + int64((val)*60*60*24*7)
-			continue
-		}
-
-		return out, errors.New(`parse duration: invalid format "` + part + `"`)
-	}
-
-	return out, nil
 }
 
 func main() {
@@ -314,7 +267,7 @@ func main() {
 		exitOnError(err)
 	}
 
-	cfg := config.Config{
+	cfg := &config.Config{
 		Log:               log,
 		RateLimitGet:      netshare.NewRateLimitSystem(*flagGetPastesPer5Min, *flagGetPastesPer15Min, *flagGetPastesPer1Hour),
 		RateLimitNew:      netshare.NewRateLimitSystem(*flagNewPastesPer5Min, *flagNewPastesPer15Min, *flagNewPastesPer1Hour),
@@ -334,7 +287,7 @@ func main() {
 		LenPasswdFile:     *flagLenPasswdFile,
 	}
 
-	apiv1Data := apiv1.Load(db, cfg)
+	apiv1Data := apiv1.Load(log, db, cfg)
 
 	rawData := raw.Load(db, cfg)
 
