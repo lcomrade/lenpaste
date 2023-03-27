@@ -19,11 +19,12 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"html/template"
 	"net/http"
 	"time"
+
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lenpaste/internal/storage"
 )
 
 type embTmpl struct {
@@ -43,7 +44,7 @@ func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error 
 	errorNotFound := false
 
 	// Check rate limit
-	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -52,7 +53,7 @@ func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error 
 	pasteID := string([]rune(req.URL.Path)[5:])
 
 	// Read DB
-	paste, err := data.DB.PasteGet(pasteID)
+	paste, err := data.db.PasteGet(pasteID)
 	if err != nil {
 		if err == storage.ErrNotFoundID {
 			errorNotFound = true
@@ -74,9 +75,9 @@ func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error 
 		Body:          tryHighlight(paste.Body, paste.Syntax, "monokai"),
 
 		ErrorNotFound: errorNotFound,
-		Translate:     data.Locales.findLocale(req).translate,
+		Translate:     data.l10n.findLocale(req).translate,
 	}
 
 	// Show paste
-	return data.EmbeddedPage.Execute(rw, tmplData)
+	return data.embeddedPage.Execute(rw, tmplData)
 }

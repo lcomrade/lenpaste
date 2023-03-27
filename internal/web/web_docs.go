@@ -40,21 +40,31 @@ type docsApiV1Tmpl struct {
 // Pattern: /docs
 func (data *Data) docsHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.Docs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
+	return data.docs.Execute(rw, docsTmpl{Translate: data.l10n.findLocale(req).translate})
 }
 
 // Pattern: /docs/apiv1
 func (data *Data) docsApiV1Hand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.DocsApiV1.Execute(rw, docsApiV1Tmpl{
+	return data.docsApiV1.Execute(rw, docsApiV1Tmpl{
 		MaxLenAuthorAll: model.MaxLengthAuthorAll,
-		Translate:       data.Locales.findLocale(req).translate,
-		Highlight:       data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
+		Translate:       data.l10n.findLocale(req).translate,
+		Highlight:       data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
+	})
+}
+
+// Pattern: /docs/apiv2
+func (data *Data) docsApiV2Hand(rw http.ResponseWriter, req *http.Request) error {
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+	return data.docsApiV1.Execute(rw, docsApiV1Tmpl{
+		MaxLenAuthorAll: model.MaxLengthAuthorAll,
+		Translate:       data.l10n.findLocale(req).translate,
+		Highlight:       data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
 	})
 }
 
 // Pattern: /docs/api_libs
 func (data *Data) docsApiLibsHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.DocsApiLibs.Execute(rw, docsTmpl{Translate: data.Locales.findLocale(req).translate})
+	return data.docsApiLibs.Execute(rw, docsTmpl{Translate: data.l10n.findLocale(req).translate})
 }

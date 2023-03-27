@@ -23,12 +23,14 @@ import "git.lcomrade.su/root/lenpaste/internal/model"
 type Config struct {
 	DB     ConfigDB     `json:"database"`
 	Public ConfigPublic `json:"public"`
+	UI     ConfigUI     `json:"ui"`
 	Paste  ConfigPaste  `json:"paste"`
 
 	About      map[string]string `json:"-"`
 	Rules      map[string]string `json:"-"`
 	TermsOfUse map[string]string `json:"-"`
 
+	ThemesDir     string `json:"-"`
 	LenPasswdFile string `json:"-"`
 }
 
@@ -48,6 +50,10 @@ type ConfigPublic struct {
 	RobotsDisallow bool `json:"robots_disallow"`
 }
 
+type ConfigUI struct {
+	DefaultTheme string `json:"default_theme"`
+}
+
 type ConfigPaste struct {
 	TitleMaxLen int   `json:"title_max_len"`
 	BodyMaxLen  int   `json:"body_max_len"`
@@ -55,7 +61,6 @@ type ConfigPaste struct {
 
 	UiDefaultLifetime    int64  `json:"-"`
 	UiDefaultLifetimeStr string `json:"ui_default_lifetime"`
-	UiDefaultTheme       string `json:"ui_default_theme"`
 }
 
 func (cfg *Config) GetAbout(locale string) string {

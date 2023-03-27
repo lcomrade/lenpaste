@@ -21,6 +21,8 @@ package web
 import (
 	"html/template"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
 type aboutTmpl struct {
@@ -46,38 +48,40 @@ type aboutMinTmp struct {
 
 // Pattern: /about
 func (data *Data) aboutHand(rw http.ResponseWriter, req *http.Request) error {
+	lang := data.l10n.detectLanguage(req)
+
 	dataTmpl := aboutTmpl{
-		Version:          data.Version,
-		TitleMaxLen:      data.TitleMaxLen,
-		BodyMaxLen:       data.BodyMaxLen,
-		MaxLifeTime:      data.MaxLifeTime,
-		ServerAbout:      data.ServerAbout,
-		ServerRules:      data.ServerRules,
-		ServerTermsExist: data.ServerTermsExist,
-		AdminName:        data.AdminName,
-		AdminMail:        data.AdminMail,
-		Highlight:        data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
-		Translate:        data.Locales.findLocale(req).translate,
+		Version:          model.Version,
+		TitleMaxLen:      data.cfg.Paste.TitleMaxLen,
+		BodyMaxLen:       data.cfg.Paste.BodyMaxLen,
+		MaxLifeTime:      data.cfg.Paste.MaxLifetime,
+		ServerAbout:      data.cfg.GetAbout(lang),
+		ServerRules:      data.cfg.GetRules(lang),
+		ServerTermsExist: data.cfg.TermsOfUse != nil,
+		AdminName:        data.cfg.Public.AdminName,
+		AdminMail:        data.cfg.Public.AdminMail,
+		Highlight:        data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:        data.l10n.findLocale(req).translate,
 	}
 
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.About.Execute(rw, dataTmpl)
+	return data.about.Execute(rw, dataTmpl)
 }
 
 // Pattern: /about/authors
 func (data *Data) authorsHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.Authors.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
+	return data.authors.Execute(rw, aboutMinTmp{Translate: data.l10n.findLocale(req).translate})
 }
 
 // Pattern: /about/license
 func (data *Data) licenseHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.License.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
+	return data.license.Execute(rw, aboutMinTmp{Translate: data.l10n.findLocale(req).translate})
 }
 
 // Pattern: /about/source_code
 func (data *Data) sourceCodePageHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.SourceCodePage.Execute(rw, aboutMinTmp{Translate: data.Locales.findLocale(req).translate})
+	return data.sourceCodePage.Execute(rw, aboutMinTmp{Translate: data.l10n.findLocale(req).translate})
 }

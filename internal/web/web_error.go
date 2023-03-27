@@ -35,9 +35,9 @@ type errorTmpl struct {
 func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
 	errData := errorTmpl{
 		Code:      0,
-		AdminName: data.AdminName,
-		AdminMail: data.AdminMail,
-		Translate: data.Locales.findLocale(req).translate,
+		AdminName: data.cfg.Public.AdminName,
+		AdminMail: data.cfg.Public.AdminMail,
+		Translate: data.l10n.findLocale(req).translate,
 	}
 
 	// Parse error
@@ -59,7 +59,7 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	rw.WriteHeader(resp.Code)
 
 	// Send response body
-	err := data.ErrorPage.Execute(rw, errData)
+	err := data.errorPage.Execute(rw, errData)
 	if err != nil {
 		return 500, err
 	}

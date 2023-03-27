@@ -33,9 +33,9 @@ type termsOfUseTmpl struct {
 // Pattern: /terms
 func (data *Data) termsOfUseHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.TermsOfUse.Execute(rw, termsOfUseTmpl{
-		TermsOfUse: data.ServerTermsOfUse,
-		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
-		Translate:  data.Locales.findLocale(req).translate},
+	return data.termsOfUse.Execute(rw, termsOfUseTmpl{
+		TermsOfUse: data.cfg.GetTermsOfUse(data.l10n.detectLanguage(req)),
+		Highlight:  data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:  data.l10n.findLocale(req).translate},
 	)
 }

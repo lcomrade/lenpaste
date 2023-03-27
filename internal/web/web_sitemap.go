@@ -30,7 +30,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 	// Generate robots.txt
 	robotsTxt := "User-agent: *\nDisallow: /\n"
 
-	if data.RobotsDisallow == false {
+	if !data.cfg.Public.RobotsDisallow {
 		proto := netshare.GetProtocol(req)
 		host := netshare.GetHost(req)
 
@@ -48,7 +48,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 }
 
 func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
-	if data.RobotsDisallow {
+	if data.cfg.Public.RobotsDisallow {
 		return model.ErrNotFound
 	}
 
@@ -61,7 +61,7 @@ func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
 	sitemapXML = sitemapXML + "\n" + `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">` + "\n"
 	sitemapXML = sitemapXML + "<url><loc>" + proto + "://" + host + "/" + "</loc></url>\n"
 	sitemapXML = sitemapXML + "<url><loc>" + proto + "://" + host + "/about" + "</loc></url>\n"
-	sitemapXML = sitemapXML + "<url><loc>" + proto + "://" + host + "/docs/apiv1" + "</loc></url>\n"
+	sitemapXML = sitemapXML + "<url><loc>" + proto + "://" + host + "/docs/apiv2" + "</loc></url>\n"
 	sitemapXML = sitemapXML + "<url><loc>" + proto + "://" + host + "/docs/api_libs" + "</loc></url>\n"
 	sitemapXML = sitemapXML + "</urlset>\n"
 

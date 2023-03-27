@@ -34,18 +34,32 @@ import (
 
 const embThemesDir = "data/theme"
 
-type Theme map[string]string
-type Themes map[string]Theme
+type theme map[string]string
 
-type ThemesListPart map[string]string
-type ThemesList map[string]ThemesListPart
+type themesData struct {
+	// VALUE = themes[THEME_NAME][KEY]
+	//
+	// For example:
+	//   locales["dark"]["color.Font"]  = "#FFFFFF"
+	//   locales["light"]["color.Font"] = "#000000"
+	themes map[string]theme
 
-func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme string) (Themes, ThemesList, error) {
-	themes := make(Themes)
-	themesList := make(ThemesList)
+	// LOCALIZED_NAME = names[LANG_CODE][THEME_NAME]
+	//
+	// For example:
+	//   names["en"]["dark"] = "Dark"
+	//   names["ru"]["dark"] = "Тёмная"
+	names map[string]map[string]string
+}
 
-	for localeCode, _ := range localesList {
-		themesList[localeCode] = make(ThemesListPart)
+func loadThemes(hostThemeDir string, locale *l10n, defaultTheme string) (*themesData, error) {
+	themes := themesData{
+		themes: make(map[string]theme),
+		names:  make(map[string]map[string]string),
+	}
+
+	for localeCode := range locale.locales {
+		themes.names[localeCode] = make(map[string]string)
 	}
 
 	// Prepare load FS function
@@ -53,7 +67,7 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 		// Get theme files list
 		files, err := fs.ReadDir(f, themeDir)
 		if err != nil {
-			return errors.New("web: failed read dir '" + themeDir + "': " + err.Error())
+			return errors.New("web: failed read dir \"" + themeDir + "\": " + err.Error())
 		}
 
 		for _, fileInfo := range files {
@@ -63,7 +77,7 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 			}
 
 			fileName := fileInfo.Name()
-			if strings.HasSuffix(fileName, ".theme") == false {
+			if !strings.HasSuffix(fileName, ".theme") {
 				continue
 			}
 			themeCode := fileName[:len(fileName)-6]
@@ -72,7 +86,7 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 			filePath := filepath.Join(themeDir, fileName)
 			fileByte, err := fs.ReadFile(f, filePath)
 			if err != nil {
-				return errors.New("web: failed open file '" + filePath + "': " + err.Error())
+				return errors.New("web: failed open file \"" + filePath + "\": " + err.Error())
 			}
 
 			fileStr := bytes.NewBuffer(fileByte).String()
@@ -80,15 +94,15 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 			// Load theme
 			theme, err := readKVCfg(fileStr)
 			if err != nil {
-				return errors.New("web: failed read file '" + filePath + "': " + err.Error())
+				return errors.New("web: failed read file \"" + filePath + "\": " + err.Error())
 			}
 
-			_, themeExist := themes[themeCode]
+			_, themeExist := themes.themes[themeCode]
 			if themeExist {
 				return errors.New("web: theme alredy loaded: " + filePath)
 			}
 
-			themes[themeCode] = Theme(theme)
+			themes.themes[themeCode] = theme
 		}
 
 		return nil
@@ -97,27 +111,27 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 	// Load embed themes
 	err := loadThemesFromFS(embFS, embThemesDir)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	// Load external themes
 	if hostThemeDir != "" {
 		err = loadThemesFromFS(os.DirFS(hostThemeDir), ".")
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 	}
 
-	// Prepare themes list
-	for key, val := range themes {
+	// Prepare themes names list
+	for key, val := range themes.names {
 		// Get theme name
 		themeName := val["theme.Name."+model.BaseLocale]
 		if themeName == "" {
-			return nil, nil, errors.New("web: empty theme.Name." + model.BaseLocale + " parameter in '" + key + "' theme")
+			return nil, errors.New("web: empty theme.Name." + model.BaseLocale + " parameter in '" + key + "' theme")
 		}
 
 		// Append to the translation, if it is not complete
-		defTheme := themes[model.BaseTheme]
+		defTheme := themes.themes[model.BaseTheme]
 		defTotal := len(defTheme)
 		curTotal := 0
 		for defKey, defVal := range defTheme {
@@ -134,7 +148,7 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 		}
 
 		if curTotal == 0 {
-			return nil, nil, errors.New("web: theme '" + key + "' is empty")
+			return nil, errors.New("web: theme \"" + key + "\" is empty")
 		}
 
 		// Add theme to themes list
@@ -142,67 +156,55 @@ func loadThemes(hostThemeDir string, localesList LocalesList, defaultTheme strin
 		if curTotal != defTotal {
 			themeNameSuffix = fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
 		}
-		themesList[model.BaseLocale][key] = themeName + themeNameSuffix
+		themes.themes[model.BaseLocale][key] = themeName + themeNameSuffix
 
-		for localeCode, _ := range localesList {
+		for localeCode := range locale.locales {
 			result, ok := val["theme.Name."+localeCode]
 			if ok {
-				themesList[localeCode][key] = result + themeNameSuffix
+				themes.themes[localeCode][key] = result + themeNameSuffix
 			} else {
-				themesList[localeCode][key] = themeName + themeNameSuffix
+				themes.themes[localeCode][key] = themeName + themeNameSuffix
 			}
 		}
 	}
 
 	// Check default theme exist
-	_, ok := themes[defaultTheme]
-	if ok == false {
-		return nil, nil, errors.New("web: default theme '" + defaultTheme + "' not found")
+	_, ok := themes.themes[defaultTheme]
+	if !ok {
+		return nil, errors.New("web: default theme '" + defaultTheme + "' not found")
 	}
 
-	return themes, themesList, nil
+	return &themes, nil
 }
 
-func (themesList ThemesList) getForLocale(req *http.Request) ThemesListPart {
-	// Get theme by cookie
-	langCookie := getCookie(req, "lang")
-	if langCookie != "" {
-		theme, ok := themesList[langCookie]
-		if ok == true {
-			return theme
-		}
-	}
-
-	// Load default part theme
-	theme, _ := themesList[model.BaseLocale]
-	return theme
+func (themes *themesData) getForLocale(locale *l10n, req *http.Request) map[string]string {
+	return themes.names[locale.detectLanguage(req)]
 }
 
-func (themes Themes) findTheme(req *http.Request, defaultTheme string) Theme {
+func (data *themesData) findTheme(req *http.Request, defaultTheme string) theme {
 	// Get theme by cookie
 	themeCookie := getCookie(req, "theme")
 	if themeCookie != "" {
-		theme, ok := themes[themeCookie]
-		if ok == true {
+		theme, ok := data.themes[themeCookie]
+		if ok {
 			return theme
 		}
 	}
 
 	// Load default theme
-	theme, _ := themes[defaultTheme]
-	return theme
+	return data.themes[defaultTheme]
 }
 
-func (theme Theme) theme(s string) string {
+func (theme theme) theme(s string) string {
 	for key, val := range theme {
 		if key == s {
 			return val
 		}
 	}
 
-	panic(errors.New("web: theme: unknown theme key: " + s))
+	panic(errors.New("web: theme: unknown theme key \"" + s + "\""))
 }
 
-func (theme Theme) tryHighlight(source string, lexer string) template.HTML {
+func (theme theme) tryHighlight(source string, lexer string) template.HTML {
 	return tryHighlight(source, lexer, theme.theme("highlight.Theme"))
 }

@@ -28,7 +28,6 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/model"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 )
@@ -37,121 +36,71 @@ import (
 var embFS embed.FS
 
 type Data struct {
-	DB  storage.DB
-	Log logger.Logger
+	log *logger.Logger
+	db  *storage.DB
+	cfg *config.Config
 
-	RateLimitNew *netshare.RateLimitSystem
-	RateLimitGet *netshare.RateLimitSystem
+	lexers []string
+	l10n   *l10n
+	themes *themesData
 
-	Lexers      []string
-	Locales     Locales
-	LocalesList LocalesList
-	Themes      Themes
-	ThemesList  ThemesList
+	styleCSS       *textTemplate.Template
+	errorPage      *template.Template
+	main           *template.Template
+	mainJS         *[]byte
+	historyJS      *textTemplate.Template
+	codeJS         *textTemplate.Template
+	pastePage      *template.Template
+	pasteJS        *textTemplate.Template
+	pasteContinue  *template.Template
+	settings       *template.Template
+	about          *template.Template
+	termsOfUse     *template.Template
+	authors        *template.Template
+	license        *template.Template
+	sourceCodePage *template.Template
 
-	StyleCSS       *textTemplate.Template
-	ErrorPage      *template.Template
-	Main           *template.Template
-	MainJS         *[]byte
-	HistoryJS      *textTemplate.Template
-	CodeJS         *textTemplate.Template
-	PastePage      *template.Template
-	PasteJS        *textTemplate.Template
-	PasteContinue  *template.Template
-	Settings       *template.Template
-	About          *template.Template
-	TermsOfUse     *template.Template
-	Authors        *template.Template
-	License        *template.Template
-	SourceCodePage *template.Template
+	docs        *template.Template
+	docsApiV1   *template.Template
+	docsApiV2   *template.Template
+	docsApiLibs *template.Template
 
-	Docs        *template.Template
-	DocsApiV1   *template.Template
-	DocsApiLibs *template.Template
-
-	EmbeddedPage     *template.Template
-	EmbeddedHelpPage *template.Template
-
-	Version string
-
-	TitleMaxLen int
-	BodyMaxLen  int
-	MaxLifeTime int64
-
-	ServerAbout      string
-	ServerRules      string
-	ServerTermsExist bool
-	ServerTermsOfUse string
-
-	AdminName string
-	AdminMail string
-
-	RobotsDisallow bool
-
-	LenPasswdFile string
-
-	UiDefaultLifeTime string
-	UiDefaultTheme    string
+	embeddedPage     *template.Template
+	embeddedHelpPage *template.Template
 }
 
-func Load(db storage.DB, cfg config.Config) (*Data, error) {
-	var data Data
-	var err error
-
+func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) (*Data, error) {
 	// Setup base info
-	data.DB = db
-	data.Log = cfg.Log
-
-	data.RateLimitNew = cfg.RateLimitNew
-	data.RateLimitGet = cfg.RateLimitGet
-
-	data.Version = cfg.Version
-
-	data.TitleMaxLen = cfg.TitleMaxLen
-	data.BodyMaxLen = cfg.BodyMaxLen
-	data.MaxLifeTime = cfg.MaxLifeTime
-	data.UiDefaultLifeTime = cfg.UiDefaultLifetime
-	data.UiDefaultTheme = cfg.UiDefaultTheme
-	data.LenPasswdFile = cfg.LenPasswdFile
-
-	data.ServerAbout = cfg.ServerAbout
-	data.ServerRules = cfg.ServerRules
-	data.ServerTermsOfUse = cfg.ServerTermsOfUse
-
-	serverTermsExist := false
-	if cfg.ServerTermsOfUse != "" {
-		serverTermsExist = true
+	var err error
+	data := Data{
+		log: log,
+		db:  db,
+		cfg: cfg,
 	}
-	data.ServerTermsExist = serverTermsExist
-
-	data.AdminName = cfg.AdminName
-	data.AdminMail = cfg.AdminMail
-
-	data.RobotsDisallow = cfg.RobotsDisallow
 
 	// Get Chroma lexers
-	data.Lexers = chromaLexers.Names(false)
+	data.lexers = chromaLexers.Names(false)
 
 	// Load locales
-	data.Locales, data.LocalesList, err = loadLocales(embFS, "data/locale")
+	data.l10n, err = loadLocales(embFS, "data/locale")
 	if err != nil {
 		return nil, err
 	}
 
 	// Load themes
-	data.Themes, data.ThemesList, err = loadThemes(cfg.UiThemesDir, data.LocalesList, data.UiDefaultTheme)
+	data.themes, err = loadThemes(cfg.ThemesDir, data.l10n, cfg.UI.DefaultTheme)
 	if err != nil {
 		return nil, err
 	}
 
 	// style.css file
-	data.StyleCSS, err = textTemplate.ParseFS(embFS, "data/style.css")
+	data.styleCSS, err = textTemplate.ParseFS(embFS, "data/style.css")
 	if err != nil {
 		return nil, err
 	}
 
 	// main.tmpl
-	data.Main, err = template.ParseFS(embFS, "data/base.tmpl", "data/main.tmpl")
+	data.main, err = template.ParseFS(embFS, "data/base.tmpl", "data/main.tmpl")
 	if err != nil {
 		return nil, err
 	}
@@ -161,106 +110,112 @@ func Load(db storage.DB, cfg config.Config) (*Data, error) {
 	if err != nil {
 		return nil, err
 	}
-	data.MainJS = &mainJS
+	data.mainJS = &mainJS
 
 	// history.js
-	data.HistoryJS, err = textTemplate.ParseFS(embFS, "data/history.js")
+	data.historyJS, err = textTemplate.ParseFS(embFS, "data/history.js")
 	if err != nil {
 		return nil, err
 	}
 
 	// code.js
-	data.CodeJS, err = textTemplate.ParseFS(embFS, "data/code.js")
+	data.codeJS, err = textTemplate.ParseFS(embFS, "data/code.js")
 	if err != nil {
 		return nil, err
 	}
 
 	// paste.tmpl
-	data.PastePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste.tmpl")
+	data.pastePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// paste.js
-	data.PasteJS, err = textTemplate.ParseFS(embFS, "data/paste.js")
+	data.pasteJS, err = textTemplate.ParseFS(embFS, "data/paste.js")
 	if err != nil {
 		return nil, err
 	}
 
 	// paste_continue.tmpl
-	data.PasteContinue, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste_continue.tmpl")
+	data.pasteContinue, err = template.ParseFS(embFS, "data/base.tmpl", "data/paste_continue.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// settings.tmpl
-	data.Settings, err = template.ParseFS(embFS, "data/base.tmpl", "data/settings.tmpl")
+	data.settings, err = template.ParseFS(embFS, "data/base.tmpl", "data/settings.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// about.tmpl
-	data.About, err = template.ParseFS(embFS, "data/base.tmpl", "data/about.tmpl")
+	data.about, err = template.ParseFS(embFS, "data/base.tmpl", "data/about.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// terms.tmpl
-	data.TermsOfUse, err = template.ParseFS(embFS, "data/base.tmpl", "data/terms.tmpl")
+	data.termsOfUse, err = template.ParseFS(embFS, "data/base.tmpl", "data/terms.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// authors.tmpl
-	data.Authors, err = template.ParseFS(embFS, "data/base.tmpl", "data/authors.tmpl")
+	data.authors, err = template.ParseFS(embFS, "data/base.tmpl", "data/authors.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// license.tmpl
-	data.License, err = template.ParseFS(embFS, "data/base.tmpl", "data/license.tmpl")
+	data.license, err = template.ParseFS(embFS, "data/base.tmpl", "data/license.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// source_code.tmpl
-	data.SourceCodePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/source_code.tmpl")
+	data.sourceCodePage, err = template.ParseFS(embFS, "data/base.tmpl", "data/source_code.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// docs.tmpl
-	data.Docs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs.tmpl")
+	data.docs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// docs_apiv1.tmpl
-	data.DocsApiV1, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv1.tmpl")
+	data.docsApiV1, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv1.tmpl")
+	if err != nil {
+		return nil, err
+	}
+
+	// docs_apiv2.tmpl
+	data.docsApiV2, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv2.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// docs_api_libs.tmpl
-	data.DocsApiLibs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_api_libs.tmpl")
+	data.docsApiLibs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_api_libs.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// error.tmpl
-	data.ErrorPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/error.tmpl")
+	data.errorPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/error.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// emb.tmpl
-	data.EmbeddedPage, err = template.ParseFS(embFS, "data/emb.tmpl")
+	data.embeddedPage, err = template.ParseFS(embFS, "data/emb.tmpl")
 	if err != nil {
 		return nil, err
 	}
 
 	// emb_help.tmpl
-	data.EmbeddedHelpPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/emb_help.tmpl")
+	data.embeddedHelpPage, err = template.ParseFS(embFS, "data/base.tmpl", "data/emb_help.tmpl")
 	if err != nil {
 		return nil, err
 	}
@@ -272,7 +227,7 @@ func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
 	// Process request
 	var err error
 
-	rw.Header().Set("Server", model.Software+"/"+data.Version)
+	rw.Header().Set("Server", model.UserAgent)
 
 	switch req.URL.Path {
 	// Search engines
@@ -303,6 +258,8 @@ func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
 		err = data.docsHand(rw, req)
 	case "/docs/apiv1":
 		err = data.docsApiV1Hand(rw, req)
+	case "/docs/apiv2":
+		err = data.docsApiV2Hand(rw, req)
 	case "/docs/api_libs":
 		err = data.docsApiLibsHand(rw, req)
 	// Pages
@@ -330,14 +287,14 @@ func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
 
 	// Log
 	if err == nil {
-		data.Log.HttpRequest(req, 200)
+		data.log.HttpRequest(req, 200)
 
 	} else {
 		code, err := data.writeError(rw, req, err)
 		if err != nil {
-			data.Log.HttpError(req, err)
+			data.log.HttpError(req, err)
 		} else {
-			data.Log.HttpRequest(req, code)
+			data.log.HttpRequest(req, code)
 		}
 	}
 }

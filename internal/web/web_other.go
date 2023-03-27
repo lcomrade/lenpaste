@@ -34,34 +34,34 @@ type jsTmpl struct {
 
 func (data *Data) styleCSSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "text/css; charset=utf-8")
-	return data.StyleCSS.Execute(rw, jsTmpl{
-		Translate: data.Locales.findLocale(req).translate,
-		Theme:     data.Themes.findTheme(req, data.UiDefaultTheme).theme,
+	return data.styleCSS.Execute(rw, jsTmpl{
+		Translate: data.l10n.findLocale(req).translate,
+		Theme:     data.themes.findTheme(req, data.cfg.UI.DefaultTheme).theme,
 	})
 }
 
 func (data *Data) mainJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	rw.Write(*data.MainJS)
+	rw.Write(*data.mainJS)
 	return nil
 }
 
 func (data *Data) codeJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	return data.CodeJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
+	return data.codeJS.Execute(rw, jsTmpl{Translate: data.l10n.findLocale(req).translate})
 }
 
 func (data *Data) historyJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	return data.HistoryJS.Execute(rw, jsTmpl{
-		Translate: data.Locales.findLocale(req).translate,
-		Theme:     data.Themes.findTheme(req, data.UiDefaultTheme).theme,
+	return data.historyJS.Execute(rw, jsTmpl{
+		Translate: data.l10n.findLocale(req).translate,
+		Theme:     data.themes.findTheme(req, data.cfg.UI.DefaultTheme).theme,
 	})
 }
 
 func (data *Data) pasteJSHand(rw http.ResponseWriter, req *http.Request) error {
 	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	return data.PasteJS.Execute(rw, jsTmpl{Translate: data.Locales.findLocale(req).translate})
+	return data.pasteJS.Execute(rw, jsTmpl{Translate: data.l10n.findLocale(req).translate})
 }
 
 func init() {
@@ -76,7 +76,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "<a href=\"/about\">{{ call .Translate `base.About` }}</a>") == false {
+	if !strings.Contains(string(tmp), "<a href=\"/about\">{{ call .Translate `base.About` }}</a>") {
 		println(resp)
 		os.Exit(1)
 	}
@@ -87,17 +87,17 @@ func init() {
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "<p>{{call .Translate `about.LenpasteAuthors` `/about/authors`}}</p>") == false {
+	if !strings.Contains(string(tmp), "<p>{{call .Translate `about.LenpasteAuthors` `/about/authors`}}</p>") {
 		println(resp)
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "/about/source_code") == false {
+	if !strings.Contains(string(tmp), "/about/source_code") {
 		println(resp)
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "/about/license") == false {
+	if !strings.Contains(string(tmp), "/about/license") {
 		println(resp)
 		os.Exit(1)
 	}
@@ -108,7 +108,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "<li>Leonid Maslakov (aka lcomrade) &lt<a href=\"mailto:root@lcomrade.su\">root@lcomrade.su</a>&gt - Core Developer.</li>") == false {
+	if !strings.Contains(string(tmp), "<li>Leonid Maslakov (aka lcomrade) &lt<a href=\"mailto:root@lcomrade.su\">root@lcomrade.su</a>&gt - Core Developer.</li>") {
 		println(resp)
 		os.Exit(1)
 	}
@@ -119,7 +119,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "https://git.lcomrade.su/root/lenpaste") == false {
+	if !strings.Contains(string(tmp), "https://git.lcomrade.su/root/lenpaste") {
 		println(resp)
 		os.Exit(1)
 	}

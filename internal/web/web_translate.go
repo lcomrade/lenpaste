@@ -9,7 +9,7 @@
 // or (at your option) any later version.
 
 // Lenpaste is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// but WITHdata ANY WARRANTY; withdata even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Affero Public License for more details.
 
@@ -31,18 +31,34 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
-type Locale map[string]string
-type Locales map[string]Locale
-type LocalesList map[string]string
+type locale map[string]string
 
-func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
-	locales := make(Locales)
-	localesList := make(LocalesList)
+type l10n struct {
+	// VALUE = locales[LANG_CODE][KEY]
+	//
+	// For example:
+	//   locales["en"]["base.About"] = "About"
+	//   locales["ru"]["base.About"] = "О сайте"
+	locales map[string]locale
+
+	// LANG_CODE - PRETTY_NAME
+	//
+	// For example:
+	//   en - English
+	//   ru - Русский
+	names map[string]string
+}
+
+func loadLocales(f embed.FS, localeDir string) (*l10n, error) {
+	data := l10n{
+		locales: make(map[string]locale),
+		names:   make(map[string]string),
+	}
 
 	// Get locale files list
 	files, err := f.ReadDir(localeDir)
 	if err != nil {
-		return nil, nil, errors.New("web: failed read dir '" + localeDir + "': " + err.Error())
+		return nil, errors.New("web: failed read dir \"" + localeDir + "\": " + err.Error())
 	}
 
 	// Load locales
@@ -53,7 +69,7 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 		}
 
 		fileName := fileInfo.Name()
-		if strings.HasSuffix(fileName, ".json") == false {
+		if !strings.HasSuffix(fileName, ".json") {
 			continue
 		}
 		localeCode := fileName[:len(fileName)-5]
@@ -62,29 +78,29 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 		filePath := filepath.Join(localeDir, fileName)
 		file, err := f.Open(filePath)
 		if err != nil {
-			return nil, nil, errors.New("web: failed open file '" + filePath + "': " + err.Error())
+			return nil, errors.New("web: failed open file \"" + filePath + "\": " + err.Error())
 		}
 		defer file.Close()
 
-		var locale Locale
+		var locale map[string]string
 		err = json.NewDecoder(file).Decode(&locale)
 		if err != nil {
-			return nil, nil, errors.New("web: failed read file '" + filePath + "': " + err.Error())
+			return nil, errors.New("web: failed read file \"" + filePath + "\": " + err.Error())
 		}
 
-		locales[localeCode] = Locale(locale)
+		data.locales[localeCode] = locale
 	}
 
-	// Prepare locales list
-	for key, val := range locales {
+	// Prepare locales names
+	for key, val := range data.locales {
 		// Get locale name
 		localeName := val["locale.Name"]
 		if localeName == "" {
-			return nil, nil, errors.New("web: empty locale.Name parameter in '" + key + "' locale")
+			return nil, errors.New("web: empty locale.Name parameter in \"" + key + "\" locale")
 		}
 
 		// Append to the translation, if it is not complete
-		defLocale := locales[model.BaseLocale]
+		defLocale := data.locales[model.BaseLocale]
 		defTotal := len(defLocale)
 		curTotal := 0
 		for defKey, defVal := range defLocale {
@@ -97,37 +113,39 @@ func loadLocales(f embed.FS, localeDir string) (Locales, LocalesList, error) {
 		}
 
 		if curTotal == 0 {
-			return nil, nil, errors.New("web: locale '" + key + "' is empty")
+			return nil, errors.New("web: locale \"" + key + "\" is empty")
 		}
 
 		if curTotal == defTotal {
-			localesList[key] = localeName
+			data.names[key] = localeName
 		} else {
-			localesList[key] = localeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
+			data.names[key] = localeName + fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
 		}
 	}
 
-	return locales, localesList, nil
+	return &data, nil
 }
 
-func (locales Locales) findLocale(req *http.Request) Locale {
-	// Get accept language by cookie
-	langCookie := getCookie(req, "lang")
-	if langCookie != "" {
-		locale, ok := locales[langCookie]
-		if ok == true {
-			return locale
+func (data *l10n) detectLanguage(req *http.Request) string {
+	// Get accept language from cookie
+	{
+		lang := getCookie(req, "lang")
+		if lang != "" {
+			_, ok := data.locales[lang]
+			if ok {
+				return lang
+			}
 		}
 	}
 
-	// Get user Accepr-Languages list
+	// Get user Accept-Languages list
 	acceptLanguage := req.Header.Get("Accept-Language")
 	acceptLanguage = strings.Replace(acceptLanguage, " ", "", -1)
 
 	var langs []string
 	for _, part := range strings.Split(acceptLanguage, ";") {
 		for _, lang := range strings.Split(part, ",") {
-			if strings.HasPrefix(lang, "q=") == false {
+			if !strings.HasPrefix(lang, "q=") {
 				langs = append(langs, lang)
 			}
 		}
@@ -135,24 +153,27 @@ func (locales Locales) findLocale(req *http.Request) Locale {
 
 	// Search locale
 	for _, lang := range langs {
-		for localeCode, locale := range locales {
+		for localeCode := range data.locales {
 			if localeCode == lang {
-				return locale
+				return lang
 			}
 		}
 	}
 
-	// Load default locale
-	locale, _ := locales[model.BaseLocale]
-	return locale
+	// Else return default language
+	return model.BaseLocale
 }
 
-func (locale Locale) translate(s string, a ...interface{}) template.HTML {
+func (data *l10n) findLocale(req *http.Request) locale {
+	return data.locales[data.detectLanguage(req)]
+}
+
+func (locale locale) translate(s string, a ...interface{}) template.HTML {
 	for key, val := range locale {
 		if key == s {
 			return template.HTML(fmt.Sprintf(val, a...))
 		}
 	}
 
-	panic(errors.New("web: translate: unknown locale key: " + s))
+	panic(errors.New("web: translate: unknown locale key \"" + s + "\""))
 }

@@ -19,9 +19,10 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
+
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 type embHelpTmpl struct {
@@ -39,7 +40,7 @@ type embHelpTmpl struct {
 // Pattern: /emb_help/
 func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
-	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -48,7 +49,7 @@ func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) er
 	pasteID := string([]rune(req.URL.Path)[10:])
 
 	// Read DB
-	paste, err := data.DB.PasteGet(pasteID)
+	paste, err := data.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
@@ -60,9 +61,9 @@ func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) er
 		OneUse:     paste.OneUse,
 		Protocol:   netshare.GetProtocol(req),
 		Host:       netshare.GetHost(req),
-		Translate:  data.Locales.findLocale(req).translate,
-		Highlight:  data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight,
+		Translate:  data.l10n.findLocale(req).translate,
+		Highlight:  data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
 	}
 
-	return data.EmbeddedHelpPage.Execute(rw, tmplData)
+	return data.embeddedHelpPage.Execute(rw, tmplData)
 }

@@ -51,18 +51,18 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	// Check auth
 	authOk := true
 
-	if data.LenPasswdFile != "" {
+	if data.cfg.LenPasswdFile != "" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
-		if authExist == true {
-			authOk, err = lenpasswd.LoadAndCheck(data.LenPasswdFile, user, pass)
+		if authExist {
+			authOk, err = lenpasswd.LoadAndCheck(data.cfg.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
 		}
 
-		if authOk == false {
+		if !authOk {
 			rw.Header().Add("WWW-Authenticate", "Basic")
 			rw.WriteHeader(401)
 		}
@@ -70,7 +70,7 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 
 	// Create paste if need
 	if req.Method == "POST" {
-		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.DB, data.RateLimitNew, data.TitleMaxLen, data.BodyMaxLen, data.MaxLifeTime, data.Lexers)
+		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.db, data.cfg, data.lexers)
 		if err != nil {
 			return err
 		}
@@ -82,21 +82,21 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 
 	// Else show create page
 	tmplData := createTmpl{
-		TitleMaxLen:        data.TitleMaxLen,
-		BodyMaxLen:         data.BodyMaxLen,
+		TitleMaxLen:        data.cfg.Paste.TitleMaxLen,
+		BodyMaxLen:         data.cfg.Paste.BodyMaxLen,
 		AuthorAllMaxLen:    model.MaxLengthAuthorAll,
-		MaxLifeTime:        data.MaxLifeTime,
-		UiDefaultLifeTime:  data.UiDefaultLifeTime,
-		Lexers:             data.Lexers,
-		ServerTermsExist:   data.ServerTermsExist,
+		MaxLifeTime:        data.cfg.Paste.MaxLifetime,
+		UiDefaultLifeTime:  data.cfg.Paste.UiDefaultLifetimeStr,
+		Lexers:             data.lexers,
+		ServerTermsExist:   data.cfg.TermsOfUse != nil,
 		AuthorDefault:      getCookie(req, "author"),
 		AuthorEmailDefault: getCookie(req, "authorEmail"),
 		AuthorURLDefault:   getCookie(req, "authorURL"),
 		AuthOk:             authOk,
-		Translate:          data.Locales.findLocale(req).translate,
+		Translate:          data.l10n.findLocale(req).translate,
 	}
 
 	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	return data.Main.Execute(rw, tmplData)
+	return data.main.Execute(rw, tmplData)
 }

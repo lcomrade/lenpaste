@@ -19,17 +19,18 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"net/http"
 	"strings"
 	"time"
+
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 )
 
 // Pattern: /dl/
 func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
-	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -37,15 +38,15 @@ func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[4:])
 
-	paste, err := data.DB.PasteGet(pasteID)
+	paste, err := data.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
 
 	// If "one use" paste
-	if paste.OneUse == true {
+	if paste.OneUse {
 		// Delete paste
-		err = data.DB.PasteDelete(pasteID)
+		err = data.db.PasteDelete(pasteID)
 		if err != nil {
 			return err
 		}
@@ -62,7 +63,7 @@ func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 
 	// Get file extension
 	fileExt := chromaLexers.Get(paste.Syntax).Config().Filenames[0][1:]
-	if strings.HasSuffix(fileName, fileExt) == false {
+	if !strings.HasSuffix(fileName, fileExt) {
 		fileName = fileName + fileExt
 	}
 

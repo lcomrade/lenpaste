@@ -52,12 +52,12 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 	// Check auth
 	authOk := true
 
-	if data.LenPasswdFile != "" {
+	if data.cfg.LenPasswdFile != "" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
-		if authExist == true {
-			authOk, err = lenpasswd.LoadAndCheck(data.LenPasswdFile, user, pass)
+		if authExist {
+			authOk, err = lenpasswd.LoadAndCheck(data.cfg.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
@@ -69,25 +69,25 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 		// Prepare data
 		dataTmpl := settingsTmpl{
 			Language:         getCookie(req, "lang"),
-			LanguageSelector: data.LocalesList,
+			LanguageSelector: data.l10n.names,
 			Theme:            getCookie(req, "theme"),
-			ThemeSelector:    data.ThemesList.getForLocale(req),
+			ThemeSelector:    data.themes.getForLocale(data.l10n, req),
 			AuthorAllMaxLen:  model.MaxLengthAuthorAll,
 			Author:           getCookie(req, "author"),
 			AuthorEmail:      getCookie(req, "authorEmail"),
 			AuthorURL:        getCookie(req, "authorURL"),
 			AuthOk:           authOk,
-			Translate:        data.Locales.findLocale(req).translate,
+			Translate:        data.l10n.findLocale(req).translate,
 		}
 
 		if dataTmpl.Theme == "" {
-			dataTmpl.Theme = data.UiDefaultTheme
+			dataTmpl.Theme = data.cfg.UI.DefaultTheme
 		}
 
 		// Show page
 		rw.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-		err := data.Settings.Execute(rw, dataTmpl)
+		err := data.settings.Execute(rw, dataTmpl)
 		if err != nil {
 			data.writeError(rw, req, err)
 		}

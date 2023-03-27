@@ -19,11 +19,12 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lineend"
 	"html/template"
 	"net/http"
 	"time"
+
+	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"git.lcomrade.su/root/lineend"
 )
 
 type pasteTmpl struct {
@@ -53,7 +54,7 @@ type pasteContinueTmpl struct {
 
 func (data *Data) getPasteHand(rw http.ResponseWriter, req *http.Request) error {
 	// Check rate limit
-	err := data.RateLimitGet.CheckAndUse(netshare.GetClientAddr(req))
+	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -62,27 +63,27 @@ func (data *Data) getPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	pasteID := string([]rune(req.URL.Path)[1:])
 
 	// Read DB
-	paste, err := data.DB.PasteGet(pasteID)
+	paste, err := data.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
 
 	// If "one use" paste
-	if paste.OneUse == true {
+	if paste.OneUse {
 		// If continue button not pressed
 		req.ParseForm()
 
 		if req.PostForm.Get("oneUseContinue") != "true" {
 			tmplData := pasteContinueTmpl{
 				ID:        paste.ID,
-				Translate: data.Locales.findLocale(req).translate,
+				Translate: data.l10n.findLocale(req).translate,
 			}
 
-			return data.PasteContinue.Execute(rw, tmplData)
+			return data.pasteContinue.Execute(rw, tmplData)
 		}
 
 		// If continue button pressed delete paste
-		err = data.DB.PasteDelete(pasteID)
+		err = data.db.PasteDelete(pasteID)
 		if err != nil {
 			return err
 		}
@@ -95,7 +96,7 @@ func (data *Data) getPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	tmplData := pasteTmpl{
 		ID:         paste.ID,
 		Title:      paste.Title,
-		Body:       data.Themes.findTheme(req, data.UiDefaultTheme).tryHighlight(paste.Body, paste.Syntax),
+		Body:       data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight(paste.Body, paste.Syntax),
 		Syntax:     paste.Syntax,
 		CreateTime: paste.CreateTime,
 		DeleteTime: paste.DeleteTime,
@@ -108,7 +109,7 @@ func (data *Data) getPasteHand(rw http.ResponseWriter, req *http.Request) error 
 		AuthorEmail: paste.AuthorEmail,
 		AuthorURL:   paste.AuthorURL,
 
-		Translate: data.Locales.findLocale(req).translate,
+		Translate: data.l10n.findLocale(req).translate,
 	}
 
 	// Get body line end
@@ -122,5 +123,5 @@ func (data *Data) getPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	}
 
 	// Show paste
-	return data.PastePage.Execute(rw, tmplData)
+	return data.pastePage.Execute(rw, tmplData)
 }
