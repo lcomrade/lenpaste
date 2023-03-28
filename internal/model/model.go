@@ -19,6 +19,7 @@
 package model
 
 const (
+	SmallName  = "lenpaste"
 	Software   = "Lenpaste"
 	BaseLocale = "en"
 	BaseTheme  = "dark"

@@ -18,9 +18,12 @@
 
 package config
 
-import "git.lcomrade.su/root/lenpaste/internal/model"
+import (
+	"git.lcomrade.su/root/lenpaste/internal/model"
+)
 
 type Config struct {
+	HTTP   ConfigHTTP   `json:"http"`
 	DB     ConfigDB     `json:"database"`
 	Public ConfigPublic `json:"public"`
 	UI     ConfigUI     `json:"ui"`
@@ -30,8 +33,11 @@ type Config struct {
 	Rules      map[string]string `json:"-"`
 	TermsOfUse map[string]string `json:"-"`
 
-	ThemesDir     string `json:"-"`
-	LenPasswdFile string `json:"-"`
+	Paths ConfigPaths `json:"-"`
+}
+
+type ConfigHTTP struct {
+	Address string `json:"address"`
 }
 
 type ConfigDB struct {
@@ -41,6 +47,9 @@ type ConfigDB struct {
 	MaxIdleConns       int    `json:"max_idle_conns"`
 	ConnMaxLifetime    int64  `json:"-"`
 	ConnMaxLifetimeStr string `json:"conn_max_lifetime"`
+
+	CleanupPeriod    int64  `json:"-"`
+	CleanupPeriodStr string `json:"cleanup_period"`
 }
 
 type ConfigPublic struct {
@@ -55,12 +64,25 @@ type ConfigUI struct {
 }
 
 type ConfigPaste struct {
-	TitleMaxLen int   `json:"title_max_len"`
-	BodyMaxLen  int   `json:"body_max_len"`
-	MaxLifetime int64 `json:"max_lifetime"`
+	TitleMaxLen    int    `json:"title_max_len"`
+	BodyMaxLen     int    `json:"body_max_len"`
+	MaxLifetime    int64  `json:"-"`
+	MaxLifetimeStr string `json:"max_lifetime"`
 
 	UiDefaultLifetime    int64  `json:"-"`
 	UiDefaultLifetimeStr string `json:"ui_default_lifetime"`
+}
+
+type ConfigPaths struct {
+	MainCfg string `json:"-"`
+
+	AboutDir string `json:"-"`
+	RulesDir string `json:"-"`
+	TermsDir string `json:"-"`
+
+	ThemesDir string `json:"-"`
+
+	LenPasswdFile string `json:"-"`
 }
 
 func (cfg *Config) GetAbout(locale string) string {

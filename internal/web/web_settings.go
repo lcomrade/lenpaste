@@ -52,12 +52,12 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 	// Check auth
 	authOk := true
 
-	if data.cfg.LenPasswdFile != "" {
+	if data.cfg.Paths.LenPasswdFile != "" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
 		if authExist {
-			authOk, err = lenpasswd.LoadAndCheck(data.cfg.LenPasswdFile, user, pass)
+			authOk, err = lenpasswd.LoadAndCheck(data.cfg.Paths.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}

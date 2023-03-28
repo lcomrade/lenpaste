@@ -62,7 +62,7 @@ func LoadFile(path string) (Data, error) {
 		pass := lineSplit[1]
 
 		_, exist := data[user]
-		if exist == true {
+		if exist {
 			return nil, errors.New("lenpasswd: overriding user " + user + " in line " + strconv.Itoa(i))
 		}
 
@@ -74,7 +74,7 @@ func LoadFile(path string) (Data, error) {
 
 func (data Data) Check(user string, pass string) bool {
 	truePass, exist := data[user]
-	if exist == false {
+	if !exist {
 		return false
 	}
 

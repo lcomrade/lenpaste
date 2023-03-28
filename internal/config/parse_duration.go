@@ -22,10 +22,9 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"time"
 )
 
-func ParseDuration(s string) (time.Duration, error) {
+func parseDuration(s string) (int64, error) {
 	var out int64
 
 	for _, part := range strings.Split(s, " ") {
@@ -68,5 +67,5 @@ func ParseDuration(s string) (time.Duration, error) {
 		return 0, errors.New(`parse duration: invalid format "` + part + `"`)
 	}
 
-	return time.Duration(out) * time.Second, nil
+	return out, nil
 }

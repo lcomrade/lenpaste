@@ -88,7 +88,7 @@ func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) (*Data, error)
 	}
 
 	// Load themes
-	data.themes, err = loadThemes(cfg.ThemesDir, data.l10n, cfg.UI.DefaultTheme)
+	data.themes, err = loadThemes(cfg.Paths.ThemesDir, data.l10n, cfg.UI.DefaultTheme)
 	if err != nil {
 		return nil, err
 	}
