@@ -25,6 +25,12 @@ import (
 )
 
 func parseDuration(s string) (int64, error) {
+	s = strings.TrimSpace(s)
+
+	if s == "" {
+		return 0, nil
+	}
+
 	var out int64
 
 	for _, part := range strings.Split(s, " ") {

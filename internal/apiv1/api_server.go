@@ -65,8 +65,8 @@ func (data *Data) getServerInfoHand(rw http.ResponseWriter, req *http.Request) e
 		AdminName:         data.cfg.Public.AdminName,
 		AdminMail:         data.cfg.Public.AdminMail,
 		Syntaxes:          data.lexers,
-		UiDefaultLifeTime: data.cfg.Paste.UiDefaultLifetimeStr,
-		AuthRequired:      data.cfg.Paths.LenPasswdFile != "",
+		UiDefaultLifeTime: data.cfg.Paste.UiDefaultLifetime,
+		AuthRequired:      data.cfg.Auth.Method != "",
 	}
 
 	// Return response

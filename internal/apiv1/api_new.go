@@ -38,7 +38,7 @@ func (data *Data) newHand(rw http.ResponseWriter, req *http.Request) error {
 	var err error
 
 	// Check auth
-	if data.cfg.Paths.LenPasswdFile != "" {
+	if data.cfg.Auth.Method == "lenpasswd" {
 		authOk := false
 
 		user, pass, authExist := req.BasicAuth()

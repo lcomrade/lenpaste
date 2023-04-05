@@ -43,6 +43,9 @@ func Load(cfgDir string) (*Config, error) {
 			MaxIdleConns:       5,
 			ConnMaxLifetime:    5 * 60,
 			ConnMaxLifetimeStr: "5m",
+
+			CleanupPeriod:    60 * 60 * 3,
+			CleanupPeriodStr: "3h",
 		},
 
 		Public: ConfigPublic{
@@ -60,10 +63,13 @@ func Load(cfgDir string) (*Config, error) {
 			TitleMaxLen:    100,
 			BodyMaxLen:     20000,
 			MaxLifetime:    0,
-			MaxLifetimeStr: "unlimited",
+			MaxLifetimeStr: "",
 
-			UiDefaultLifetime:    0,
-			UiDefaultLifetimeStr: "",
+			UiDefaultLifetime: "",
+		},
+
+		Auth: ConfigAuth{
+			Method: "",
 		},
 
 		About:      nil,
@@ -98,33 +104,34 @@ func Load(cfgDir string) (*Config, error) {
 	// Convert strings duration to time
 	cfg.DB.ConnMaxLifetime, err = parseDuration(cfg.DB.ConnMaxLifetimeStr)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("config: " + err.Error())
 	}
 
 	cfg.Paste.MaxLifetime, err = parseDuration(cfg.Paste.MaxLifetimeStr)
 	if err != nil {
-		return nil, err
-	}
-
-	cfg.Paste.UiDefaultLifetime, err = parseDuration(cfg.Paste.UiDefaultLifetimeStr)
-	if err != nil {
-		return nil, err
+		return nil, errors.New("config: " + err.Error())
 	}
 
 	// Read about, rules and terms of use
 	cfg.About, err = loadL10nFiles(cfg.Paths.AboutDir, ".txt")
 	if err != nil {
-		return nil, errors.New("config: " + err.Error())
+		if !os.IsNotExist(err) {
+			return nil, errors.New("config: " + err.Error())
+		}
 	}
 
 	cfg.Rules, err = loadL10nFiles(cfg.Paths.RulesDir, ".txt")
 	if err != nil {
-		return nil, errors.New("config: " + err.Error())
+		if !os.IsNotExist(err) {
+			return nil, errors.New("config: " + err.Error())
+		}
 	}
 
 	cfg.TermsOfUse, err = loadL10nFiles(cfg.Paths.TermsDir, ".txt")
 	if err != nil {
-		return nil, errors.New("config: " + err.Error())
+		if !os.IsNotExist(err) {
+			return nil, errors.New("config: " + err.Error())
+		}
 	}
 
 	return &cfg, nil

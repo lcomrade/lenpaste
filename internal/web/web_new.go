@@ -51,7 +51,7 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 	// Check auth
 	authOk := true
 
-	if data.cfg.Paths.LenPasswdFile != "" {
+	if data.cfg.Auth.Method == "lenpasswd" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
@@ -86,7 +86,7 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 		BodyMaxLen:         data.cfg.Paste.BodyMaxLen,
 		AuthorAllMaxLen:    model.MaxLengthAuthorAll,
 		MaxLifeTime:        data.cfg.Paste.MaxLifetime,
-		UiDefaultLifeTime:  data.cfg.Paste.UiDefaultLifetimeStr,
+		UiDefaultLifeTime:  data.cfg.Paste.UiDefaultLifetime,
 		Lexers:             data.lexers,
 		ServerTermsExist:   data.cfg.TermsOfUse != nil,
 		AuthorDefault:      getCookie(req, "author"),

@@ -38,7 +38,7 @@ import (
 )
 
 func fatal(e error) {
-	fmt.Fprintln(os.Stderr, model.SmallName+": error:", e.Error())
+	fmt.Fprintln(os.Stderr, model.SmallName+" error:", e.Error())
 	os.Exit(1)
 }
 
@@ -117,6 +117,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "cfg-dir",
 				Aliases: []string{"d"},
+				Value:   config.DefaultDir,
 				Usage:   "directory with Lenpaste config files",
 			},
 		},
@@ -127,7 +128,7 @@ func main() {
 				Name:  "run",
 				Usage: "Run as demon",
 				Action: func(ctx *cli.Context) error {
-					return run(ctx.String("config"))
+					return run(ctx.String("cfg-dir"))
 				},
 			},
 		},

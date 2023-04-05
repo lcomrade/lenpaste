@@ -28,6 +28,7 @@ type Config struct {
 	Public ConfigPublic `json:"public"`
 	UI     ConfigUI     `json:"ui"`
 	Paste  ConfigPaste  `json:"paste"`
+	Auth   ConfigAuth   `json:"auth"`
 
 	About      map[string]string `json:"-"`
 	Rules      map[string]string `json:"-"`
@@ -69,8 +70,11 @@ type ConfigPaste struct {
 	MaxLifetime    int64  `json:"-"`
 	MaxLifetimeStr string `json:"max_lifetime"`
 
-	UiDefaultLifetime    int64  `json:"-"`
-	UiDefaultLifetimeStr string `json:"ui_default_lifetime"`
+	UiDefaultLifetime string `json:"ui_default_lifetime"`
+}
+
+type ConfigAuth struct {
+	Method string `json:"method"`
 }
 
 type ConfigPaths struct {

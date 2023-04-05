@@ -63,10 +63,13 @@ func loadThemes(hostThemeDir string, locale *l10n, defaultTheme string) (*themes
 	}
 
 	// Prepare load FS function
-	loadThemesFromFS := func(f fs.FS, themeDir string) error {
+	loadThemesFromFS := func(f fs.FS, themeDir string, ignoreIfNotExist bool) error {
 		// Get theme files list
 		files, err := fs.ReadDir(f, themeDir)
 		if err != nil {
+			if ignoreIfNotExist && os.IsNotExist(err) {
+				return nil
+			}
 			return errors.New("web: failed read dir \"" + themeDir + "\": " + err.Error())
 		}
 
@@ -99,7 +102,7 @@ func loadThemes(hostThemeDir string, locale *l10n, defaultTheme string) (*themes
 
 			_, themeExist := themes.themes[themeCode]
 			if themeExist {
-				return errors.New("web: theme alredy loaded: " + filePath)
+				return errors.New("web: theme already loaded: " + filePath)
 			}
 
 			themes.themes[themeCode] = theme
@@ -109,25 +112,23 @@ func loadThemes(hostThemeDir string, locale *l10n, defaultTheme string) (*themes
 	}
 
 	// Load embed themes
-	err := loadThemesFromFS(embFS, embThemesDir)
+	err := loadThemesFromFS(embFS, embThemesDir, false)
 	if err != nil {
 		return nil, err
 	}
 
 	// Load external themes
-	if hostThemeDir != "" {
-		err = loadThemesFromFS(os.DirFS(hostThemeDir), ".")
-		if err != nil {
-			return nil, err
-		}
+	err = loadThemesFromFS(os.DirFS(hostThemeDir), ".", true)
+	if err != nil {
+		return nil, err
 	}
 
 	// Prepare themes names list
-	for key, val := range themes.names {
+	for key, val := range themes.themes {
 		// Get theme name
 		themeName := val["theme.Name."+model.BaseLocale]
 		if themeName == "" {
-			return nil, errors.New("web: empty theme.Name." + model.BaseLocale + " parameter in '" + key + "' theme")
+			return nil, errors.New("web: empty \"theme.Name." + model.BaseLocale + "\" parameter in \"" + key + "\" theme")
 		}
 
 		// Append to the translation, if it is not complete
@@ -151,19 +152,19 @@ func loadThemes(hostThemeDir string, locale *l10n, defaultTheme string) (*themes
 			return nil, errors.New("web: theme \"" + key + "\" is empty")
 		}
 
-		// Add theme to themes list
+		// Add theme to themes names list
 		themeNameSuffix := ""
 		if curTotal != defTotal {
 			themeNameSuffix = fmt.Sprintf(" (%.2f%%)", (float32(curTotal)/float32(defTotal))*100)
 		}
-		themes.themes[model.BaseLocale][key] = themeName + themeNameSuffix
+		themes.names[model.BaseLocale][key] = themeName + themeNameSuffix
 
 		for localeCode := range locale.locales {
 			result, ok := val["theme.Name."+localeCode]
 			if ok {
-				themes.themes[localeCode][key] = result + themeNameSuffix
+				themes.names[localeCode][key] = result + themeNameSuffix
 			} else {
-				themes.themes[localeCode][key] = themeName + themeNameSuffix
+				themes.names[localeCode][key] = themeName + themeNameSuffix
 			}
 		}
 	}
