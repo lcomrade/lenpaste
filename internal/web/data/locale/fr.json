@@ -1,1 +1,19 @@
-{}
+{
+    "about.AdminName": "Nom de l'administrateur :",
+    "about.AdminTitle": "Contacter l'administrateur",
+    "about.Lenpaste2": "Vous n'avez pas besoin de vous inscrire.",
+    "about.Lenpaste5": "Lenpaste a sa propre <a href=\"%s\">API</a>.",
+    "about.Limit": "Limites",
+    "about.LimitBodyNo": "La longueur du snippet n'est pas limitée.",
+    "about.LimitLifeTimeNo": "Aucune durée maximale de vie du snippet.",
+    "about.AboutServerTitle": "À propos de ce serveur",
+    "about.AdminEmail": "E-mail de l'administrateur:",
+    "about.Lenpaste1": "Lenpaste est un logiciel gratuit. L'ensemble du <a href=\"%s\">code source</a> est disponible sous licence <a href=\"%s\">%s</a>.",
+    "about.Lenpaste3": "Ce site n'utilise aucun cookie pour converser une trace de votre passage.",
+    "about.Lenpaste4": "Ce site peut marcher sans JavaScript.",
+    "about.LenpasteAuthors": "<a href=\"%s\">En savoir plus sur les auteurs de Lenpaste.</a>",
+    "about.LenpasteMessage": "Ce serveur exécute la version <code>%s</code> de Lenpaste. À propos de Lenpaste :",
+    "about.LenpasteTitle": "Qu'est-ce que Lenpaste ?",
+    "about.LimitBody": "Longueur maximal du snippet : <code>%d</code> symboles.",
+    "about.LimitLifeTime": "Durée de vie maximale du snippet : <code>%d</code> secondes."
+}
