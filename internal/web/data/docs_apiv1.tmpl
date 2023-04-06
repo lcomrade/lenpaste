@@ -155,9 +155,21 @@
 
 <h4 id="getServerInfo">GET <code>/api/v1/getServerInfo</code></h4>
 <p>{{call .Translate `docsAPIv1.ResponseExample`}}</p>
+<table>
+	<th>{{call .Translate `docsAPIv1.Field`}}</th>
+	<th>{{call .Translate `docsAPIv1.Required`}}</th>
+	<th>{{call .Translate `docsAPIv1.Default`}}</th>
+	<th>{{call .Translate `docsAPIv1.Description`}}</th>
+	<tr>
+		<td><code>lang</code></td>
+		<td></td>
+		<td></td>
+		<td>{{call .Translate `docsAPIv1.ReqServerInfoLang`}}</td>
+	</tr>
+</table>
 {{ call .Highlight `{
 	"software": "Lenpaste",
-	"version": "1.2",
+	"version": "1.4",
 	"titleMaxlength": 100,
 	"bodyMaxlength": 20000,
 	"maxLifeTime": -1,

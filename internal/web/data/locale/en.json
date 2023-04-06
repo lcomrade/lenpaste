@@ -73,7 +73,7 @@
 	"docsAPIv1Libs.StatusOfficial": "Official",
 	"docsAPIv1Libs.StatusUnofficial": "Unofficial",
 	"docsAPIv1Libs.Title": "Libraries for working with API",
-	"docsAPIv2.ReqServerInfoLang": "The language in which the about, rules, and term of user will be returned.",
+	"docsAPIv1.ReqServerInfoLang": "The language in which the about, rules, and term of user will be returned.",
 	"error.400": "Bad Request",
 	"error.401": "Unauthorized",
 	"error.404": "Not Found",

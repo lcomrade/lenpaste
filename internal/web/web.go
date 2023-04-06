@@ -62,7 +62,6 @@ type Data struct {
 
 	docs        *template.Template
 	docsApiV1   *template.Template
-	docsApiV2   *template.Template
 	docsApiLibs *template.Template
 
 	embeddedPage     *template.Template
@@ -190,12 +189,6 @@ func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) (*Data, error)
 		return nil, err
 	}
 
-	// docs_apiv2.tmpl
-	data.docsApiV2, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_apiv2.tmpl")
-	if err != nil {
-		return nil, err
-	}
-
 	// docs_api_libs.tmpl
 	data.docsApiLibs, err = template.ParseFS(embFS, "data/base.tmpl", "data/docs_api_libs.tmpl")
 	if err != nil {
@@ -258,8 +251,6 @@ func (data *Data) Handler(rw http.ResponseWriter, req *http.Request) {
 		err = data.docsHand(rw, req)
 	case "/docs/apiv1":
 		err = data.docsApiV1Hand(rw, req)
-	case "/docs/apiv2":
-		err = data.docsApiV2Hand(rw, req)
 	case "/docs/api_libs":
 		err = data.docsApiLibsHand(rw, req)
 	// Pages
