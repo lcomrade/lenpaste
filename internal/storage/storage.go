@@ -26,6 +26,10 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsCreds "github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 var (
@@ -35,15 +39,30 @@ var (
 type DB struct {
 	cfg  *config.Config
 	pool *sql.DB
+	s3   *s3.Client
 }
 
 func Open(cfg *config.Config) (*DB, error) {
-	// Open SQL DB
 	var err error
 	db := DB{
 		cfg: cfg,
 	}
 
+	// Open S3 bucket
+	s3Cfg := aws.Config{
+		Credentials: awsCreds.NewStaticCredentialsProvider(cfg.S3.AccessKeyID, cfg.S3.SecretAccessKey, ""),
+		EndpointResolverWithOptions: aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+			return aws.Endpoint{
+				PartitionID:   cfg.S3.PartitionID,
+				URL:           cfg.S3.URL,
+				SigningRegion: cfg.S3.SigningRegion,
+			}, nil
+		}),
+	}
+
+	db.s3 = s3.NewFromConfig(s3Cfg)
+
+	// Open SQL DB
 	db.pool, err = sql.Open(db.cfg.DB.Driver, db.cfg.DB.Source)
 	if err != nil {
 		return nil, errors.New("storage: open: " + err.Error())
@@ -72,6 +91,21 @@ func (db *DB) InitDB() error {
 			create_time INTEGER NOT NULL,
 			delete_time INTEGER NOT NULL,
 			one_use     BOOL    NOT NULL
+		);
+
+		CREATE TABLE IF NOT EXISTS files (
+			id               TEXT     PRIMARY KEY,
+			title            TEXT     NOT NULL,
+			create_time      INTEGER  NOT NULL,
+			delete_time      INTEGER  NOT NULL,
+
+			filename         TEXT     NOT NULL,
+			url              TEXT     NOT NULL,
+			upload_finished  BOOL     NOT NULL  DEFAULT false,
+
+			author           TEXT     NOT NULL  DEFAULT '',
+			author_email     TEXT     NOT NULL  DEFAULT '',
+			author_url       TEXT     NOT NULL  DEFAULT ''
 		);
 	`)
 	if err != nil {
