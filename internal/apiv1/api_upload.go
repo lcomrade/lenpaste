@@ -16,26 +16,12 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package model
+package apiv1
 
-type File struct {
-	ID         string `json:"id"` // Ignored when creating
-	Title      string `json:"title"`
-	CreateTime int64  `json:"createTime"` // Ignored when creating
-	DeleteTime int64  `json:"deleteTime"`
+import (
+	"net/http"
+)
 
-	Filename string `json:"filename"`
-	URL      string `json:"url"`
-
-	Author      string `json:"author"`
-	AuthorEmail string `json:"authorEmail"`
-	AuthorURL   string `json:"authorURL"`
-}
-
-func (f *File) S3Key() string {
-	return FileS3Key(f.ID, f.Filename)
-}
-
-func FileS3Key(id, filename string) string {
-	return id + "_" + filename
+func (data *Data) uploadHand(rw http.ResponseWriter, req *http.Request) error {
+	return nil
 }

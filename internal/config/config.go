@@ -63,6 +63,12 @@ type ConfigS3 struct {
 	SecretAccessKey string `json:"secret_access_key"`
 
 	Bucket string `json:"bucket"`
+
+	UploadingTimeout    int64  `json:"-"`
+	UploadingTimeoutStr string `json:"uploading_timeout"`
+
+	CleanupPeriod    int64  `json:"-"`
+	CleanupPeriodStr string `json:"cleanup_period"`
 }
 
 type ConfigPublic struct {

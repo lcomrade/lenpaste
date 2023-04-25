@@ -58,6 +58,8 @@ func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
 		err = data.newHand(rw, req)
 	case "/api/v1/get":
 		err = data.getHand(rw, req)
+	case "/api/v1/upload":
+		err = data.uploadHand(rw, req)
 	case "/api/v1/getServerInfo":
 		err = data.getServerInfoHand(rw, req)
 	default:

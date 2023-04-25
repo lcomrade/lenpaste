@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 
@@ -33,7 +34,7 @@ import (
 )
 
 var (
-	ErrNotFoundID = errors.New("db: could not find ID")
+	ErrNotFoundID = model.NewError(404, "db: could not find ID")
 )
 
 type DB struct {
@@ -46,6 +47,31 @@ func Open(cfg *config.Config) (*DB, error) {
 	var err error
 	db := DB{
 		cfg: cfg,
+	}
+
+	// Check S3 settings
+	if cfg.S3.PartitionID == "" {
+		return nil, errors.New("storage: open: S3 \"partition ID\" could not be empty")
+	}
+
+	if cfg.S3.URL == "" {
+		return nil, errors.New("storage: open: S3 \"URL\" could not be empty")
+	}
+
+	if cfg.S3.SigningRegion == "" {
+		return nil, errors.New("storage: open: S3 \"signing region\" could not be empty")
+	}
+
+	if cfg.S3.AccessKeyID == "" {
+		return nil, errors.New("storage: open: S3 \"access key\" could not be empty")
+	}
+
+	if cfg.S3.SecretAccessKey == "" {
+		return nil, errors.New("storage: open: S3 \"secret access key\" could not be empty")
+	}
+
+	if cfg.S3.Bucket == "" {
+		return nil, errors.New("storage: open: S3 \"bucket\" could not be empty")
 	}
 
 	// Open S3 bucket

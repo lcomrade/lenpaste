@@ -41,11 +41,13 @@ func Load(cfgDir string) (*Config, error) {
 			Source:             "",
 			MaxOpenConns:       25,
 			MaxIdleConns:       5,
-			ConnMaxLifetime:    5 * 60,
 			ConnMaxLifetimeStr: "5m",
 
-			CleanupPeriod:    60 * 60 * 3,
-			CleanupPeriodStr: "3h",
+			CleanupPeriodStr: "1h",
+		},
+
+		S3: ConfigS3{
+			CleanupPeriodStr: "1h",
 		},
 
 		Public: ConfigPublic{
@@ -62,7 +64,6 @@ func Load(cfgDir string) (*Config, error) {
 		Paste: ConfigPaste{
 			TitleMaxLen:    100,
 			BodyMaxLen:     20000,
-			MaxLifetime:    0,
 			MaxLifetimeStr: "",
 
 			UiDefaultLifetime: "",
@@ -102,14 +103,29 @@ func Load(cfgDir string) (*Config, error) {
 	}
 
 	// Convert strings duration to time
+	cfg.DB.CleanupPeriod, err = parseDuration(cfg.DB.CleanupPeriodStr)
+	if err != nil {
+		return nil, errors.New("config: DB cleanup period: " + err.Error())
+	}
+
 	cfg.DB.ConnMaxLifetime, err = parseDuration(cfg.DB.ConnMaxLifetimeStr)
 	if err != nil {
-		return nil, errors.New("config: " + err.Error())
+		return nil, errors.New("config: DB connection maximum lifetime: " + err.Error())
+	}
+
+	cfg.S3.UploadingTimeout, err = parseDuration(cfg.S3.UploadingTimeoutStr)
+	if err != nil {
+		return nil, errors.New("config: S3 uploading timeout: " + err.Error())
+	}
+
+	cfg.S3.CleanupPeriod, err = parseDuration(cfg.S3.CleanupPeriodStr)
+	if err != nil {
+		return nil, errors.New("config: S3 cleanup period: " + err.Error())
 	}
 
 	cfg.Paste.MaxLifetime, err = parseDuration(cfg.Paste.MaxLifetimeStr)
 	if err != nil {
-		return nil, errors.New("config: " + err.Error())
+		return nil, errors.New("config: paste maximum lifetime: " + err.Error())
 	}
 
 	// Read about, rules and terms of use

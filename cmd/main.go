@@ -42,15 +42,30 @@ func fatal(e error) {
 	os.Exit(1)
 }
 
-func backgroundJob(cleanJobPeriod time.Duration, db *storage.DB, log *logger.Logger) {
+func backgroundJobPastes(cleanJobPeriod time.Duration, db *storage.DB, log *logger.Logger) {
 	for {
 		// Delete expired pastes
 		count, err := db.PasteDeleteExpired()
 		if err != nil {
-			log.Error(errors.New("Delete expired: " + err.Error()))
+			log.Error(errors.New("background: " + err.Error()))
 		}
 
-		log.Info("Delete " + strconv.FormatInt(count, 10) + " expired pastes")
+		log.Info("Delete " + strconv.FormatInt(count, 10) + " expired pastes.")
+
+		// Wait
+		time.Sleep(cleanJobPeriod)
+	}
+}
+
+func backgroundJobFiles(cleanJobPeriod time.Duration, db *storage.DB, log *logger.Logger) {
+	for {
+		expired, notFinished, err := db.FileCleanup()
+		if err != nil {
+			log.Error(errors.New("background: " + err.Error()))
+		}
+
+		log.Info("Delete " + strconv.FormatInt(expired, 10) + " expired files.")
+		log.Info("Delete " + strconv.FormatInt(notFinished, 10) + " unfinished uploads.")
 
 		// Wait
 		time.Sleep(cleanJobPeriod)
@@ -100,8 +115,9 @@ func run(cfgDir string) error {
 		apiv1Data.Hand(rw, req)
 	})
 
-	// Run background job
-	go backgroundJob(time.Second*time.Duration(cfg.DB.CleanupPeriod), db, log)
+	// Run background jobs
+	go backgroundJobPastes(time.Second*time.Duration(cfg.DB.CleanupPeriod), db, log)
+	go backgroundJobFiles(time.Second*time.Duration(cfg.S3.CleanupPeriod), db, log)
 
 	// Run HTTP server
 	log.Info("Run HTTP server on " + cfg.HTTP.Address)
