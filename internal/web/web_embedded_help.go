@@ -20,9 +20,9 @@ package web
 
 import (
 	"html/template"
-	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"github.com/gin-gonic/gin"
 )
 
 type embHelpTmpl struct {
@@ -38,9 +38,9 @@ type embHelpTmpl struct {
 }
 
 // Pattern: /emb_help/
-func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) error {
+func (hand *handler) embeddedHelpHand(c *gin.Context) {
 	// Check rate limit
-	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -49,7 +49,7 @@ func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) er
 	pasteID := string([]rune(req.URL.Path)[10:])
 
 	// Read DB
-	paste, err := data.db.PasteGet(pasteID)
+	paste, err := hand.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
@@ -61,8 +61,8 @@ func (data *Data) embeddedHelpHand(rw http.ResponseWriter, req *http.Request) er
 		OneUse:     paste.OneUse,
 		Protocol:   netshare.GetProtocol(req),
 		Host:       netshare.GetHost(req),
-		Translate:  data.l10n.findLocale(req).translate,
-		Highlight:  data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:  hand.l10n.findLocale(req).translate,
+		Highlight:  data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
 	}
 
 	return data.embeddedHelpPage.Execute(rw, tmplData)

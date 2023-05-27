@@ -129,7 +129,7 @@ func loadLocales(f embed.FS, localeDir string) (*l10n, error) {
 func (data *l10n) detectLanguage(req *http.Request) string {
 	// Get accept language from cookie
 	{
-		lang := getCookie(req, "lang")
+		lang := c.Cookie("lang")
 		if lang != "" {
 			_, ok := data.locales[lang]
 			if ok {

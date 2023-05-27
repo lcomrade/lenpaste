@@ -39,7 +39,8 @@ type Config struct {
 }
 
 type ConfigHTTP struct {
-	Address string `json:"address"`
+	Address        string   `json:"address"`
+	TrustedProxies []string `json:"trusted_proxies"`
 }
 
 type ConfigDB struct {

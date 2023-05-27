@@ -2,7 +2,7 @@ module git.lcomrade.su/root/lenpaste
 
 go 1.18
 
-replace git.lcomrade.su/root/lenpaste/internal => ./internal
+replace git.lcomrade.su/root/lenpaste => ./
 
 require (
 	git.lcomrade.su/root/lineend v1.0.0
@@ -14,6 +14,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/urfave/cli/v2 v2.25.1
+	github.com/gin-contrib/multitemplate v0.0.0-20230212012517-45920c92c271
 )
 
 require (

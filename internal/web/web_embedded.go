@@ -20,11 +20,11 @@ package web
 
 import (
 	"html/template"
-	"net/http"
 	"time"
 
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"github.com/gin-gonic/gin"
 )
 
 type embTmpl struct {
@@ -40,11 +40,11 @@ type embTmpl struct {
 }
 
 // Pattern: /emb/
-func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error {
+func (hand *handler) embeddedHand(c *gin.Context) {
 	errorNotFound := false
 
 	// Check rate limit
-	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error 
 	pasteID := string([]rune(req.URL.Path)[5:])
 
 	// Read DB
-	paste, err := data.db.PasteGet(pasteID)
+	paste, err := hand.db.PasteGet(pasteID)
 	if err != nil {
 		if err == storage.ErrNotFoundID {
 			errorNotFound = true
@@ -75,7 +75,7 @@ func (data *Data) embeddedHand(rw http.ResponseWriter, req *http.Request) error 
 		Body:          tryHighlight(paste.Body, paste.Syntax, "monokai"),
 
 		ErrorNotFound: errorNotFound,
-		Translate:     data.l10n.findLocale(req).translate,
+		Translate:     hand.l10n.findLocale(req).translate,
 	}
 
 	// Show paste

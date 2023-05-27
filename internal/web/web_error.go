@@ -20,9 +20,9 @@ package web
 
 import (
 	"html/template"
-	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 type errorTmpl struct {
@@ -32,12 +32,12 @@ type errorTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
+func (hand *handler) writeError(c *gin.Context, e error) (int, error) {
 	errData := errorTmpl{
 		Code:      0,
-		AdminName: data.cfg.Public.AdminName,
-		AdminMail: data.cfg.Public.AdminMail,
-		Translate: data.l10n.findLocale(req).translate,
+		AdminName: hand.cfg.Public.AdminName,
+		AdminMail: hand.cfg.Public.AdminMail,
+		Translate: hand.l10n.findLocale(req).translate,
 	}
 
 	// Parse error
@@ -50,9 +50,9 @@ func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error)
 	errData.Code = resp.Code
 
 	// Prepare header
-	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	c.Header("Content-Type", "text/plain; charset=utf-8")
 	for key, val := range resp.Header {
-		rw.Header().Set(key, val)
+		c.Header(key, val)
 	}
 
 	// Set HTTP status code

@@ -24,6 +24,7 @@ import (
 
 	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 const cookieMaxAge = 60 * 60 * 24 * 360 * 50 // 50 year
@@ -46,18 +47,18 @@ type settingsTmpl struct {
 }
 
 // Pattern: /settings
-func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error {
+func (hand *handler) settingsHand(c *gin.Context) {
 	var err error
 
 	// Check auth
 	authOk := true
 
-	if data.cfg.Auth.Method == "lenpasswd" {
+	if hand.cfg.Auth.Method == "lenpasswd" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
 		if authExist {
-			authOk, err = lenpasswd.LoadAndCheck(data.cfg.Paths.LenPasswdFile, user, pass)
+			authOk, err = lenpasswd.LoadAndCheck(hand.cfg.Paths.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
@@ -68,24 +69,24 @@ func (data *Data) settingsHand(rw http.ResponseWriter, req *http.Request) error 
 	if req.Method != "POST" {
 		// Prepare data
 		dataTmpl := settingsTmpl{
-			Language:         getCookie(req, "lang"),
-			LanguageSelector: data.l10n.names,
-			Theme:            getCookie(req, "theme"),
-			ThemeSelector:    data.themes.getForLocale(data.l10n, req),
+			Language:         c.Cookie("lang"),
+			LanguageSelector: hand.l10n.names,
+			Theme:            c.Cookie("theme"),
+			ThemeSelector:    data.themes.getForLocale(hand.l10n, req),
 			AuthorAllMaxLen:  model.MaxLengthAuthorAll,
-			Author:           getCookie(req, "author"),
-			AuthorEmail:      getCookie(req, "authorEmail"),
-			AuthorURL:        getCookie(req, "authorURL"),
+			Author:           c.Cookie("author"),
+			AuthorEmail:      c.Cookie("authorEmail"),
+			AuthorURL:        c.Cookie("authorURL"),
 			AuthOk:           authOk,
-			Translate:        data.l10n.findLocale(req).translate,
+			Translate:        hand.l10n.findLocale(req).translate,
 		}
 
 		if dataTmpl.Theme == "" {
-			dataTmpl.Theme = data.cfg.UI.DefaultTheme
+			dataTmpl.Theme = hand.cfg.UI.DefaultTheme
 		}
 
 		// Show page
-		rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+		c.Header("Content-Type", "text/html; charset=utf-8")
 
 		err := data.settings.Execute(rw, dataTmpl)
 		if err != nil {

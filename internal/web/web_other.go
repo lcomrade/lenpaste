@@ -22,9 +22,10 @@ import (
 	"crypto/md5"
 	"fmt"
 	"html/template"
-	"net/http"
 	"os"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type jsTmpl struct {
@@ -32,36 +33,36 @@ type jsTmpl struct {
 	Theme     func(string) string
 }
 
-func (data *Data) styleCSSHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "text/css; charset=utf-8")
+func (hand *handler) styleCSSHand(c *gin.Context) {
+	c.Header("Content-Type", "text/css; charset=utf-8")
 	return data.styleCSS.Execute(rw, jsTmpl{
-		Translate: data.l10n.findLocale(req).translate,
-		Theme:     data.themes.findTheme(req, data.cfg.UI.DefaultTheme).theme,
+		Translate: hand.l10n.findLocale(req).translate,
+		Theme:     data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).theme,
 	})
 }
 
-func (data *Data) mainJSHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+func (hand *handler) mainJSHand(c *gin.Context) {
+	c.Header("Content-Type", "application/javascript; charset=utf-8")
 	rw.Write(*data.mainJS)
 	return nil
 }
 
-func (data *Data) codeJSHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	return data.codeJS.Execute(rw, jsTmpl{Translate: data.l10n.findLocale(req).translate})
+func (hand *handler) codeJSHand(c *gin.Context) {
+	c.Header("Content-Type", "application/javascript; charset=utf-8")
+	return data.codeJS.Execute(rw, jsTmpl{Translate: hand.l10n.findLocale(req).translate})
 }
 
-func (data *Data) historyJSHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+func (hand *handler) historyJSHand(c *gin.Context) {
+	c.Header("Content-Type", "application/javascript; charset=utf-8")
 	return data.historyJS.Execute(rw, jsTmpl{
-		Translate: data.l10n.findLocale(req).translate,
-		Theme:     data.themes.findTheme(req, data.cfg.UI.DefaultTheme).theme,
+		Translate: hand.l10n.findLocale(req).translate,
+		Theme:     data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).theme,
 	})
 }
 
-func (data *Data) pasteJSHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
-	return data.pasteJS.Execute(rw, jsTmpl{Translate: data.l10n.findLocale(req).translate})
+func (hand *handler) pasteJSHand(c *gin.Context) {
+	c.Header("Content-Type", "application/javascript; charset=utf-8")
+	return data.pasteJS.Execute(rw, jsTmpl{Translate: hand.l10n.findLocale(req).translate})
 }
 
 func init() {

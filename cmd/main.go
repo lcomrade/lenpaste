@@ -21,18 +21,15 @@ package main
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"os"
 	"strconv"
 	"time"
 
-	"git.lcomrade.su/root/lenpaste/internal/apiv1"
 	"git.lcomrade.su/root/lenpaste/internal/config"
+	"git.lcomrade.su/root/lenpaste/internal/handler"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/model"
-	"git.lcomrade.su/root/lenpaste/internal/raw"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
-	"git.lcomrade.su/root/lenpaste/internal/web"
 
 	"github.com/urfave/cli/v2"
 )
@@ -94,34 +91,13 @@ func run(cfgDir string) error {
 		return err
 	}
 
-	// Load data for HTTP handlers
-	apiv1Data := apiv1.Load(log, db, cfg)
-
-	rawData := raw.Load(log, db, cfg)
-
-	webData, err := web.Load(log, db, cfg)
-	if err != nil {
-		return err
-	}
-
-	// Handlers
-	http.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-		webData.Handler(rw, req)
-	})
-	http.HandleFunc("/raw/", func(rw http.ResponseWriter, req *http.Request) {
-		rawData.Hand(rw, req)
-	})
-	http.HandleFunc("/api/", func(rw http.ResponseWriter, req *http.Request) {
-		apiv1Data.Hand(rw, req)
-	})
-
 	// Run background jobs
 	go backgroundJobPastes(time.Second*time.Duration(cfg.DB.CleanupPeriod), db, log)
 	go backgroundJobFiles(time.Second*time.Duration(cfg.S3.CleanupPeriod), db, log)
 
 	// Run HTTP server
 	log.Info("Run HTTP server on " + cfg.HTTP.Address)
-	return http.ListenAndServe(cfg.HTTP.Address, nil)
+	return handler.Run(log, db, cfg)
 }
 
 func main() {

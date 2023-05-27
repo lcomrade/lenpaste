@@ -62,5 +62,5 @@ func (hand *handler) getServerInfoHand(c *gin.Context) {
 	}
 
 	// Return response
-	c.JSON(200, serverInfo)
+	c.JSON(http.StatusOK serverInfo)
 }

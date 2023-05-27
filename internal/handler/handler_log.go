@@ -23,11 +23,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func (hand *handler) logRequest(c *gin.Context, code int) {
+	c.Set("request_logged", true)
+	hand.log.Info(c.ClientIP(), c.Request.Method, code, c.Request.URL.Path, `"`+c.Request.UserAgent()+`"`)
+}
+
 func (hand *handler) writeErrorJSON(c *gin.Context, e error) {
 	resp := model.ParseError(e)
 
 	for key, val := range resp.Header {
 		c.Header(key, val)
+	}
+
+	// Log request
+	if resp.Code < 500 {
+		hand.logRequest(c, resp.Code)
+	} else {
+		hand.log.Error(c.ClientIP(), c.Request.Method, resp.Code, c.Request.URL.Path, `"`+c.Request.UserAgent()+`",`, "error:", `"`+e.Error()+`"`)
 	}
 
 	c.JSON(resp.Code, resp)
@@ -38,6 +50,13 @@ func (hand *handler) writeErrorPlain(c *gin.Context, e error) {
 
 	for key, val := range resp.Header {
 		c.Header(key, val)
+	}
+
+	// Log request
+	if resp.Code < 500 {
+		hand.logRequest(c, resp.Code)
+	} else {
+		hand.log.Error(c.ClientIP(), c.Request.Method, resp.Code, c.Request.URL.Path, `"`+c.Request.UserAgent()+`",`, "error:", `"`+e.Error()+`"`)
 	}
 
 	c.Data(resp.Code, gin.MIMEPlain, []byte(resp.Text))

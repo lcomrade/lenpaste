@@ -25,12 +25,13 @@ import (
 
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
+	"github.com/gin-gonic/gin"
 )
 
 // Pattern: /dl/
-func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
+func (hand *handler) dlHand(c *gin.Context) {
 	// Check rate limit
-	err := data.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
 	if err != nil {
 		return err
 	}
@@ -38,7 +39,7 @@ func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 	// Read DB
 	pasteID := string([]rune(req.URL.Path)[4:])
 
-	paste, err := data.db.PasteGet(pasteID)
+	paste, err := hand.db.PasteGet(pasteID)
 	if err != nil {
 		return err
 	}
@@ -46,7 +47,7 @@ func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 	// If "one use" paste
 	if paste.OneUse {
 		// Delete paste
-		err = data.db.PasteDelete(pasteID)
+		err = hand.db.PasteDelete(pasteID)
 		if err != nil {
 			return err
 		}
@@ -68,10 +69,10 @@ func (data *Data) dlHand(rw http.ResponseWriter, req *http.Request) error {
 	}
 
 	// Write result
-	rw.Header().Set("Content-Type", "application/octet-stream")
-	rw.Header().Set("Content-Disposition", "attachment; filename="+fileName)
-	rw.Header().Set("Content-Transfer-Encoding", "binary")
-	rw.Header().Set("Expires", "0")
+	c.Header("Content-Type", "application/octet-stream")
+	c.Header("Content-Disposition", "attachment; filename="+fileName)
+	c.Header("Content-Transfer-Encoding", "binary")
+	c.Header("Expires", "0")
 
 	http.ServeContent(rw, req, fileName, createTime, strings.NewReader(paste.Body))
 

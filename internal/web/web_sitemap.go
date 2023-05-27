@@ -20,17 +20,18 @@ package web
 
 import (
 	"io"
-	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
 	"git.lcomrade.su/root/lenpaste/internal/netshare"
+
+	"github.com/gin-gonic/gin"
 )
 
-func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error {
+func (hand *handler) robotsTxtHand(c *gin.Context) {
 	// Generate robots.txt
 	robotsTxt := "User-agent: *\nDisallow: /\n"
 
-	if !data.cfg.Public.RobotsDisallow {
+	if !hand.cfg.Public.RobotsDisallow {
 		proto := netshare.GetProtocol(req)
 		host := netshare.GetHost(req)
 
@@ -38,7 +39,7 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 	}
 
 	// Write response
-	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	c.Header("Content-Type", "text/plain; charset=utf-8")
 	_, err := io.WriteString(rw, robotsTxt)
 	if err != nil {
 		return err
@@ -47,9 +48,10 @@ func (data *Data) robotsTxtHand(rw http.ResponseWriter, req *http.Request) error
 	return nil
 }
 
-func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
-	if data.cfg.Public.RobotsDisallow {
-		return model.ErrNotFound
+func (hand *handler) sitemapHand(c *gin.Context) {
+	if hand.cfg.Public.RobotsDisallow {
+		hand.writeError(c, model.ErrNotFound)
+		return
 	}
 
 	// Get protocol and host
@@ -66,7 +68,7 @@ func (data *Data) sitemapHand(rw http.ResponseWriter, req *http.Request) error {
 	sitemapXML = sitemapXML + "</urlset>\n"
 
 	// Write response
-	rw.Header().Set("Content-Type", "text/xml; charset=utf-8")
+	c.Header("Content-Type", "text/xml; charset=utf-8")
 	_, err := io.WriteString(rw, sitemapXML)
 	if err != nil {
 		return err

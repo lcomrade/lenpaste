@@ -20,7 +20,8 @@ package web
 
 import (
 	"html/template"
-	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type termsOfUseTmpl struct {
@@ -31,11 +32,11 @@ type termsOfUseTmpl struct {
 }
 
 // Pattern: /terms
-func (data *Data) termsOfUseHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+func (hand *handler) termsOfUseHand(c *gin.Context) {
+	c.Header("Content-Type", "text/html; charset=utf-8")
 	return data.termsOfUse.Execute(rw, termsOfUseTmpl{
-		TermsOfUse: data.cfg.GetTermsOfUse(data.l10n.detectLanguage(req)),
-		Highlight:  data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
-		Translate:  data.l10n.findLocale(req).translate},
+		TermsOfUse: hand.cfg.GetTermsOfUse(hand.l10n.detectLanguage(req)),
+		Highlight:  data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:  hand.l10n.findLocale(req).translate},
 	)
 }

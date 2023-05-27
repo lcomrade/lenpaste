@@ -20,11 +20,11 @@ package web
 
 import (
 	"html/template"
-	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
 	"git.lcomrade.su/root/lenpaste/internal/model"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
+
+	"github.com/gin-gonic/gin"
 )
 
 type createTmpl struct {
@@ -45,18 +45,18 @@ type createTmpl struct {
 	Translate func(string, ...interface{}) template.HTML
 }
 
-func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error {
+func (hand *handler) newPasteHand(c *gin.Context) {
 	var err error
 
 	// Check auth
 	authOk := true
 
-	if data.cfg.Auth.Method == "lenpasswd" {
+	if hand.cfg.Auth.Method == "lenpasswd" {
 		authOk = false
 
 		user, pass, authExist := req.BasicAuth()
 		if authExist {
-			authOk, err = lenpasswd.LoadAndCheck(data.cfg.Paths.LenPasswdFile, user, pass)
+			authOk, err = lenpasswd.LoadAndCheck(hand.cfg.Paths.LenPasswdFile, user, pass)
 			if err != nil {
 				return err
 			}
@@ -70,7 +70,7 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 
 	// Create paste if need
 	if req.Method == "POST" {
-		pasteID, _, _, err := netshare.PasteAddFromForm(req, data.db, data.cfg, data.lexers)
+		pasteID, _, _, err := netshare.PasteAddFromForm(req, hand.db, hand.cfg, hand.lexers)
 		if err != nil {
 			return err
 		}
@@ -82,21 +82,21 @@ func (data *Data) newPasteHand(rw http.ResponseWriter, req *http.Request) error 
 
 	// Else show create page
 	tmplData := createTmpl{
-		TitleMaxLen:        data.cfg.Paste.TitleMaxLen,
-		BodyMaxLen:         data.cfg.Paste.BodyMaxLen,
+		TitleMaxLen:        hand.cfg.Paste.TitleMaxLen,
+		BodyMaxLen:         hand.cfg.Paste.BodyMaxLen,
 		AuthorAllMaxLen:    model.MaxLengthAuthorAll,
-		MaxLifeTime:        data.cfg.Paste.MaxLifetime,
-		UiDefaultLifeTime:  data.cfg.Paste.UiDefaultLifetime,
-		Lexers:             data.lexers,
-		ServerTermsExist:   data.cfg.TermsOfUse != nil,
-		AuthorDefault:      getCookie(req, "author"),
-		AuthorEmailDefault: getCookie(req, "authorEmail"),
-		AuthorURLDefault:   getCookie(req, "authorURL"),
+		MaxLifeTime:        hand.cfg.Paste.MaxLifetime,
+		UiDefaultLifeTime:  hand.cfg.Paste.UiDefaultLifetime,
+		Lexers:             hand.lexers,
+		ServerTermsExist:   hand.cfg.TermsOfUse != nil,
+		AuthorDefault:      c.Cookie("author"),
+		AuthorEmailDefault: c.Cookie("authorEmail"),
+		AuthorURLDefault:   c.Cookie("authorURL"),
 		AuthOk:             authOk,
-		Translate:          data.l10n.findLocale(req).translate,
+		Translate:          hand.l10n.findLocale(req).translate,
 	}
 
-	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+	c.Header("Content-Type", "text/html; charset=utf-8")
 
-	return data.main.Execute(rw, tmplData)
+	return hand.main.Execute(rw, tmplData)
 }

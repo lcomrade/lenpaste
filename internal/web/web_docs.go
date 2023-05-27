@@ -20,9 +20,9 @@ package web
 
 import (
 	"html/template"
-	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 type docsTmpl struct {
@@ -38,23 +38,23 @@ type docsApiV1Tmpl struct {
 }
 
 // Pattern: /docs
-func (data *Data) docsHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.docs.Execute(rw, docsTmpl{Translate: data.l10n.findLocale(req).translate})
+func (hand *handler) docsHand(c *gin.Context) {
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	return data.docs.Execute(rw, docsTmpl{Translate: hand.l10n.findLocale(req).translate})
 }
 
 // Pattern: /docs/apiv1
-func (data *Data) docsApiV1Hand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+func (hand *handler) docsApiV1Hand(c *gin.Context) {
+	c.Header("Content-Type", "text/html; charset=utf-8")
 	return data.docsApiV1.Execute(rw, docsApiV1Tmpl{
 		MaxLenAuthorAll: model.MaxLengthAuthorAll,
-		Translate:       data.l10n.findLocale(req).translate,
-		Highlight:       data.themes.findTheme(req, data.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:       hand.l10n.findLocale(req).translate,
+		Highlight:       data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
 	})
 }
 
 // Pattern: /docs/api_libs
-func (data *Data) docsApiLibsHand(rw http.ResponseWriter, req *http.Request) error {
-	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return data.docsApiLibs.Execute(rw, docsTmpl{Translate: data.l10n.findLocale(req).translate})
+func (hand *handler) docsApiLibsHand(c *gin.Context) {
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	return data.docsApiLibs.Execute(rw, docsTmpl{Translate: hand.l10n.findLocale(req).translate})
 }

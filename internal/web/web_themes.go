@@ -184,7 +184,7 @@ func (themes *themesData) getForLocale(locale *l10n, req *http.Request) map[stri
 
 func (data *themesData) findTheme(req *http.Request, defaultTheme string) theme {
 	// Get theme by cookie
-	themeCookie := getCookie(req, "theme")
+	themeCookie := c.Cookie("theme")
 	if themeCookie != "" {
 		theme, ok := data.themes[themeCookie]
 		if ok {

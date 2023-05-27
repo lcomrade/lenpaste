@@ -18,11 +18,9 @@
 
 package web
 
-import (
-	"net/http"
-)
+import "github.com/gin-gonic/gin"
 
-func writeRedirect(rw http.ResponseWriter, req *http.Request, newURL string, code int) {
+func writeRedirect(c *gin.Context, newURL string, code int) {
 	if newURL == "" {
 		newURL = "/"
 	}
@@ -31,6 +29,6 @@ func writeRedirect(rw http.ResponseWriter, req *http.Request, newURL string, cod
 		newURL = newURL + "?" + req.URL.RawQuery
 	}
 
-	rw.Header().Set("Location", newURL)
+	c.Header("Location", newURL)
 	rw.WriteHeader(code)
 }
