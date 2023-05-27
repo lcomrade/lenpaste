@@ -16,19 +16,20 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package handler
 
 import (
-	"net/http"
+	"errors"
 
 	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/model"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
+	"github.com/gin-gonic/gin"
 )
 
-type Data struct {
+type handler struct {
 	log *logger.Logger
 	db  *storage.DB
 	cfg *config.Config
@@ -36,46 +37,37 @@ type Data struct {
 	lexers []string
 }
 
-func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) *Data {
-	lexers := chromaLexers.Names(false)
-
-	return &Data{
+func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
+	hand := &handler{
 		log:    log,
 		db:     db,
 		cfg:    cfg,
-		lexers: lexers,
-	}
-}
-
-func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
-	// Process request
-	var err error
-
-	rw.Header().Set("Server", model.Software+"/"+model.Version)
-
-	switch req.URL.Path {
-	case "/api/v1/new":
-		err = data.newHand(rw, req)
-	case "/api/v1/get":
-		err = data.getHand(rw, req)
-	case "/api/v1/upload":
-		err = data.uploadHand(rw, req)
-	case "/api/v1/getServerInfo":
-		err = data.getServerInfoHand(rw, req)
-	default:
-		err = model.ErrNotFound
+		lexers: chromaLexers.Names(false),
 	}
 
-	// Log
-	if err == nil {
-		data.log.HttpRequest(req, 200)
-
-	} else {
-		code, err := data.writeError(rw, req, err)
-		if err != nil {
-			data.log.HttpError(req, err)
-		} else {
-			data.log.HttpRequest(req, code)
-		}
+	// Setup Gin logging
+	if model.Debug {
+		gin.SetMode(gin.ReleaseMode)
 	}
+
+	// Setup Gin routers
+	r := gin.New()
+
+	r.GET("/api/v1/get", hand.apiPasteGet)
+	r.POST("/api/v1/new", hand.apiPasteNew)
+
+	r.GET("/api/v1/pasteGet", hand.apiPasteGet)
+	r.PUT("/api/v1/pasteNew", hand.apiPasteNew)
+
+	r.GET("/api/v1/getServerInfo", hand.getServerInfoHand)
+
+	r.GET("/raw/:id", hand.rawHand)
+
+	// Run
+	err := r.Run(cfg.HTTP.Address)
+	if err != nil {
+		return errors.New("handler: " + err.Error())
+	}
+
+	return nil
 }

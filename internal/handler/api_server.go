@@ -16,13 +16,11 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package handler
 
 import (
-	"encoding/json"
-	"net/http"
-
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 type serverInfoType struct {
@@ -42,34 +40,27 @@ type serverInfoType struct {
 }
 
 // GET /api/v1/getServerInfo
-func (data *Data) getServerInfoHand(rw http.ResponseWriter, req *http.Request) error {
-	// Check method
-	if req.Method != "GET" {
-		return model.ErrMethodNotAllowed
-	}
-
+func (hand *handler) getServerInfoHand(c *gin.Context) {
 	// Get request parameters
-	req.ParseForm()
-	lang := req.Form.Get("lang")
+	lang := c.Query("lang")
 
 	// Prepare data
 	serverInfo := serverInfoType{
 		Software:          model.Software,
 		Version:           model.Version,
-		TitleMaxLen:       data.cfg.Paste.TitleMaxLen,
-		BodyMaxLen:        data.cfg.Paste.BodyMaxLen,
-		MaxLifeTime:       data.cfg.Paste.MaxLifetime,
-		ServerAbout:       data.cfg.GetAbout(lang),
-		ServerRules:       data.cfg.GetRules(lang),
-		ServerTermsOfUse:  data.cfg.GetTermsOfUse(lang),
-		AdminName:         data.cfg.Public.AdminName,
-		AdminMail:         data.cfg.Public.AdminMail,
-		Syntaxes:          data.lexers,
-		UiDefaultLifeTime: data.cfg.Paste.UiDefaultLifetime,
-		AuthRequired:      data.cfg.Auth.Method != "",
+		TitleMaxLen:       hand.cfg.Paste.TitleMaxLen,
+		BodyMaxLen:        hand.cfg.Paste.BodyMaxLen,
+		MaxLifeTime:       hand.cfg.Paste.MaxLifetime,
+		ServerAbout:       hand.cfg.GetAbout(lang),
+		ServerRules:       hand.cfg.GetRules(lang),
+		ServerTermsOfUse:  hand.cfg.GetTermsOfUse(lang),
+		AdminName:         hand.cfg.Public.AdminName,
+		AdminMail:         hand.cfg.Public.AdminMail,
+		Syntaxes:          hand.lexers,
+		UiDefaultLifeTime: hand.cfg.Paste.UiDefaultLifetime,
+		AuthRequired:      hand.cfg.Auth.Method != "",
 	}
 
 	// Return response
-	rw.Header().Set("Content-Type", "application/json")
-	return json.NewEncoder(rw).Encode(serverInfo)
+	c.JSON(200, serverInfo)
 }

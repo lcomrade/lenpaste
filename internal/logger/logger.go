@@ -20,13 +20,10 @@ package logger
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"runtime"
 	"strconv"
 	"time"
-
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 )
 
 type Logger struct {
@@ -53,18 +50,18 @@ func getTrace() string {
 	}
 }
 
-func (cfg *Logger) Info(msg string) {
-	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.timeFormat), "[INFO]   ", msg)
+func (log *Logger) Error(a ...any) {
+	fmt.Fprint(os.Stderr, time.Now().Format(log.timeFormat), "     [ERROR]    ", getTrace(), fmt.Sprintln(a...))
 }
 
-func (cfg *Logger) Error(e error) {
-	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.timeFormat), "[ERROR]  ", getTrace(), e.Error())
+func (log *Logger) Info(a ...any) {
+	fmt.Fprint(os.Stdout, time.Now().Format(log.timeFormat), "     [INFO]     ", fmt.Sprintln(a...))
 }
 
-func (cfg *Logger) HttpRequest(req *http.Request, code int) {
-	fmt.Fprintln(os.Stdout, time.Now().Format(cfg.timeFormat), "[REQUEST]", netshare.GetClientAddr(req).String(), req.Method, code, req.URL.Path, "(User-Agent: "+req.UserAgent()+")")
+func (log *Logger) Warning(a ...any) {
+	fmt.Fprint(os.Stdout, time.Now().Format(log.timeFormat), "     [WARNING]  ", fmt.Sprintln(a...))
 }
 
-func (cfg *Logger) HttpError(req *http.Request, e error) {
-	fmt.Fprintln(os.Stderr, time.Now().Format(cfg.timeFormat), "[ERROR]  ", netshare.GetClientAddr(req).String(), req.Method, 500, req.URL.Path, "(User-Agent: "+req.UserAgent()+")", "Error:", getTrace(), e.Error())
+func (log *Logger) Debug(a ...any) {
+	fmt.Fprint(os.Stdout, time.Now().Format(log.timeFormat), "     [DEBUG]    ", fmt.Sprintln(a...))
 }

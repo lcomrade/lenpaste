@@ -16,45 +16,37 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package netshare
+package handler
 
 import (
-	"net/http"
+	"net"
 	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"git.lcomrade.su/root/lenpaste/internal/config"
 	"git.lcomrade.su/root/lenpaste/internal/model"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"git.lcomrade.su/root/lineend"
+	"github.com/gin-gonic/gin"
 )
 
-func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lexerNames []string) (string, int64, int64, error) {
-	// Check HTTP method
-	if req.Method != "POST" {
-		return "", 0, 0, model.ErrMethodNotAllowed
-	}
-
+func (hand *handler) pasteNew(c *gin.Context) (model.NewPaste, error) {
 	// Check rate limit
-	err := db.RateLimitCheck("paste_new", GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_new", net.ParseIP(c.ClientIP()))
 	if err != nil {
-		return "", 0, 0, err
+		return model.NewPaste{}, err
 	}
 
 	// Read form
-	req.ParseForm()
-
 	paste := model.Paste{
-		Title:       req.PostForm.Get("title"),
-		Body:        req.PostForm.Get("body"),
-		Syntax:      req.PostForm.Get("syntax"),
+		Title:       c.PostForm("title"),
+		Body:        c.PostForm("body"),
+		Syntax:      c.PostForm("syntax"),
 		DeleteTime:  0,
 		OneUse:      false,
-		Author:      req.PostForm.Get("author"),
-		AuthorEmail: req.PostForm.Get("authorEmail"),
-		AuthorURL:   req.PostForm.Get("authorURL"),
+		Author:      c.PostForm("author"),
+		AuthorEmail: c.PostForm("authorEmail"),
+		AuthorURL:   c.PostForm("authorURL"),
 	}
 
 	// Remove new line from title
@@ -63,21 +55,21 @@ func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lex
 	paste.Title = strings.Replace(paste.Title, "\t", " ", -1)
 
 	// Check title
-	if utf8.RuneCountInString(paste.Title) > cfg.Paste.TitleMaxLen && cfg.Paste.TitleMaxLen >= 0 {
-		return "", 0, 0, model.ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.Title) > hand.cfg.Paste.TitleMaxLen && hand.cfg.Paste.TitleMaxLen > 0 {
+		return model.NewPaste{}, model.ErrPayloadTooLarge
 	}
 
 	// Check paste body
 	if paste.Body == "" {
-		return "", 0, 0, model.ErrBadRequest
+		return model.NewPaste{}, model.ErrBadRequest
 	}
 
-	if utf8.RuneCountInString(paste.Body) > cfg.Paste.BodyMaxLen && cfg.Paste.BodyMaxLen > 0 {
-		return "", 0, 0, model.ErrPayloadTooLarge
+	if utf8.RuneCountInString(paste.Body) > hand.cfg.Paste.BodyMaxLen && hand.cfg.Paste.BodyMaxLen > 0 {
+		return model.NewPaste{}, model.ErrPayloadTooLarge
 	}
 
 	// Change paste body lines end
-	switch req.PostForm.Get("lineEnd") {
+	switch c.PostForm("lineEnd") {
 	case "", "LF", "lf":
 		paste.Body = lineend.UnknownToUnix(paste.Body)
 
@@ -88,7 +80,7 @@ func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lex
 		paste.Body = lineend.UnknownToOldMac(paste.Body)
 
 	default:
-		return "", 0, 0, model.ErrBadRequest
+		return model.NewPaste{}, model.ErrBadRequest
 	}
 
 	// Check syntax
@@ -97,7 +89,7 @@ func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lex
 	}
 
 	syntaxOk := false
-	for _, name := range lexerNames {
+	for _, name := range hand.lexers {
 		if name == paste.Syntax {
 			syntaxOk = true
 			break
@@ -105,22 +97,22 @@ func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lex
 	}
 
 	if !syntaxOk {
-		return "", 0, 0, model.ErrBadRequest
+		return model.NewPaste{}, model.ErrBadRequest
 	}
 
 	// Get delete time
-	expirStr := req.PostForm.Get("expiration")
+	expirStr := c.PostForm("expiration")
 	if expirStr != "" {
 		// Convert string to int
 		expir, err := strconv.ParseInt(expirStr, 10, 64)
 		if err != nil {
-			return "", 0, 0, model.ErrBadRequest
+			return model.NewPaste{}, model.ErrBadRequest
 		}
 
 		// Check limits
-		if cfg.Paste.MaxLifetime > 0 {
-			if expir > cfg.Paste.MaxLifetime || expir <= 0 {
-				return "", 0, 0, model.ErrBadRequest
+		if hand.cfg.Paste.MaxLifetime > 0 {
+			if expir > hand.cfg.Paste.MaxLifetime || expir <= 0 {
+				return model.NewPaste{}, model.ErrBadRequest
 			}
 		}
 
@@ -131,28 +123,28 @@ func PasteAddFromForm(req *http.Request, db *storage.DB, cfg *config.Config, lex
 	}
 
 	// Get "one use" parameter
-	if req.PostForm.Get("oneUse") == "true" {
+	if c.PostForm("oneUse") == "true" {
 		paste.OneUse = true
 	}
 
 	// Check author name, email and URL length.
 	if utf8.RuneCountInString(paste.Author) > model.MaxLengthAuthorAll {
-		return "", 0, 0, model.ErrPayloadTooLarge
+		return model.NewPaste{}, model.ErrPayloadTooLarge
 	}
 
 	if utf8.RuneCountInString(paste.AuthorEmail) > model.MaxLengthAuthorAll {
-		return "", 0, 0, model.ErrPayloadTooLarge
+		return model.NewPaste{}, model.ErrPayloadTooLarge
 	}
 
 	if utf8.RuneCountInString(paste.AuthorURL) > model.MaxLengthAuthorAll {
-		return "", 0, 0, model.ErrPayloadTooLarge
+		return model.NewPaste{}, model.ErrPayloadTooLarge
 	}
 
 	// Create paste
-	pasteID, createTime, deleteTime, err := db.PasteAdd(paste)
+	data, err := hand.db.PasteAdd(paste)
 	if err != nil {
-		return pasteID, createTime, deleteTime, err
+		return model.NewPaste{}, err
 	}
 
-	return pasteID, createTime, deleteTime, nil
+	return data, nil
 }

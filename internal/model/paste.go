@@ -31,3 +31,9 @@ type Paste struct {
 	AuthorEmail string `json:"authorEmail"`
 	AuthorURL   string `json:"authorURL"`
 }
+
+type NewPaste struct {
+	ID         string `json:"id"`
+	CreateTime int64  `json:"createTime"`
+	DeleteTime int64  `json:"deleteTime"`
+}

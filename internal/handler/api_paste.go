@@ -16,12 +16,36 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package handler
 
 import (
+	"net"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func (data *Data) uploadHand(rw http.ResponseWriter, req *http.Request) error {
-	return nil
+func (hand *handler) apiPasteGet(c *gin.Context) {
+	openOneUse := false
+	if c.Query("openOneUse") == "true" {
+		openOneUse = true
+	}
+
+	paste, err := hand.pasteGet(c.Query("id"), openOneUse, net.ParseIP(c.ClientIP()))
+	if err != nil {
+		hand.writeErrorJSON(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, paste)
+}
+
+func (hand *handler) apiPasteNew(c *gin.Context) {
+	newPaste, err := hand.pasteNew(c)
+	if err != nil {
+		hand.writeErrorJSON(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, newPaste)
 }

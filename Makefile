@@ -5,7 +5,7 @@ NAME = lenpaste
 MAIN_GO = ./cmd/*.go
 
 export GOMODULE111=on
-LDFLAGS = -w -s -X "internal/model.Version=$(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')"
+LDFLAGS = -w -s -X "git.lcomrade.su/root/lenpaste/internal/model.Version=$(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')"
 
 
 .PHONY: all fmt clean

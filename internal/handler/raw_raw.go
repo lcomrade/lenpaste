@@ -16,37 +16,43 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package raw
+package handler
 
 import (
-	"io"
+	"net"
 	"net/http"
 
-	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
-func (data *Data) writeError(rw http.ResponseWriter, req *http.Request, e error) (int, error) {
-	// Parse error
-	resp := model.ParseError(e)
-
-	if resp.Code > 499 {
-		data.log.HttpError(req, e)
-	}
-
-	// Prepare header
-	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	for key, val := range resp.Header {
-		rw.Header().Set(key, val)
-	}
-
-	// Set HTTP status code
-	rw.WriteHeader(resp.Code)
-
-	// Send response body
-	_, err := io.WriteString(rw, resp.Text)
+// Pattern: /raw/
+func (hand *handler) rawHand(c *gin.Context) {
+	// Check rate limit
+	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
 	if err != nil {
-		return 500, err
+		hand.writeErrorPlain(c, err)
+		return
 	}
 
-	return resp.Code, nil
+	// Read DB
+	pasteID := c.Param("id")
+
+	paste, err := hand.db.PasteGet(pasteID)
+	if err != nil {
+		hand.writeErrorPlain(c, err)
+		return
+	}
+
+	// If "one use" paste
+	if paste.OneUse {
+		// Delete paste
+		err = hand.db.PasteDelete(pasteID)
+		if err != nil {
+			hand.writeErrorPlain(c, err)
+			return
+		}
+	}
+
+	// Write result
+	c.Data(http.StatusOK, gin.MIMEPlain, []byte(paste.Body))
 }

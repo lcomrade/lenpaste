@@ -26,13 +26,13 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
-func (db *DB) PasteAdd(paste model.Paste) (string, int64, int64, error) {
+func (db *DB) PasteAdd(paste model.Paste) (model.NewPaste, error) {
 	var err error
 
 	// Generate ID
 	paste.ID, err = genTokenCrypto(8)
 	if err != nil {
-		return "", 0, 0, errors.New("storage: add paste: " + err.Error())
+		return model.NewPaste{}, errors.New("storage: add paste: " + err.Error())
 	}
 
 	// Set paste create time
@@ -65,10 +65,14 @@ func (db *DB) PasteAdd(paste model.Paste) (string, int64, int64, error) {
 		paste.Author, paste.AuthorEmail, paste.AuthorURL,
 	)
 	if err != nil {
-		return "", 0, 0, errors.New("storage: add paste: " + err.Error())
+		return model.NewPaste{}, errors.New("storage: add paste: " + err.Error())
 	}
 
-	return paste.ID, paste.CreateTime, paste.DeleteTime, nil
+	return model.NewPaste{
+		ID:         paste.ID,
+		CreateTime: paste.CreateTime,
+		DeleteTime: paste.DeleteTime,
+	}, nil
 }
 
 func (db *DB) PasteDelete(id string) error {

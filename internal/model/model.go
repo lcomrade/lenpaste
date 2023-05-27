@@ -31,4 +31,12 @@ const (
 var (
 	Version   = "unknown"
 	UserAgent = Software + "/" + Version
+
+	Debug = false
 )
+
+func init() {
+	if Version == "unknown" || Version == "" {
+		Debug = true
+	}
+}

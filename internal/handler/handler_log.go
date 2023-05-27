@@ -16,45 +16,29 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package raw
+package handler
 
 import (
-	"net/http"
-
-	"git.lcomrade.su/root/lenpaste/internal/config"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
 	"git.lcomrade.su/root/lenpaste/internal/model"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"github.com/gin-gonic/gin"
 )
 
-type Data struct {
-	log *logger.Logger
-	db  *storage.DB
-	cfg *config.Config
+func (hand *handler) writeErrorJSON(c *gin.Context, e error) {
+	resp := model.ParseError(e)
+
+	for key, val := range resp.Header {
+		c.Header(key, val)
+	}
+
+	c.JSON(resp.Code, resp)
 }
 
-func Load(log *logger.Logger, db *storage.DB, cfg *config.Config) *Data {
-	return &Data{
-		log: log,
-		db:  db,
-		cfg: cfg,
+func (hand *handler) writeErrorPlain(c *gin.Context, e error) {
+	resp := model.ParseError(e)
+
+	for key, val := range resp.Header {
+		c.Header(key, val)
 	}
-}
 
-func (data *Data) Hand(rw http.ResponseWriter, req *http.Request) {
-	rw.Header().Set("Server", model.UserAgent)
-
-	err := data.rawHand(rw, req)
-
-	if err == nil {
-		data.log.HttpRequest(req, 200)
-
-	} else {
-		code, err := data.writeError(rw, req, err)
-		if err != nil {
-			data.log.HttpError(req, err)
-		} else {
-			data.log.HttpRequest(req, code)
-		}
-	}
+	c.Data(resp.Code, gin.MIMEPlain, []byte(resp.Text))
 }

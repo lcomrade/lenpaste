@@ -16,15 +16,49 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package apiv1
+package handler
 
 import (
-	"net/http"
+	"net"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
-// GET /api/v1/
-func (data *Data) MainHand(rw http.ResponseWriter, req *http.Request) {
-	data.writeError(rw, req, model.ErrNotFound)
+func (hand *handler) pasteGet(id string, openOneUse bool, clientIP net.IP) (model.Paste, error) {
+	// Check rate limit
+	err := hand.db.RateLimitCheck("paste_get", clientIP)
+	if err != nil {
+		return model.Paste{}, err
+	}
+
+	// Check paste id
+	if id == "" {
+		return model.Paste{}, model.ErrBadRequest
+	}
+
+	// Get paste
+	paste, err := hand.db.PasteGet(id)
+	if err != nil {
+		return model.Paste{}, err
+	}
+
+	// If "one use" paste
+	if paste.OneUse {
+		if openOneUse {
+			// Delete paste
+			err = hand.db.PasteDelete(id)
+			if err != nil {
+				return model.Paste{}, err
+			}
+
+		} else {
+			// Remove secret data
+			paste = model.Paste{
+				ID:     paste.ID,
+				OneUse: true,
+			}
+		}
+	}
+
+	return paste, nil
 }
