@@ -16,12 +16,13 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"crypto/md5"
 	"fmt"
 	"html/template"
+	"net/http"
 	"os"
 	"strings"
 
@@ -35,34 +36,52 @@ type jsTmpl struct {
 
 func (hand *handler) styleCSSHand(c *gin.Context) {
 	c.Header("Content-Type", "text/css; charset=utf-8")
-	return data.styleCSS.Execute(rw, jsTmpl{
-		Translate: hand.l10n.findLocale(req).translate,
-		Theme:     data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).theme,
+	err := hand.styleCSS.Execute(c.Writer, jsTmpl{
+		Translate: hand.l10n.findLocale(c).translate,
+		Theme:     hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).theme,
 	})
+
+	if err != nil {
+		hand.writeErrorWeb(c, err)
+		return
+	}
 }
 
 func (hand *handler) mainJSHand(c *gin.Context) {
-	c.Header("Content-Type", "application/javascript; charset=utf-8")
-	rw.Write(*data.mainJS)
-	return nil
+	c.Data(http.StatusOK, "application/javascript; charset=utf-8", *hand.mainJS)
 }
 
 func (hand *handler) codeJSHand(c *gin.Context) {
 	c.Header("Content-Type", "application/javascript; charset=utf-8")
-	return data.codeJS.Execute(rw, jsTmpl{Translate: hand.l10n.findLocale(req).translate})
+	err := hand.codeJS.Execute(c.Writer, jsTmpl{Translate: hand.l10n.findLocale(c).translate})
+
+	if err != nil {
+		hand.writeErrorWeb(c, err)
+		return
+	}
 }
 
 func (hand *handler) historyJSHand(c *gin.Context) {
 	c.Header("Content-Type", "application/javascript; charset=utf-8")
-	return data.historyJS.Execute(rw, jsTmpl{
-		Translate: hand.l10n.findLocale(req).translate,
-		Theme:     data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).theme,
+	err := hand.historyJS.Execute(c.Writer, jsTmpl{
+		Translate: hand.l10n.findLocale(c).translate,
+		Theme:     hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).theme,
 	})
+
+	if err != nil {
+		hand.writeErrorWeb(c, err)
+		return
+	}
 }
 
 func (hand *handler) pasteJSHand(c *gin.Context) {
 	c.Header("Content-Type", "application/javascript; charset=utf-8")
-	return data.pasteJS.Execute(rw, jsTmpl{Translate: hand.l10n.findLocale(req).translate})
+	err := hand.pasteJS.Execute(c.Writer, jsTmpl{Translate: hand.l10n.findLocale(c).translate})
+
+	if err != nil {
+		hand.writeErrorWeb(c, err)
+		return
+	}
 }
 
 func init() {

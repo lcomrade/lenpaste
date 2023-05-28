@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"embed"
@@ -24,11 +24,11 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"net/http"
 	"path/filepath"
 	"strings"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 type locale map[string]string
@@ -126,10 +126,10 @@ func loadLocales(f embed.FS, localeDir string) (*l10n, error) {
 	return &data, nil
 }
 
-func (data *l10n) detectLanguage(req *http.Request) string {
+func (data *l10n) detectLanguage(c *gin.Context) string {
 	// Get accept language from cookie
 	{
-		lang := c.Cookie("lang")
+		lang := getCookie(c, "lang")
 		if lang != "" {
 			_, ok := data.locales[lang]
 			if ok {
@@ -139,7 +139,7 @@ func (data *l10n) detectLanguage(req *http.Request) string {
 	}
 
 	// Get user Accept-Languages list
-	acceptLanguage := req.Header.Get("Accept-Language")
+	acceptLanguage := c.Request.Header.Get("Accept-Language")
 	acceptLanguage = strings.Replace(acceptLanguage, " ", "", -1)
 
 	var langs []string
@@ -164,8 +164,8 @@ func (data *l10n) detectLanguage(req *http.Request) string {
 	return model.BaseLocale
 }
 
-func (data *l10n) findLocale(req *http.Request) locale {
-	return data.locales[data.detectLanguage(req)]
+func (data *l10n) findLocale(c *gin.Context) locale {
+	return data.locales[data.detectLanguage(c)]
 }
 
 func (locale locale) translate(s string, a ...interface{}) template.HTML {

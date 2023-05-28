@@ -16,15 +16,16 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"bytes"
+	"html/template"
+
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/alecthomas/chroma/v2/lexers"
 	"github.com/alecthomas/chroma/v2/styles"
-	"html/template"
 )
 
 func tryHighlight(source string, lexer string, theme string) template.HTML {

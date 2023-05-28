@@ -25,7 +25,6 @@ import (
 type Config struct {
 	HTTP   ConfigHTTP   `json:"http"`
 	DB     ConfigDB     `json:"database"`
-	S3     ConfigS3     `json:"s3"`
 	Public ConfigPublic `json:"public"`
 	UI     ConfigUI     `json:"ui"`
 	Paste  ConfigPaste  `json:"paste"`
@@ -50,23 +49,6 @@ type ConfigDB struct {
 	MaxIdleConns       int    `json:"max_idle_conns"`
 	ConnMaxLifetime    int64  `json:"-"`
 	ConnMaxLifetimeStr string `json:"conn_max_lifetime"`
-
-	CleanupPeriod    int64  `json:"-"`
-	CleanupPeriodStr string `json:"cleanup_period"`
-}
-
-type ConfigS3 struct {
-	PartitionID   string `json:"partition_id"`
-	URL           string `json:"url"`
-	SigningRegion string `json:"signing_region"`
-
-	AccessKeyID     string `json:"access_key_id"`
-	SecretAccessKey string `json:"secret_access_key"`
-
-	Bucket string `json:"bucket"`
-
-	UploadingTimeout    int64  `json:"-"`
-	UploadingTimeoutStr string `json:"uploading_timeout"`
 
 	CleanupPeriod    int64  `json:"-"`
 	CleanupPeriodStr string `json:"cleanup_period"`

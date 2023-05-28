@@ -19,6 +19,8 @@
 package handler
 
 import (
+	"net/http"
+
 	"git.lcomrade.su/root/lenpaste/internal/model"
 	"github.com/gin-gonic/gin"
 )
@@ -62,5 +64,5 @@ func (hand *handler) getServerInfoHand(c *gin.Context) {
 	}
 
 	// Return response
-	c.JSON(http.StatusOK serverInfo)
+	c.JSON(http.StatusOK, serverInfo)
 }

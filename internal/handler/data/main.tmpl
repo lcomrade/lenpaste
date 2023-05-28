@@ -21,10 +21,6 @@
 {{define "titlePrefix"}}{{end}}
 {{define "headAppend"}}<script src="/main.js"></script>{{end}}
 {{define "article"}}
-{{if eq .AuthOk false}}
-<h3>{{call .Translate `main.CreatePaste`}}</h3>
-<p>{{call .Translate `main.AuthRequired`}}</p>
-{{else}}
 <h3>{{call .Translate `main.CreatePaste`}}</h3>
 <form id="create-paste-form" action="/" method="post">
 	<div class="text-bar">
@@ -122,5 +118,4 @@
 		<div class="text-bar-right">{{if .ServerTermsExist}}{{ call .Translate `main.AcceptTerms` `/terms` }}{{end}}</div>
 	</div>
 </form>
-{{end}}
 {{end}}

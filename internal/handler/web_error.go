@@ -16,27 +16,44 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
 
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	"github.com/gin-gonic/gin"
 )
 
-type termsOfUseTmpl struct {
-	TermsOfUse string
+func (hand *handler) writeErrorWeb(c *gin.Context, e error) {
+	type errorTmpl struct {
+		Code      int
+		AdminName string
+		AdminMail string
+		Translate func(string, ...interface{}) template.HTML
+	}
 
-	Highlight func(string, string) template.HTML
-	Translate func(string, ...interface{}) template.HTML
-}
+	errData := errorTmpl{
+		Code:      0,
+		AdminName: hand.cfg.Public.AdminName,
+		AdminMail: hand.cfg.Public.AdminMail,
+		Translate: hand.l10n.findLocale(c).translate,
+	}
 
-// Pattern: /terms
-func (hand *handler) termsOfUseHand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.termsOfUse.Execute(rw, termsOfUseTmpl{
-		TermsOfUse: hand.cfg.GetTermsOfUse(hand.l10n.detectLanguage(req)),
-		Highlight:  data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
-		Translate:  hand.l10n.findLocale(req).translate},
-	)
+	// Parse error
+	resp := model.ParseError(e)
+
+	if resp.Code > 499 {
+		hand.logError(c, resp)
+	}
+
+	errData.Code = resp.Code
+
+	// Prepare header
+	for key, val := range resp.Header {
+		c.Header(key, val)
+	}
+
+	// Send response body
+	c.HTML(resp.Code, "error.tmpl", errData)
 }

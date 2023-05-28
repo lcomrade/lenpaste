@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"bytes"
@@ -24,12 +24,12 @@ import (
 	"fmt"
 	"html/template"
 	"io/fs"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 const embThemesDir = "data/theme"
@@ -178,13 +178,13 @@ func loadThemes(hostThemeDir string, locale *l10n, defaultTheme string) (*themes
 	return &themes, nil
 }
 
-func (themes *themesData) getForLocale(locale *l10n, req *http.Request) map[string]string {
-	return themes.names[locale.detectLanguage(req)]
+func (themes *themesData) getForLocale(c *gin.Context, locale *l10n) map[string]string {
+	return themes.names[locale.detectLanguage(c)]
 }
 
-func (data *themesData) findTheme(req *http.Request, defaultTheme string) theme {
+func (data *themesData) findTheme(c *gin.Context, defaultTheme string) theme {
 	// Get theme by cookie
-	themeCookie := c.Cookie("theme")
+	themeCookie := getCookie(c, "theme")
 	if themeCookie != "" {
 		theme, ok := data.themes[themeCookie]
 		if ok {

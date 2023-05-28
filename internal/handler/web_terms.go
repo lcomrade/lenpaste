@@ -16,17 +16,27 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
+	"html/template"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func getCookie(req *http.Request, name string) string {
-	cookie, err := req.Cookie(name)
-	if err != nil {
-		return ""
+// Pattern: /terms
+func (hand *handler) termsOfUseHand(c *gin.Context) {
+	type termsOfUseTmpl struct {
+		TermsOfUse string
+
+		Highlight func(string, string) template.HTML
+		Translate func(string, ...interface{}) template.HTML
 	}
 
-	return cookie.Value
+	c.HTML(http.StatusOK, "terms.tmpl", termsOfUseTmpl{
+		TermsOfUse: hand.cfg.GetTermsOfUse(hand.l10n.detectLanguage(c)),
+		Highlight:  hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:  hand.l10n.findLocale(c).translate},
+	)
 }

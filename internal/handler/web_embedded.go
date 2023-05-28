@@ -16,13 +16,14 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
+	"net"
+	"net/http"
 	"time"
 
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"github.com/gin-gonic/gin"
 )
@@ -44,13 +45,14 @@ func (hand *handler) embeddedHand(c *gin.Context) {
 	errorNotFound := false
 
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
 	if err != nil {
-		return err
+		hand.writeErrorWeb(c, err)
+		return
 	}
 
 	// Get paste ID
-	pasteID := string([]rune(req.URL.Path)[5:])
+	pasteID := c.Param("id")
 
 	// Read DB
 	paste, err := hand.db.PasteGet(pasteID)
@@ -59,7 +61,8 @@ func (hand *handler) embeddedHand(c *gin.Context) {
 			errorNotFound = true
 
 		} else {
-			return err
+			hand.writeErrorWeb(c, err)
+			return
 		}
 	}
 
@@ -75,9 +78,9 @@ func (hand *handler) embeddedHand(c *gin.Context) {
 		Body:          tryHighlight(paste.Body, paste.Syntax, "monokai"),
 
 		ErrorNotFound: errorNotFound,
-		Translate:     hand.l10n.findLocale(req).translate,
+		Translate:     hand.l10n.findLocale(c).translate,
 	}
 
 	// Show paste
-	return data.embeddedPage.Execute(rw, tmplData)
+	c.HTML(http.StatusOK, "emb.tmpl", tmplData)
 }

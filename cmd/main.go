@@ -54,21 +54,6 @@ func backgroundJobPastes(cleanJobPeriod time.Duration, db *storage.DB, log *logg
 	}
 }
 
-func backgroundJobFiles(cleanJobPeriod time.Duration, db *storage.DB, log *logger.Logger) {
-	for {
-		expired, notFinished, err := db.FileCleanup()
-		if err != nil {
-			log.Error(errors.New("background: " + err.Error()))
-		}
-
-		log.Info("Delete " + strconv.FormatInt(expired, 10) + " expired files.")
-		log.Info("Delete " + strconv.FormatInt(notFinished, 10) + " unfinished uploads.")
-
-		// Wait
-		time.Sleep(cleanJobPeriod)
-	}
-}
-
 func run(cfgDir string) error {
 	// Setup logger
 	log := logger.New("2006/01/02 15:04:05")
@@ -93,7 +78,6 @@ func run(cfgDir string) error {
 
 	// Run background jobs
 	go backgroundJobPastes(time.Second*time.Duration(cfg.DB.CleanupPeriod), db, log)
-	go backgroundJobFiles(time.Second*time.Duration(cfg.S3.CleanupPeriod), db, log)
 
 	// Run HTTP server
 	log.Info("Run HTTP server on " + cfg.HTTP.Address)

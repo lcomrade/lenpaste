@@ -46,10 +46,6 @@ func Load(cfgDir string) (*Config, error) {
 			CleanupPeriodStr: "1h",
 		},
 
-		S3: ConfigS3{
-			CleanupPeriodStr: "1h",
-		},
-
 		Public: ConfigPublic{
 			AdminName: "",
 			AdminMail: "",
@@ -111,16 +107,6 @@ func Load(cfgDir string) (*Config, error) {
 	cfg.DB.ConnMaxLifetime, err = parseDuration(cfg.DB.ConnMaxLifetimeStr)
 	if err != nil {
 		return nil, errors.New("config: DB connection maximum lifetime: " + err.Error())
-	}
-
-	cfg.S3.UploadingTimeout, err = parseDuration(cfg.S3.UploadingTimeoutStr)
-	if err != nil {
-		return nil, errors.New("config: S3 uploading timeout: " + err.Error())
-	}
-
-	cfg.S3.CleanupPeriod, err = parseDuration(cfg.S3.CleanupPeriodStr)
-	if err != nil {
-		return nil, errors.New("config: S3 cleanup period: " + err.Error())
 	}
 
 	cfg.Paste.MaxLifetime, err = parseDuration(cfg.Paste.MaxLifetimeStr)

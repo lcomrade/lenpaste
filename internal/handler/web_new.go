@@ -16,68 +16,45 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
+	"net/http"
 
-	"git.lcomrade.su/root/lenpaste/internal/lenpasswd"
 	"git.lcomrade.su/root/lenpaste/internal/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-type createTmpl struct {
-	TitleMaxLen       int
-	BodyMaxLen        int
-	AuthorAllMaxLen   int
-	MaxLifeTime       int64
-	UiDefaultLifeTime string
-	Lexers            []string
-	ServerTermsExist  bool
-
-	AuthorDefault      string
-	AuthorEmailDefault string
-	AuthorURLDefault   string
-
-	AuthOk bool
-
-	Translate func(string, ...interface{}) template.HTML
-}
-
 func (hand *handler) newPasteHand(c *gin.Context) {
-	var err error
+	type createTmpl struct {
+		TitleMaxLen       int
+		BodyMaxLen        int
+		AuthorAllMaxLen   int
+		MaxLifeTime       int64
+		UiDefaultLifeTime string
+		Lexers            []string
+		ServerTermsExist  bool
 
-	// Check auth
-	authOk := true
+		AuthorDefault      string
+		AuthorEmailDefault string
+		AuthorURLDefault   string
 
-	if hand.cfg.Auth.Method == "lenpasswd" {
-		authOk = false
-
-		user, pass, authExist := req.BasicAuth()
-		if authExist {
-			authOk, err = lenpasswd.LoadAndCheck(hand.cfg.Paths.LenPasswdFile, user, pass)
-			if err != nil {
-				return err
-			}
-		}
-
-		if !authOk {
-			rw.Header().Add("WWW-Authenticate", "Basic")
-			rw.WriteHeader(401)
-		}
+		Translate func(string, ...interface{}) template.HTML
 	}
 
 	// Create paste if need
-	if req.Method == "POST" {
-		pasteID, _, _, err := netshare.PasteAddFromForm(req, hand.db, hand.cfg, hand.lexers)
+	if c.Request.Method == "POST" {
+		newPaste, err := hand.pasteNew(c)
 		if err != nil {
-			return err
+			hand.writeErrorWeb(c, err)
+			return
 		}
 
 		// Redirect to paste
-		writeRedirect(rw, req, "/"+pasteID, 302)
-		return nil
+		c.Redirect(http.StatusFound, "/"+newPaste.ID)
+		return
 	}
 
 	// Else show create page
@@ -89,14 +66,11 @@ func (hand *handler) newPasteHand(c *gin.Context) {
 		UiDefaultLifeTime:  hand.cfg.Paste.UiDefaultLifetime,
 		Lexers:             hand.lexers,
 		ServerTermsExist:   hand.cfg.TermsOfUse != nil,
-		AuthorDefault:      c.Cookie("author"),
-		AuthorEmailDefault: c.Cookie("authorEmail"),
-		AuthorURLDefault:   c.Cookie("authorURL"),
-		AuthOk:             authOk,
-		Translate:          hand.l10n.findLocale(req).translate,
+		AuthorDefault:      getCookie(c, "author"),
+		AuthorEmailDefault: getCookie(c, "authorEmail"),
+		AuthorURLDefault:   getCookie(c, "authorURL"),
+		Translate:          hand.l10n.findLocale(c).translate,
 	}
 
-	c.Header("Content-Type", "text/html; charset=utf-8")
-
-	return hand.main.Execute(rw, tmplData)
+	c.HTML(http.StatusOK, "main.tmpl", tmplData)
 }

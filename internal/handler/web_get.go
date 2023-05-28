@@ -16,13 +16,14 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
+	"net"
+	"net/http"
 	"time"
 
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"git.lcomrade.su/root/lineend"
 	"github.com/gin-gonic/gin"
 )
@@ -54,38 +55,40 @@ type pasteContinueTmpl struct {
 
 func (hand *handler) getPasteHand(c *gin.Context) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
 	if err != nil {
-		return err
+		hand.writeErrorWeb(c, err)
+		return
 	}
 
 	// Get paste ID
-	pasteID := string([]rune(req.URL.Path)[1:])
+	pasteID := c.Param("id")
 
 	// Read DB
 	paste, err := hand.db.PasteGet(pasteID)
 	if err != nil {
-		return err
+		hand.writeErrorWeb(c, err)
+		return
 	}
 
 	// If "one use" paste
 	if paste.OneUse {
 		// If continue button not pressed
-		req.ParseForm()
-
-		if req.PostForm.Get("oneUseContinue") != "true" {
+		if c.PostForm("oneUseContinue") != "true" {
 			tmplData := pasteContinueTmpl{
 				ID:        paste.ID,
-				Translate: hand.l10n.findLocale(req).translate,
+				Translate: hand.l10n.findLocale(c).translate,
 			}
 
-			return data.pasteContinue.Execute(rw, tmplData)
+			c.HTML(http.StatusOK, "paste_continue.tmpl", tmplData)
+			return
 		}
 
 		// If continue button pressed delete paste
 		err = hand.db.PasteDelete(pasteID)
 		if err != nil {
-			return err
+			hand.writeErrorWeb(c, err)
+			return
 		}
 	}
 
@@ -96,7 +99,7 @@ func (hand *handler) getPasteHand(c *gin.Context) {
 	tmplData := pasteTmpl{
 		ID:         paste.ID,
 		Title:      paste.Title,
-		Body:       data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight(paste.Body, paste.Syntax),
+		Body:       hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight(paste.Body, paste.Syntax),
 		Syntax:     paste.Syntax,
 		CreateTime: paste.CreateTime,
 		DeleteTime: paste.DeleteTime,
@@ -109,7 +112,7 @@ func (hand *handler) getPasteHand(c *gin.Context) {
 		AuthorEmail: paste.AuthorEmail,
 		AuthorURL:   paste.AuthorURL,
 
-		Translate: hand.l10n.findLocale(req).translate,
+		Translate: hand.l10n.findLocale(c).translate,
 	}
 
 	// Get body line end
@@ -123,5 +126,5 @@ func (hand *handler) getPasteHand(c *gin.Context) {
 	}
 
 	// Show paste
-	return data.pastePage.Execute(rw, tmplData)
+	c.HTML(http.StatusOK, "paste.tmpl", tmplData)
 }

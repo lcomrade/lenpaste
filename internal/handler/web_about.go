@@ -16,10 +16,11 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
+	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
 	"github.com/gin-gonic/gin"
@@ -48,7 +49,7 @@ type aboutMinTmp struct {
 
 // Pattern: /about
 func (hand *handler) aboutHand(c *gin.Context) {
-	lang := hand.l10n.detectLanguage(req)
+	lang := hand.l10n.detectLanguage(c)
 
 	dataTmpl := aboutTmpl{
 		Version:          model.Version,
@@ -60,28 +61,24 @@ func (hand *handler) aboutHand(c *gin.Context) {
 		ServerTermsExist: hand.cfg.TermsOfUse != nil,
 		AdminName:        hand.cfg.Public.AdminName,
 		AdminMail:        hand.cfg.Public.AdminMail,
-		Highlight:        data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
-		Translate:        hand.l10n.findLocale(req).translate,
+		Highlight:        hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:        hand.l10n.findLocale(c).translate,
 	}
 
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.about.Execute(rw, dataTmpl)
+	c.HTML(http.StatusOK, "about.tmpl", dataTmpl)
 }
 
 // Pattern: /about/authors
 func (hand *handler) authorsHand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.authors.Execute(rw, aboutMinTmp{Translate: hand.l10n.findLocale(req).translate})
+	c.HTML(http.StatusOK, "authors.tmpl", aboutMinTmp{Translate: hand.l10n.findLocale(c).translate})
 }
 
 // Pattern: /about/license
 func (hand *handler) licenseHand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.license.Execute(rw, aboutMinTmp{Translate: hand.l10n.findLocale(req).translate})
+	c.HTML(http.StatusOK, "license.tmpl", aboutMinTmp{Translate: hand.l10n.findLocale(c).translate})
 }
 
 // Pattern: /about/source_code
 func (hand *handler) sourceCodePageHand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.sourceCodePage.Execute(rw, aboutMinTmp{Translate: hand.l10n.findLocale(req).translate})
+	c.HTML(http.StatusOK, "source_code.tmpl", aboutMinTmp{Translate: hand.l10n.findLocale(c).translate})
 }

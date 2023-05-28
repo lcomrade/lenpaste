@@ -16,14 +16,13 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
+	"net"
 	"net/http"
 	"strings"
-	"time"
 
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"github.com/gin-gonic/gin"
 )
@@ -31,17 +30,19 @@ import (
 // Pattern: /dl/
 func (hand *handler) dlHand(c *gin.Context) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
 	if err != nil {
-		return err
+		hand.writeErrorPlain(c, err)
+		return
 	}
 
 	// Read DB
-	pasteID := string([]rune(req.URL.Path)[4:])
+	pasteID := c.Param("id")
 
 	paste, err := hand.db.PasteGet(pasteID)
 	if err != nil {
-		return err
+		hand.writeErrorPlain(c, err)
+		return
 	}
 
 	// If "one use" paste
@@ -49,12 +50,10 @@ func (hand *handler) dlHand(c *gin.Context) {
 		// Delete paste
 		err = hand.db.PasteDelete(pasteID)
 		if err != nil {
-			return err
+			hand.writeErrorPlain(c, err)
+			return
 		}
 	}
-
-	// Get create time
-	createTime := time.Unix(paste.CreateTime, 0).UTC()
 
 	// Get file name
 	fileName := paste.ID
@@ -69,12 +68,9 @@ func (hand *handler) dlHand(c *gin.Context) {
 	}
 
 	// Write result
-	c.Header("Content-Type", "application/octet-stream")
 	c.Header("Content-Disposition", "attachment; filename="+fileName)
 	c.Header("Content-Transfer-Encoding", "binary")
 	c.Header("Expires", "0")
 
-	http.ServeContent(rw, req, fileName, createTime, strings.NewReader(paste.Body))
-
-	return nil
+	c.Data(http.StatusOK, "application/octet-stream", []byte(paste.Body))
 }

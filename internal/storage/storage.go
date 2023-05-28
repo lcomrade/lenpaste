@@ -27,10 +27,6 @@ import (
 	"git.lcomrade.su/root/lenpaste/internal/model"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-
-	"github.com/aws/aws-sdk-go-v2/aws"
-	awsCreds "github.com/aws/aws-sdk-go-v2/credentials"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 var (
@@ -40,7 +36,6 @@ var (
 type DB struct {
 	cfg  *config.Config
 	pool *sql.DB
-	s3   *s3.Client
 }
 
 func Open(cfg *config.Config) (*DB, error) {
@@ -48,45 +43,6 @@ func Open(cfg *config.Config) (*DB, error) {
 	db := DB{
 		cfg: cfg,
 	}
-
-	// Check S3 settings
-	if cfg.S3.PartitionID == "" {
-		return nil, errors.New("storage: open: S3 \"partition ID\" could not be empty")
-	}
-
-	if cfg.S3.URL == "" {
-		return nil, errors.New("storage: open: S3 \"URL\" could not be empty")
-	}
-
-	if cfg.S3.SigningRegion == "" {
-		return nil, errors.New("storage: open: S3 \"signing region\" could not be empty")
-	}
-
-	if cfg.S3.AccessKeyID == "" {
-		return nil, errors.New("storage: open: S3 \"access key\" could not be empty")
-	}
-
-	if cfg.S3.SecretAccessKey == "" {
-		return nil, errors.New("storage: open: S3 \"secret access key\" could not be empty")
-	}
-
-	if cfg.S3.Bucket == "" {
-		return nil, errors.New("storage: open: S3 \"bucket\" could not be empty")
-	}
-
-	// Open S3 bucket
-	s3Cfg := aws.Config{
-		Credentials: awsCreds.NewStaticCredentialsProvider(cfg.S3.AccessKeyID, cfg.S3.SecretAccessKey, ""),
-		EndpointResolverWithOptions: aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
-			return aws.Endpoint{
-				PartitionID:   cfg.S3.PartitionID,
-				URL:           cfg.S3.URL,
-				SigningRegion: cfg.S3.SigningRegion,
-			}, nil
-		}),
-	}
-
-	db.s3 = s3.NewFromConfig(s3Cfg)
 
 	// Open SQL DB
 	db.pool, err = sql.Open(db.cfg.DB.Driver, db.cfg.DB.Source)

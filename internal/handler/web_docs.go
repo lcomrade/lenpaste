@@ -16,10 +16,11 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
+	"net/http"
 
 	"git.lcomrade.su/root/lenpaste/internal/model"
 	"github.com/gin-gonic/gin"
@@ -39,22 +40,19 @@ type docsApiV1Tmpl struct {
 
 // Pattern: /docs
 func (hand *handler) docsHand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.docs.Execute(rw, docsTmpl{Translate: hand.l10n.findLocale(req).translate})
+	c.HTML(http.StatusOK, "docs.tmpl", docsTmpl{Translate: hand.l10n.findLocale(c).translate})
 }
 
 // Pattern: /docs/apiv1
 func (hand *handler) docsApiV1Hand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.docsApiV1.Execute(rw, docsApiV1Tmpl{
+	c.HTML(http.StatusOK, "docs_apiv1.tmpl", docsApiV1Tmpl{
 		MaxLenAuthorAll: model.MaxLengthAuthorAll,
-		Translate:       hand.l10n.findLocale(req).translate,
-		Highlight:       data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
+		Translate:       hand.l10n.findLocale(c).translate,
+		Highlight:       hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight,
 	})
 }
 
 // Pattern: /docs/api_libs
 func (hand *handler) docsApiLibsHand(c *gin.Context) {
-	c.Header("Content-Type", "text/html; charset=utf-8")
-	return data.docsApiLibs.Execute(rw, docsTmpl{Translate: hand.l10n.findLocale(req).translate})
+	c.HTML(http.StatusOK, "docs_api_libs.tmpl", docsTmpl{Translate: hand.l10n.findLocale(c).translate})
 }

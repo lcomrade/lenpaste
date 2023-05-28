@@ -16,42 +16,45 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package web
+package handler
 
 import (
 	"html/template"
+	"net"
+	"net/http"
 
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	"github.com/gin-gonic/gin"
 )
 
-type embHelpTmpl struct {
-	ID         string
-	DeleteTime int64
-	OneUse     bool
-
-	Protocol string
-	Host     string
-
-	Translate func(string, ...interface{}) template.HTML
-	Highlight func(string, string) template.HTML
-}
-
 // Pattern: /emb_help/
 func (hand *handler) embeddedHelpHand(c *gin.Context) {
+	type embHelpTmpl struct {
+		ID         string
+		DeleteTime int64
+		OneUse     bool
+
+		Protocol string
+		Host     string
+
+		Translate func(string, ...interface{}) template.HTML
+		Highlight func(string, string) template.HTML
+	}
+
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", netshare.GetClientAddr(req))
+	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
 	if err != nil {
-		return err
+		hand.writeErrorWeb(c, err)
+		return
 	}
 
 	// Get paste ID
-	pasteID := string([]rune(req.URL.Path)[10:])
+	pasteID := c.Param("id")
 
 	// Read DB
 	paste, err := hand.db.PasteGet(pasteID)
 	if err != nil {
-		return err
+		hand.writeErrorWeb(c, err)
+		return
 	}
 
 	// Show paste
@@ -59,11 +62,11 @@ func (hand *handler) embeddedHelpHand(c *gin.Context) {
 		ID:         paste.ID,
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,
-		Protocol:   netshare.GetProtocol(req),
-		Host:       netshare.GetHost(req),
-		Translate:  hand.l10n.findLocale(req).translate,
-		Highlight:  data.themes.findTheme(req, hand.cfg.UI.DefaultTheme).tryHighlight,
+		Protocol:   getProtocol(c),
+		Host:       getHost(c),
+		Translate:  hand.l10n.findLocale(c).translate,
+		Highlight:  hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight,
 	}
 
-	return data.embeddedHelpPage.Execute(rw, tmplData)
+	c.HTML(http.StatusOK, "emb_help.tmpl", tmplData)
 }
