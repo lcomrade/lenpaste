@@ -32,7 +32,7 @@ import (
 
 func (hand *handler) pasteNew(c *gin.Context) (model.NewPaste, error) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_new", net.ParseIP(c.ClientIP()))
+	err := hand.db.RateLimitCheck(model.RLPasteNew, net.ParseIP(c.ClientIP()))
 	if err != nil {
 		return model.NewPaste{}, err
 	}

@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"strings"
 
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
 	"github.com/gin-gonic/gin"
 )
@@ -30,7 +31,7 @@ import (
 // Pattern: /dl/
 func (hand *handler) dlHand(c *gin.Context) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
+	err := hand.db.RateLimitCheck(model.RLPasteGet, net.IP(c.ClientIP()))
 	if err != nil {
 		hand.writeErrorPlain(c, err)
 		return

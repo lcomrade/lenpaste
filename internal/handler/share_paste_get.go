@@ -26,7 +26,7 @@ import (
 
 func (hand *handler) pasteGet(id string, openOneUse bool, clientIP net.IP) (model.Paste, error) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", clientIP)
+	err := hand.db.RateLimitCheck(model.RLPasteGet, clientIP)
 	if err != nil {
 		return model.Paste{}, err
 	}

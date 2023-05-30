@@ -22,13 +22,14 @@ import (
 	"net"
 	"net/http"
 
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	"github.com/gin-gonic/gin"
 )
 
 // Pattern: /raw/
 func (hand *handler) rawHand(c *gin.Context) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
+	err := hand.db.RateLimitCheck(model.RLPasteGet, net.IP(c.ClientIP()))
 	if err != nil {
 		hand.writeErrorPlain(c, err)
 		return

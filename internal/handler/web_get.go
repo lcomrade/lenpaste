@@ -24,6 +24,7 @@ import (
 	"net/http"
 	"time"
 
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	"git.lcomrade.su/root/lineend"
 	"github.com/gin-gonic/gin"
 )
@@ -55,7 +56,7 @@ type pasteContinueTmpl struct {
 
 func (hand *handler) getPasteHand(c *gin.Context) {
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
+	err := hand.db.RateLimitCheck(model.RLPasteGet, net.IP(c.ClientIP()))
 	if err != nil {
 		hand.writeErrorWeb(c, err)
 		return

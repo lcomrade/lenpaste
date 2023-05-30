@@ -24,6 +24,7 @@ import (
 	"net/http"
 	"time"
 
+	"git.lcomrade.su/root/lenpaste/internal/model"
 	"git.lcomrade.su/root/lenpaste/internal/storage"
 	"github.com/gin-gonic/gin"
 )
@@ -45,7 +46,7 @@ func (hand *handler) embeddedHand(c *gin.Context) {
 	errorNotFound := false
 
 	// Check rate limit
-	err := hand.db.RateLimitCheck("paste_get", net.IP(c.ClientIP()))
+	err := hand.db.RateLimitCheck(model.RLPasteGet, net.IP(c.ClientIP()))
 	if err != nil {
 		hand.writeErrorWeb(c, err)
 		return
