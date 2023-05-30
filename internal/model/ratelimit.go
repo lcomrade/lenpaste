@@ -16,13 +16,15 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package storage
+package model
 
-import (
-	"net"
-)
+type RLCategory string
 
-func (db *DB) RateLimitCheck(name string, ip net.IP) error {
-	// TODO: Write a ratelimit system based on Redis.
-	return nil
+func (cat RLCategory) String() string {
+	return string(cat)
 }
+
+const (
+	RLPasteGet = RLCategory("paste_get")
+	RLPasteNew = RLCategory("paste_new")
+)

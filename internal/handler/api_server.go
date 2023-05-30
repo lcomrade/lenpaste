@@ -60,7 +60,7 @@ func (hand *handler) getServerInfoHand(c *gin.Context) {
 		AdminMail:         hand.cfg.Public.AdminMail,
 		Syntaxes:          hand.lexers,
 		UiDefaultLifeTime: hand.cfg.Paste.UiDefaultLifetime,
-		AuthRequired:      hand.cfg.Auth.Method != "",
+		AuthRequired:      false,
 	}
 
 	// Return response

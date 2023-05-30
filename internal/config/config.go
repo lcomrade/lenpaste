@@ -28,7 +28,6 @@ type Config struct {
 	Public ConfigPublic `json:"public"`
 	UI     ConfigUI     `json:"ui"`
 	Paste  ConfigPaste  `json:"paste"`
-	Auth   ConfigAuth   `json:"auth"`
 
 	About      map[string]string `json:"-"`
 	Rules      map[string]string `json:"-"`
@@ -72,10 +71,14 @@ type ConfigPaste struct {
 	MaxLifetimeStr string `json:"max_lifetime"`
 
 	UiDefaultLifetime string `json:"ui_default_lifetime"`
+
+	RateLimit ConfigPasteRateLimit `json:"rate_limit"`
 }
 
-type ConfigAuth struct {
-	Method string `json:"method"`
+type ConfigPasteRateLimit struct {
+	GetPer1Hour int `json:"get_per_1hour"`
+
+	NewPer1Hour int `json:"new_per_1hour"`
 }
 
 type ConfigPaths struct {

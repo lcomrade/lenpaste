@@ -63,10 +63,11 @@ func Load(cfgDir string) (*Config, error) {
 			MaxLifetimeStr: "",
 
 			UiDefaultLifetime: "",
-		},
 
-		Auth: ConfigAuth{
-			Method: "",
+			RateLimit: ConfigPasteRateLimit{
+				GetPer1Hour: 500,
+				NewPer1Hour: 40,
+			},
 		},
 
 		About:      nil,

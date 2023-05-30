@@ -36,6 +36,8 @@ var (
 type DB struct {
 	cfg  *config.Config
 	pool *sql.DB
+
+	rlNative *rateLimit
 }
 
 func Open(cfg *config.Config) (*DB, error) {
@@ -43,6 +45,11 @@ func Open(cfg *config.Config) (*DB, error) {
 	db := DB{
 		cfg: cfg,
 	}
+
+	// Init native rate limit
+	db.rlNativeInit()
+	db.rlNative.writeCategory(model.RLPasteGet, time.Hour, cfg.Paste.RateLimit.GetPer1Hour)
+	db.rlNative.writeCategory(model.RLPasteNew, time.Hour, cfg.Paste.RateLimit.NewPer1Hour)
 
 	// Open SQL DB
 	db.pool, err = sql.Open(db.cfg.DB.Driver, db.cfg.DB.Source)
