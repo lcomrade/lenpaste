@@ -20,6 +20,7 @@ package config
 
 import (
 	"git.lcomrade.su/root/lenpaste/internal/model"
+	"github.com/gin-gonic/gin"
 )
 
 type Config struct {
@@ -127,4 +128,19 @@ func (cfg *Config) GetTermsOfUse(locale string) string {
 	}
 
 	return out
+}
+
+func (cfg *Config) IsTrustedProxy(c *gin.Context) bool {
+	if len(cfg.HTTP.TrustedProxies) == 0 {
+		return true
+	}
+
+	ip := c.RemoteIP()
+	for _, part := range cfg.HTTP.TrustedProxies {
+		if part == ip {
+			return true
+		}
+	}
+
+	return false
 }

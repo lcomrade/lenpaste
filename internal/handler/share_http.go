@@ -52,20 +52,30 @@ func getCookie(c *gin.Context, name string) string {
 	return val
 }
 
-func getHost(c *gin.Context) string {
-	// Read header
+func (hand *handler) getHost(c *gin.Context) string {
+	// If not trusted proxy
+	if !hand.cfg.IsTrustedProxy(c) {
+		return c.Request.Host
+	}
+
+	// Check proxy header
 	xHost := c.Request.Header.Get("X-Forwarded-Host")
 
-	// Check
 	if xHost != "" {
 		return xHost
 	}
 
+	// Else return real host
 	return c.Request.Host
 }
 
-func getProtocol(c *gin.Context) string {
-	// X-Forwarded-Proto
+func (hand *handler) getProtocol(c *gin.Context) string {
+	// If not trusted proxy
+	if !hand.cfg.IsTrustedProxy(c) {
+		return c.Request.URL.Scheme
+	}
+
+	// Check proxy header
 	xProto := c.Request.Header.Get("X-Forwarded-Proto")
 
 	if xProto != "" {

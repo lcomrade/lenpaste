@@ -29,8 +29,8 @@ func (hand *handler) robotsTxtHand(c *gin.Context) {
 	robotsTxt := "User-agent: *\nDisallow: /\n"
 
 	if !hand.cfg.Public.RobotsDisallow {
-		proto := getProtocol(c)
-		host := getHost(c)
+		proto := hand.getProtocol(c)
+		host := hand.getHost(c)
 
 		robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + proto + "://" + host + "/sitemap.xml\n"
 	}
@@ -46,8 +46,8 @@ func (hand *handler) sitemapHand(c *gin.Context) {
 	}
 
 	// Get protocol and host
-	proto := getProtocol(c)
-	host := getHost(c)
+	proto := hand.getProtocol(c)
+	host := hand.getHost(c)
 
 	// Generate sitemap.xml
 	sitemapXML := `<?xml version="1.0" encoding="UTF-8"?>`

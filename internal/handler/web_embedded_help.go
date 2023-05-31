@@ -63,8 +63,8 @@ func (hand *handler) embeddedHelpHand(c *gin.Context) {
 		ID:         paste.ID,
 		DeleteTime: paste.DeleteTime,
 		OneUse:     paste.OneUse,
-		Protocol:   getProtocol(c),
-		Host:       getHost(c),
+		Protocol:   hand.getProtocol(c),
+		Host:       hand.getHost(c),
 		Translate:  hand.l10n.findLocale(c).translate,
 		Highlight:  hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight,
 	}
