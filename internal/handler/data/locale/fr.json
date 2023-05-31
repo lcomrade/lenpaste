@@ -99,7 +99,6 @@
     "main.AuthorURL": "URL de l'auteur :",
     "main.AuthorURLPlaceholder": "https://example.org",
     "main.Create": "Créer un nouveau snippet",
-    "main.CreatePaste": "Créer un snippet",
     "main.EnterText": "Saisir un texte...",
     "main.EnterTitle": "Titre (optionnel)...",
     "main.Expiration": "Expiration :",

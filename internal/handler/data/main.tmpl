@@ -21,7 +21,10 @@
 {{define "titlePrefix"}}{{end}}
 {{define "headAppend"}}<script src="/main.js"></script>{{end}}
 {{define "article"}}
-<h3>{{call .Translate `main.CreatePaste`}}</h3>
+<div class="tab-container">
+	<h3 class="tab-active">{{call .Translate `tab.Paste`}}</h3
+	><h3 class="tab-normal"><a href="/space/">{{call .Translate `tab.CodeSpace`}}</a></h3>
+</div>
 <form id="create-paste-form" action="/" method="post">
 	<div class="text-bar">
 		<div>

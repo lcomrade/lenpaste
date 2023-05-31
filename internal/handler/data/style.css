@@ -20,7 +20,7 @@
 
 /* MAIN */
 body {
-	width: 70%;
+	width: 80%;
 	margin: 0;
 	margin-left: auto;
 	margin-right: auto;
@@ -53,6 +53,11 @@ header {
 	padding-right: 20px;
 	color: {{call .Theme `color.HeaderFont`}};
 	background: {{call .Theme `color.Header`}};
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 header h2,
@@ -95,6 +100,42 @@ article {
 .stretch-width {
 	width: 100%;
 	box-sizing: border-box;	
+}
+
+.tab-container {
+	width: 100%;
+
+	margin-top: 10px;
+	margin-bottom: 20px;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.tab-container .tab-active,
+.tab-container .tab-normal {
+	display: inline;
+	padding: 10px;
+}
+
+.tab-container .tab-active {
+	background-color: {{call .Theme `color.TabActiveBackground`}};
+	color: {{call .Theme `color.TabActiveTextColor`}};
+}
+
+.tab-container .tab-normal {
+	background-color: {{call .Theme `color.TabNormalBackground`}};
+}
+
+.tab-container .tab-normal a {
+	color: {{call .Theme `color.TabNormalTextColor`}};
+}
+
+.tab-container .tab-active:hover,
+.tab-container .tab-normal:hover {
+	cursor: pointer;
 }
 
 .button-block-right {

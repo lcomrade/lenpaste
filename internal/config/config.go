@@ -24,11 +24,12 @@ import (
 )
 
 type Config struct {
-	HTTP   ConfigHTTP   `json:"http"`
-	DB     ConfigDB     `json:"database"`
-	Public ConfigPublic `json:"public"`
-	UI     ConfigUI     `json:"ui"`
-	Paste  ConfigPaste  `json:"paste"`
+	HTTP    ConfigHTTP    `json:"http"`
+	DB      ConfigDB      `json:"database"`
+	Public  ConfigPublic  `json:"public"`
+	UI      ConfigUI      `json:"ui"`
+	Paste   ConfigPaste   `json:"paste"`
+	CodeRun ConfigCodeRun `json:"code_run"`
 
 	About      map[string]string `json:"-"`
 	Rules      map[string]string `json:"-"`
@@ -80,6 +81,16 @@ type ConfigPasteRateLimit struct {
 	GetPer1Hour int `json:"get_per_1hour"`
 
 	NewPer1Hour int `json:"new_per_1hour"`
+}
+
+type ConfigCodeRun struct {
+	SharedSecret string `json:"shared_secret"`
+
+	RateLimit ConfigCodeRunRateLimit `json:"rate_limit"`
+}
+
+type ConfigCodeRunRateLimit struct {
+	RunPer1Hour int `json:"run_per_1hour"`
 }
 
 type ConfigPaths struct {

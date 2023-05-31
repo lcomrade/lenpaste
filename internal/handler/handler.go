@@ -212,6 +212,10 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 	r.GET("/", hand.newPasteHand)
 	r.POST("/", hand.newPasteHand)
 	r.GET("/:id", hand.getPasteHand)
+
+	r.GET("/space/", hand.spaceHand)
+	r.GET("/space/:id", hand.spaceHand)
+
 	r.GET("/settings", hand.settingsHand)
 	r.POST("/settings", hand.settingsHand)
 	r.GET("/terms", hand.termsOfUseHand)

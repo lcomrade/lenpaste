@@ -129,7 +129,6 @@
     "pasteEmbHelp.Title": "Eingebettet",
     "main.BurnAfterReading": "Nach dem Lesen Vernichten",
     "main.Create": "Neuen Paste Erstellen",
-    "main.CreatePaste": "Erstelle Paste",
     "pasteEmb.ErrorCouldNotEmb": "Dieser Paste kann nicht in andere Webseiten eingebettet werden",
     "pasteJS.ShortMonth": "\"Jan\", \"Feb\", \"Mär\", \"Apr\", \"Mai\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Okt\", \"Nov\", \"Dez\"",
     "pasteJS.ShortWeekDay": "\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"",

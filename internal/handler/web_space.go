@@ -16,16 +16,21 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package model
+package handler
 
-type RLCategory string
+import (
+	"html/template"
+	"net/http"
 
-func (cat RLCategory) String() string {
-	return string(cat)
-}
-
-const (
-	RLPasteGet = RLCategory("paste_get")
-	RLPasteNew = RLCategory("paste_new")
-	RLCodeRun  = RLCategory("code_run")
+	"github.com/gin-gonic/gin"
 )
+
+func (hand *handler) spaceHand(c *gin.Context) {
+	type spaceTmpl struct {
+		Translate func(string, ...interface{}) template.HTML
+	}
+
+	c.HTML(http.StatusOK, "space.tmpl", spaceTmpl{
+		Translate: hand.l10n.findLocale(c).translate,
+	})
+}
