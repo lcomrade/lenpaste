@@ -45,6 +45,9 @@ type serverInfoType struct {
 func (hand *handler) getServerInfoHand(c *gin.Context) {
 	// Get request parameters
 	lang := c.Query("lang")
+	if lang == "" {
+		lang = model.BaseLocale
+	}
 
 	// Prepare data
 	serverInfo := serverInfoType{

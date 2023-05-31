@@ -33,6 +33,7 @@ type docsTmpl struct {
 
 type docsApiV1Tmpl struct {
 	MaxLenAuthorAll int
+	DefaultLang     string
 
 	Highlight func(string, string) template.HTML
 	Translate func(string, ...interface{}) template.HTML
@@ -47,6 +48,7 @@ func (hand *handler) docsHand(c *gin.Context) {
 func (hand *handler) docsApiV1Hand(c *gin.Context) {
 	c.HTML(http.StatusOK, "docs_apiv1.tmpl", docsApiV1Tmpl{
 		MaxLenAuthorAll: model.MaxLengthAuthorAll,
+		DefaultLang:     model.BaseLocale,
 		Translate:       hand.l10n.findLocale(c).translate,
 		Highlight:       hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).tryHighlight,
 	})
