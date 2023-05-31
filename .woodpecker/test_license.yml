@@ -1,0 +1,11 @@
+when:
+  event: [push, pull_request]
+  branch: develop
+
+pipeline:
+  build:
+    image: alpine
+    pull: true
+    commands:
+      - chmod +x ./tools/license_check.sh
+      - ./tools/license_check.sh
