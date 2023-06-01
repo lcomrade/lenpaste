@@ -55,6 +55,9 @@ type handler struct {
 	historyJS *textTemplate.Template
 	codeJS    *textTemplate.Template
 	pasteJS   *textTemplate.Template
+
+	spaceJS  *textTemplate.Template
+	spaceCSS *textTemplate.Template
 }
 
 func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
@@ -156,6 +159,18 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 		return errors.New("handler: " + err.Error())
 	}
 
+	// space.css
+	hand.spaceCSS, err = textTemplate.ParseFS(embFS, "data/space.css")
+	if err != nil {
+		return errors.New("handler: " + err.Error())
+	}
+
+	// space.js
+	hand.spaceJS, err = textTemplate.ParseFS(embFS, "data/space.js")
+	if err != nil {
+		return errors.New("handler: " + err.Error())
+	}
+
 	// Load templates
 	{
 		d, err := embFS.ReadDir("data")
@@ -163,19 +178,41 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 			return errors.New("handler: " + err.Error())
 		}
 
-		// Add html/template files
+		// Add some html/template files manual
+		tmplFilesManual := [][]string{
+			{"emb.tmpl"},
+			{"space.tmpl"},
+		}
+
+		// Add other html/template files
 		var tmplFiles []string
 		for _, file := range d {
 			if file.IsDir() {
 				continue
 			}
 
+			// If file already manual added
 			fileName := file.Name()
+
+			ok := true
+			for _, part := range tmplFilesManual {
+				if fileName == part[len(part)-1] {
+					ok = false
+					break
+				}
+			}
+
+			if !ok {
+				continue
+			}
+
+			// Else save file name
 			if strings.HasSuffix(fileName, ".tmpl") {
 				tmplFiles = append(tmplFiles, fileName)
 			}
 		}
 
+		// Load templates to Gin
 		render := multitemplate.NewRenderer()
 
 		for _, fileName := range tmplFiles {
@@ -184,6 +221,17 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 					"data/base.tmpl",
 					"data/"+fileName,
 				),
+			))
+		}
+
+		for _, part := range tmplFilesManual {
+			var tmpls []string
+			for _, fileName := range part {
+				tmpls = append(tmpls, "data/"+fileName)
+			}
+
+			render.Add(part[len(part)-1], template.Must(
+				template.ParseFS(embFS, tmpls...),
 			))
 		}
 
@@ -215,6 +263,8 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 
 	r.GET("/space/", hand.spaceHand)
 	r.GET("/space/:id", hand.spaceHand)
+	r.GET("/space.css", hand.spaceCSSHand)
+	r.GET("/space.js", hand.spaceJSHand)
 
 	r.GET("/settings", hand.settingsHand)
 	r.POST("/settings", hand.settingsHand)

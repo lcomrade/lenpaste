@@ -25,12 +25,40 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func (hand *handler) spaceCSSHand(c *gin.Context) {
+	c.Header("Content-Type", "text/css; charset=utf-8")
+	err := hand.spaceCSS.Execute(c.Writer, jsTmpl{
+		Translate: hand.l10n.findLocale(c).translate,
+		Theme:     hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).theme,
+	})
+
+	if err != nil {
+		hand.writeErrorWeb(c, err)
+		return
+	}
+}
+
+func (hand *handler) spaceJSHand(c *gin.Context) {
+	c.Header("Content-Type", "application/javascript; charset=utf-8")
+	err := hand.spaceJS.Execute(c.Writer, jsTmpl{
+		Translate: hand.l10n.findLocale(c).translate,
+		Theme:     hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).theme,
+	})
+
+	if err != nil {
+		hand.writeErrorWeb(c, err)
+		return
+	}
+}
+
 func (hand *handler) spaceHand(c *gin.Context) {
 	type spaceTmpl struct {
 		Translate func(string, ...interface{}) template.HTML
+		Theme     func(string) string
 	}
 
 	c.HTML(http.StatusOK, "space.tmpl", spaceTmpl{
 		Translate: hand.l10n.findLocale(c).translate,
+		Theme:     hand.themes.findTheme(c, hand.cfg.UI.DefaultTheme).theme,
 	})
 }
