@@ -51,9 +51,11 @@ func ParseError(e error) Error {
 	var resp *Error
 
 	if !errors.As(e, &resp) {
-		resp.Code = 500
-		resp.Text = "Internal Server Error"
-		resp.RealErr = e.Error()
+		resp = &Error{
+			Code:    500,
+			Text:    "Internal Server Error",
+			RealErr: e.Error(),
+		}
 	}
 
 	return *resp
