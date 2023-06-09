@@ -23,11 +23,6 @@ color.Element          = #B9B9B9
 color.Red  = #FF1F1F
 color.Grey = #888888
 
-color.TabActiveTextColor  = #000000
-color.TabActiveBackground = #C3C3C3
-color.TabNormalTextColor  = #999999
-color.TabNormalBackground = #B9B9B9
-
 color.Button           = #888888
 color.ButtonFont       = #FFFFFF
 color.ButtonHover      = #999999

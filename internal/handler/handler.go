@@ -55,9 +55,6 @@ type handler struct {
 	historyJS *textTemplate.Template
 	codeJS    *textTemplate.Template
 	pasteJS   *textTemplate.Template
-
-	spaceJS  *textTemplate.Template
-	spaceCSS *textTemplate.Template
 }
 
 func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
@@ -159,18 +156,6 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 		return errors.New("handler: " + err.Error())
 	}
 
-	// space.css
-	hand.spaceCSS, err = textTemplate.ParseFS(embFS, "data/space.css")
-	if err != nil {
-		return errors.New("handler: " + err.Error())
-	}
-
-	// space.js
-	hand.spaceJS, err = textTemplate.ParseFS(embFS, "data/space.js")
-	if err != nil {
-		return errors.New("handler: " + err.Error())
-	}
-
 	// Load templates
 	{
 		d, err := embFS.ReadDir("data")
@@ -181,7 +166,6 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 		// Add some html/template files manual
 		tmplFilesManual := [][]string{
 			{"emb.tmpl"},
-			{"space.tmpl"},
 		}
 
 		// Add other html/template files
@@ -260,11 +244,6 @@ func Run(log *logger.Logger, db *storage.DB, cfg *config.Config) error {
 	r.GET("/", hand.newPasteHand)
 	r.POST("/", hand.newPasteHand)
 	r.GET("/:id", hand.getPasteHand)
-
-	r.GET("/space/", hand.spaceHand)
-	r.GET("/space/:id", hand.spaceHand)
-	r.GET("/space.css", hand.spaceCSSHand)
-	r.GET("/space.js", hand.spaceJSHand)
 
 	r.GET("/settings", hand.settingsHand)
 	r.POST("/settings", hand.settingsHand)
