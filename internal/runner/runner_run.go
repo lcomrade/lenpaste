@@ -16,29 +16,15 @@
 // You should have received a copy of the GNU Affero Public License along with Lenpaste.
 // If not, see <https://www.gnu.org/licenses/>.
 
-package model
+package runner
 
-const (
-	SmallName  = "lenpaste"
-	Software   = "Lenpaste"
-	BaseLocale = "en"
-	BaseTheme  = "dark"
-
-	// Max length or paste author name, email and URL.
-	MaxLengthAuthorAll = 100
-
-	RunnerTimeout = 30
+import (
+	"git.lcomrade.su/root/lenpaste/internal/model"
 )
 
-var (
-	Version   = "unknown"
-	UserAgent = Software + "/" + Version
+func (coord *RunCoordinator) Run(req model.RunRequest) {
+	// Find best instance to run
+	coord.lock <- struct{}{}
 
-	Debug = false
-)
-
-func init() {
-	if Version == "unknown" || Version == "" {
-		Debug = true
-	}
+	<-coord.lock
 }

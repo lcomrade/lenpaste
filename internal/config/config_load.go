@@ -70,6 +70,12 @@ func Load(cfgDir string) (*Config, error) {
 			},
 		},
 
+		CodeRun: ConfigCodeRun{
+			RateLimit: ConfigCodeRunRateLimit{
+				RunPer1Hour: 3600,
+			},
+		},
+
 		About:      nil,
 		Rules:      nil,
 		TermsOfUse: nil,

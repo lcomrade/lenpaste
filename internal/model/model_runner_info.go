@@ -18,27 +18,23 @@
 
 package model
 
-const (
-	SmallName  = "lenpaste"
-	Software   = "Lenpaste"
-	BaseLocale = "en"
-	BaseTheme  = "dark"
+type RunnerInfo struct {
+	Provider string `json:"provider"`
 
-	// Max length or paste author name, email and URL.
-	MaxLengthAuthorAll = 100
+	Workers int `json:"workers"`
 
-	RunnerTimeout = 30
-)
+	Environments map[string]RunnerEnvironment `json:"environments"`
+}
 
-var (
-	Version   = "unknown"
-	UserAgent = Software + "/" + Version
+type RunnerEnvironment struct {
+	CpuCores int `json:"cpu_cores"`
+	RAM      int `json:"ram"`
 
-	Debug = false
-)
+	Arch string `json:"arch"`
+	OS   string `json:"os"`
 
-func init() {
-	if Version == "unknown" || Version == "" {
-		Debug = true
-	}
+	Language string `json:"language"`
+	ToolName string `json:"tool_name"`
+
+	Timeout int `json:"timeout"`
 }

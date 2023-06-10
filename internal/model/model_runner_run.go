@@ -18,27 +18,25 @@
 
 package model
 
-const (
-	SmallName  = "lenpaste"
-	Software   = "Lenpaste"
-	BaseLocale = "en"
-	BaseTheme  = "dark"
+type RunnerRequest struct {
+	EnvironmentID string               `json:"environment_id"`
+	Build         RunnerRequestBuild   `json:"build"`
+	Execute       RunnerRequestExecute `json:"execute"`
+}
 
-	// Max length or paste author name, email and URL.
-	MaxLengthAuthorAll = 100
+type RunnerRequestBuild struct {
+	File string `json:"file"`
+}
 
-	RunnerTimeout = 30
-)
+type RunnerRequestExecute struct {
+	CustomTimeout int               `json:"custom_timeout"`
+	Env           map[string]string `json:"env"`
+	RunArgs       []string          `json:"run_args"`
+	Stdin         string            `json:"stdin"`
+}
 
-var (
-	Version   = "unknown"
-	UserAgent = Software + "/" + Version
-
-	Debug = false
-)
-
-func init() {
-	if Version == "unknown" || Version == "" {
-		Debug = true
-	}
+type RunnerResponse struct {
+	TimeoutExit bool   `json:"timeout_exit"`
+	Output      string `json:"output"`
+	ExitCode    int    `json:"exit_code"`
 }

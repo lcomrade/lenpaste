@@ -84,9 +84,14 @@ type ConfigPasteRateLimit struct {
 }
 
 type ConfigCodeRun struct {
-	SharedSecret string `json:"shared_secret"`
-
+	Runners   []ConfigCodeRunRunner  `json:"runners"`
 	RateLimit ConfigCodeRunRateLimit `json:"rate_limit"`
+}
+
+type ConfigCodeRunRunner struct {
+	Required     bool   `json:"required"`
+	BaseURL      string `json:"base_url"`
+	SharedSecret string `json:"shared_secret"`
 }
 
 type ConfigCodeRunRateLimit struct {

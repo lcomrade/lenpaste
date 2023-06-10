@@ -18,27 +18,11 @@
 
 package model
 
-const (
-	SmallName  = "lenpaste"
-	Software   = "Lenpaste"
-	BaseLocale = "en"
-	BaseTheme  = "dark"
+type RunRequest struct {
+	File string
 
-	// Max length or paste author name, email and URL.
-	MaxLengthAuthorAll = 100
-
-	RunnerTimeout = 30
-)
-
-var (
-	Version   = "unknown"
-	UserAgent = Software + "/" + Version
-
-	Debug = false
-)
-
-func init() {
-	if Version == "unknown" || Version == "" {
-		Debug = true
-	}
+	CustomTimeout int
+	Env           map[string]string
+	RunArgs       []string
+	Stdin         string
 }
