@@ -156,5 +156,8 @@
     "docsAPIv1.ReqGetOpenOneUse": "Wenn <code>true</code>, wird der gesamte Inhalt des Pastes zurückgegeben und anschließend gelöscht. Wenn <code>false</code>, wird die API lediglich <code>id</code> und <code>oneUse</code> zurückgeben, der Paste wird nicht gelöscht.",
     "docsAPIv1.ReqNewExpiration": "Zeigt den Ablauf des Pastes in Sekunden. Wenn dieser Parameter auf <code>0</code> gesetzt ist, wird der Paste für immer gespeichert.",
     "docsAPIv1.ReqNewSyntax": "Syntax Hervorhebung im Paste. Eine Liste der verfügbaren Hervorhebungen kann über die <a href=\"%s\"><code>getServerInfo</code></a> Methode erhalten werden.",
-    "pasteContinue.Message": "Dieser Paste kann lediglich einmalig angesehen werden, danach wird er gelöscht. Weiter?"
+    "pasteContinue.Message": "Dieser Paste kann lediglich einmalig angesehen werden, danach wird er gelöscht. Weiter?",
+    "docsAPIv1.ReqServerInfoLang": "Die Sprache in der die About-Seite, die Regeln und die Nutzerbedingungen ausgegeben werden.",
+    "tab.Paste": "Einfügen",
+    "noscript": "Für diese Funktion brauchst du aktiviertes Javascript."
 }
