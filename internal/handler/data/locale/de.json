@@ -159,5 +159,7 @@
     "pasteContinue.Message": "Dieser Paste kann lediglich einmalig angesehen werden, danach wird er gelöscht. Weiter?",
     "docsAPIv1.ReqServerInfoLang": "Die Sprache in der die About-Seite, die Regeln und die Nutzerbedingungen ausgegeben werden.",
     "tab.Paste": "Einfügen",
-    "noscript": "Für diese Funktion brauchst du aktiviertes Javascript."
+    "noscript": "Für diese Funktion brauchst du aktiviertes Javascript.",
+    "space.NewSpace": "Neuer Raum",
+    "tab.CodeSpace": "Programmierraum"
 }
