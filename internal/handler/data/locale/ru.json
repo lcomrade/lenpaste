@@ -1,5 +1,5 @@
 {
-    "about.AboutServerTitle": "Об этом сервер",
+    "about.AboutServerTitle": "Об этом сервере",
     "about.AdminEmail": "Почта администратора:",
     "about.AdminName": "Имя администратора:",
     "about.AdminTitle": "Связаться с администратором",
@@ -7,10 +7,10 @@
     "about.Lenpaste2": "Вам не нужно регистрироваться здесь.",
     "about.Lenpaste3": "Этот сайт не использует Cookie, чтобы следить за вами.",
     "about.Lenpaste4": "Этот сайт может работать без JavaScript.",
-    "about.Lenpaste5": "У ЛенОтрывка есть свой собственный <a href=\"%s\">API</a>.",
-    "about.LenpasteAuthors": "<a href=\"%s\">Посмотреть список авторов ЛенОтрывка.</a>",
-    "about.LenpasteMessage": "На этом сервере использует ЛенОтрывок версии <code>%s</code>. Немного о нём:",
-    "about.LenpasteTitle": "Что такое ЛенОтрывок?",
+    "about.Lenpaste5": "У Lenpaste есть <a href=\"%s\">API</a>.",
+    "about.LenpasteAuthors": "<a href=\"%s\">Узнайте больше об авторах Lenpaste.</a>",
+    "about.LenpasteMessage": "Этот сервер использует Lenpaste <code>%s</code>. Немного о нём:",
+    "about.LenpasteTitle": "Что такое Lenpaste?",
     "about.Limit": "Лимиты",
     "about.LimitBody": "Максимальная длина отрывка: <code>%d</code> символов.",
     "about.LimitBodyNo": "Длина отрывка неограниченна.",
@@ -157,5 +157,8 @@
     "terms.Notice": "Эти условия использования не имеет ни какого отношения к ПО ЛенОтрывок, они распространяются только на этот сервер.",
     "terms.Title": "Условия использования",
     "docsAPIv1.Introduction1": "API ЛенОтрывка не требует регистрации для его использования.",
-    "docsAPIv1.Introduction2": "Любой POST запрос к API отправляется в формате <code>application/x-www-form-urlencoded</code>. Так же API всегда возвращает ответ на любой запрос в формате <code>application/json</code> и кодировке UTF8."
+    "docsAPIv1.Introduction2": "Любой POST запрос к API отправляется в формате <code>application/x-www-form-urlencoded</code>. Так же API всегда возвращает ответ на любой запрос в формате <code>application/json</code> и кодировке UTF8.",
+    "space.NewSpace": "Новое Пространство",
+    "tab.Paste": "Вставить",
+    "tab.CodeSpace": "Кодовое Пространство"
 }
