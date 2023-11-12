@@ -160,5 +160,6 @@
     "docsAPIv1.Introduction2": "Любой POST запрос к API отправляется в формате <code>application/x-www-form-urlencoded</code>. Так же API всегда возвращает ответ на любой запрос в формате <code>application/json</code> и кодировке UTF8.",
     "space.NewSpace": "Новое Пространство",
     "tab.Paste": "Вставить",
-    "tab.CodeSpace": "Кодовое Пространство"
+    "tab.CodeSpace": "Кодовое Пространство",
+    "noscript": "Эта функция доступна только при включённом JavaScript."
 }
