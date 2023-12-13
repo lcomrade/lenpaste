@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |-
             sed -i "/VERSION[[:space:]]*=/c\VERSION=${{env.version}}" ./Makefile
-            sed -i "s/$(GO) build/$(GO) build -mod=vendor/" ./Makefile
+            sed -i "s/\$(GO) build/\$(GO) build -mod=vendor/" ./Makefile
             sudo chown -R 0:0 ../lenpaste-${{env.version}}/
             cd ..
             sudo tar --mtime="${{env.commit_date}}" -zcf ./lenpaste-${{env.version}}.tar.gz ./lenpaste-${{env.version}}/
