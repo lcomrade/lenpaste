@@ -5,7 +5,7 @@ version: "2"
 
 services:
   lenpaste:
-    image: git.lcomrade.su/root/lenpaste:latest
+    image: ghcr.io/lcomrade/lenpaste:X.X
     restart: always
     environment:
       - LENPASTE_DB_DRIVER=postgres
@@ -20,7 +20,7 @@ services:
       - postgres
 
   postgres:
-    image: postgres
+    image: docker.io/library/postgres:16.1
     restart: always
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata

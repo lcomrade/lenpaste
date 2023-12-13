@@ -19,10 +19,10 @@
 package raw
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/config"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"github.com/lcomrade/lenpaste/internal/config"
+	"github.com/lcomrade/lenpaste/internal/logger"
+	"github.com/lcomrade/lenpaste/internal/netshare"
+	"github.com/lcomrade/lenpaste/internal/storage"
 	"net/http"
 )
 

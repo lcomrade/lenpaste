@@ -2,12 +2,12 @@
 
 
 ## Features
-- No need to register
-- Supports multiple languages
-- Uses cookies only to store settings
-- Can work without JavaScript
-- Has its own API
-- Open source and self-hosted
+- No need to register.
+- Supports multiple languages.
+- Uses cookies only to store settings.
+- Can work without JavaScript.
+- Has its own API.
+- Open source and self-hosted.
 
 
 
@@ -18,8 +18,6 @@
 | [code.dbt3ch.com](https://code.dbt3ch.com)         | Server is managed by DB Tech. He made a [video about Lenpaste v1.1](https://www.youtube.com/watch?v=YxcHxsZHh9A). |
 | [notepad.co.il](https://notepad.co.il)             | Server managed by Shlomi Porush. He reported the bug and made some suggestions.                                   |
 | [lenp.pardesicat.xyz](https://lenp.pardesicat.xyz) | Server managed by Pardesi_Cat. He translated Lenpaste into Bengali and helped correct the documentation.          |
-
-Find more public servers here or add your own: https://monitor.lcomrade.su/?srv=lenpaste
 
 
 
@@ -37,7 +35,7 @@ services:
   lenpaste:
 	# There are images for x86, x64, ARM64, ARM v7, ARM v6.
 	# The Raspberry Pi is supported, including the latest 64-bit versions.
-    image: git.lcomrade.su/root/lenpaste:latest
+    image: github.com/lcomrade/lenpaste:latest
     restart: always
     environment:
       # All parameters are optional
@@ -101,12 +99,12 @@ TIP: If you want to install updates, run: `docker-compose pull && docker-compose
 
 ## Build from source code
 On Debian/Ubuntu:
-```
-sudo apt update
-sudo apt -y install git make gcc golang
-git clone https://git.lcomrade.su/root/lenpaste.git
-cd ./lenpaste/
-git checkout vX.X
+```bash
+export LENPASTE_VERSION=X.X
+sudo apt -y install wget make golang gcc
+wget -O ./lenpaste-$LENPASTE_VERSION.tar.gz https://github.com/lcomrade/lenpaste/releases/download/v$LENPASTE_VERSION/lenpaste-$LENPASTE_VERSION.tar.gz
+tar -ztf ./lenpaste-$LENPASTE_VERSION.tar.gz
+cd ./lenpaste-$LENPASTE_VERSION/
 make
 ```
 
@@ -121,13 +119,13 @@ So you can build your own image to run on an officially unsupported architecture
 (of course you have to rebuild it every time you update Lenpaste).
 
 On Debian/Ubuntu:
-```
-sudo apt update
-sudo apt -y install git docker.io
-git clone https://git.lcomrade.su/root/lenpaste.git
-cd ./lenpaste/
-git checkout vX.X
-sudo docker build -t localhost/lenpaste:latest ./
+```bash
+export LENPASTE_VERSION=X.X
+sudo apt -y install wget docker.io
+wget -O ./lenpaste-$LENPASTE_VERSION.tar.gz https://github.com/lcomrade/lenpaste/releases/download/v$LENPASTE_VERSION/lenpaste-$LENPASTE_VERSION.tar.gz
+tar -ztf ./lenpaste-$LENPASTE_VERSION.tar.gz
+cd ./lenpaste-$LENPASTE_VERSION/
+sudo docker build -t localhost/lenpaste:$LENPASTE_VERSION ./
 ```
 
 The `localhost/lenpaste:latest` image should now have appeared on your local machine.
@@ -147,10 +145,6 @@ For instance administrators:
 - [Make Lenpaste server private](docs/private_server.md)
 - [Themes for WEB interface](docs/themes.md)
 
-For contributors:
-- [Translate on Codeberg Weblate](https://translate.codeberg.org/projects/lenpaste/)
-- [Themes for WEB interface](docs/themes.md)
-
 Lenpaste API:
 - [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
 - [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
@@ -164,14 +158,12 @@ Might be interesting:
 
 ## Contribute
 What can I do?
-- Translate Lenpaste to you Language: [Codeberg Weblate/Lenpaste](https://translate.codeberg.org/projects/lenpaste/)
 - Write an article (DevTo, Medium, your website, and so on) or make a video (YouTube, PeerTube, and so on).
   A link to your article/video will be included in this README.
 - Create or update a package:
 	- Create NixOS package.
 	- Update TrueCharts package.
 	- Other.
-- Install the Lenpaste server and add it to [Lenmonitor](https://monitor.lcomrade.su/).
 - Recommend Lenpaste to your friends.
 
 

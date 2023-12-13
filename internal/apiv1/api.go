@@ -19,11 +19,11 @@
 package apiv1
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/config"
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
+	"github.com/lcomrade/lenpaste/internal/config"
+	"github.com/lcomrade/lenpaste/internal/logger"
+	"github.com/lcomrade/lenpaste/internal/netshare"
+	"github.com/lcomrade/lenpaste/internal/storage"
 	"net/http"
 )
 

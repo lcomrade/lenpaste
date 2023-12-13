@@ -20,8 +20,8 @@ package apiv1
 
 import (
 	"encoding/json"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lenpaste/internal/storage"
+	"github.com/lcomrade/lenpaste/internal/netshare"
+	"github.com/lcomrade/lenpaste/internal/storage"
 	"net/http"
 )
 

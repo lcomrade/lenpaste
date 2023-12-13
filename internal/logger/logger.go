@@ -20,7 +20,7 @@ package logger
 
 import (
 	"fmt"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"github.com/lcomrade/lenpaste/internal/netshare"
 	"net/http"
 	"os"
 	"runtime"

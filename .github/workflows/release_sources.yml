@@ -1,0 +1,45 @@
+name: Tarball with source code
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - v**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+            fetch-tags: true
+
+      - name: Get version
+        shell: bash
+        run: |-
+            echo "version=$(git describe --tags --always | sed 's/-/+/' | sed 's/^v//')" >> $GITHUB_ENV
+            echo "commit_date=$(git log -1 --format=%ai)" >> $GITHUB_ENV
+
+      - name: Create vendor directory
+        shell: bash
+        run: |-
+            sudo apt-get install -y golang
+            go mod vendor
+
+      - name: Create tarball
+        shell: bash
+        run: |-
+            mkdir ../lenpaste-${{env.version}}/
+            cp -r ./* ../lenpaste-${{env.version}}/
+            cp -r ./.* ../lenpaste-${{env.version}}/
+            cd ../lenpaste-${{env.version}}/
+            sed -i "/VERSION[[:space:]]*=/c\VERSION=${{env.version}}" ./Makefile
+            sed -i "s/$(GO) build/$(GO) build -mod=vendor/" ./Makefile
+            tar --mtime="${{env.commit_date}}" -zcf ../lenpaste-${{env.version}}.tar.gz ../lenpaste-${{env.version}}/
+            sha256sum ../lenpaste-${{env.version}}.tar.gz
+
+      - uses: actions/checkout@v4
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload v${{env.version}} ../lenpaste-${{env.version}}.tar.gz

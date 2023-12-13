@@ -19,8 +19,8 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
 	chromaLexers "github.com/alecthomas/chroma/v2/lexers"
+	"github.com/lcomrade/lenpaste/internal/netshare"
 	"net/http"
 	"strings"
 	"time"

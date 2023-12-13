@@ -19,7 +19,7 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"github.com/lcomrade/lenpaste/internal/netshare"
 	"io"
 	"net/http"
 )

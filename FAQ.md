@@ -12,15 +12,6 @@ At idle time the container uses about 10 MB of RAM, it uses almost no CPU,
 and the disk load is also minimal (all HTML pages are loaded into memory at startup).
 
 
-## Why isn't the source code posted on GitHub?
-There are several reasons why I don't use GitHub,
-all of which are detailed [here](https://git.lcomrade.su/root/give-up-github).
-Here I will only describe the basic idea.
-
-GitHub has gained too much power over open source developers.
-It's time to take that power away from the capitalists.
-
-
 ## Does Lenpaste collect telemetry?
 **No.** No data about users or the server is collected.
 We respect your privacy!

@@ -1,5 +1,5 @@
-git.lcomrade.su/root/lineend v1.0.0 h1:qcxrR4DS18Erx+pG/EspoDhEDai+mjgSYefwSK2dq5g=
-git.lcomrade.su/root/lineend v1.0.0/go.mod h1:D0q3jMx0I1PFZjAFwkmUNW8D5tIw8rZJoeUAxhYD7Ec=
+github.com/lcomrade/lenpaste/internal/lineend v1.0.0 h1:qcxrR4DS18Erx+pG/EspoDhEDai+mjgSYefwSK2dq5g=
+github.com/lcomrade/lenpaste/internal/lineend v1.0.0/go.mod h1:D0q3jMx0I1PFZjAFwkmUNW8D5tIw8rZJoeUAxhYD7Ec=
 github.com/alecthomas/assert/v2 v2.2.0 h1:f6L/b7KE2bfA+9O4FL3CM/xJccDEwPVYd5fALBiuwvw=
 github.com/alecthomas/assert/v2 v2.2.0/go.mod h1:b/+1DI2Q6NckYi+3mXyH3wFb8qG37K/DuK80n7WefXA=
 github.com/alecthomas/chroma/v2 v2.4.0 h1:Loe2ZjT5x3q1bcWwemqyqEi8p11/IV/ncFCeLYDpWC4=

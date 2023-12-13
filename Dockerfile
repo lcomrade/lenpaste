@@ -1,5 +1,5 @@
 # BUILD
-FROM golang:1.18.10-alpine3.17 as build
+FROM docker.io/library/golang:1.18.10-alpine3.17 as build
 
 WORKDIR /build
 
@@ -15,7 +15,7 @@ RUN make
 
 
 # RUN
-FROM alpine:3.17.1 as run
+FROM docker.io/library/alpine:3.17.1
 
 WORKDIR /
 

@@ -19,8 +19,8 @@
 package web
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
-	"git.lcomrade.su/root/lineend"
+	"github.com/lcomrade/lenpaste/internal/lineend"
+	"github.com/lcomrade/lenpaste/internal/netshare"
 	"html/template"
 	"net/http"
 	"time"

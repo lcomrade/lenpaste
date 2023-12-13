@@ -2,11 +2,10 @@ GO ?= go
 GOFMT ?= gofmt
 
 NAME = lenpaste
+VERSION = $(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')
+
 MAIN_GO = ./cmd/*.go
-
-export GOMODULE111=on
-LDFLAGS = -w -s -X "main.Version=$(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')"
-
+LDFLAGS = -w -s -X "main.Version=$(VERSION)"
 
 .PHONY: all fmt clean
 

@@ -119,7 +119,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if strings.Contains(string(tmp), "https://git.lcomrade.su/root/lenpaste") == false {
+	if strings.Contains(string(tmp), "https://github.com/lcomrade/lenpaste") == false {
 		println(resp)
 		os.Exit(1)
 	}

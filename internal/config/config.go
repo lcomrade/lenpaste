@@ -19,8 +19,8 @@
 package config
 
 import (
-	"git.lcomrade.su/root/lenpaste/internal/logger"
-	"git.lcomrade.su/root/lenpaste/internal/netshare"
+	"github.com/lcomrade/lenpaste/internal/logger"
+	"github.com/lcomrade/lenpaste/internal/netshare"
 )
 
 const Software = "Lenpaste"

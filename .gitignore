@@ -1,2 +1,6 @@
-/dist/*
-*.bak
+/.vscode/**
+!/.vscode/extensions.json
+
+/dist/**
+/vendor/**
+**.bak
