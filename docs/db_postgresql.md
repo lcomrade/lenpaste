@@ -1,12 +1,12 @@
 # Database: PostgreSQL
 Here is an example of the basic Docker Compose config (`docker-compose.yml`):
 ```yaml
-version: "2"
+version: "3.4"
 
 services:
   lenpaste:
     image: ghcr.io/lcomrade/lenpaste:X.X
-    restart: always
+    restart: on-failure:10
     environment:
       - LENPASTE_DB_DRIVER=postgres
       - LENPASTE_DB_SOURCE=postgres://lenpaste:pass@postgres/lenpaste?sslmode=disable

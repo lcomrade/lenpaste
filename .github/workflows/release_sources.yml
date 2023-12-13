@@ -29,13 +29,17 @@ jobs:
       - name: Create tarball
         shell: bash
         run: |-
-            mkdir ../lenpaste-${{env.version}}/
+            sudo mkdir ../lenpaste-${{env.version}}/
+            sudo chown -R $(id -u):$(id -g) ../lenpaste-${{env.version}}/
             cp -r ./* ../lenpaste-${{env.version}}/
             cp -r ./.* ../lenpaste-${{env.version}}/
             cd ../lenpaste-${{env.version}}/
             sed -i "/VERSION[[:space:]]*=/c\VERSION=${{env.version}}" ./Makefile
             sed -i "s/$(GO) build/$(GO) build -mod=vendor/" ./Makefile
-            tar --mtime="${{env.commit_date}}" -zcf ../lenpaste-${{env.version}}.tar.gz ../lenpaste-${{env.version}}/
+            sudo chown -R 0:0 ../lenpaste-${{env.version}}/
+            sudo tar --mtime="${{env.commit_date}}" -zcf ../lenpaste-${{env.version}}.tar.gz ../lenpaste-${{env.version}}/
+            sudo rm -rf ../lenpaste-${{env.version}}/
+            sudo chown -R $(id -u):$(id -g) ../lenpaste-${{env.version}}.tar.gz
             sha256sum ../lenpaste-${{env.version}}.tar.gz
 
       - uses: actions/checkout@v4

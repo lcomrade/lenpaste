@@ -29,14 +29,14 @@ apt-get install -y docker.io docker-compose
 
 2. Use a file like this `docker-compose.yml`:
 ```yaml
-version: "2"
+version: "3.4"
 
 services:
   lenpaste:
-	# There are images for x86, x64, ARM64, ARM v7, ARM v6.
-	# The Raspberry Pi is supported, including the latest 64-bit versions.
-    image: github.com/lcomrade/lenpaste:latest
-    restart: always
+    # There are images for x86, x64, ARM64, ARM v7, ARM v6.
+    # The Raspberry Pi is supported, including the latest 64-bit versions.
+    # Replace "X.X" to target Lenpaste version.
+    image: ghcr.io/lcomrade/lenpaste:X.X
     environment:
       # All parameters are optional
       #
