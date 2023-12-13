@@ -1,7 +1,6 @@
 name: Tarball with source code
 on:
   push:
-    branches: [ main ]
     tags:
       - v**
 
@@ -43,4 +42,4 @@ jobs:
       - name: Upload Release Asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload v${{env.version}} ./lenpaste-${{env.version}}.tar.gz
+        run: gh release upload v${{env.version}} ../lenpaste-${{env.version}}.tar.gz
