@@ -1,1 +1,8 @@
-dist
+/.git/**
+/dist/**
+/docs/**
+/tools/**
+/vendor/**
+
+**.md
+**/.gitignore

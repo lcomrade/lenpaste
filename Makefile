@@ -4,6 +4,9 @@ GOFMT ?= gofmt
 NAME = lenpaste
 VERSION = $(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')
 
+CGO_ENABLED ?= 1
+GOOS ?=
+GOARCH ?=
 MAIN_GO = ./cmd/*.go
 LDFLAGS = -w -s -X "main.Version=$(VERSION)"
 
@@ -12,7 +15,7 @@ LDFLAGS = -w -s -X "main.Version=$(VERSION)"
 all:
 	mkdir -p ./dist/bin/
 
-	$(GO) build -trimpath -ldflags="$(LDFLAGS)" -o ./dist/bin/$(NAME) $(MAIN_GO)
+	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) $(GO) build -trimpath -ldflags="$(LDFLAGS)" -o ./dist/bin/$(NAME) $(MAIN_GO)
 	chmod +x ./dist/bin/$(NAME)
 
 fmt:

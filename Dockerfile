@@ -1,30 +1,27 @@
 # BUILD
-FROM docker.io/library/golang:1.18.10-alpine3.17 as build
+FROM docker.io/library/debian:bookworm-20231120-slim as build
 
 WORKDIR /build
 
-RUN apk add --no-cache make=4.3-r1 git=2.38.3-r1 gcc=12.2.1_git20220924-r4 musl-dev=1.2.3-r4
+RUN sed -i '/^URIs:/d' /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's/^# http/URIs: http/' /etc/apt/sources.list.d/debian.sources && \
+    apt-get update -o Acquire::Check-Valid-Until=false && \
+    apt-get install -y make git golang gcc && \
+    apt-get clean
 
-COPY ./go.mod ./
-COPY go.sum ./
-RUN go mod download -x
+COPY ./go.mod ./go.sum ./
+RUN go mod download
 
 COPY . ./
-
-RUN make
+RUN CGO_ENABLED=0 make
 
 
 # RUN
-FROM docker.io/library/alpine:3.17.1
+FROM scratch
 
-WORKDIR /
-
-COPY --from=build /build/dist/bin/* /usr/local/bin/
-
-COPY ./entrypoint.sh /
-RUN chmod 755 /entrypoint.sh && mkdir -p /data/
+COPY --from=build /build/dist/bin/lenpaste /lenpaste
 
 VOLUME /data
 EXPOSE 80/tcp
 
-CMD [ "/entrypoint.sh" ]
+CMD [ "/lenpaste" ]
