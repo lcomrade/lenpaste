@@ -1,8 +1,6 @@
-/.git/**
-/dist/**
-/docs/**
-/tools/**
-/vendor/**
-
-**.md
-**/.gitignore
+*
+!go.mod
+!go.sum
+!cmd/**/*.go
+!internal/**/*.go
+!internal/web/data/**

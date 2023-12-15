@@ -7,7 +7,7 @@ VERSION = $(shell git describe --tags --always | sed 's/-/+/' | sed 's/^v//')
 CGO_ENABLED ?= 1
 GOOS ?=
 GOARCH ?=
-MAIN_GO = ./cmd/*.go
+MAIN_GO = ./cmd/$(NAME)/*.go
 LDFLAGS = -w -s -X "main.Version=$(VERSION)"
 
 .PHONY: all fmt clean
