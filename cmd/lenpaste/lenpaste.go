@@ -114,14 +114,14 @@ func main() {
 
 	// -body-max-length flag
 	if *flagBodyMaxLen == 0 {
-		exitOnError(errors.New("max body length cannot be 0"))
+		exitOnError(errors.New("maximum body length cannot be 0"))
 	}
 
 	// -max-paste-lifetime
 	maxLifeTime := int64(-1)
 
 	if *flagMaxLifetime != 0 && *flagMaxLifetime < 600 {
-		exitOnError(errors.New("-max-paste-lifetime flag cannot have a value less than 10 minutes"))
+		exitOnError(errors.New("maximum paste lifetime flag cannot have a value less than 10 minutes"))
 		maxLifeTime = int64(*flagMaxLifetime / time.Second)
 	}
 

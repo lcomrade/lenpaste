@@ -103,7 +103,7 @@ On Debian/Ubuntu:
 export LENPASTE_VERSION=X.X
 sudo apt -y install wget make golang gcc
 wget -O ./lenpaste-$LENPASTE_VERSION.tar.gz https://github.com/lcomrade/lenpaste/releases/download/v$LENPASTE_VERSION/lenpaste-$LENPASTE_VERSION.tar.gz
-tar -ztf ./lenpaste-$LENPASTE_VERSION.tar.gz
+tar -xf ./lenpaste-$LENPASTE_VERSION.tar.gz
 cd ./lenpaste-$LENPASTE_VERSION/
 make
 ```
@@ -123,12 +123,12 @@ On Debian/Ubuntu:
 export LENPASTE_VERSION=X.X
 sudo apt -y install wget docker.io
 wget -O ./lenpaste-$LENPASTE_VERSION.tar.gz https://github.com/lcomrade/lenpaste/releases/download/v$LENPASTE_VERSION/lenpaste-$LENPASTE_VERSION.tar.gz
-tar -ztf ./lenpaste-$LENPASTE_VERSION.tar.gz
+tar -xf ./lenpaste-$LENPASTE_VERSION.tar.gz
 cd ./lenpaste-$LENPASTE_VERSION/
 sudo docker build -t localhost/lenpaste:$LENPASTE_VERSION ./
 ```
 
-The `localhost/lenpaste:latest` image should now have appeared on your local machine.
+The `localhost/lenpaste:X.X` image should now have appeared on your local machine.
 You can use it in `docker-compose.yml` or copy it to another machine.
 
 

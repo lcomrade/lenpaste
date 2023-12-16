@@ -210,7 +210,7 @@ func (c *CLI) printHelp() {
 		}
 
 		if v.required {
-			reqFlags += v.cliFlagName + " "
+			reqFlags += "[" + v.cliFlagName + "] "
 		}
 	}
 
@@ -253,17 +253,26 @@ func (c *CLI) Parse() {
 			envVal = pSplit[1]
 		}
 
-		if strings.HasPrefix(envKey, c.envPrefix) {
-			for _, v := range c.vars {
-				if v.envVarName == envKey {
-					err := writeVar(envVal, v.value, v.preHook)
-					if err != nil {
-						exitOnError("read \"" + envKey + "\" environment variable: " + err.Error())
-					}
-					readVars[v.name] = struct{}{}
-					break
+		if !strings.HasPrefix(envKey, c.envPrefix) {
+			continue
+		}
+
+		ok := false
+		for _, v := range c.vars {
+			if v.envVarName == envKey {
+				err := writeVar(envVal, v.value, v.preHook)
+				if err != nil {
+					exitOnError("read \"" + envKey + "\" environment variable: " + err.Error())
 				}
+				readVars[v.name] = struct{}{}
+
+				ok = true
+				break
 			}
+		}
+
+		if !ok {
+			exitOnError("unknown environment variable \"" + envKey + "\"")
 		}
 	}
 
@@ -287,6 +296,7 @@ func (c *CLI) Parse() {
 					exitOnError("flag \"" + varInProgress.cliFlagName + "\" occurs twice")
 				}
 
+				ok := false
 				for _, v := range c.vars {
 					if v.cliFlagName == arg {
 						switch v.value.(type) {
@@ -298,8 +308,14 @@ func (c *CLI) Parse() {
 
 						alreadyRead[v.cliFlagName] = struct{}{}
 						readVars[v.name] = struct{}{}
+
+						ok = true
 						break
 					}
+				}
+
+				if !ok {
+					exitOnError("unknown flag \"" + arg + "\"")
 				}
 
 			} else {

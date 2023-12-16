@@ -2,7 +2,7 @@ module github.com/lcomrade/lenpaste
 
 go 1.16
 
-replace github.com/lcomrade/lenpaste => ./
+replace github.com/lcomrade/lenpaste/internal => ./internal
 
 require (
 	github.com/alecthomas/chroma/v2 v2.4.0

@@ -1,4 +1,4 @@
-name: Tarball with source code
+name: Tarball
 on:
   push:
     tags:
@@ -15,31 +15,19 @@ jobs:
 
       - name: Get version
         shell: bash
-        run: |-
-            echo "version=$(git describe --tags --always | sed 's/-/+/' | sed 's/^v//')" >> $GITHUB_ENV
-            echo "commit_date=$(git log -1 --format=%ai)" >> $GITHUB_ENV
+        run: echo "version=$(git describe --tags --always | sed 's/-/+/' | sed 's/^v//')" >> $GITHUB_ENV
 
-      - name: Create vendor directory
+      - name: Install dependencies
         shell: bash
-        run: |-
-            sudo apt-get install -y golang
-            go mod vendor
+        run: sudo apt-get install -y make golang
 
       - name: Create tarball
         shell: bash
         run: |-
-            cp -r $(pwd) ../lenpaste-${{env.version}}/
-            cd ../lenpaste-${{env.version}}/
-            sed -i "/VERSION[[:space:]]*=/c\VERSION=${{env.version}}" ./Makefile
-            sed -i "s/\$(GO) build/\$(GO) build -mod=vendor/" ./Makefile
-            cd ..
-            sudo chown -R 0:0 ./lenpaste-${{env.version}}/
-            sudo tar --mtime="${{env.commit_date}}" -zcf ./lenpaste-${{env.version}}.tar.gz ./lenpaste-${{env.version}}/
-            sudo rm -rf ./lenpaste-${{env.version}}/
-            sudo chown $(id -u):$(id -g) ./lenpaste-${{env.version}}.tar.gz
-            sha256sum ./lenpaste-${{env.version}}.tar.gz
+            make tarball
+            sha256sum ./dist/sources/lenpaste-${{env.version}}.tar.gz
 
-      - name: Upload Release Asset
+      - name: Attach tarball to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload v${{env.version}} ../lenpaste-${{env.version}}.tar.gz
