@@ -1,5 +1,11 @@
 **Lenpaste** is a web service that allows you to share notes anonymously, an alternative to `pastebin.com`.
 
+> I don't have much time to maintain this project right now, but I didn't request it. Open an issue or write to me by e-mail, I will try to answer.
+>
+> Also the source code I wrote seems to me now very bad. If I have time I will definitely refactor it:)
+>
+> \- Leonid Maslakov \<root@lcomrade.su\>
+
 
 ## Features
 - No need to register.
@@ -22,7 +28,8 @@
 
 
 ## Launch your own server
-1. If you don't already have Docker installed, do so:
+### Simple setup
+1. If you don't already have Docker and Docker Compose installed, do so:
 ```
 apt-get install -y docker.io docker-compose
 ```
@@ -33,57 +40,12 @@ version: "3.4"
 
 services:
   lenpaste:
-    # There are images for x86, x64, ARM64, ARM v7, ARM v6.
+    # There are images for x64, ARM64, ARM v7, ARM v6.
     # The Raspberry Pi is supported, including the latest 64-bit versions.
     # Replace "X.X" to target Lenpaste version.
     image: ghcr.io/lcomrade/lenpaste:X.X
-    environment:
-      # All parameters are optional
-      #
-      # HTTP server
-      - LENPASTE_ADDRESS=:80                  # ADDRES:PORT for HTTP server.
-      #
-      # Database settings
-      - LENPASTE_DB_DRIVER=sqlite3            # Currently supported drivers: 'sqlite3' and 'postgres'.
-      - LENPASTE_DB_SOURCE=/data/lenpaste.db  # DB source.
-      - LENPASTE_DB_MAX_OPEN_CONNS=25         # Maximum number of connections to the database.
-      - LENPASTE_DB_MAX_IDLE_CONNS=5          # Maximum number of idle connections to the database.
-      - LENPASTE_DB_CLEANUP_PERIOD=3h         # Interval at which the DB is cleared of expired but not yet deleted pastes.
-      #
-      # Search engines
-      - LENPASTE_ROBOTS_DISALLOW=false        # Prohibits search engine crawlers from indexing site using robots.txt file.
-      #
-      # Storage limits
-      - LENPASTE_TITLE_MAX_LENGTH=100         # Maximum length of the paste title. If 0 disable title, if -1 disable length limit.
-      - LENPASTE_BODY_MAX_LENGTH=20000        # Maximum length of the paste body. If -1 disable length limit. Can't be -1.
-      - LENPASTE_MAX_PASTE_LIFETIME=unlimited # Maximum lifetime of the paste. Examples: 10m, 1h 30m, 12h, 7w, 30d, 365d.
-      #
-      # Rate limits
-      - LENPASTE_GET_PASTES_PER_5MIN=50       # Maximum number of pastes that can be VIEWED in 5 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_GET_PASTES_PER_15MIN=100     # Maximum number of pastes that can be VIEWED in 15 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_GET_PASTES_PER_1HOUR=500     # Maximum number of pastes that can be VIEWED in 1 hour from one IP. If 0 disable rate-limit.
-      - LENPASTE_NEW_PASTES_PER_5MIN=15       # Maximum number of pastes that can be CREATED in 5 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_NEW_PASTES_PER_15MIN=30      # Maximum number of pastes that can be CREATED in 15 minutes from one IP. If 0 disable rate-limit.
-      - LENPASTE_NEW_PASTES_PER_1HOUR=40      # Maximum number of pastes that can be CREATED in 1 hour from one IP. If 0 disable rate-limit.
-      #
-      # Information about server admin
-      - LENPASTE_ADMIN_NAME=                  # Name of the administrator of this server.
-      - LENPASTE_ADMIN_MAIL=                  # Email of the administrator of this server.
-      #
-      # WEB interface settings
-      - LENPASTE_UI_DEFAULT_LIFETIME=         # Lifetime of paste will be set by default in WEB interface. Examples: 10min, 1h, 1d, 2w, 6mon, 1y.
-      - LENPASTE_UI_DEFAULT_THEME=dark        # Sets the default theme for the WEB interface. Examples: dark, light.
     volumes:
-      # /data/lenpaste.db - SQLite DB if used.
-      # /data/about       - About this server (TXT file).
-      # /data/rules       - This server rules (TXT file).
-      # /data/terms       - This server "terms of use" (TXT file).
-      # /data/themes/*    - External WEB interface themes.
-      # /data/lenpasswd   - If this file exists, the server will ask for auth to create new pastes.
-      #                     File format: USER:PLAIN_PASSWORD on each line.
       - "${PWD}/data:/data"
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"
     ports:
       - "80:80"
 ```
@@ -93,26 +55,184 @@ services:
 docker-compose pull && docker-compose up -d
 ```
 
-TIP: If you want to install updates, run: `docker-compose pull && docker-compose up -d && docker system prune -a -f`
+If you want to install updates, run: `docker-compose pull && docker-compose up -d && docker system prune -a -f`
+
+
+### Lenpaste configuration
+#### HTTP
+The `LENPASTE_ADDRESS` environment variable specifies the `ADDRESS:PORT` at which Lenpaste will expect HTTP connections.
+The default is `:80`.
+
+
+#### Database
+The `LENPASTE_DB_DRIVER` environment variable specifies the database to be used.
+The default is `sqlite3`, possible values are `sqlite3` and `postgres`.
+
+The `LENPASTE_DB_SOURCE` environment variable specifies the data to connect to the database.
+In case of SQLite3 the default value is `/data/lenpaste.db`, for other databases it is necessary to specify the value explicitly.
+
+The `LENPASTE_DB_MAX_OPEN_CONNS` environment variable specifies the maximum number of database connections that Lenpaste can open at one time.
+The default is `25`.
+
+The `LENPASTE_DB_MAX_IDLE_CONNS` environment variable specifies the maximum number of database connections that Lenpaste can have in idle state.
+The default is `5`.
+
+The `LENPASTE_DB_CLEANUP_PERIOD` environment variable specifies the time after which Lenpaste should delete expired pastes.
+If the user tries to open an expired paste that has not yet been cleaned, the user will receive a 404 error.
+The default is `1m` (1 minute).
+
+
+#### Search engines
+The `LENPASTE_ROBOTS_DISALLOW` environment variable prohibits or allows search engine robots (such as Google) to index your Lenpaste instance via the robots.txt file.
+The default is `false` (allow indexing).
+
+
+#### Storage limits
+The `LENPASTE_TITLE_TITLE_MAX_LENGTH` environment variable sets the maximum size of the paste header.
+The default is `100`.
+
+The `LENPASTE_BODY_MAX_LENGTH` environment variable sets the maximum size of the paste body.
+The default is `20000`.
+
+The `LENPASTE_MAX_PASTE_LIFETIME` environment variable sets the maximum paste life time.
+Examples of `10m`, `1h 30m`, `12h`, `7w`, `30d`, `365d` values. The default is `unlimited`.
+
+
+#### Rate limits
+The environment variables `LENPASTE_GET_PASTES_PER_5MIN`, `LENPASTE_GET_PASTES_PER_15MIN`, `LENPASTE_GET_PASTES_PER_1HOUR`
+set the maximum number of pastes that can be VIEWED in 5, 15 or 60 minutes from one IP.
+The default values is `50`, `100`, `500`.
+
+The environment variables `LENPASTE_NEW_PASTES_PER_5MIN`, `LENPASTE_NEW_PASTES_PER_15MIN`, `LENPASTE_NEW_PASTES_PER_1HOUR`
+set the maximum number of pastes that can be CREATED in 5, 15 or 60 minutes from one IP.
+The default values is `15`, `30`, `40`.
+
+To turn off any rait limit just set it to `0`.
+Lenpaste remembers the limit only until the restart, after the restart the limit count starts again.
+
+
+#### Access control
+If the file `/data/lenpasswd` is present, the server will prompt for a login and password to create the paste.
+The file format is `LOGIN:PLAIN_PASSWORD` on each line.
+
+
+#### Information about server
+The `LENPASTE_ADMIN_NAME` environment variable sets the name of the server administrator.
+
+The `LENPASTE_ADMIN_MAIL` environment variable sets the email of the server administrator.
+
+If the `/data/about` text file exists, its contents will be displayed at the top of the "About" page.
+
+The `/data/rules` text file may contain human-readable rules for using the server (it is not a legal document).
+
+The `/data/terms` text file may contain "Terms of Use" written in "legal language".
+
+
+#### Web interface
+The `LENPASTE_UI_DEFAULT_LIFETIME` environment variable sets the default paste lifetime selected in the WEB interface.
+Examples of values of `10min`, `1h`, `1d`, `2w`, `6mon`, `1y`.
+The first available value in the list will be selected by default.
+
+The `LENPASTE_UI_DEFAULT_THEME` environment variable sets the default theme to be used in the WEB interface.
+The default is `dark`.
+
+In the `/data/themes/` directory, the administrator can place custom themes for WEB interface.
+You can create a custom theme for the WEB interface based on the themes located in `./internal/web/data/theme/`.
+
+
+### Lenpaste + Nginx
+Here is an example of the basic Nginx config (`/etc/nginx/nginx.conf`) that will work with Lenpaste:
+```nginx
+events {
+	worker_connections 1024;
+}
+
+http {
+	error_log /var/log/nginx/error.log warn;
+	server_tokens off; # Disables emitting nginx version on error pages and in the “Server” response header field.
+
+	ssl_protocols TLSv1.2 TLSv1.3; # TLSv1.2 enables HTTPS on older devices.
+
+	client_max_body_size 1M;
+	client_body_timeout 300s;
+
+	proxy_http_version 1.1;
+	
+	# Required for Lenpaste to work correctly.
+	proxy_set_header Host $host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $remote_addr;
+	proxy_set_header X-Forwarded-Proto $scheme;
+}
+
+# HTTP
+server {
+	server_name YOUR_DOMAIN;
+	listen 80;
+	listen [::]:80;
+
+	access_log /var/log/nginx/YOUR_DOMAIN.access.log combined;
+
+	location / {
+		proxy_pass http://localhost:8000/;
+		#return 301 https://$host$request_uri; - redirect to HTTPS
+	}
+
+	# Required for Lets Encrypt
+	location /.well-known/acme-challenge/ {
+		root /var/www/letsencrypt/;
+	}
+}
+
+# HTTPS
+server {
+	server_name YOUR_DOMAIN;
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+	ssl_certificate /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem;
+
+	access_log /var/log/nginx/YOUR_DOMAIN.access.log combined;
+	
+	location / {
+		proxy_pass http://localhost:8000/;
+	}
+}
+```
+
+### Lenpaste + Postgres
+Here is an example of the basic Docker Compose config (`docker-compose.yml`) that will make Lenpaste work with Postgres:
+```yaml
+version: "3.4"
+
+services:
+  postgres:
+    image: docker.io/library/postgres:16.1
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=lenpaste
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - "${PWD}/data/postgres:/var/lib/postgresql/data"
+
+  lenpaste:
+    image: ghcr.io/lcomrade/lenpaste:X.X
+    restart: on-failure:10
+    environment:
+      - LENPASTE_DB_DRIVER=postgres
+      - LENPASTE_DB_SOURCE=postgres://lenpaste:pass@postgres/lenpaste?sslmode=disable
+    volumes:
+      - "${PWD}/data:/data"
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres
+```
 
 
 
 ## Build from source code
-On Debian/Ubuntu:
-```bash
-export LENPASTE_VERSION=X.X
-sudo apt -y install wget make golang gcc
-wget -O ./lenpaste-$LENPASTE_VERSION.tar.gz https://github.com/lcomrade/lenpaste/releases/download/v$LENPASTE_VERSION/lenpaste-$LENPASTE_VERSION.tar.gz
-tar -xf ./lenpaste-$LENPASTE_VERSION.tar.gz
-cd ./lenpaste-$LENPASTE_VERSION/
-make
-```
-
-You can find the result of the build in the `./dist/` directory.
-
-
-
-## Build Docker image
+### Build Docker image (recommended)
 **Why is it necessary?**
 An official image may not support your architecture e.g. MIPS, PowerPC, etc.
 So you can build your own image to run on an officially unsupported architecture
@@ -132,22 +252,23 @@ The `localhost/lenpaste:X.X` image should now have appeared on your local machin
 You can use it in `docker-compose.yml` or copy it to another machine.
 
 
+### Build binary
+On Debian/Ubuntu:
+```bash
+export LENPASTE_VERSION=X.X
+sudo apt -y install wget make golang gcc libc6-dev
+wget -O ./lenpaste-$LENPASTE_VERSION.tar.gz https://github.com/lcomrade/lenpaste/releases/download/v$LENPASTE_VERSION/lenpaste-$LENPASTE_VERSION.tar.gz
+tar -xf ./lenpaste-$LENPASTE_VERSION.tar.gz
+cd ./lenpaste-$LENPASTE_VERSION/
+make
+```
+
+You can find the result of the build in the `./dist/` directory.
+
+
 
 ## Other documentation
-For all:
-- [Frequently Asked Questions](FAQ.md)
-
-For instance administrators:
-- [Reverse proxy: Nginx](docs/reverse_proxy_nginx.md)
-- [Database: PostgreSQL](docs/db_postgresql.md)
-- [Rate limiting](docs/ratelimits.md)
-- [Add Lenpaste to Search Engines](docs/search_engines.md)
-- [Make Lenpaste server private](docs/private_server.md)
-- [Themes for WEB interface](docs/themes.md)
-
-Lenpaste API:
-- [Lenpaste API](https://paste.lcomrade.su/docs/apiv1)
-- [Libraries for working with API](https://paste.lcomrade.su/docs/api_libs)
+Read more about [Lenpaste API](https://paste.lcomrade.su/docs/apiv1).
 
 Might be interesting:
 - [How to Install LenPaste on Your Synology NAS](https://mariushosting.com/how-to-install-lenpaste-on-your-synology-nas/) (WEB site)
@@ -171,10 +292,3 @@ What can I do?
 ## Contacts
 - Matrix room: [`#lenpaste:lcomrade.su`](https://matrix.to/#/#lenpaste:lcomrade.su)
 - Contact me: Leonid Maslakov \<root@lcomrade.su\>
-
-
-
-## Donate
-All donations will go to Leonid Maslakov, for now the sole developer:
-- Qiwi: https://qiwi.com/n/LCOMRADE
-- YooMoney (aka Yandex Money): https://yoomoney.ru/to/4100118011659535

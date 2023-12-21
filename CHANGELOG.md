@@ -2,6 +2,11 @@
 Semantic versioning is used (https://semver.org/).
 
 
+## v1.3.1
+- Fixed a problem with building Lenpaste from source code.
+- Revised documentation.
+- Minor improvements were made.
+
 ## v1.3
 - UI: Added custom themes support. Added light theme.
 - UI: Added translations into Bengali and German (thanks Pardesi_Cat and Hiajen).
