@@ -1,9 +1,10 @@
 *
-!go.mod
-!go.sum
+!.git/**
 !cmd/**/*.go
 !internal/**/*.go
 !internal/web/data/**
 !vendor/**
 !entrypoint.sh
+!go.mod
+!go.sum
 !Makefile

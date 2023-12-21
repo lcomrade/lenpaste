@@ -17,7 +17,7 @@ all:
 
 tarball:
 	mkdir -p ./dist/tmp/$(NAME)-$(VERSION)/
-	cp -r $(filter-out ./.git ./dist,$(shell echo ./* ./.*)) ./dist/tmp/$(NAME)-$(VERSION)/
+	cp -r $(filter-out ./. ./.. ./.git ./dist,$(shell echo ./* ./.*)) ./dist/tmp/$(NAME)-$(VERSION)/
 
 	go mod vendor -o ./dist/tmp/$(NAME)-$(VERSION)/vendor/
 
