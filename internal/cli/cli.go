@@ -22,7 +22,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -34,7 +33,6 @@ func exitOnError(msg string) {
 type variable struct {
 	name        string
 	cliFlagName string
-	envVarName  string
 
 	preHook func(string) (string, error)
 
@@ -45,8 +43,7 @@ type variable struct {
 }
 
 type CLI struct {
-	envPrefix string
-	version   string
+	version string
 
 	vars []variable
 }
@@ -56,10 +53,9 @@ type FlagOptions struct {
 	PreHook  func(string) (string, error)
 }
 
-func New(envPrefix, version string) *CLI {
+func New(version string) *CLI {
 	return &CLI{
-		envPrefix: strings.ToUpper(strings.TrimRight(envPrefix, "_")) + "_",
-		version:   version,
+		version: version,
 
 		vars: []variable{},
 	}
@@ -81,7 +77,6 @@ func (c *CLI) addVar(name string, value interface{}, defValue string, usage stri
 	c.vars = append(c.vars, variable{
 		name:        name,
 		cliFlagName: "-" + name,
-		envVarName:  c.envPrefix + strings.ToUpper(strings.ReplaceAll(name, "-", "_")),
 
 		preHook: opts.PreHook,
 
@@ -244,38 +239,6 @@ func (c *CLI) Parse() {
 	// Used to check if "required" flags are present.
 	readVars := make(map[string]struct{})
 
-	// Read variables from environment
-	for _, p := range os.Environ() {
-		var envKey, envVal string
-		{
-			pSplit := strings.SplitN(p, "=", 2)
-			envKey = pSplit[0]
-			envVal = pSplit[1]
-		}
-
-		if !strings.HasPrefix(envKey, c.envPrefix) {
-			continue
-		}
-
-		ok := false
-		for _, v := range c.vars {
-			if v.envVarName == envKey {
-				err := writeVar(envVal, v.value, v.preHook)
-				if err != nil {
-					exitOnError("read \"" + envKey + "\" environment variable: " + err.Error())
-				}
-				readVars[v.name] = struct{}{}
-
-				ok = true
-				break
-			}
-		}
-
-		if !ok {
-			exitOnError("unknown environment variable \"" + envKey + "\"")
-		}
-	}
-
 	// Read variables from CLI flags
 	{
 		alreadyRead := make(map[string]struct{})
@@ -338,7 +301,7 @@ func (c *CLI) Parse() {
 		if v.required {
 			_, ok := readVars[v.name]
 			if !ok {
-				exitOnError("environment variable \"" + v.envVarName + "\" or \"" + v.cliFlagName + "\" flag is missing")
+				exitOnError("\"" + v.cliFlagName + "\" flag is missing")
 			}
 		}
 	}

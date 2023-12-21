@@ -5,4 +5,5 @@
 !internal/**/*.go
 !internal/web/data/**
 !vendor/**
+!entrypoint.sh
 !Makefile

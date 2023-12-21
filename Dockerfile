@@ -18,13 +18,13 @@ RUN make
 # RUN
 FROM docker.io/library/debian:bookworm-20231120-slim
 
-RUN mkdir /data/
+COPY ./entrypoint.sh /
 
-COPY --from=build /build/dist/bin/* /usr/local/bin/
+RUN mkdir /data/ && chmod +x /entrypoint.sh
 
 VOLUME /data
 EXPOSE 80/tcp
 
-ENV LENPASTE_DB_SOURCE=/data/lenpaste.db
+COPY --from=build /build/dist/bin/* /usr/local/bin/
 
-CMD [ "/usr/local/bin/lenpaste" ]
+CMD [ "/entrypoint.sh" ]

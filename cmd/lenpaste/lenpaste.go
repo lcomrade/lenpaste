@@ -66,7 +66,7 @@ func main() {
 	var err error
 
 	// Read environment variables and CLI flags
-	c := cli.New("LENPASTE", Version)
+	c := cli.New(Version)
 
 	flagAddress := c.AddStringVar("address", ":80", "HTTP server ADDRESS:PORT.", nil)
 
